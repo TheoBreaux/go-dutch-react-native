@@ -1,26 +1,29 @@
-import React from "react";
-import { Image, StyleSheet, View } from "react-native";
-import GoDutchLogo from "../assets/go-dutch-logo.png";
+import { Image, StyleSheet, View, Text } from "react-native";
 
 const Logo = () => {
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={GoDutchLogo} />
+      <Image
+        style={styles.logo}
+        source={require("../images/go-dutch-logo.png")}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "90%",
-    aspectRatio: 1,
-    display: "flex",
-    justifyContent: "center", // Center horizontally
-    alignItems: "center", // Center vertically
+    width: "100%",
+    aspectRatio: 4 / 1,
+    backgroundColor: "transparent",
+    marginTop: 40,
   },
   logo: {
-    width: "100%",
-    aspectRatio: 1,
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    resizeMode: "center",
+    marginHorizontal: 20,
   },
 });
 
