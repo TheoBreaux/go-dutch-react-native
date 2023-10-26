@@ -13,7 +13,8 @@ const App = () => {
   return (
     <>
       {/* <SignUpLogIn /> */}
-      <LogInForm />
+      {/* <LogInForm /> */}
+      <SignUpForm/>
     </>
     // <NativeRouter>
     //   <Routes>
