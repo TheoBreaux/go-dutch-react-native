@@ -9,6 +9,7 @@ import {
 import Logo from "./Logo";
 
 const SignUpLogIn = () => {
+  
   const signUp = () => {
     console.log("sign up");
   };

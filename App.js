@@ -10,20 +10,25 @@ import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 
 const App = () => {
-  return <SignUpLogIn />;
-  // <NativeRouter>
-  //   <Routes>
-  //     <Route exact path="/" component={LogInSignUp} />
-  //     <Route path="/signup" component={SignUpForm} />
-  //     <Route path="/payment-sources" component={PaymentSources} />
-  //     <Route path="/login" component={LogInForm} />
-  //     <Route path="/user-home" component={UserHomePage} />
-  //     <Route path="/new-split" component={NewSplitForm} />
-  //     <Route path="/add-diners" component={AddDiners} />
-  //     <Route path="/dining-history" component={DiningEventHistory} />
-  //     <Route path="/image-logs" component={ImageLogs} />
-  //   </Routes>
-  // </NativeRouter>
+  return (
+    <>
+      {/* <SignUpLogIn /> */}
+      <LogInForm />
+    </>
+    // <NativeRouter>
+    //   <Routes>
+    //     <Route exact path="/" component={LogInSignUp} />
+    //     <Route path="/signup" component={SignUpForm} />
+    //     <Route path="/payment-sources" component={PaymentSources} />
+    //     <Route path="/login" component={LogInForm} />
+    //     <Route path="/user-home" component={UserHomePage} />
+    //     <Route path="/new-split" component={NewSplitForm} />
+    //     <Route path="/add-diners" component={AddDiners} />
+    //     <Route path="/dining-history" component={DiningEventHistory} />
+    //     <Route path="/image-logs" component={ImageLogs} />
+    //   </Routes>
+    // </NativeRouter>
+  );
 };
 
 export default App;
