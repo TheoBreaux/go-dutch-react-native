@@ -4,19 +4,19 @@ const Footer = () => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <View>
+        <View style={styles.buttonWrapper}>
           <Button title="Home" color={"#A40E24"} />
         </View>
-        <View>
-          <Button title="New Split" color={"#A40E24"} />
+        <View style={styles.buttonWrapper}>
+          <Button title="Split" color={"#A40E24"} />
         </View>
-        <View>
+        <View style={styles.buttonWrapper}>
           <Button title="History" color={"#A40E24"} />
         </View>
-        <View>
-          <Button title="Image Logs" color={"#A40E24"} />
+        <View style={styles.buttonWrapper}>
+          <Button title="Images" color={"#A40E24"} />
         </View>
-        <View>
+        <View style={styles.buttonWrapper}>
           <Button title="Log Out" color={"#A40E24"} />
         </View>
       </View>
@@ -26,7 +26,6 @@ const Footer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     flex: 1,
     justifyContent: "flex-end",
   },
@@ -34,15 +33,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
   },
-  button: {
+  buttonWrapper: {
     flex: 1,
-    margin: 0,
-    padding: 0,
     borderColor: "black",
     borderWidth: 2,
-    fontWeight: "bold",
-    borderStyle: "solid",
-    width: "100%",
   },
 });
 
