@@ -1,15 +1,29 @@
 import { View, Button, StyleSheet } from "react-native";
 
 const Footer = () => {
+  const pressHandler = () => {
+    console.log("pressed");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
-          <Button title="Home" color={"#A40E24"} buttonStyle={styles.button} />
+          <Button
+            title="Home"
+            color={"#A40E24"}
+            buttonStyle={styles.button}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button title="Split" color={"#A40E24"} buttonStyle={styles.button} />
+          <Button
+            title="Split"
+            color={"#A40E24"}
+            buttonStyle={styles.button}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
@@ -17,6 +31,7 @@ const Footer = () => {
             title="History"
             color={"#A40E24"}
             buttonStyle={styles.button}
+            onPress={pressHandler}
           />
         </View>
 
@@ -25,6 +40,7 @@ const Footer = () => {
             title="Images"
             color={"#A40E24"}
             buttonStyle={styles.button}
+            onPress={pressHandler}
           />
         </View>
 
@@ -33,6 +49,7 @@ const Footer = () => {
             title="Log Out"
             color={"#A40E24"}
             buttonStyle={styles.button}
+            onPress={pressHandler}
           />
         </View>
       </View>

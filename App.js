@@ -9,13 +9,16 @@ import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 
+
+
 const App = () => {
   return (
     <>
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
       {/* <SignUpForm/> */}
-      {/* <NewSplitForm/> */}
+      <NewSplitForm/>
+
     </>
     // <NativeRouter>
     //   <Routes>
