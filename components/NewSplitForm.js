@@ -28,7 +28,7 @@ const NewSplitForm = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Restaurant/Bar</Text>
+          <Text>Restaurant/Bar:</Text>
           <View style={styles.exitRestaurant}>
             <View style={styles.button}>
               <Button color={"#A40E24"} title="X" />
