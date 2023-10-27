@@ -15,6 +15,7 @@ const App = () => {
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
       <SignUpForm/>
+      {/* <NewSplitForm/> */}
     </>
     // <NativeRouter>
     //   <Routes>

@@ -8,46 +8,46 @@ const SignUpForm = () => {
   return (
     <>
       <Logo />
-      <View>
-        <View style={styles.nameInputs}>
-          <View>
+      <View style={styles.inputContainer}>
+        <View style={styles.nameInputsContainer}>
+          <View style={styles.nameInputs}>
             <Text>First Name</Text>
-            <TextInput></TextInput>
+            <TextInput style={styles.firstNameInput} />
           </View>
-          <View>
+          <View style={styles.nameInputs}>
             <Text>Last Name</Text>
-            <TextInput></TextInput>
+            <TextInput style={styles.lastNameInput} />
           </View>
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>Email</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>Email</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>Create Username</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>Create Username</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>Password</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>Password</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>Confirm Password</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>Confirm Password</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>State</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>State</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>City/Town</Text>
-          <TextInput></TextInput>
+          <Text style={styles.inputLabels}>City/Town</Text>
+          <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.button}>
@@ -64,8 +64,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
-  nameInputs: {
+  nameInputsContainer: {
     flexDirection: "row",
+  },
+  inputLabels: {
+    marginTop: 10,
+  },
+  nameInputs: {
+    width: "50%",
+  },
+  firstNameInput: {
+    marginRight: 5,
+    padding: 10,
+    backgroundColor: "#e8ebf0",
+    borderBottomColor: "#1a202c",
+    borderBottomWidth: 2,
+    borderRadius: 5,
+  },
+  lastNameInput: {
+    padding: 10,
+    backgroundColor: "#e8ebf0",
+    borderBottomColor: "#1a202c",
+    borderBottomWidth: 2,
+    borderRadius: 5,
   },
   logInInputs: {
     width: "100%",
@@ -81,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A40E24",
     borderRadius: 5,
     padding: 10,
-    margin: 10,
+    margin: 16,
     width: "100%",
     borderColor: "black",
     borderWidth: 5,
