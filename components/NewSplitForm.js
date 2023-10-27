@@ -1,12 +1,12 @@
 import { View, Image, StyleSheet, Text, TextInput, Button } from "react-native";
 import Logo from "./Logo";
 import { Picker } from "@react-native-picker/picker";
+import Footer from "./Footer";
 
 const NewSplitForm = () => {
   return (
     <>
       <Logo />
-
       <View style={styles.container}>
         <Image
           style={styles.friendsImage}
@@ -52,6 +52,7 @@ const NewSplitForm = () => {
           <Button title="Continue" color={"#A40E24"}></Button>
         </View>
       </View>
+      <Footer />
     </>
   );
 };

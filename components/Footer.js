@@ -5,19 +5,35 @@ const Footer = () => {
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
-          <Button title="Home" color={"#A40E24"} />
+          <Button title="Home" color={"#A40E24"} buttonStyle={styles.button} />
         </View>
+
         <View style={styles.buttonWrapper}>
-          <Button title="Split" color={"#A40E24"} />
+          <Button title="Split" color={"#A40E24"} buttonStyle={styles.button} />
         </View>
+
         <View style={styles.buttonWrapper}>
-          <Button title="History" color={"#A40E24"} />
+          <Button
+            title="History"
+            color={"#A40E24"}
+            buttonStyle={styles.button}
+          />
         </View>
+
         <View style={styles.buttonWrapper}>
-          <Button title="Images" color={"#A40E24"} />
+          <Button
+            title="Images"
+            color={"#A40E24"}
+            buttonStyle={styles.button}
+          />
         </View>
+
         <View style={styles.buttonWrapper}>
-          <Button title="Log Out" color={"#A40E24"} />
+          <Button
+            title="Log Out"
+            color={"#A40E24"}
+            buttonStyle={styles.button}
+          />
         </View>
       </View>
     </View>
@@ -26,8 +42,7 @@ const Footer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-end",
+    height: 40,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -37,6 +52,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: "black",
     borderWidth: 2,
+  },
+  button: {
+    padding: 0,
+    margin: 0,
   },
 });
 

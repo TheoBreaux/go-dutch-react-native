@@ -8,7 +8,6 @@ import AddDiners from "./components/AddDiners";
 import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
-import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -17,7 +16,6 @@ const App = () => {
       {/* <LogInForm /> */}
       {/* <SignUpForm/> */}
       {/* <NewSplitForm/> */}
-      <Footer />
     </>
     // <NativeRouter>
     //   <Routes>
