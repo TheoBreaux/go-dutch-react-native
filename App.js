@@ -11,13 +11,19 @@ import SignUpLogIn from "./components/SignUpLogIn";
 
 
 
+
 const App = () => {
   return (
     <>
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
       {/* <SignUpForm/> */}
-      <NewSplitForm/>
+      {/* <NewSplitForm/> */}
+      {/* <DiningEventHistory/> */}
+      {/* <ImageLogs/> */}
+      {/* <AddDiners/> */}
+      <UserHomePage/>
+
 
     </>
     // <NativeRouter>

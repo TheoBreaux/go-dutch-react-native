@@ -1,7 +1,13 @@
-import React from "react";
+import Footer from "./Footer";
+import Logo from "./Logo";
 
 const AddDiners = () => {
-  return <View></View>;
+  return (
+    <>
+      <Logo />
+      <Footer />
+    </>
+  );
 };
 
 export default AddDiners;

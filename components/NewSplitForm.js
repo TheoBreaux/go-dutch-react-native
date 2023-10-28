@@ -4,6 +4,13 @@ import { Picker } from "@react-native-picker/picker";
 import Footer from "./Footer";
 
 const NewSplitForm = () => {
+
+  
+  const changeRestaurantHandler = () => {
+    console.log("close");
+  };
+
+
   return (
     <>
       <Logo />
@@ -31,7 +38,11 @@ const NewSplitForm = () => {
           <Text>Restaurant/Bar:</Text>
           <View style={styles.exitRestaurant}>
             <View style={styles.button}>
-              <Button color={"#A40E24"} title="X" />
+              <Button
+                color={"#A40E24"}
+                title="X"
+                onPress={changeRestaurantHandler}
+              />
             </View>
 
             <TextInput style={styles.restaurantInput} />
