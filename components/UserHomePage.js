@@ -25,8 +25,8 @@ const UserHomePage = () => {
 
   return (
     <>
-      <Logo />
       <View style={styles.container}>
+        <Logo />
         <Text style={styles.title}>Welcome, firstName!</Text>
         <Text style={styles.subtitle}>
           Featured restaurants near city/town!
@@ -41,9 +41,18 @@ const UserHomePage = () => {
           loop={true}
           loopClonesPerSide={featuredRestaurants.length}
         />
+
+        <View style={styles.restaurantInfoContainer}>
+          <Text>Restaurant Name</Text>
+          <Text>Address</Text>
+          <Text>City, State</Text>
+          <Text>Rating</Text>
+          <View>
+            <Button title="Reserve" />
+          </View>
+        </View>
       </View>
-  
-      
+
       <Footer />
     </>
   );
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   carouselItem: {
-    flex: 1, // Adjust the flex value as needed
+    // flex: 1, // Adjust the flex value as needed
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: 5,
@@ -75,7 +84,13 @@ const styles = StyleSheet.create({
     height: "100%", // You can adjust this value as needed
     resizeMode: "cover", // Use "cover" for better image scaling
   },
+  restaurantInfoContainer: {
+    // flex: 1,
+    padding: 0,
+    marginLeft: 5,
+    marginBottom: -150,
+    alignItems: "center"
+  },
 });
 
 export default UserHomePage;
-
