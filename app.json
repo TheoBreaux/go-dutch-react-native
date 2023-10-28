@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "backgroundColor": "whitesmoke",
+    "backgroundColor": "rgb(200, 200, 200)",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
