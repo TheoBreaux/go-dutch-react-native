@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   Button,
+  Linking,
 } from "react-native";
 import Footer from "./Footer";
 import Logo from "./Logo";
@@ -14,9 +15,33 @@ import Carousel from "react-native-snap-carousel";
 
 const UserHomePage = () => {
   const renderItem = ({ item }) => {
+    const handleExternalLink = () => {
+      Linking.openURL(item.website);
+    };
+
     return (
-      <View style={styles.carouselItem}>
-        <Image source={{ uri: item.imgUrl }} style={styles.carouselImage} />
+      <View style={styles.carouselContainer}>
+        <View style={styles.carouselImageContainer}>
+          <Image source={{ uri: item.imgUrl }} style={styles.carouselImage} />
+        </View>
+
+        <View style={styles.restaurantInfoContainer}>
+          <View style={styles.restaurantInfo}>
+            <Text style={styles.restaurantName}>{item.name}</Text>
+            <Text>{item.address}</Text>
+            <Text>
+              {item.city}, {item.state} {item.zip}
+            </Text>
+            <Text>Rating:{item.rating}⭐</Text>
+          </View>
+          <View style={styles.reserveButton}>
+            <Button
+              title="Reserve"
+              color={"#A40E24"}
+              onPress={handleExternalLink}
+            />
+          </View>
+        </View>
       </View>
     );
   };
@@ -25,12 +50,14 @@ const UserHomePage = () => {
 
   return (
     <>
+      <Logo />
       <View style={styles.container}>
-        <Logo />
-        <Text style={styles.title}>Welcome, firstName!</Text>
-        <Text style={styles.subtitle}>
-          Featured restaurants near city/town!
-        </Text>
+        <View style={styles.titlesContainer}>
+          <Text style={styles.title}>Welcome, firstName!</Text>
+          <Text style={styles.subtitle}>
+            Featured restaurants near city/town!
+          </Text>
+        </View>
         <Carousel
           data={featuredRestaurants}
           renderItem={renderItem}
@@ -41,16 +68,9 @@ const UserHomePage = () => {
           loop={true}
           loopClonesPerSide={featuredRestaurants.length}
         />
-
-        <View style={styles.restaurantInfoContainer}>
-          <Text>Restaurant Name</Text>
-          <Text>Address</Text>
-          <Text>City, State</Text>
-          <Text>Rating</Text>
-          <View>
-            <Button title="Reserve" />
-          </View>
-        </View>
+        {/* <View style={styles.adSpace}>
+          <Text>SOME USER INFO OR AD</Text>
+        </View> */}
       </View>
 
       <Footer />
@@ -61,7 +81,10 @@ const UserHomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 400,
+    alignItems: "center",
+  },
+  titlesContainer: {
+    marginBottom: 10,
   },
   title: {
     textAlign: "center",
@@ -71,25 +94,47 @@ const styles = StyleSheet.create({
   subtitle: {
     textAlign: "center",
     fontSize: 16,
-    marginBottom: 10,
   },
-  carouselItem: {
-    // flex: 1, // Adjust the flex value as needed
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: 5,
+
+  carouselContainer: {
+    flex: 2,
+    marginTop: 0,
+    marginBottom: 200,
+  },
+  carouselImageContainer: {
+    width: "100%",
+    height: "55%", // Adjust this value as needed
   },
   carouselImage: {
-    width: "100%", // You can adjust this value as needed
-    height: "100%", // You can adjust this value as needed
-    resizeMode: "cover", // Use "cover" for better image scaling
+    height: "100%",
+    width: "100%",
+    resizeMode: "center",
   },
   restaurantInfoContainer: {
-    // flex: 1,
-    padding: 0,
-    marginLeft: 5,
-    marginBottom: -150,
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+  },
+  restaurantInfo: {
+    alignItems: "center",
+    marginTop: -55,
+    marginBottom: 10,
+  },
+  restaurantName: {
+    fontSize: 32,
+    paddingTop: 10,
+  },
+  reserveButton: {
+    backgroundColor: "#A40E24",
+    borderRadius: 5,
+    padding: 5,
+    width: 150,
+    borderColor: "black",
+    borderWidth: 5,
+    borderStyle: "solid",
+  },
+  adSpace: {
+    flex: 1,
   },
 });
 
