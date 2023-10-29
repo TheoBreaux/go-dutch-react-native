@@ -6,8 +6,10 @@ import { paymentOptions } from "../data/data";
 import { useState } from "react";
 
 const PaymentSources = () => {
-  const [selectedPrimaryPayment, setSelectedPrimaryPayment] = useState("default");
-  const [selectedSecondaryPayment, setSelectedSecondaryPayment] = useState("default");
+  const [selectedPrimaryPayment, setSelectedPrimaryPayment] =
+    useState("default");
+  const [selectedSecondaryPayment, setSelectedSecondaryPayment] =
+    useState("default");
   const [primaryPaymentUsername, setPrimaryPaymentUsername] = useState("");
   const [secondaryPaymentUsername, setSecondaryPaymentUsername] = useState("");
 
@@ -34,8 +36,7 @@ const PaymentSources = () => {
             <Picker
               style={styles.input}
               selectedValue={selectedPrimaryPayment}
-              onValueChange={handlePrimaryPaymentChange}
-            >
+              onValueChange={handlePrimaryPaymentChange}>
               {paymentOptions.map((item, index) => (
                 <Picker.Item
                   key={index}
@@ -63,9 +64,7 @@ const PaymentSources = () => {
             <Picker
               style={styles.input}
               selectedValue={selectedSecondaryPayment}
-              onValueChange={handleSecondaryPaymentChange
-              }
-            >
+              onValueChange={handleSecondaryPaymentChange}>
               {paymentOptions.map((item, index) => (
                 <Picker.Item
                   key={index}
@@ -90,7 +89,11 @@ const PaymentSources = () => {
         <View style={styles.submitButton}>
           <Button title="Submit" color={"#A40E24"} />
         </View>
+        <View style={styles.adSpace}>
+          <Text style={styles.ad}>This will be ad space</Text>
+        </View>
       </View>
+
       <Footer />
     </>
   );
@@ -133,6 +136,23 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderStyle: "solid",
     marginLeft: 0,
+  },
+  adSpace: {
+    marginTop: 15,
+    borderWidth: 2,
+    borderColor: "#A40E24",
+    borderStyle: 'dashed',
+    padding: 5,
+    width: '100%',
+    height: 200,
+  },
+  ad: {
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center",
   },
 });
 
