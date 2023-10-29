@@ -1,10 +1,20 @@
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import Logo from "./Logo";
+import { states } from "../data/data";
+import { Picker } from "@react-native-picker/picker";
+import { useState } from "react";
 
 const SignUpForm = () => {
+  const [selectedState, setSelectedState] = useState("");
+
+  const handleStateChange = (itemValue) => {
+    setSelectedState(itemValue);
+  };
+
   const submitForm = () => {
     console.log("submit form");
   };
+
   return (
     <>
       <Logo />
@@ -42,7 +52,16 @@ const SignUpForm = () => {
 
         <View style={styles.logInInputs}>
           <Text style={styles.inputLabels}>State</Text>
-          <TextInput style={styles.textInput} />
+          <View>
+            <Picker
+              style={styles.textInput}
+              selectedValue={selectedState}
+              onValueChange={handleStateChange}>
+              {states.map((item, index) => (
+                <Picker.Item key={item.abbreviation} value={item.name} label={item.name} />
+              ))}
+            </Picker>
+          </View>
         </View>
 
         <View style={styles.logInInputs}>

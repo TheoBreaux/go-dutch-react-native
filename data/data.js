@@ -1,5 +1,5 @@
 export const states = [
-    { name: "", abbreviation: "" },
+    { name: "Select a state", abbreviation: "" },
     { name: "Alabama", abbreviation: "AL" },
     { name: "Alaska", abbreviation: "AK" },
     { name: "Arizona", abbreviation: "AZ" },
@@ -54,7 +54,7 @@ export const states = [
   ];
   
   export const paymentOptions = [
-    { source: "", label: "" },
+    { source: "", label: "Please select" },
     { source: "venmo", label: "Venmo" },
     { source: "paypal", label: "Paypal" },
     { source: "zelle", label: "Zelle" },
