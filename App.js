@@ -22,7 +22,8 @@ const App = () => {
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
-      <UserHomePage/>
+      {/* <UserHomePage/> */}
+      <PaymentSources/>
 
 
     </>

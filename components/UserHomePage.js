@@ -88,14 +88,13 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
   },
   subtitle: {
     textAlign: "center",
     fontSize: 16,
   },
-
   carouselContainer: {
     flex: 2,
     marginTop: 0,

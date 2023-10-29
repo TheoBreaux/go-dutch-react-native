@@ -60,7 +60,7 @@ const NewSplitForm = () => {
         </View>
 
         <View style={styles.continueButton}>
-          <Button title="Continue" color={"#A40E24"}></Button>
+          <Button title="Continue" color={"#A40E24"}/>
         </View>
       </View>
       <Footer />
