@@ -17,13 +17,13 @@ const App = () => {
     <>
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
-      <SignUpForm/>
+      {/* <SignUpForm/> */}
       {/* <NewSplitForm/> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
       {/* <UserHomePage/> */}
-      {/* <PaymentSources/> */}
+      <PaymentSources/>
 
 
     </>

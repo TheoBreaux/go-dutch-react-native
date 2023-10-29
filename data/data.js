@@ -54,7 +54,7 @@ export const states = [
   ];
   
   export const paymentOptions = [
-    { source: "", label: "Please select" },
+    { source: "", label: "Please select payment source" },
     { source: "venmo", label: "Venmo" },
     { source: "paypal", label: "Paypal" },
     { source: "zelle", label: "Zelle" },
