@@ -9,23 +9,18 @@ import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 
-
-
-
 const App = () => {
   return (
     <>
-      {/* <SignUpLogIn /> */}
+      <SignUpLogIn />
       {/* <LogInForm /> */}
       {/* <SignUpForm/> */}
-      {/* <NewSplitForm/> */}
+      {/* <NewSplitForm /> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
       {/* <UserHomePage/> */}
-      <PaymentSources/>
-
-
+      {/* <PaymentSources/> */}
     </>
     // <NativeRouter>
     //   <Routes>

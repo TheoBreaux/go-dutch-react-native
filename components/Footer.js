@@ -1,4 +1,5 @@
 import { View, Button, StyleSheet } from "react-native";
+import Colors from "../constants/colors";
 
 const Footer = () => {
   const pressHandler = () => {
@@ -9,23 +10,43 @@ const Footer = () => {
     <View style={styles.footerContainer}>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
-          <Button title="Home" color={"#A40E24"} onPress={pressHandler} />
+          <Button
+            title="Home"
+            color={Colors.goDutchRed}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button title="Split" color={"#A40E24"} onPress={pressHandler} />
+          <Button
+            title="Split"
+            color={Colors.goDutchRed}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button title="History" color={"#A40E24"} onPress={pressHandler} />
+          <Button
+            title="History"
+            color={Colors.goDutchRed}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button title="Images" color={"#A40E24"} onPress={pressHandler} />
+          <Button
+            title="Images"
+            color={Colors.goDutchRed}
+            onPress={pressHandler}
+          />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button title="Log Out" color={"#A40E24"} onPress={pressHandler} />
+          <Button
+            title="Log Out"
+            color={Colors.goDutchRed}
+            onPress={pressHandler}
+          />
         </View>
       </View>
     </View>

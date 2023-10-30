@@ -1,5 +1,6 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import Logo from "./Logo";
+import Colors from "../constants/colors";
 
 const LogInForm = () => {
   const submitForm = () => {
@@ -20,7 +21,11 @@ const LogInForm = () => {
           <TextInput style={styles.textInput} />
         </View>
         <View style={styles.button}>
-          <Button title="Submit" color="#A40E24" onPress={submitForm} />
+          <Button
+            title="Submit"
+            color={Colors.goDutchRed}
+            onPress={submitForm}
+          />
         </View>
       </View>
     </>
@@ -37,14 +42,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 10,
   },
   button: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 10,
     margin: 10,

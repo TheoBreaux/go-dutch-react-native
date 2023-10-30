@@ -3,6 +3,7 @@ import Logo from "./Logo";
 import { states } from "../data/data";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
+import Colors from "../constants/colors";
 
 const SignUpForm = () => {
   const [selectedState, setSelectedState] = useState("");
@@ -70,7 +71,7 @@ const SignUpForm = () => {
         </View>
 
         <View style={styles.button}>
-          <Button title="Submit" color="#A40E24" onPress={submitForm} />
+          <Button title="Submit" color={Colors.goDutchRed} onPress={submitForm} />
         </View>
       </View>
     </>
@@ -95,15 +96,15 @@ const styles = StyleSheet.create({
   firstNameInput: {
     marginRight: 5,
     padding: 10,
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
   },
   lastNameInput: {
     padding: 10,
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
   },
@@ -111,14 +112,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 10,
   },
   button: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 10,
     margin: 16,

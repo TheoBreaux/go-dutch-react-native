@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import Footer from "./Footer";
 import { paymentOptions } from "../data/data";
 import { useState } from "react";
+import Colors from "../constants/colors";
 
 const PaymentSources = () => {
   const [selectedPrimaryPayment, setSelectedPrimaryPayment] =
@@ -87,7 +88,7 @@ const PaymentSources = () => {
         </View>
 
         <View style={styles.submitButton}>
-          <Button title="Submit" color={"#A40E24"} />
+          <Button title="Submit" color={Colors.goDutchRed} />
         </View>
         <View style={styles.adSpace}>
           <Text style={styles.ad}>This will be ad space</Text>
@@ -112,22 +113,22 @@ const styles = StyleSheet.create({
   subtitle: {
     textAlign: "center",
     fontSize: 18,
-    color: "#a40e24",
+    color: Colors.goDutchRed,
   },
   inputContainer: {
     width: "100%",
     marginTop: 10,
   },
   input: {
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 5,
     width: "100%",
   },
   submitButton: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 5,
     marginTop: 10,
@@ -140,10 +141,10 @@ const styles = StyleSheet.create({
   adSpace: {
     marginTop: 15,
     borderWidth: 2,
-    borderColor: "#A40E24",
-    borderStyle: 'dashed',
+    borderColor: Colors.goDutchRed,
+    borderStyle: "dashed",
     padding: 5,
-    width: '100%',
+    width: "100%",
     height: 200,
   },
   ad: {

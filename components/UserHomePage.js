@@ -12,6 +12,7 @@ import Footer from "./Footer";
 import Logo from "./Logo";
 import { featuredRestaurants } from "../data/data";
 import Carousel from "react-native-snap-carousel";
+import Colors from "../constants/colors";
 
 const UserHomePage = () => {
   const renderItem = ({ item }) => {
@@ -37,7 +38,7 @@ const UserHomePage = () => {
           <View style={styles.reserveButton}>
             <Button
               title="Reserve"
-              color={"#A40E24"}
+              color={Colors.goDutchRed}
               onPress={handleExternalLink}
             />
           </View>
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   reserveButton: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 5,
     width: 150,

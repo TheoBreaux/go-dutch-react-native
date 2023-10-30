@@ -4,9 +4,10 @@ import {
   StyleSheet,
   Image,
   Button,
-  TouchableOpacity,
 } from "react-native";
 import Logo from "./Logo";
+import Colors from "../constants/colors";
+
 
 const SignUpLogIn = () => {
   
@@ -29,10 +30,10 @@ const SignUpLogIn = () => {
         />
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title="Sign Up" color="#A40E24" onPress={signUp} />
+            <Button title="Sign Up" color={Colors.goDutchRed} onPress={signUp} />
           </View>
           <View style={styles.button}>
-            <Button title="Log In" color="#A40E24" onPress={login} />
+            <Button title="Log In" color={Colors.goDutchRed} onPress={login} />
           </View>
         </View>
         <Image
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   button: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 5,
     margin: 10,

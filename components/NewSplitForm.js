@@ -2,14 +2,12 @@ import { View, Image, StyleSheet, Text, TextInput, Button } from "react-native";
 import Logo from "./Logo";
 import { Picker } from "@react-native-picker/picker";
 import Footer from "./Footer";
+import Colors from "../constants/colors";
 
 const NewSplitForm = () => {
-
-  
   const changeRestaurantHandler = () => {
     console.log("close");
   };
-
 
   return (
     <>
@@ -39,7 +37,7 @@ const NewSplitForm = () => {
           <View style={styles.exitRestaurant}>
             <View style={styles.button}>
               <Button
-                color={"#A40E24"}
+                color={Colors.goDutchRed}
                 title="X"
                 onPress={changeRestaurantHandler}
               />
@@ -60,7 +58,7 @@ const NewSplitForm = () => {
         </View>
 
         <View style={styles.continueButton}>
-          <Button title="Continue" color={"#A40E24"}/>
+          <Button title="Continue" color={Colors.goDutchRed} />
         </View>
       </View>
       <Footer />
@@ -82,7 +80,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    color: "#273f81",
+    color: Colors.goDutchBlue,
     fontSize: 25,
     marginTop: -15,
   },
@@ -90,8 +88,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 5,
@@ -102,15 +100,15 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   restaurantInput: {
-    backgroundColor: "#e8ebf0",
-    borderBottomColor: "#1a202c",
+    backgroundColor: Colors.inputBackground,
+    borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 5,
     width: "88%",
   },
   button: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 0,
     margin: 0,
@@ -123,7 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   continueButton: {
-    backgroundColor: "#A40E24",
+    backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     padding: 5,
     margin: 10,
