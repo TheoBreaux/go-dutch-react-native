@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
   buttonOuterContainer: {
     borderRadius: 5,
     borderWidth: 3,
-    margin: 10,
+    marginTop: 10,
     overflow: "hidden",
   },
   buttonContainer: {
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
-    margin: 1,
+    margin: 2,
     width: 370,
     borderColor: "black",
     borderWidth: 3,

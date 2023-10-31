@@ -24,8 +24,8 @@ const App = () => {
   return (
     <>
       {/* <SignUpLogIn /> */}
-      <LogInForm />
-      {/* <SignUpForm/> */}
+      {/* <LogInForm /> */}
+      <SignUpForm/>
       {/* <NewSplitForm /> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
