@@ -4,7 +4,9 @@ import Colors from "../../constants/colors";
 const PrimaryButton = ({ children, onPress }) => {
   return (
     <View style={styles.buttonOuterContainer}>
-      <Pressable onPress={onPress}>
+      <Pressable
+        onPress={onPress}
+        android_ripple={{ color: Colors.goDutchBlue }}>
         <View style={styles.buttonContainer}>
           <Text style={styles.buttonText}>{children}</Text>
         </View>
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
-    margin: 1,
+    margin: 2,
     width: 150,
     borderColor: "black",
     borderWidth: 3,
