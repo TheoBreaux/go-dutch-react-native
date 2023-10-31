@@ -3,10 +3,15 @@ import Logo from "./Logo";
 import { Picker } from "@react-native-picker/picker";
 import Footer from "./Footer";
 import Colors from "../constants/colors";
+import SecondaryButton from "./ui/SecondaryButton";
 
 const NewSplitForm = () => {
   const changeRestaurantHandler = () => {
     console.log("close");
+  };
+
+  const continueHandler = () => {
+    console.log("coontinue");
   };
 
   return (
@@ -57,8 +62,8 @@ const NewSplitForm = () => {
           <TextInput style={styles.input} />
         </View>
 
-        <View style={styles.continueButton}>
-          <Button title="Continue" color={Colors.goDutchRed} />
+        <View>
+          <SecondaryButton onPress={continueHandler}>Continue</SecondaryButton>
         </View>
       </View>
       <Footer />
@@ -122,16 +127,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",
-  },
-  continueButton: {
-    backgroundColor: Colors.goDutchRed,
-    borderRadius: 5,
-    padding: 5,
-    margin: 10,
-    width: "100%",
-    borderColor: "black",
-    borderWidth: 5,
-    borderStyle: "solid",
   },
 });
 

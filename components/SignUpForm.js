@@ -4,6 +4,7 @@ import { states } from "../data/data";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import Colors from "../constants/colors";
+import SecondaryButton from "./ui/SecondaryButton";
 
 const SignUpForm = () => {
   const [selectedState, setSelectedState] = useState("");
@@ -74,12 +75,8 @@ const SignUpForm = () => {
           <TextInput style={styles.textInput} />
         </View>
 
-        <View style={styles.button}>
-          <Button
-            title="Submit"
-            color={Colors.goDutchRed}
-            onPress={submitForm}
-          />
+        <View>
+          <SecondaryButton onPress={submitForm}>Submit</SecondaryButton>
         </View>
       </View>
     </>
@@ -127,16 +124,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 10,
-  },
-  button: {
-    backgroundColor: Colors.goDutchRed,
-    borderRadius: 5,
-    padding: 10,
-    margin: 16,
-    width: "100%",
-    borderColor: "black",
-    borderWidth: 5,
-    borderStyle: "solid",
   },
 });
 

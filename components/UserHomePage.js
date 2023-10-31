@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  Button,
   Linking,
 } from "react-native";
 import Footer from "./Footer";
@@ -13,6 +12,7 @@ import Logo from "./Logo";
 import { featuredRestaurants } from "../data/data";
 import Carousel from "react-native-snap-carousel";
 import Colors from "../constants/colors";
+import PrimaryButton from "./ui/PrimaryButton";
 
 const UserHomePage = () => {
   const renderItem = ({ item }) => {
@@ -35,12 +35,8 @@ const UserHomePage = () => {
             </Text>
             <Text style={styles.restaurantText}>Rating:{item.rating}⭐</Text>
           </View>
-          <View style={styles.reserveButton}>
-            <Button
-              title="Reserve"
-              color={Colors.goDutchRed}
-              onPress={handleExternalLink}
-            />
+          <View>
+            <PrimaryButton onPress={handleExternalLink}>Reserve</PrimaryButton>
           </View>
         </View>
       </View>
@@ -129,15 +125,6 @@ const styles = StyleSheet.create({
   restaurantText: {
     fontFamily: "red-hat-regular",
     fontSize: 18,
-  },
-  reserveButton: {
-    backgroundColor: Colors.goDutchRed,
-    borderRadius: 5,
-    padding: 5,
-    width: 150,
-    borderColor: "black",
-    borderWidth: 5,
-    borderStyle: "solid",
   },
   adSpace: {
     flex: 1,
