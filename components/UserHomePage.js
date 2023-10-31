@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
   restaurantInfo: {
     alignItems: "center",
     marginTop: -55,
-    marginBottom: 10,
   },
   restaurantName: {
     fontFamily: "red-hat-bold",

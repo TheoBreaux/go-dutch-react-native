@@ -24,13 +24,13 @@ const App = () => {
   return (
     <>
       {/* <SignUpLogIn /> */}
-      {/* <LogInForm /> */}
+      <LogInForm />
       {/* <SignUpForm/> */}
       {/* <NewSplitForm /> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
-      <UserHomePage/>
+      {/* <UserHomePage/> */}
       {/* <PaymentSources/> */}
     </>
     // <NativeRouter>
