@@ -1,16 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Button,
-} from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import Logo from "./Logo";
-import Colors from "../constants/colors";
-
+import PrimaryButton from "./ui/PrimaryButton";
 
 const SignUpLogIn = () => {
-  
   const signUp = () => {
     console.log("sign up");
   };
@@ -29,12 +21,8 @@ const SignUpLogIn = () => {
           source={require("../images/go-dutch-split-button.png")}
         />
         <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button title="Sign Up" color={Colors.goDutchRed} onPress={signUp} />
-          </View>
-          <View style={styles.button}>
-            <Button title="Log In" color={Colors.goDutchRed} onPress={login} />
-          </View>
+          <PrimaryButton onPress={signUp}>Sign Up</PrimaryButton>
+          <PrimaryButton onPress={login}>Log In</PrimaryButton>
         </View>
         <Image
           style={styles.patternImage}
@@ -51,28 +39,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: 'red-hat-bold',
+    fontFamily: "red-hat-bold",
     fontSize: 25,
   },
   iconImage: {
     marginTop: 30,
-    width: 200,
+    width: 250,
     height: 200,
     resizeMode: "center",
   },
   buttonContainer: {
     flexDirection: "row",
     marginTop: 30,
-  },
-  button: {
-    backgroundColor: Colors.goDutchRed,
-    borderRadius: 5,
-    padding: 5,
-    margin: 10,
-    width: 150,
-    borderColor: "black",
-    borderWidth: 5,
-    borderStyle: "solid",
   },
   patternImage: {
     marginTop: 20,
