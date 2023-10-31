@@ -9,7 +9,8 @@ import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
+// import { SplashScreen } from "expo-splash-screen";
+// import { useEffect } from "react";
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -17,15 +18,28 @@ const App = () => {
     "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
   });
 
+  // useEffect(() => {
+  //   const prepare = async () => {
+  //     await SplashScreen.preventAutoHideAsync();
+
+  //     await Font.loadAsync({
+  //       "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
+  //       "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
+  //     });
+  //     SplashScreen.hideAsync();
+  //   };
+  //   prepare();
+  // }, []);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null; //can return loading indicator here if wanted
   }
 
   return (
     <>
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
-      <SignUpForm/>
+      <SignUpForm />
       {/* <NewSplitForm /> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}

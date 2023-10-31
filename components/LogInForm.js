@@ -4,7 +4,6 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
-ErrorMessage;
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -71,7 +70,8 @@ const LogInForm = () => {
         <Formik
           initialValues={initialValues}
           validate={validateForm}
-          onSubmit={(values) => {
+          onSubmit={(values, actions) => {
+            actions.resetForm();
             console.log(values);
           }}>
           {({ handleChange, handleSubmit, handleBlur, values }) => (
