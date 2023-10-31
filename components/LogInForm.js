@@ -62,9 +62,6 @@ const LogInForm = () => {
     // }
   };
 
-  const submitForm = () => {
-    console.log("form submitted");
-  };
   return (
     <>
       <Logo />
@@ -89,14 +86,23 @@ const LogInForm = () => {
                 />
               </View>
 
-
-
               <View style={styles.logInInputs}>
                 <Text style={styles.label}>Password</Text>
-                <TextInput style={styles.textInput} />
+                <Field name="password">
+                  {({ field }) => (
+                    <TextInput style={styles.textInput} {...field} />
+                  )}
+                </Field>
+                <ErrorMessage
+                  name="password"
+                  component={Text}
+                  style={styles.errorText}
+                />
               </View>
               <View style={styles.button}>
-                <SecondaryButton onPress={submitForm}>Submit</SecondaryButton>
+                <SecondaryButton type="submit" disabled={isSubmitting}>
+                  Submit
+                </SecondaryButton>
               </View>
             </View>
           </Form>
