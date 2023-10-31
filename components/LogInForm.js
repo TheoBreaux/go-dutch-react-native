@@ -12,12 +12,12 @@ const LogInForm = () => {
 
       <View style={styles.inputContainer}>
         <View style={styles.logInInputs}>
-          <Text>Username</Text>
+          <Text style={styles.label}>Username</Text>
           <TextInput style={styles.textInput} />
         </View>
 
         <View style={styles.logInInputs}>
-          <Text>Password</Text>
+          <Text style={styles.label}>Password</Text>
           <TextInput style={styles.textInput} />
         </View>
         <View style={styles.button}>
@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
   },
   logInInputs: {
     width: "100%",
+  },
+  label: {
+    fontFamily: "red-hat-regular",
   },
   textInput: {
     backgroundColor: Colors.inputBackground,

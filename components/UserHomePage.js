@@ -29,11 +29,11 @@ const UserHomePage = () => {
         <View style={styles.restaurantInfoContainer}>
           <View style={styles.restaurantInfo}>
             <Text style={styles.restaurantName}>{item.name}</Text>
-            <Text>{item.address}</Text>
-            <Text>
+            <Text style={styles.restaurantText}>{item.address}</Text>
+            <Text style={styles.restaurantText}>
               {item.city}, {item.state} {item.zip}
             </Text>
-            <Text>Rating:{item.rating}⭐</Text>
+            <Text style={styles.restaurantText}>Rating:{item.rating}⭐</Text>
           </View>
           <View style={styles.reserveButton}>
             <Button
@@ -88,13 +88,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
+    fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 32,
-    fontWeight: "bold",
   },
   subtitle: {
+    fontFamily: "red-hat-regular",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 18,
   },
   carouselContainer: {
     flex: 2,
@@ -121,8 +122,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   restaurantName: {
-    fontSize: 32,
+    fontFamily: "red-hat-bold",
+    fontSize: 40,
     paddingTop: 10,
+  },
+  restaurantText: {
+    fontFamily: "red-hat-regular",
+    fontSize: 18,
   },
   reserveButton: {
     backgroundColor: Colors.goDutchRed,

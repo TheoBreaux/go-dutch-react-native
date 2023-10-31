@@ -21,19 +21,19 @@ const NewSplitForm = () => {
         <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
 
         <View style={styles.inputContainer}>
-          <Text>Date:</Text>
+          <Text style={styles.label}>Date:</Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Select a dining experience:</Text>
+          <Text style={styles.label}>Select a dining experience:</Text>
           <View>
             <Picker style={styles.input} />
           </View>
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Restaurant/Bar:</Text>
+          <Text style={styles.label}>Restaurant/Bar:</Text>
           <View style={styles.exitRestaurant}>
             <View style={styles.button}>
               <Button
@@ -48,12 +48,12 @@ const NewSplitForm = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Input unlisted restaurant:</Text>
+          <Text style={styles.label}>Input unlisted restaurant:</Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Title:</Text>
+          <Text style={styles.label}>Title:</Text>
           <TextInput style={styles.input} />
         </View>
 
@@ -79,13 +79,16 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   title: {
-    fontWeight: "bold",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchBlue,
     fontSize: 25,
     marginTop: -15,
   },
   inputContainer: {
     width: "100%",
+  },
+  label: {
+    fontFamily: "red-hat-regular",
   },
   input: {
     backgroundColor: Colors.inputBackground,

@@ -8,18 +8,29 @@ import AddDiners from "./components/AddDiners";
 import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 const App = () => {
+  const [fontsLoaded] = useFonts({
+    "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
+    "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <>
-      <SignUpLogIn />
+      {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
       {/* <SignUpForm/> */}
       {/* <NewSplitForm /> */}
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
-      {/* <UserHomePage/> */}
+      <UserHomePage/>
       {/* <PaymentSources/> */}
     </>
     // <NativeRouter>

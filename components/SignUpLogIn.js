@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontWeight: "bold",
+    fontFamily: 'red-hat-bold',
     fontSize: 25,
   },
   iconImage: {

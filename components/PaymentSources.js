@@ -32,7 +32,7 @@ const PaymentSources = () => {
         <Text style={styles.subtitle}>Please select your payment sources!</Text>
 
         <View style={styles.inputContainer}>
-          <Text>Select Primary Payment Source</Text>
+          <Text style={styles.label}>Select Primary Payment Source</Text>
           <View>
             <Picker
               style={styles.input}
@@ -50,7 +50,7 @@ const PaymentSources = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Please Enter Payment Source Username</Text>
+          <Text style={styles.label}>Please Enter Payment Source Username</Text>
           <TextInput
             style={styles.input}
             placeholder="@john-smith"
@@ -60,7 +60,7 @@ const PaymentSources = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Select Secondary Payment Source</Text>
+          <Text style={styles.label}>Select Secondary Payment Source</Text>
           <View>
             <Picker
               style={styles.input}
@@ -78,7 +78,7 @@ const PaymentSources = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text>Please Enter Payment Source Username</Text>
+          <Text style={styles.label}>Please Enter Payment Source Username</Text>
           <TextInput
             style={styles.input}
             placeholder="@john-smith"
@@ -106,14 +106,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
+    fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 32,
-    fontWeight: "bold",
   },
   subtitle: {
+    fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 18,
     color: Colors.goDutchRed,
+  },
+  label: {
+    fontFamily: "red-hat-regular",
   },
   inputContainer: {
     width: "100%",

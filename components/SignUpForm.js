@@ -22,11 +22,11 @@ const SignUpForm = () => {
       <View style={styles.inputContainer}>
         <View style={styles.nameInputsContainer}>
           <View style={styles.nameInputs}>
-            <Text>First Name</Text>
+            <Text style={styles.inputLabels}>First Name</Text>
             <TextInput style={styles.firstNameInput} />
           </View>
           <View style={styles.nameInputs}>
-            <Text>Last Name</Text>
+            <Text style={styles.inputLabels}>Last Name</Text>
             <TextInput style={styles.lastNameInput} />
           </View>
         </View>
@@ -59,7 +59,11 @@ const SignUpForm = () => {
               selectedValue={selectedState}
               onValueChange={handleStateChange}>
               {states.map((item, index) => (
-                <Picker.Item key={item.abbreviation} value={item.name} label={item.name} />
+                <Picker.Item
+                  key={item.abbreviation}
+                  value={item.name}
+                  label={item.name}
+                />
               ))}
             </Picker>
           </View>
@@ -71,7 +75,11 @@ const SignUpForm = () => {
         </View>
 
         <View style={styles.button}>
-          <Button title="Submit" color={Colors.goDutchRed} onPress={submitForm} />
+          <Button
+            title="Submit"
+            color={Colors.goDutchRed}
+            onPress={submitForm}
+          />
         </View>
       </View>
     </>
@@ -89,6 +97,7 @@ const styles = StyleSheet.create({
   },
   inputLabels: {
     marginTop: 10,
+    fontFamily: "red-hat-regular",
   },
   nameInputs: {
     width: "50%",
@@ -112,6 +121,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {
+    fontFamily: "red-hat-regular",
     backgroundColor: Colors.inputBackground,
     borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
