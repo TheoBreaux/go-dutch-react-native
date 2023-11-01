@@ -259,6 +259,7 @@ const SignUpForm = () => {
 
 const styles = StyleSheet.create({
   inputContainer: {
+    marginTop: -15,
     flex: 1,
     alignItems: "center",
     padding: 16,

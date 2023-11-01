@@ -39,8 +39,8 @@ const App = () => {
     <>
       {/* <SignUpLogIn /> */}
       {/* <LogInForm /> */}
-      <SignUpForm />
-      {/* <NewSplitForm /> */}
+      {/* <SignUpForm /> */}
+      <NewSplitForm />
       {/* <DiningEventHistory/> */}
       {/* <ImageLogs/> */}
       {/* <AddDiners/> */}
