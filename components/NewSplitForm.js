@@ -20,7 +20,7 @@ const getCurrentDate = () => {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return `${month}-${day}-${year}`;
 };
 
 const NewSplitForm = () => {
@@ -30,14 +30,14 @@ const NewSplitForm = () => {
   const initialValues = {
     eventDate: getCurrentDate(),
     selectedRestaurant: "",
-    inputSelectedRestaurant: "",
+    enteredSelectedRestaurant: "",
     eventTitle: "",
   };
 
   const validateForm = (values) => {
     const errors = {};
 
-    if (!values.selectedRestaurant || !values.inputSelectedRestaurant) {
+    if (!values.selectedRestaurant || !values.enteredSelectedRestaurant) {
       errors.selectedRestaurant = "Please select or enter your restaurant";
     }
 
@@ -54,19 +54,16 @@ const NewSplitForm = () => {
     console.log("close");
   };
 
-  // const continueHandler = () => {
-  //   console.log("coontinue");
-  // };
-
   return (
     <>
       <Logo />
-      <Image
-        style={styles.friendsImage}
-        source={require("../images/friends.png")}
-      />
-      <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
       <ScrollView>
+        <Image
+          style={styles.friendsImage}
+          source={require("../images/friends.png")}
+        />
+        <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
+
         <View style={styles.container}>
           <Formik
             initialValues={initialValues}
@@ -101,6 +98,11 @@ const NewSplitForm = () => {
                       ))} */}
                     </Picker>
                   </View>
+                  <ErrorMessage
+                    name="selectedRestaurant"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -113,23 +115,50 @@ const NewSplitForm = () => {
                         onPress={changeRestaurantHandler}
                       />
                     </View>
-                    <TextInput style={styles.restaurantInput}></TextInput>
+                    <TextInput
+                      style={styles.restaurantInput}
+                      value={values.selectedRestaurant}
+                      editable={false}
+                    />
                   </View>
+                  <Text style={styles.notListedText}>
+                    Not listed? Input below
+                  </Text>
                 </View>
 
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Input unlisted restaurant:</Text>
-                  <TextInput style={styles.input} />
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={handleChange("enteredSelectedRestaurant")}
+                    onBlur={handleBlur("enteredSelectedRestaurant")}
+                    value={values.enteredSelectedRestaurant}
+                  />
+                  <ErrorMessage
+                    name="enteredSelectedRestaurant"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
 
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Title:</Text>
-                  <TextInput style={styles.input} />
+                  <TextInput
+                    style={styles.input}
+                    value={values.eventTitle}
+                    onChangeText={handleChange("eventTitle")}
+                    onBlur={handleBlur("eventTitle")}
+                  />
+                  <ErrorMessage
+                    name="eventTitle"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
 
                 <View>
                   <SecondaryButton onPress={handleSubmit}>
-                    Submit
+                    Continue
                   </SecondaryButton>
                 </View>
               </View>
@@ -149,7 +178,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   friendsImage: {
-    marginTop: -20,
+    marginTop: -15,
     width: 400,
     height: 250,
     resizeMode: "contain",
@@ -160,11 +189,17 @@ const styles = StyleSheet.create({
     color: Colors.goDutchBlue,
     fontSize: 25,
     marginTop: -15,
+    marginBottom: -20,
+  },
+  notListedText: {
+    color: "red",
+    fontSize: 12,
   },
   inputContainer: {
     width: "100%",
   },
   label: {
+    marginTop: 5,
     fontFamily: "red-hat-regular",
   },
   input: {
@@ -199,6 +234,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    color: "#fc8181",
   },
 });
 
