@@ -1,100 +1,172 @@
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import Logo from "./Logo";
 import { Picker } from "@react-native-picker/picker";
 import Footer from "./Footer";
 import { paymentOptions } from "../data/data";
 import { useState } from "react";
 import Colors from "../constants/colors";
+import { ErrorMessage, Formik } from "formik";
+import SecondaryButton from "./ui/SecondaryButton";
 
 const PaymentSources = () => {
-  const [selectedPrimaryPayment, setSelectedPrimaryPayment] =
-    useState("default");
-  const [selectedSecondaryPayment, setSelectedSecondaryPayment] =
-    useState("default");
-  const [primaryPaymentUsername, setPrimaryPaymentUsername] = useState("");
-  const [secondaryPaymentUsername, setSecondaryPaymentUsername] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [error, setError] = useState("");
 
-  const handlePrimaryPaymentChange = (itemValue) => {
-    setSelectedPrimaryPayment(itemValue);
+  const initialValues = {
+    selectedPrimaryPayment: "",
+    primaryPaymentUsername: "",
+    selectedSecondaryPayment: "",
+    secondaryPaymentUsername: "",
   };
 
-  const handleSecondaryPaymentChange = (itemValue) => {
-    setSelectedSecondaryPayment(itemValue);
+  const validateForm = (values) => {
+    const errors = {};
+
+    if (!values.selectedPrimaryPayment) {
+      errors.selectedPrimaryPayment =
+        "Please select your primary payment source";
+    }
+
+    if (!values.primaryPaymentUsername) {
+      errors.primaryPaymentUsername =
+        "Please enter your primary payment username";
+    }
+
+    if (!values.selectedSecondaryPayment) {
+      errors.selectedSecondaryPayment =
+        "Please select your secondary payment source";
+    }
+
+    if (!values.setSecondaryPaymentUsername) {
+      errors.setSecondaryPaymentUsername =
+        "Please enter your secondary payment username";
+    }
+
+    const isValid = Object.keys(errors).length === 0;
+    setIsFormValid(isValid);
+    return errors;
   };
 
   return (
     <>
       <Logo />
+      <ScrollView>
+        <View style={styles.container}>
+          {/* <Text style={styles.title}>Welcome, firstName!</Text>
+          <Text style={styles.subtitle}>
+            Please select your payment sources!
+          </Text> */}
 
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome, firstName!</Text>
+          <Formik
+            initialValues={initialValues}
+            validate={validateForm}
+            onSubmit={(values, actions) => {
+              actions.resetForm();
+              console.log(values);
+            }}>
+            {({ handleChange, handleSubmit, handleBlur, values }) => (
+              <>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>
+                    Select Primary Payment Source
+                  </Text>
+                  <View>
+                    <Picker
+                      style={styles.input}
+                      selectedValue={values.selectedPrimaryPayment}
+                      onValueChange={handleChange("selectedPrimaryPayment")}
+                      onBlur={handleBlur("selectedPrimaryPayment")}>
+                      {paymentOptions.map((item, index) => (
+                        <Picker.Item
+                          key={index}
+                          label={item.label}
+                          value={item.source}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                  <ErrorMessage
+                    name="selectedPrimaryPayment"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
 
-        <Text style={styles.subtitle}>Please select your payment sources!</Text>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>
+                    Please Enter Payment Source Username
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="@john-smith"
+                    value={values.primaryPaymentUsername}
+                    onChangeText={handleChange("primaryPaymentUsername")}
+                    onBlur={handleBlur("primaryPaymentUsername")}
+                  />
+                  <ErrorMessage
+                    name="primaryPaymentUsername"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Select Primary Payment Source</Text>
-          <View>
-            <Picker
-              style={styles.input}
-              selectedValue={selectedPrimaryPayment}
-              onValueChange={handlePrimaryPaymentChange}>
-              {paymentOptions.map((item, index) => (
-                <Picker.Item
-                  key={index}
-                  label={item.label}
-                  value={item.source}
-                />
-              ))}
-            </Picker>
-          </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>
+                    Select Secondary Payment Source
+                  </Text>
+                  <View>
+                    <Picker
+                      style={styles.input}
+                      selectedValue={values.selectedSecondaryPayment}
+                      onValueChange={handleChange("selectedSecondaryPayment")}
+                      onBlur={handleBlur("selectedSecondaryPayment")}>
+                      {paymentOptions.map((item, index) => (
+                        <Picker.Item
+                          key={index}
+                          label={item.label}
+                          value={item.source}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                  <ErrorMessage
+                    name="selectedSecondaryPayment"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>
+                    Please Enter Secondary Payment Source Username
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="$johnsmith"
+                    value={values.secondaryPaymentUsername}
+                    onChangeText={handleChange("secondaryPaymentUsername")}
+                    onBlur={handleBlur("secondaryPaymentUsername")}
+                  />
+                  <ErrorMessage
+                    name="secondaryPaymentUsername"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
+
+                <View style={styles.submitButton}>
+                  <SecondaryButton onPress={handleSubmit}>
+                    Submit
+                  </SecondaryButton>
+                </View>
+                {/* <View style={styles.adSpace}>
+                  <Text style={styles.ad}>This will be ad space</Text>
+                </View> */}
+              </>
+            )}
+          </Formik>
         </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Please Enter Payment Source Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="@john-smith"
-            value={primaryPaymentUsername}
-            onChangeText={(text) => setPrimaryPaymentUsername(text)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Select Secondary Payment Source</Text>
-          <View>
-            <Picker
-              style={styles.input}
-              selectedValue={selectedSecondaryPayment}
-              onValueChange={handleSecondaryPaymentChange}>
-              {paymentOptions.map((item, index) => (
-                <Picker.Item
-                  key={index}
-                  label={item.label}
-                  value={item.source}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Please Enter Payment Source Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="@john-smith"
-            value={secondaryPaymentUsername}
-            onChangeText={(text) => setSecondaryPaymentUsername(text)}
-          />
-        </View>
-
-        <View style={styles.submitButton}>
-          <Button title="Submit" color={Colors.goDutchRed} />
-        </View>
-        <View style={styles.adSpace}>
-          <Text style={styles.ad}>This will be ad space</Text>
-        </View>
-      </View>
-
+      </ScrollView>
       <Footer />
     </>
   );
@@ -103,12 +175,14 @@ const PaymentSources = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 16,
+    alignItems: "center",
   },
   title: {
     fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 32,
+    marginTop: -20,
   },
   subtitle: {
     fontFamily: "red-hat-bold",
@@ -131,17 +205,6 @@ const styles = StyleSheet.create({
     padding: 5,
     width: "100%",
   },
-  submitButton: {
-    backgroundColor: Colors.goDutchRed,
-    borderRadius: 5,
-    padding: 5,
-    marginTop: 10,
-    width: "100%",
-    borderColor: "black",
-    borderWidth: 5,
-    borderStyle: "solid",
-    marginLeft: 0,
-  },
   adSpace: {
     marginTop: 15,
     borderWidth: 2,
@@ -149,7 +212,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     padding: 5,
     width: "100%",
-    height: 200,
+    height: 230,
   },
   ad: {
     justifyContent: "center",
@@ -158,6 +221,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
+  },
+  errorText: {
+    color: "#fc8181",
   },
 });
 

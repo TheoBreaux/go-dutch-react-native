@@ -37,7 +37,7 @@ const NewSplitForm = () => {
   const validateForm = (values) => {
     const errors = {};
 
-    if (!values.selectedRestaurant || !values.enteredSelectedRestaurant) {
+    if (!values.selectedRestaurant && !values.enteredSelectedRestaurant) {
       errors.selectedRestaurant = "Please select or enter your restaurant";
     }
 
@@ -57,13 +57,13 @@ const NewSplitForm = () => {
   return (
     <>
       <Logo />
+
       <ScrollView>
         <Image
           style={styles.friendsImage}
           source={require("../images/friends.png")}
         />
         <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
-
         <View style={styles.container}>
           <Formik
             initialValues={initialValues}
@@ -98,11 +98,11 @@ const NewSplitForm = () => {
                       ))} */}
                     </Picker>
                   </View>
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name="selectedRestaurant"
                     component={Text}
                     style={styles.errorText}
-                  />
+                  /> */}
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -135,7 +135,7 @@ const NewSplitForm = () => {
                     value={values.enteredSelectedRestaurant}
                   />
                   <ErrorMessage
-                    name="enteredSelectedRestaurant"
+                    name="selectedRestaurant"
                     component={Text}
                     style={styles.errorText}
                   />
@@ -156,7 +156,7 @@ const NewSplitForm = () => {
                   />
                 </View>
 
-                <View>
+                <View style={styles.buttonContainer}>
                   <SecondaryButton onPress={handleSubmit}>
                     Continue
                   </SecondaryButton>
@@ -237,6 +237,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#fc8181",
+  },
+  buttonContainer: {
+    marginTop: 10,
   },
 });
 
