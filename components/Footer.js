@@ -1,9 +1,13 @@
 import { View, Button, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+const Stack = createStackNavigator();
 
 const Footer = () => {
-  const pressHandler = () => {
-    console.log("pressed");
+  const logOut = () => {
+    console.log("log out");
   };
 
   return (
@@ -13,7 +17,7 @@ const Footer = () => {
           <Button
             title="Home"
             color={Colors.goDutchRed}
-            onPress={pressHandler}
+            onPress={() => navigation.navigate("UserHomePage")}
           />
         </View>
 
@@ -21,7 +25,7 @@ const Footer = () => {
           <Button
             title="Split"
             color={Colors.goDutchRed}
-            onPress={pressHandler}
+            onPress={() => navigation.navigate("NewSplitForm")}
           />
         </View>
 
@@ -29,7 +33,7 @@ const Footer = () => {
           <Button
             title="History"
             color={Colors.goDutchRed}
-            onPress={pressHandler}
+            onPress={() => navigation.navigate("DiningEventHistory")}
           />
         </View>
 
@@ -37,16 +41,12 @@ const Footer = () => {
           <Button
             title="Images"
             color={Colors.goDutchRed}
-            onPress={pressHandler}
+            onPress={() => navigation.navigate("ImageLogs")}
           />
         </View>
 
         <View style={styles.buttonWrapper}>
-          <Button
-            title="Log Out"
-            color={Colors.goDutchRed}
-            onPress={pressHandler}
-          />
+          <Button title="Log Out" color={Colors.goDutchRed} onPress={logOut} />
         </View>
       </View>
     </View>

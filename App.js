@@ -1,4 +1,3 @@
-import { NativeRouter, Route, Routes } from "react-router-native";
 import SignUpForm from "./components/SignUpForm";
 import PaymentSources from "./components/PaymentSources";
 import LogInForm from "./components/LogInForm";
@@ -9,8 +8,12 @@ import DiningEventHistory from "./components/DiningEventHistory";
 import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 import { useFonts } from "expo-font";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 // import { SplashScreen } from "expo-splash-screen";
 // import { useEffect } from "react";
+
+const Stack = createStackNavigator();
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -36,30 +39,50 @@ const App = () => {
   }
 
   return (
-    <>
-      {/* <SignUpLogIn /> */}
-      {/* <LogInForm /> */}
-      {/* <SignUpForm /> */}
-      {/* <NewSplitForm /> */}
-      {/* <DiningEventHistory/> */}
-      {/* <ImageLogs/> */}
-      {/* <AddDiners/> */}
-      {/* <UserHomePage/> */}
-      <PaymentSources/>
-    </>
-    // <NativeRouter>
-    //   <Routes>
-    //     <Route exact path="/" component={LogInSignUp} />
-    //     <Route path="/signup" component={SignUpForm} />
-    //     <Route path="/payment-sources" component={PaymentSources} />
-    //     <Route path="/login" component={LogInForm} />
-    //     <Route path="/user-home" component={UserHomePage} />
-    //     <Route path="/new-split" component={NewSplitForm} />
-    //     <Route path="/add-diners" component={AddDiners} />
-    //     <Route path="/dining-history" component={DiningEventHistory} />
-    //     <Route path="/image-logs" component={ImageLogs} />
-    //   </Routes>
-    // </NativeRouter>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SignUpLogIn">
+        <Stack.Screen
+          name="SignUpLogIn"
+          component={SignUpLogIn}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentSources"
+          component={PaymentSources}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LogIn"
+          component={LogInForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserHomePage"
+          component={UserHomePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NewSplitForm"
+          component={NewSplitForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddDiners"
+          component={AddDiners}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DiningEventHistory"
+          component={DiningEventHistory}
+        />
+        <Stack.Screen name="ImageLogs" component={ImageLogs} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

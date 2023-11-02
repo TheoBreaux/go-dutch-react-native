@@ -2,15 +2,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
 
-const SignUpLogIn = () => {
-  const signUp = () => {
-    console.log("sign up");
-  };
-
-  const login = () => {
-    console.log("log in");
-  };
-
+const SignUpLogIn = ({ navigation }) => {
   return (
     <>
       <Logo />
@@ -21,8 +13,12 @@ const SignUpLogIn = () => {
           source={require("../images/go-dutch-split-button.png")}
         />
         <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={signUp}>Sign Up</PrimaryButton>
-          <PrimaryButton onPress={login}>Log In</PrimaryButton>
+          <PrimaryButton onPress={() => navigation.navigate("SignUp")}>
+            Sign Up
+          </PrimaryButton>
+          <PrimaryButton onPress={() => navigation.navigate("LogIn")}>
+            Log In
+          </PrimaryButton>
         </View>
         <Image
           style={styles.patternImage}
