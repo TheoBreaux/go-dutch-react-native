@@ -66,7 +66,7 @@ const LogInForm = () => {
   return (
     <>
       <Logo />
-      <View style={styles.inputContainer}>
+      <View style={styles.container}>
         <Formik
           initialValues={initialValues}
           validate={validateForm}
@@ -115,7 +115,7 @@ const LogInForm = () => {
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  container: {
     flex: 1,
     alignItems: "center",
     padding: 16,

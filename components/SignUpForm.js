@@ -243,7 +243,7 @@ const SignUpForm = () => {
                     style={styles.errorText}
                   />
                 </View>
-                <View>
+                <View style={styles.buttonContainer}>
                   <SecondaryButton onPress={handleSubmit}>
                     Submit
                   </SecondaryButton>
@@ -310,6 +310,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#fc8181",
+  },
+  buttonContainer: {
+    marginBottom: 30,
   },
 });
 
