@@ -15,6 +15,7 @@ import Colors from "./constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import CustomIcon from "./components/CustomIcon";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -76,18 +77,16 @@ const App = () => {
       <BottomTab.Navigator
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: Colors.goDutchRed,
-            height: 55,
-            paddingBottom: 5,
-            paddingTop: 5,
-            borderTopColor: "black",
-            borderTopWidth: 2,
+            backgroundColor: "black",
+            height: 60,
+            borderTopColor: "white",
           },
           tabBarLabelStyle: {
             color: "white",
             fontFamily: "red-hat-regular",
             fontSize: 12,
           },
+          tabBarActiveBackgroundColor: Colors.goDutchRed,
         }}>
         <BottomTab.Screen
           name="Home"
@@ -104,7 +103,7 @@ const App = () => {
           component={NewSplitForm}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="money" size={30} color="white" />
+              <CustomIcon color="white" size={35} />
             ),
             headerShown: false,
           }}
