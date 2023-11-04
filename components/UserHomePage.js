@@ -7,7 +7,6 @@ import {
   Dimensions,
   Linking,
 } from "react-native";
-import Footer from "./Footer";
 import Logo from "./Logo";
 import { featuredRestaurants } from "../data/data";
 import Carousel from "react-native-snap-carousel";
@@ -69,8 +68,6 @@ const UserHomePage = () => {
           <Text>SOME USER INFO OR AD</Text>
         </View> */}
       </View>
-
-      {/* <Footer /> */}
     </>
   );
 };

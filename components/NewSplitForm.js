@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import Logo from "./Logo";
 import { Picker } from "@react-native-picker/picker";
-import Footer from "./Footer";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
@@ -166,7 +165,6 @@ const NewSplitForm = () => {
           </Formik>
         </View>
       </ScrollView>
-      {/* <Footer /> */}
     </>
   );
 };
