@@ -9,11 +9,57 @@ import ImageLogs from "./components/ImageLogs";
 import SignUpLogIn from "./components/SignUpLogIn";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-// import { SplashScreen } from "expo-splash-screen";
-// import { useEffect } from "react";
+import Colors from "./constants/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
+const BottomTab = createBottomTabNavigator();
+
+const StackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UserHomePage"
+      component={UserHomePage}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="SignUpLogIn"
+      component={SignUpLogIn}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="SignUp"
+      component={SignUpForm}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="PaymentSources"
+      component={PaymentSources}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="LogIn"
+      component={LogInForm}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="NewSplitForm"
+      component={NewSplitForm}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="AddDiners"
+      component={AddDiners}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen name="DiningEventHistory" component={DiningEventHistory} />
+    <Stack.Screen name="ImageLogs" component={ImageLogs} />
+  </Stack.Navigator>
+);
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -21,67 +67,79 @@ const App = () => {
     "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
   });
 
-  // useEffect(() => {
-  //   const prepare = async () => {
-  //     await SplashScreen.preventAutoHideAsync();
-
-  //     await Font.loadAsync({
-  //       "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
-  //       "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
-  //     });
-  //     SplashScreen.hideAsync();
-  //   };
-  //   prepare();
-  // }, []);
-
   if (!fontsLoaded) {
-    return null; //can return loading indicator here if wanted
+    return null; // Can return a loading indicator here if needed
   }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignUpLogIn">
-        <Stack.Screen
-          name="SignUpLogIn"
-          component={SignUpLogIn}
-          options={{ headerShown: false }}
+      <BottomTab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: Colors.goDutchRed,
+            height: 55,
+            paddingBottom: 5,
+            paddingTop: 5,
+            borderTopColor: "black",
+            borderTopWidth: 2,
+          },
+          tabBarLabelStyle: {
+            color: "white",
+            fontFamily: "red-hat-regular",
+            fontSize: 12,
+          },
+        }}>
+        <BottomTab.Screen
+          name="Home"
+          component={StackNavigator}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" color="white" size={30} />
+            ),
+            headerShown: false,
+          }}
         />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUpForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PaymentSources"
-          component={PaymentSources}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LogIn"
-          component={LogInForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="UserHomePage"
-          component={UserHomePage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NewSplitForm"
+        <BottomTab.Screen
+          name="New Split"
           component={NewSplitForm}
-          options={{ headerShown: false }}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="money" size={30} color="white" />
+            ),
+            headerShown: false,
+          }}
         />
-        <Stack.Screen
-          name="AddDiners"
-          component={AddDiners}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DiningEventHistory"
+        <BottomTab.Screen
+          name="History"
           component={DiningEventHistory}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="history" size={30} color="white" />
+            ),
+            headerShown: false,
+          }}
         />
-        <Stack.Screen name="ImageLogs" component={ImageLogs} />
-      </Stack.Navigator>
+        <BottomTab.Screen
+          name="Image Logs"
+          component={ImageLogs}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="images-outline" size={30} color="white" />
+            ),
+            headerShown: false,
+          }}
+        />
+        <BottomTab.Screen
+          name="Log Out"
+          component={ImageLogs}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Entypo name="log-out" size={30} color="white" />
+            ),
+            headerShown: false,
+          }}
+        />
+      </BottomTab.Navigator>
     </NavigationContainer>
   );
 };

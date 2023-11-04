@@ -70,7 +70,7 @@ const UserHomePage = () => {
         </View> */}
       </View>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

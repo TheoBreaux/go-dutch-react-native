@@ -6,7 +6,7 @@ const ImageLogs = () => {
   return (
     <>
       <Logo />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

@@ -166,7 +166,7 @@ const NewSplitForm = () => {
           </Formik>
         </View>
       </ScrollView>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     color: "#fc8181",
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: 5,
   },
 });
 

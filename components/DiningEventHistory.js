@@ -6,7 +6,7 @@ const DiningEventHistory = () => {
   return (
     <>
       <Logo />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

@@ -1,9 +1,5 @@
 import { View, Button, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-
-const Stack = createStackNavigator();
 
 const Footer = () => {
   const logOut = () => {
