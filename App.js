@@ -79,12 +79,11 @@ const App = () => {
           tabBarStyle: {
             backgroundColor: "black",
             height: 60,
-            borderTopColor: "white",
           },
           tabBarLabelStyle: {
             color: "white",
             fontFamily: "red-hat-regular",
-            fontSize: 12,
+            fontSize: 13,
           },
           tabBarActiveBackgroundColor: Colors.goDutchRed,
         }}>
