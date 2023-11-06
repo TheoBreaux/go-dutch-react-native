@@ -83,9 +83,49 @@ const SignUpForm = () => {
     return emailRegex.test(email);
   };
 
-  const handleFormSubmit = (values, actions) => {
+  const handleFormSubmit = async (values, actions, { resetForm }) => {
     actions.resetForm();
     console.log(values);
+    const newUser = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      username: values.createUsername.toLowerCase(),
+      password: values.password,
+      state: values.selectedState,
+      cityTown: values.enteredCityTown,
+    };
+
+    try {
+      const response = await fetch(
+        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app//signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUser),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.detail) {
+        setError(data.detail);
+      } else {
+        setCookie("email", data.email);
+        setCookie("username", data.username);
+        setCookie("firstName", data.firstName);
+        setCookie("lastName", data.lastName);
+        setCookie("cityTown", data.cityTown);
+        setCookie("AuthToken", data.token);
+        navigate("/payment-sources");
+        window.location.reload();
+        setTimeout(() => {
+          resetForm();
+        }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

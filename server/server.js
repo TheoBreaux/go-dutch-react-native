@@ -25,6 +25,35 @@ pool.query("SELECT NOW()", (err, result) => {
   }
 });
 
+//SIGN UP TO GO DUTCH - INITIAL USER INFO
+app.post("/signup", async (req, res) => {
+  const { firstName, lastName, email, username, password, state, cityTown } =
+    req.body;
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(password, salt);
+
+  try {
+    const newUser = await pool.query(
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, state, city_town) VALUES($1, $2, $3, $4, $5, $6, $7)`,
+      [firstName, lastName, email, username, hashedPassword, state, cityTown]
+    );
+
+    const token = jwt.sign(
+      { email, username, firstName, lastName, cityTown },
+      "secret",
+      {
+        expiresIn: "1hr",
+      }
+    );
+    res.json({ email, username, firstName, lastName, cityTown, token });
+  } catch (error) {
+    console.error(error);
+    if (error) {
+      res.json({ detail: error.detail });
+    }
+  }
+});
+
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
   const { username, password, firstName, lastName, cityTown } = req.body;

@@ -34,8 +34,6 @@ const LogInForm = () => {
 
   const handleFormSubmit = async (values, actions) => {
     actions.resetForm();
-    console.log(values);
-
     const userInfo = {
       username: values.username,
       password: values.password,
@@ -57,10 +55,9 @@ const LogInForm = () => {
       if (data.detail) {
         setError(data.detail);
       } else {
-        navigation.navigate("Home");
-        setTimeout(() => {
-          resetForm();
-        }, 1000);
+        navigation.navigate("Main", { screen: "Home" });
+        // setTimeout(() => {
+        // }, 1000);
       }
       console.log(data);
     } catch (error) {
