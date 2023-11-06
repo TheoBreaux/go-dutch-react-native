@@ -1,7 +1,9 @@
 const PORT = process.env.PORT ?? 8000;
 const express = require("express");
 const app = express();
-
+app.use(express.json());
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const Pool = require("pg").Pool;
 require("dotenv").config();
 
@@ -13,6 +15,7 @@ const pool = new Pool({
   database: "godutchapp",
 });
 
+//CHECKING THAT I AM CONNECTED TO DATABASE
 pool.query("SELECT NOW()", (err, result) => {
   if (err) {
     console.error("Error connecting to the database:", err);
@@ -25,7 +28,7 @@ pool.query("SELECT NOW()", (err, result) => {
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
   const { username, password, firstName, lastName, cityTown } = req.body;
-  console.log(username, password);
+  console.log(req.body);
 
   try {
     const users = await pool.query("SELECT * FROM users WHERE username = $1", [

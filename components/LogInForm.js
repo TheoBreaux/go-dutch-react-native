@@ -4,10 +4,12 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
+import { useNavigation } from "@react-navigation/native";
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
+  const navigation = useNavigation();
 
   const initialValues = {
     username: "",
@@ -39,40 +41,32 @@ const LogInForm = () => {
       password: values.password,
     };
     try {
-      const response = await fetch("http://10.0.2.2:8000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userInfo),
-      });
+      const response = await fetch(
+        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app/login",
+        {
+          method: "POST",
+          headers: {
+            // Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
+        }
+      );
 
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data);
+      const data = await response.json();
+      if (data.detail) {
+        setError(data.detail);
       } else {
-        // Handle non-successful responses, e.g., response.status is not 200
-        console.error("Request failed with status: " + response.status);
+        navigation.navigate("Home");
+        setTimeout(() => {
+          resetForm();
+        }, 1000);
       }
+      console.log(data);
     } catch (error) {
-      // Handle network or fetch-related errors
-      console.error("An error occurred:", error);
+      console.error(error);
     }
   };
-
-  // if (data.detail) {
-  //   setError(data.detail);
-  // } else {
-  //   setCookie("firstName", data.firstName);
-  //   setCookie("lastName", data.lastName);
-  //   setCookie("username", data.username);
-  //   setCookie("email", data.email);
-  //   setCookie("cityTown", data.cityTown);
-  //   setCookie("AuthToken", data.token);
-  //   navigate("/user-home");
-  //   // window.location.reload();
-  //   setTimeout(() => {
-  //     resetForm();
-  //   }, 1000);
-  // }
 
   return (
     <>
