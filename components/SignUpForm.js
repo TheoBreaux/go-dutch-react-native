@@ -83,6 +83,11 @@ const SignUpForm = () => {
     return emailRegex.test(email);
   };
 
+  const handleFormSubmit = (values, actions) => {
+    actions.resetForm();
+    console.log(values);
+  };
+
   return (
     <>
       <Logo />
@@ -91,10 +96,7 @@ const SignUpForm = () => {
           <Formik
             initialValues={initialValues}
             validate={validateForm}
-            onSubmit={(values, actions) => {
-              actions.resetForm();
-              console.log(values);
-            }}>
+            onSubmit={handleFormSubmit}>
             {({ handleChange, handleSubmit, handleBlur, values }) => (
               <>
                 <View style={styles.nameInputsContainer}>

@@ -155,7 +155,7 @@ const NewSplitForm = () => {
                   />
                 </View>
 
-                <View style={styles.buttonContainer}>
+                <View>
                   <SecondaryButton onPress={handleSubmit}>
                     Continue
                   </SecondaryButton>
@@ -235,9 +235,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#fc8181",
-  },
-  buttonContainer: {
-    marginTop: 5,
   },
 });
 

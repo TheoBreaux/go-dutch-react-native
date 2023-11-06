@@ -30,38 +30,49 @@ const LogInForm = () => {
     return errors;
   };
 
-  // const handleSubmit = () => {
-  //   console.log("submitting");
-  // const userInfo = {
-  //   username: values.username,
-  //   password: values.password,
-  // };
-  // try {
-  //   const response = await fetch("http://localhost:8000/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(userInfo),
-  //   });
-  //   const data = await response.json();
-  //   if (data.detail) {
-  //     setError(data.detail);
-  //   } else {
-  //     setCookie("firstName", data.firstName);
-  //     setCookie("lastName", data.lastName);
-  //     setCookie("username", data.username);
-  //     setCookie("email", data.email);
-  //     setCookie("cityTown", data.cityTown);
-  //     setCookie("AuthToken", data.token);
-  //     navigate("/user-home");
-  //     // window.location.reload();
-  //     setTimeout(() => {
-  //       resetForm();
-  //     }, 1000);
-  //   }
-  // } catch (error) {
-  //   console.error(error);
+  const handleFormSubmit = async (values, actions) => {
+    actions.resetForm();
+    console.log(values);
+
+    const userInfo = {
+      username: values.username,
+      password: values.password,
+    };
+    try {
+      const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userInfo),
+      });
+  
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        // Handle non-successful responses, e.g., response.status is not 200
+        console.error("Request failed with status: " + response.status);
+      }
+    } catch (error) {
+      // Handle network or fetch-related errors
+      console.error("An error occurred:", error);
+    }
+  };
+
+  // if (data.detail) {
+  //   setError(data.detail);
+  // } else {
+  //   setCookie("firstName", data.firstName);
+  //   setCookie("lastName", data.lastName);
+  //   setCookie("username", data.username);
+  //   setCookie("email", data.email);
+  //   setCookie("cityTown", data.cityTown);
+  //   setCookie("AuthToken", data.token);
+  //   navigate("/user-home");
+  //   // window.location.reload();
+  //   setTimeout(() => {
+  //     resetForm();
+  //   }, 1000);
   // }
-  // };
 
   return (
     <>
@@ -70,10 +81,7 @@ const LogInForm = () => {
         <Formik
           initialValues={initialValues}
           validate={validateForm}
-          onSubmit={(values, actions) => {
-            actions.resetForm();
-            console.log(values);
-          }}>
+          onSubmit={handleFormSubmit}>
           {({ handleChange, handleSubmit, handleBlur, values }) => (
             <View style={styles.logInInputs}>
               <Text style={styles.label}>Username</Text>
@@ -134,6 +142,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   errorText: {
+    marginTop: -5,
     color: "#fc8181",
   },
 });

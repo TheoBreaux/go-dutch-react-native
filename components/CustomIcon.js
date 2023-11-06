@@ -6,8 +6,9 @@ const CustomIcon = ({ color, size }) => (
       source={require("../images/go-dutch-split-button.png")}
       style={{
         width: size,
-        height: 30,
+        height: size,
         tintColor: color,
+        resizeMode: "contain",
       }}
     />
   </View>

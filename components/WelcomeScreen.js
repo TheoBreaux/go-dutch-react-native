@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
 
-const SignUpLogIn = ({ navigation }) => {
+const WelcomeScreen = ({ navigation }) => {
   return (
     <>
       <Logo />
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpLogIn;
+export default WelcomeScreen;
