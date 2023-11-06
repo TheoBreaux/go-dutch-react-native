@@ -15,6 +15,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import CustomIcon from "./components/CustomIcon";
 import WelcomeScreen from "./components/WelcomeScreen";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -95,23 +97,25 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="LogIn" //change this back to welcome after developing
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="SignUp" component={SignUpForm} />
-        <Stack.Screen name="LogIn" component={LogInForm} />
-        <Stack.Screen name="PaymentSources" component={PaymentSources} />
-        <Stack.Screen
-          name="Main"
-          component={MainTabNavigator}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="LogIn" //change this back to welcome after developing
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="SignUp" component={SignUpForm} />
+          <Stack.Screen name="LogIn" component={LogInForm} />
+          <Stack.Screen name="PaymentSources" component={PaymentSources} />
+          <Stack.Screen
+            name="Main"
+            component={MainTabNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

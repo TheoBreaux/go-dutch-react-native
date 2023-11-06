@@ -1,15 +1,18 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Keyboard } from "react-native";
 import Logo from "./Logo";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/store";
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const initialValues = {
     username: "",
@@ -33,7 +36,6 @@ const LogInForm = () => {
   };
 
   const handleFormSubmit = async (values, actions) => {
-    actions.resetForm();
     const userInfo = {
       username: values.username,
       password: values.password,
@@ -55,14 +57,14 @@ const LogInForm = () => {
       if (data.detail) {
         setError(data.detail);
       } else {
+        dispatch(setUser(data));
+        actions.resetForm();
         navigation.navigate("Main", { screen: "Home" });
-        // setTimeout(() => {
-        // }, 1000);
       }
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
+    Keyboard.dismiss();
   };
 
   return (
@@ -81,6 +83,7 @@ const LogInForm = () => {
                 onChangeText={handleChange("username")}
                 onBlur={handleBlur("username")}
                 value={values.username}
+                autoCapitalize="none"
               />
               <ErrorMessage
                 name="username"
@@ -104,6 +107,11 @@ const LogInForm = () => {
               </View>
               <View>
                 <SecondaryButton onPress={handleSubmit}>Submit</SecondaryButton>
+              </View>
+              <View>
+                <Text style={[styles.errorText, styles.noUserExists]}>
+                  {error}
+                </Text>
               </View>
             </View>
           )}
@@ -134,7 +142,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     marginTop: -5,
-    color: "#fc8181",
+    color: "red",
+  },
+  noUserExists: {
+    textAlign: "center",
+    marginTop: 5,
+    fontSize: 18,
   },
 });
 

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -12,8 +11,12 @@ import { featuredRestaurants } from "../data/data";
 import Carousel from "react-native-snap-carousel";
 import Colors from "../constants/colors";
 import PrimaryButton from "./ui/PrimaryButton";
+import { useSelector } from "react-redux";
 
 const UserHomePage = () => {
+  const userName = useSelector((state) => state.userInfo.user.firstName);
+  const userCity = useSelector((state) => state.userInfo.user.cityTown);
+
   const renderItem = ({ item }) => {
     const handleExternalLink = () => {
       Linking.openURL(item.website);
@@ -49,9 +52,9 @@ const UserHomePage = () => {
       <Logo />
       <View style={styles.container}>
         <View style={styles.titlesContainer}>
-          <Text style={styles.title}>Welcome, firstName!</Text>
+          <Text style={styles.title}>Welcome, {userName}!</Text>
           <Text style={styles.subtitle}>
-            Featured restaurants near city/town!
+            Featured restaurants near {userCity}!
           </Text>
         </View>
         <Carousel
