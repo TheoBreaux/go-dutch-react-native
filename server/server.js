@@ -25,6 +25,7 @@ pool.query("SELECT NOW()", (err, result) => {
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
   const { username, password, firstName, lastName, cityTown } = req.body;
+  console.log(username, password);
 
   try {
     const users = await pool.query("SELECT * FROM users WHERE username = $1", [
