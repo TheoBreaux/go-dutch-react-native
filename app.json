@@ -5,12 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "backgroundColor": "rgb(200, 200, 200)",
+    "backgroundColor": "white",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
-
     "web": {
       "favicon": "./assets/favicon.png"
     }

@@ -64,9 +64,6 @@ app.post("/users", async (req, res) => {
     email,
   } = req.body;
 
-  console.log("NEW INFO:", primaryPaymentSource);
-  console.log("NEW INFO:", email);
-
   try {
     const newUserPaymentInfo = await pool.query(
       `UPDATE users 
@@ -132,6 +129,61 @@ app.post("/login", async (req, res) => {
     console.error(error);
   }
 });
+
+
+// SEND NEW DINING EVENTS TO DATABASE
+app.post("/diningevents", async (req, res) => {
+  const {
+    dining_date,
+    restaurant_bar,
+    title,
+    primary_diner_username,
+    tax,
+    tip,
+    total_meal_cost,
+  } = req.body;
+
+  try {
+    const newDiningEvent = await pool.query(
+      `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING event_id`,
+      [
+        dining_date,
+        restaurant_bar,
+        title,
+        primary_diner_username,
+        tax,
+        tip,
+        total_meal_cost,
+      ]
+    );
+    const eventId = newDiningEvent.rows[0].event_id;
+    res.json({ event_id: eventId });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
+app.get("/additionaldiners/suggestions", async (req, res) => {
+  const userInput = req.query.input;
+
+  try {
+    const autoCompleteDiner = await pool.query(
+      `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      [`%${userInput}%`]
+    );
+    const suggestions = autoCompleteDiner.rows.map((row) => ({
+      username: row.username,
+      firstName: row.first_name,
+      lastName: row.last_name,
+    }));
+    res.json(suggestions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 // app.get("/users", (req, res) => {
 //   pool.query("SELECT * FROM users", (err, result) => {
