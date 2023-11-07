@@ -13,6 +13,7 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
+import LocateUser from "./LocateUser";
 
 const getCurrentDate = () => {
   const now = new Date();
@@ -25,6 +26,7 @@ const getCurrentDate = () => {
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
+  const [restaurants, setRestaurants] = useState([]);
 
   const initialValues = {
     eventDate: getCurrentDate(),
