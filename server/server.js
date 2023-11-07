@@ -54,10 +54,49 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//SEND PAYMENT SOURCES INFO - UPDATE USER PROFILE
+app.post("/users", async (req, res) => {
+  const {
+    primaryPaymentSource,
+    primaryPaymentSourceUsername,
+    secondaryPaymentSource,
+    secondaryPaymentSourceUsername,
+    email,
+  } = req.body;
+
+  console.log("NEW INFO:", primaryPaymentSource);
+  console.log("NEW INFO:", email);
+
+  try {
+    const newUserPaymentInfo = await pool.query(
+      `UPDATE users 
+      SET primary_payment_source = $1, 
+      primary_payment_source_username = $2, 
+      secondary_payment_source = $3, 
+      secondary_payment_source_username = $4
+      WHERE email = $5`,
+      [
+        primaryPaymentSource,
+        primaryPaymentSourceUsername,
+        secondaryPaymentSource,
+        secondaryPaymentSourceUsername,
+        email,
+      ]
+    );
+
+    // On success, send a 200 OK response
+    res.status(200).json({ success: true });
+    console.log("From server:", newUserPaymentInfo);
+  } catch (error) {
+    console.error(error);
+    // On error, send a 500 Internal Server Error response with an error message
+    res.status(500).json({ detail: error.detail });
+  }
+});
+
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
   const { username, password, firstName, lastName, cityTown } = req.body;
-  console.log(req.body);
 
   try {
     const users = await pool.query("SELECT * FROM users WHERE username = $1", [
@@ -93,12 +132,6 @@ app.post("/login", async (req, res) => {
     console.error(error);
   }
 });
-
-
-
-
-
-
 
 // app.get("/users", (req, res) => {
 //   pool.query("SELECT * FROM users", (err, result) => {

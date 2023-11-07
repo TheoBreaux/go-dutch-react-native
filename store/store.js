@@ -9,10 +9,13 @@ const userInfoSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    logOut: (state) => {
+      state.user = {};
+    },
   },
 });
 
-export const { setUser } = userInfoSlice.actions;
+export const { setUser, logOut } = userInfoSlice.actions;
 
 const store = configureStore({
   reducer: {

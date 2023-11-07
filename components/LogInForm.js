@@ -1,4 +1,11 @@
-import { View, Text, TextInput, StyleSheet, Keyboard } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native";
 import Logo from "./Logo";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
@@ -10,6 +17,7 @@ import { setUser } from "../store/store";
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -97,8 +105,15 @@ const LogInForm = () => {
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
                   value={values.password}
-                  secureTextEntry={true}
+                  secureTextEntry={!showPassword}
                 />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={styles.passwordToggle}>
+                  <Text style={styles.passwordToggleText}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Text>
+                </TouchableOpacity>
                 <ErrorMessage
                   name="password"
                   component={Text}
@@ -139,6 +154,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 10,
+  },
+  passwordToggle: {
+    position: "absolute",
+    top: 30,
+    right: 10,
+  },
+  passwordToggleText: {
+    color: Colors.goDutchRed,
   },
   errorText: {
     marginTop: -5,

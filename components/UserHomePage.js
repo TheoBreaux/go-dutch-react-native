@@ -9,9 +9,9 @@ import {
 import Logo from "./Logo";
 import { featuredRestaurants } from "../data/data";
 import Carousel from "react-native-snap-carousel";
-import Colors from "../constants/colors";
 import PrimaryButton from "./ui/PrimaryButton";
 import { useSelector } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
 
 const UserHomePage = () => {
   const userName = useSelector((state) => state.userInfo.user.firstName);
@@ -37,8 +37,9 @@ const UserHomePage = () => {
             </Text>
             <Text style={styles.restaurantText}>Rating:{item.rating}⭐</Text>
           </View>
-          <View>
+          <View style={styles.buttonContainer}>
             <PrimaryButton onPress={handleExternalLink}>Reserve</PrimaryButton>
+            {/* <Ionicons name="star" color="red" size={30} /> */}
           </View>
         </View>
       </View>
@@ -60,16 +61,13 @@ const UserHomePage = () => {
         <Carousel
           data={featuredRestaurants}
           renderItem={renderItem}
-          sliderWidth={screenWidth} // Match with screen width
-          itemWidth={screenWidth} // Match with screen width to display only one item
+          sliderWidth={screenWidth}
+          itemWidth={screenWidth}
           autoplay={true}
           autoplayInterval={3000}
           loop={true}
           loopClonesPerSide={featuredRestaurants.length}
         />
-        {/* <View style={styles.adSpace}>
-          <Text>SOME USER INFO OR AD</Text>
-        </View> */}
       </View>
     </>
   );
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
   },
   carouselImageContainer: {
     width: "100%",
-    height: "55%", // Adjust this value as needed
+    height: "55%",
   },
   carouselImage: {
     height: "100%",
@@ -125,8 +123,9 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-regular",
     fontSize: 18,
   },
-  adSpace: {
-    flex: 1,
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

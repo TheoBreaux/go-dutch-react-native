@@ -6,10 +6,16 @@ import { useState } from "react";
 import Colors from "../constants/colors";
 import { ErrorMessage, Formik } from "formik";
 import SecondaryButton from "./ui/SecondaryButton";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const PaymentSources = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
+  const navigation = useNavigation();
+
+  const userName = useSelector((state) => state.userInfo.user.firstName);
+  const email = useSelector((state) => state.userInfo.user.email);
 
   const initialValues = {
     selectedPrimaryPayment: "",
@@ -42,26 +48,52 @@ const PaymentSources = () => {
     }
 
     const isValid = Object.keys(errors).length === 0;
-    console.log(isValid);
     setIsFormValid(isValid);
     return errors;
+  };
+
+  const handleFormSubmit = async (values, actions) => {
+    const newUserPaymentInfo = {
+      primaryPaymentSource: values.selectedPrimaryPayment,
+      primaryPaymentSourceUsername: values.primaryPaymentUsername,
+      secondaryPaymentSource: values.selectedSecondaryPayment,
+      secondaryPaymentSourceUsername: values.secondaryPaymentUsername,
+      email: email,
+    };
+    try {
+      const response = await fetch(
+        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUserPaymentInfo),
+        }
+      );
+
+      const data = await response.json();
+      if (data.detail) {
+        setError(data.detail);
+      } else {
+        actions.resetForm();
+        navigation.navigate("Main", { screen: "Home" });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <>
       <Logo />
       <View style={styles.welcomeMessage}>
-        <Text style={styles.title}>Welcome, firstName!</Text>
+        <Text style={styles.title}>Welcome, {userName}!</Text>
         <Text style={styles.subtitle}>Please select your payment sources!</Text>
       </View>
       <View style={styles.container}>
         <Formik
           initialValues={initialValues}
           validate={validateForm}
-          onSubmit={(values, actions) => {
-            actions.resetForm();
-            console.log(values);
-          }}>
+          onSubmit={handleFormSubmit}>
           {({ handleChange, handleSubmit, handleBlur, values }) => (
             <ScrollView>
               <View style={styles.inputContainer}>
@@ -175,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   welcomeMessage: {
-    marginTop: 10,
+    marginTop: 15,
   },
   title: {
     fontFamily: "red-hat-bold",

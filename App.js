@@ -17,6 +17,7 @@ import CustomIcon from "./components/CustomIcon";
 import WelcomeScreen from "./components/WelcomeScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import LogOutScreen from "./components/LogOutScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -75,7 +76,7 @@ const MainTabNavigator = () => {
       />
       <BottomTab.Screen
         name="Log Out"
-        component={ImageLogs}
+        component={LogOutScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Entypo name="log-out" size={30} color="white" />
@@ -100,7 +101,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="LogIn" //change this back to welcome after developing
+          initialRouteName="Welcome" //change this back to welcome after developing
           screenOptions={{
             headerShown: false,
           }}>

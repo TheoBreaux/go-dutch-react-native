@@ -13,13 +13,18 @@ import { useState } from "react";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/store";
 
 const SignUpForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState(false);
-  const [viewConfirmedPassword, setViewConfirmedPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const initialValues = {
     firstName: "",
@@ -83,9 +88,8 @@ const SignUpForm = () => {
     return emailRegex.test(email);
   };
 
-  const handleFormSubmit = async (values, actions, { resetForm }) => {
+  const handleFormSubmit = async (values, actions) => {
     actions.resetForm();
-    console.log(values);
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -98,7 +102,7 @@ const SignUpForm = () => {
 
     try {
       const response = await fetch(
-        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app//signup",
+        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -111,17 +115,8 @@ const SignUpForm = () => {
       if (data.detail) {
         setError(data.detail);
       } else {
-        setCookie("email", data.email);
-        setCookie("username", data.username);
-        setCookie("firstName", data.firstName);
-        setCookie("lastName", data.lastName);
-        setCookie("cityTown", data.cityTown);
-        setCookie("AuthToken", data.token);
-        navigate("/payment-sources");
-        window.location.reload();
-        setTimeout(() => {
-          resetForm();
-        }, 1000);
+        dispatch(setUser(data));
+        navigation.navigate("PaymentSources");
       }
     } catch (error) {
       console.error(error);
@@ -178,6 +173,8 @@ const SignUpForm = () => {
                     onChangeText={handleChange("email")}
                     onBlur={handleBlur("email")}
                     value={values.email}
+                    autoCapitalize="none"
+                    autoComplete="email"
                   />
                   <ErrorMessage
                     name="email"
@@ -192,6 +189,7 @@ const SignUpForm = () => {
                     onChangeText={handleChange("createUsername")}
                     onBlur={handleBlur("createUsername")}
                     value={values.createUsername}
+                    autoCapitalize="none"
                   />
                   <ErrorMessage
                     name="createUsername"
@@ -351,7 +349,8 @@ const styles = StyleSheet.create({
     color: Colors.goDutchRed,
   },
   errorText: {
-    color: "#fc8181",
+    color: "red",
+    marginTop: -5,
   },
   buttonContainer: {
     marginBottom: 30,
