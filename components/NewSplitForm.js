@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LocateUser from "./LocateUser";
 
 const getCurrentDate = () => {
@@ -23,7 +23,7 @@ const getCurrentDate = () => {
   return `${month}-${day}-${year}`;
 };
 
-const NewSplitForm = () => {
+const NewSplitForm = ({ latitude, longitude }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const [restaurants, setRestaurants] = useState([]);
@@ -57,6 +57,7 @@ const NewSplitForm = () => {
 
   return (
     <>
+      <LocateUser latitude={latitude} longitude={longitude} />
       <Logo />
 
       <ScrollView>
