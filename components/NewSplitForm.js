@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LocateUser from "./LocateUser";
 
 const getCurrentDate = () => {
@@ -23,10 +23,14 @@ const getCurrentDate = () => {
   return `${month}-${day}-${year}`;
 };
 
-const NewSplitForm = ({ latitude, longitude }) => {
+const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const [restaurants, setRestaurants] = useState([]);
+
+  const handleRestaurantDataReceived = (restaurantData) => {
+    setRestaurants(restaurantData);
+  };
 
   const initialValues = {
     eventDate: getCurrentDate(),
@@ -55,9 +59,11 @@ const NewSplitForm = ({ latitude, longitude }) => {
     console.log("close");
   };
 
+  // console.log("NEW SPLIT FORM DATA:", restaurants.results.length);
+
   return (
     <>
-      <LocateUser latitude={latitude} longitude={longitude} />
+      <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} />
       <Logo />
 
       <ScrollView>
@@ -91,20 +97,20 @@ const NewSplitForm = ({ latitude, longitude }) => {
                       selectedValue={values.selectedRestaurant}
                       onValueChange={handleChange("selectedRestaurant")}
                       onBlur={handleBlur("selectedRestaurant")}>
-                      {/* {restaurants.map((item, index) => (
-                        <Picker.Item
-                          key={item.abbreviation}
-                          value={item.name}
-                          label={item.name}
-                        />
-                      ))} */}
+                      {restaurants.results.map((restaurant) => (
+                          <Picker.Item
+                            key={restaurant.place_id}
+                            value={restaurant.name}
+                            id={restaurant.vicinity}
+                          />
+                        ))}
                     </Picker>
                   </View>
-                  {/* <ErrorMessage
-                    name="selectedRestaurant"
-                    component={Text}
-                    style={styles.errorText}
-                  /> */}
+                  <ErrorMessage
+                      name="selectedRestaurant"
+                      component={Text}
+                      style={styles.errorText}
+                    />
                 </View>
 
                 <View style={styles.inputContainer}>

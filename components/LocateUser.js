@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
-import { FlatList, Text, View, StyleSheet } from "react-native";
 
-const LocateUser = () => {
+const LocateUser = ({ onRestaurantDataReceived }) => {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -14,16 +12,15 @@ const LocateUser = () => {
   }, []);
 
   const getLocationAsync = useCallback(async () => {
-    const { status } = await Permissions.askAsync(
-      Permissions.LOCATION_FOREGROUND
-    );
+    const { status } = await Location.requestForegroundPermissionsAsync();
+
     if (status === "granted") {
       try {
         let location = await Location.getCurrentPositionAsync({});
         setHasLocationPermission(true);
         setLatitude(location.coords.latitude);
         setLongitude(location.coords.longitude);
-        handleRestaurantSearch();
+        await handleRestaurantSearch();
       } catch (error) {
         console.error(error);
       }
@@ -32,7 +29,7 @@ const LocateUser = () => {
     }
   }, []);
 
-  const handleRestaurantSearch = () => {
+  const handleRestaurantSearch = async () => {
     const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     const location = `location=${latitude},${longitude}`;
     const radius = "&radius=2000";
@@ -42,45 +39,14 @@ const LocateUser = () => {
 
     fetch(restaurantSearchUrl)
       .then((response) => response.json())
-      .then((result) => setRestaurantList(result))
+      .then((result) => {
+        setRestaurantList(result);
+        onRestaurantDataReceived(result); // Pass the restaurant data to the parent component
+      })
       .catch((e) => console.log(e));
   };
 
-  console.log("RESULTS:", restaurantList.results.length);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  });
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={restaurantList.results}
-        keyExtractor={(item) => item.place_id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
-        style={{
-          backgroundColor: "grey",
-          width: "80%",
-          margin: 60,
-          padding: 5,
-        }}
-      />
-      <Text
-        style={{
-          backgroundColor: "grey",
-          color: "white",
-          padding: 20,
-          marginBottom: 50,
-        }}>
-        Search Restaurants
-      </Text>
-    </View>
-  );
+  return null; // This component doesn't render anything
 };
 
 export default LocateUser;

@@ -18,7 +18,6 @@ import WelcomeScreen from "./components/WelcomeScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import LogOutScreen from "./components/LogOutScreen";
-import LocateUser from "./components/LocateUser";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
