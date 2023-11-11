@@ -30,20 +30,33 @@ const LocateUser = ({ onRestaurantDataReceived }) => {
   }, []);
 
   const handleRestaurantSearch = async () => {
-    const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-    const location = `location=${latitude},${longitude}`;
-    const radius = "&radius=2000";
-    const type = "&keyword=restaurant";
-    const key = "&key=AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
-    const restaurantSearchUrl = url + location + radius + type + key;
+    if (hasLocationPermission) {
+      const url =
+        "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+      const location = `location=${latitude},${longitude}`;
+      const radius = "&radius=2000";
+      const type = "&keyword=restaurant";
+      const key = "&key=AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
+      const restaurantSearchUrl = url + location + radius + type + key;
 
-    fetch(restaurantSearchUrl)
-      .then((response) => response.json())
-      .then((result) => {
-        setRestaurantList(result);
-        onRestaurantDataReceived(result); // Pass the restaurant data to the parent component
-      })
-      .catch((e) => console.log(e));
+      try {
+        const response = await fetch(restaurantSearchUrl);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        const data = result.results;
+        console.log("THIS IS THE DATA RESULT:", data);
+        setRestaurantList(data);
+
+        if (onRestaurantDataReceived) {
+          onRestaurantDataReceived(data);
+        }
+        return data;
+      } catch (error) {
+        console.error("Error fetching restaurant data:", error);
+      }
+    }
   };
 
   return null; // This component doesn't render anything

@@ -13,7 +13,6 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
-import LocateUser from "./LocateUser";
 
 const getCurrentDate = () => {
   const now = new Date();
@@ -27,10 +26,7 @@ const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-
-  const handleRestaurantDataReceived = (restaurantData) => {
-    setRestaurants(restaurantData);
-  };
+  const [loading, setLoading] = useState(true);
 
   const initialValues = {
     eventDate: getCurrentDate(),
@@ -59,11 +55,11 @@ const NewSplitForm = () => {
     console.log("close");
   };
 
-  // console.log("NEW SPLIT FORM DATA:", restaurants.results.length);
+  console.log("NEW SPLIT FORM DATA :", restaurants);
+  console.log("NEW SPLIT FORM DATA :", restaurants);
 
   return (
     <>
-      <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} />
       <Logo />
 
       <ScrollView>
@@ -97,20 +93,22 @@ const NewSplitForm = () => {
                       selectedValue={values.selectedRestaurant}
                       onValueChange={handleChange("selectedRestaurant")}
                       onBlur={handleBlur("selectedRestaurant")}>
-                      {restaurants.results.map((restaurant) => (
-                          <Picker.Item
-                            key={restaurant.place_id}
-                            value={restaurant.name}
-                            id={restaurant.vicinity}
-                          />
-                        ))}
+                      {restaurants.results
+                        ? restaurants.results.map((restaurant) => (
+                            <Picker.Item
+                              key={restaurant.place_id}
+                              value={restaurant.name}
+                              id={restaurant.vicinity}
+                            />
+                          ))
+                        : null}
                     </Picker>
                   </View>
                   <ErrorMessage
-                      name="selectedRestaurant"
-                      component={Text}
-                      style={styles.errorText}
-                    />
+                    name="selectedRestaurant"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
 
                 <View style={styles.inputContainer}>

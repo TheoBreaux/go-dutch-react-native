@@ -14,6 +14,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/store";
+import LocateUser from "./LocateUser";
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -75,8 +76,14 @@ const LogInForm = () => {
     Keyboard.dismiss();
   };
 
+  const handleRestaurantDataReceived = (data) => {
+    setRestaurants(data);
+    setLoading(false);
+  };
+
   return (
     <>
+      <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} />
       <Logo />
       <View style={styles.container}>
         <Formik
