@@ -19,12 +19,14 @@ import { getCurrentDate } from "../utils";
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
-  // const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = useState("");
 
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
-  console.log(restaurantList);
+
+  const sortedRestaurantList = restaurantList
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const initialValues = {
     eventDate: getCurrentDate(),
@@ -92,7 +94,7 @@ const NewSplitForm = () => {
                       onValueChange={(itemValue, itemIndex) =>
                         setSelectedRestaurant(itemValue)
                       }>
-                      {restaurantList.map((restaurant) => (
+                      {sortedRestaurantList.map((restaurant) => (
                         <Picker.Item
                           key={restaurant.place_id}
                           label={restaurant.name + ", " + restaurant.vicinity}

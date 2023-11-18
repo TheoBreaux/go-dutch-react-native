@@ -18,7 +18,6 @@ import * as Location from "expo-location";
 import { useCallback } from "react";
 import { getCityFromCoordinates } from "../utils";
 
-
 const LogInForm = () => {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [latitude, setLatitude] = useState(0);
@@ -99,7 +98,6 @@ const LogInForm = () => {
         }
         const result = await response.json();
         const data = result.results;
-        console.log("THIS IS THE DATA RESULT:", data);
         dispatch(setRestaurantList(data));
         return data;
       } catch (error) {
@@ -140,17 +138,10 @@ const LogInForm = () => {
     Keyboard.dismiss();
   };
 
-
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
   console.log(restaurantList);
   console.log(restaurantList);
-  console.log(restaurantList)
-  console.log(restaurantList)
-  console.log(restaurantList)
-  console.log(restaurantList)
-  console.log(restaurantList)
-
-
+  console.log(restaurantList);
 
 
   return (
