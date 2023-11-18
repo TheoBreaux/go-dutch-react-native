@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Logo from "./Logo";
-import { states } from "../data/data";
-import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
@@ -33,8 +31,6 @@ const SignUpForm = () => {
     createUsername: "",
     password: "",
     confirmedPassword: "",
-    selectedState: "",
-    enteredCityTown: "",
   };
 
   const validateForm = (values) => {
@@ -70,14 +66,6 @@ const SignUpForm = () => {
       errors.confirmedPassword = "Passwords do not match";
     }
 
-    if (!values.selectedState) {
-      errors.selectedState = "Please select your state";
-    }
-
-    if (!values.enteredCityTown) {
-      errors.enteredCityTown = "Please enter your city or town";
-    }
-
     const isValid = Object.keys(errors).length === 0;
     setIsFormValid(isValid);
     return errors;
@@ -96,13 +84,11 @@ const SignUpForm = () => {
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
-      state: values.selectedState,
-      cityTown: values.enteredCityTown,
     };
 
     try {
       const response = await fetch(
-        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app/signup",
+        "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -246,43 +232,6 @@ const SignUpForm = () => {
                   />
                 </View>
 
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>State</Text>
-                  <View>
-                    <Picker
-                      style={styles.textInput}
-                      selectedValue={values.selectedState}
-                      onValueChange={handleChange("selectedState")}
-                      onBlur={handleBlur("selectedState")}>
-                      {states.map((item, index) => (
-                        <Picker.Item
-                          key={item.abbreviation}
-                          value={item.name}
-                          label={item.name}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
-                  <ErrorMessage
-                    name="selectedState"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>City/Town</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("enteredCityTown")}
-                    onBlur={handleBlur("enteredCityTown")}
-                    value={values.enteredCityTown}
-                  />
-                  <ErrorMessage
-                    name="enteredCityTown"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
                 <View style={styles.buttonContainer}>
                   <SecondaryButton onPress={handleSubmit}>
                     Submit

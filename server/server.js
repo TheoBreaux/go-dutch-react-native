@@ -27,25 +27,20 @@ pool.query("SELECT NOW()", (err, result) => {
 
 //SIGN UP TO GO DUTCH - INITIAL USER INFO
 app.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, username, password, state, cityTown } =
-    req.body;
+  const { firstName, lastName, email, username, password } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password, state, city_town) VALUES($1, $2, $3, $4, $5, $6, $7)`,
-      [firstName, lastName, email, username, hashedPassword, state, cityTown]
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password) VALUES($1, $2, $3, $4, $5)`,
+      [firstName, lastName, email, username, hashedPassword]
     );
 
-    const token = jwt.sign(
-      { email, username, firstName, lastName, cityTown },
-      "secret",
-      {
-        expiresIn: "1hr",
-      }
-    );
-    res.json({ email, username, firstName, lastName, cityTown, token });
+    const token = jwt.sign({ email, username, firstName, lastName }, "secret", {
+      expiresIn: "1hr",
+    });
+    res.json({ email, username, firstName, lastName, token });
   } catch (error) {
     console.error(error);
     if (error) {
@@ -93,7 +88,7 @@ app.post("/users", async (req, res) => {
 
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
-  const { username, password, firstName, lastName, cityTown } = req.body;
+  const { username, password, firstName, lastName } = req.body;
 
   try {
     const users = await pool.query("SELECT * FROM users WHERE username = $1", [
@@ -106,20 +101,15 @@ app.post("/login", async (req, res) => {
       password,
       users.rows[0].hashed_password
     );
-    const token = jwt.sign(
-      { username, firstName, lastName, cityTown },
-      "secret",
-      {
-        expiresIn: "1hr",
-      }
-    )
+    const token = jwt.sign({ username, firstName, lastName }, "secret", {
+      expiresIn: "1hr",
+    });
     if (success) {
       res.json({
         email: users.rows[0].email,
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
-        cityTown: users.rows[0].city_town,
         token,
       });
     } else {
@@ -129,7 +119,6 @@ app.post("/login", async (req, res) => {
     console.error(error);
   }
 });
-
 
 // SEND NEW DINING EVENTS TO DATABASE
 app.post("/diningevents", async (req, res) => {
@@ -183,7 +172,6 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 // app.get("/users", (req, res) => {
 //   pool.query("SELECT * FROM users", (err, result) => {

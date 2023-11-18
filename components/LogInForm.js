@@ -9,19 +9,28 @@ import {
 import Logo from "./Logo";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/store";
-// import LocateUser from "./LocateUser";
+import { setCurrentCity, setUser } from "../store/store";
+import * as Location from "expo-location";
+import { useCallback } from "react";
+import { getCityFromCoordinates } from "../utils";
 
 const LogInForm = () => {
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [restaurantList, setRestaurantList] = useState([]);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
 
   const initialValues = {
     username: "",
@@ -44,7 +53,62 @@ const LogInForm = () => {
     return errors;
   };
 
-  const handleFormSubmit = async (values, actions) => {
+  useEffect(() => {
+    getLocationAsync();
+  }, []);
+
+  //get current location coordinates
+  const getLocationAsync = useCallback(async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status === "granted") {
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+
+        setHasLocationPermission(true);
+        setLatitude(location.coords.latitude);
+        setLongitude(location.coords.longitude);
+        await handleRestaurantSearch();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("Location permission not granted");
+    }
+  }, []);
+
+  const handleLocationSearch = async () => {
+    const city = await getCityFromCoordinates(latitude, longitude, apiKey);
+    dispatch(setCurrentCity(city));
+  };
+
+  const handleRestaurantSearch = async () => {
+    if (hasLocationPermission) {
+      const url =
+        "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+      const location = `location=${latitude},${longitude}`;
+      const radius = "&radius=2000";
+      const type = "&keyword=restaurant";
+      const key = "&key=AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
+      const restaurantSearchUrl = url + location + radius + type + key;
+
+      try {
+        const response = await fetch(restaurantSearchUrl);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        const data = result.results;
+        // console.log("THIS IS THE DATA RESULT:", data);
+        setRestaurantList(data);
+        return data;
+      } catch (error) {
+        console.error("Error fetching restaurant data:", error);
+      }
+    }
+  };
+
+  const handleFormSubmit = async (values) => {
     const userInfo = {
       username: values.username,
       password: values.password,
@@ -55,7 +119,6 @@ const LogInForm = () => {
         {
           method: "POST",
           headers: {
-            // Accept: "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userInfo),
@@ -63,16 +126,12 @@ const LogInForm = () => {
       );
 
       const data = await response.json();
-      console.log("THIS DATA:", data);
 
       if (data.detail) {
         setError(data.detail);
-        // actions.resetForm();
       } else {
         dispatch(setUser(data));
-        
-
-
+        handleLocationSearch();
         navigation.navigate("Main", { screen: "Home" });
       }
     } catch (error) {
@@ -81,14 +140,8 @@ const LogInForm = () => {
     Keyboard.dismiss();
   };
 
-  // const handleRestaurantDataReceived = (data) => {
-  //   setRestaurants(data);
-  //   setLoading(false);
-  // };
-
   return (
     <>
-      {/* <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} /> */}
       <Logo />
       <View style={styles.container}>
         <Formik

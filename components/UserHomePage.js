@@ -12,10 +12,12 @@ import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "./ui/PrimaryButton";
 import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { current } from "@reduxjs/toolkit";
 
 const UserHomePage = () => {
   const userName = useSelector((state) => state.userInfo.user.firstName);
   const userCity = useSelector((state) => state.userInfo.user.cityTown);
+  const currentCity = useSelector((state) => state.userInfo.currentCity);
 
   const renderItem = ({ item }) => {
     const handleExternalLink = () => {
@@ -55,7 +57,7 @@ const UserHomePage = () => {
         <View style={styles.titlesContainer}>
           <Text style={styles.title}>Welcome, {userName}!</Text>
           <Text style={styles.subtitle}>
-            Featured restaurants near {userCity}!
+            Featured restaurants near {currentCity}!
           </Text>
         </View>
         <Carousel

@@ -4,10 +4,14 @@ const userInfoSlice = createSlice({
   name: "userInfo",
   initialState: {
     user: {},
+    currentCity: "",
   },
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+    },
+    setCurrentCity: (state, action) => {
+      state.currentCity = action.payload;
     },
     logOut: (state) => {
       state.user = {};
@@ -15,7 +19,7 @@ const userInfoSlice = createSlice({
   },
 });
 
-export const { setUser, logOut } = userInfoSlice.actions;
+export const { setUser, setCurrentCity, logOut } = userInfoSlice.actions;
 
 const store = configureStore({
   reducer: {
