@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
       {
         expiresIn: "1hr",
       }
-    );
+    )
     if (success) {
       res.json({
         email: users.rows[0].email,

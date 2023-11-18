@@ -14,7 +14,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/store";
-import LocateUser from "./LocateUser";
+// import LocateUser from "./LocateUser";
 
 const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -51,7 +51,7 @@ const LogInForm = () => {
     };
     try {
       const response = await fetch(
-        "https://8190-2603-8000-c001-b6a2-2d28-2e98-361d-8cfc.ngrok-free.app/login",
+        "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/login",
         {
           method: "POST",
           headers: {
@@ -63,11 +63,16 @@ const LogInForm = () => {
       );
 
       const data = await response.json();
+      console.log("THIS DATA:", data);
+
       if (data.detail) {
         setError(data.detail);
+        // actions.resetForm();
       } else {
         dispatch(setUser(data));
-        actions.resetForm();
+        
+
+
         navigation.navigate("Main", { screen: "Home" });
       }
     } catch (error) {
@@ -76,14 +81,14 @@ const LogInForm = () => {
     Keyboard.dismiss();
   };
 
-  const handleRestaurantDataReceived = (data) => {
-    setRestaurants(data);
-    setLoading(false);
-  };
+  // const handleRestaurantDataReceived = (data) => {
+  //   setRestaurants(data);
+  //   setLoading(false);
+  // };
 
   return (
     <>
-      <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} />
+      {/* <LocateUser onRestaurantDataReceived={handleRestaurantDataReceived} /> */}
       <Logo />
       <View style={styles.container}>
         <Formik
@@ -105,6 +110,7 @@ const LogInForm = () => {
                 component={Text}
                 style={styles.errorText}
               />
+
               <View style={styles.logInInputs}>
                 <Text style={styles.label}>Password</Text>
                 <TextInput
@@ -127,6 +133,7 @@ const LogInForm = () => {
                   style={styles.errorText}
                 />
               </View>
+
               <View>
                 <SecondaryButton onPress={handleSubmit}>Submit</SecondaryButton>
               </View>

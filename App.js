@@ -43,7 +43,7 @@ const MainTabNavigator = () => {
         component={UserHomePage}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color="white" size={30} />
+            <Ionicons name="home" color="white" size={35} />
           ),
         }}
       />
@@ -52,7 +52,7 @@ const MainTabNavigator = () => {
         component={NewSplitForm}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <CustomIcon color="white" size={30} />
+            <CustomIcon color="white" size={35} />
           ),
         }}
       />
@@ -61,7 +61,7 @@ const MainTabNavigator = () => {
         component={DiningEventHistory}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="history" size={30} color="white" />
+            <FontAwesome name="history" size={35} color="white" />
           ),
         }}
       />
@@ -70,7 +70,7 @@ const MainTabNavigator = () => {
         component={ImageLogs}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="images-outline" size={30} color="white" />
+            <Ionicons name="images-outline" size={35} color="white" />
           ),
         }}
       />
@@ -79,7 +79,7 @@ const MainTabNavigator = () => {
         component={LogOutScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Entypo name="log-out" size={30} color="white" />
+            <Entypo name="log-out" size={35} color="white" />
           ),
         }}
       />

@@ -55,9 +55,6 @@ const NewSplitForm = () => {
     console.log("close");
   };
 
-  console.log("NEW SPLIT FORM DATA :", restaurants);
-  console.log("NEW SPLIT FORM DATA :", restaurants);
-
   return (
     <>
       <Logo />
