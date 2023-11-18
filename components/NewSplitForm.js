@@ -20,7 +20,6 @@ const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedRestaurant, setSelectedRestaurant] = useState("");
 
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
 
@@ -51,19 +50,19 @@ const NewSplitForm = () => {
     return errors;
   };
 
-  const changeRestaurantHandler = () => {
-    console.log("close");
+  const changeRestaurantHandler = (handleChange) => {
+    handleChange("selectedRestaurant")("");
   };
 
   return (
     <>
       <Logo />
-
       <ScrollView>
         <Image
           style={styles.friendsImage}
           source={require("../images/friends.png")}
         />
+
         <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
         <View style={styles.container}>
           <Formik
@@ -90,9 +89,9 @@ const NewSplitForm = () => {
                   <View>
                     <Picker
                       style={styles.input}
-                      selectedValue={selectedRestaurant}
+                      selectedValue={values.selectedRestaurant}
                       onValueChange={(itemValue, itemIndex) =>
-                        setSelectedRestaurant(itemValue)
+                        handleChange("selectedRestaurant")(itemValue)
                       }>
                       {sortedRestaurantList.map((restaurant) => (
                         <Picker.Item
@@ -118,12 +117,12 @@ const NewSplitForm = () => {
                       <Button
                         color={Colors.goDutchRed}
                         title="X"
-                        onPress={changeRestaurantHandler}
+                        onPress={() => changeRestaurantHandler(handleChange)}
                       />
                     </View>
                     <TextInput
                       style={styles.restaurantInput}
-                      value={selectedRestaurant}
+                      value={values.selectedRestaurant}
                       editable={false}
                     />
                   </View>
@@ -141,7 +140,7 @@ const NewSplitForm = () => {
                     value={values.enteredSelectedRestaurant}
                   />
                   <ErrorMessage
-                    name="selectedRestaurant"
+                    name="enteredSelectedRestaurant"
                     component={Text}
                     style={styles.errorText}
                   />

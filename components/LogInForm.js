@@ -139,9 +139,8 @@ const LogInForm = () => {
   };
 
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
-  console.log(restaurantList);
-  console.log(restaurantList);
-  console.log(restaurantList);
+ 
+
 
 
   return (
