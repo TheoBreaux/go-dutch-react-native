@@ -12,11 +12,12 @@ import SecondaryButton from "./ui/SecondaryButton";
 import { useEffect, useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-import { setCurrentCity, setUser } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentCity, setRestaurantList, setUser } from "../store/store";
 import * as Location from "expo-location";
 import { useCallback } from "react";
 import { getCityFromCoordinates } from "../utils";
+
 
 const LogInForm = () => {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
@@ -25,7 +26,6 @@ const LogInForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [restaurantList, setRestaurantList] = useState([]);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -99,8 +99,8 @@ const LogInForm = () => {
         }
         const result = await response.json();
         const data = result.results;
-        // console.log("THIS IS THE DATA RESULT:", data);
-        setRestaurantList(data);
+        console.log("THIS IS THE DATA RESULT:", data);
+        dispatch(setRestaurantList(data));
         return data;
       } catch (error) {
         console.error("Error fetching restaurant data:", error);
@@ -139,6 +139,19 @@ const LogInForm = () => {
     }
     Keyboard.dismiss();
   };
+
+
+  const restaurantList = useSelector((state) => state.userInfo.restaurantList);
+  console.log(restaurantList);
+  console.log(restaurantList);
+  console.log(restaurantList)
+  console.log(restaurantList)
+  console.log(restaurantList)
+  console.log(restaurantList)
+  console.log(restaurantList)
+
+
+
 
   return (
     <>

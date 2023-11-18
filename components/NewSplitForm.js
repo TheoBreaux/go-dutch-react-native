@@ -13,20 +13,18 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
-
-const getCurrentDate = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${month}-${day}-${year}`;
-};
+import { useSelector } from "react-redux";
+import { getCurrentDate } from "../utils";
 
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
-  const [restaurants, setRestaurants] = useState([]);
+  // const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRestaurant, setSelectedRestaurant] = useState("");
+
+  const restaurantList = useSelector((state) => state.userInfo.restaurantList);
+  console.log(restaurantList);
 
   const initialValues = {
     eventDate: getCurrentDate(),
@@ -84,21 +82,24 @@ const NewSplitForm = () => {
 
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Select a dining experience:</Text>
+                </View>
+
+                <View>
                   <View>
                     <Picker
                       style={styles.input}
-                      selectedValue={values.selectedRestaurant}
-                      onValueChange={handleChange("selectedRestaurant")}
-                      onBlur={handleBlur("selectedRestaurant")}>
-                      {restaurants.results
-                        ? restaurants.results.map((restaurant) => (
-                            <Picker.Item
-                              key={restaurant.place_id}
-                              value={restaurant.name}
-                              id={restaurant.vicinity}
-                            />
-                          ))
-                        : null}
+                      selectedValue={selectedRestaurant}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedRestaurant(itemValue)
+                      }>
+                      {restaurantList.map((restaurant) => (
+                        <Picker.Item
+                          key={restaurant.place_id}
+                          label={restaurant.name + ", " + restaurant.vicinity}
+                          value={restaurant.name}
+                          id={restaurant.vicinity}
+                        />
+                      ))}
                     </Picker>
                   </View>
                   <ErrorMessage
@@ -120,7 +121,7 @@ const NewSplitForm = () => {
                     </View>
                     <TextInput
                       style={styles.restaurantInput}
-                      value={values.selectedRestaurant}
+                      value={selectedRestaurant}
                       editable={false}
                     />
                   </View>
@@ -210,6 +211,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 5,
+    color: "black",
     width: "100%",
   },
   exitRestaurant: {
@@ -223,6 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     width: "88%",
+    color: Colors.goDutchBlue,
   },
   button: {
     backgroundColor: Colors.goDutchRed,
@@ -238,7 +241,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   errorText: {
-    color: "#fc8181",
+    color: "red",
   },
 });
 

@@ -12,7 +12,6 @@ import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "./ui/PrimaryButton";
 import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import { current } from "@reduxjs/toolkit";
 
 const UserHomePage = () => {
   const userName = useSelector((state) => state.userInfo.user.firstName);

@@ -5,6 +5,7 @@ const userInfoSlice = createSlice({
   initialState: {
     user: {},
     currentCity: "",
+    restaurantList: [],
   },
   reducers: {
     setUser: (state, action) => {
@@ -13,13 +14,17 @@ const userInfoSlice = createSlice({
     setCurrentCity: (state, action) => {
       state.currentCity = action.payload;
     },
+    setRestaurantList: (state, action) => {
+      state.restaurantList = action.payload;
+    },
     logOut: (state) => {
       state.user = {};
     },
   },
 });
 
-export const { setUser, setCurrentCity, logOut } = userInfoSlice.actions;
+export const { setUser, setCurrentCity, setRestaurantList, logOut } =
+  userInfoSlice.actions;
 
 const store = configureStore({
   reducer: {
