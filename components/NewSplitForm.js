@@ -54,6 +54,38 @@ const NewSplitForm = () => {
     handleChange("selectedRestaurant")("");
   };
 
+  // const handleFormSubmit = async (values) => {
+  //   const userInfo = {
+  //     username: values.username,
+  //     password: values.password,
+  //   };
+  //   try {
+  //     const response = await fetch(
+  //       "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/login",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(userInfo),
+  //       }
+  //     );
+
+  //     const data = await response.json();
+
+  //     if (data.detail) {
+  //       setError(data.detail);
+  //     } else {
+  //       dispatch(setUser(data));
+  //       handleLocationSearch();
+  //       navigation.navigate("Main", { screen: "Home" });
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   Keyboard.dismiss();
+  // };
+
   return (
     <>
       <Logo />
@@ -93,6 +125,7 @@ const NewSplitForm = () => {
                       onValueChange={(itemValue, itemIndex) =>
                         handleChange("selectedRestaurant")(itemValue)
                       }>
+                      <Picker.Item label="Select a restaurant..." value="" />
                       {sortedRestaurantList.map((restaurant) => (
                         <Picker.Item
                           key={restaurant.place_id}
