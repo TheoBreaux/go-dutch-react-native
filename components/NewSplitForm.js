@@ -15,7 +15,6 @@ import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../utils";
-import { useNavigation } from "@react-navigation/native";
 import ReceiptCapture from "./ReceiptCapture";
 
 const NewSplitForm = () => {
@@ -29,7 +28,6 @@ const NewSplitForm = () => {
   const primaryDinerUsername = useSelector(
     (state) => state.userInfo.user.username
   );
-  const navigation = useNavigation();
 
   const sortedRestaurantList = restaurantList
     .slice()
@@ -90,7 +88,6 @@ const NewSplitForm = () => {
       const result = await response.json();
       setEventId(result.event_id);
       setIsCapturingReceipt(!isCapturingReceipt);
-      // navigation.navigate("AddDiners");
     } catch (error) {
       console.error(error);
     }

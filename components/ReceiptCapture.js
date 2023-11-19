@@ -4,7 +4,8 @@ import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
 import PrimaryButton from "./ui/PrimaryButton";
 import { Entypo } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const ReceiptCapture = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -12,6 +13,8 @@ const ReceiptCapture = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -39,6 +42,8 @@ const ReceiptCapture = () => {
         await MediaLibrary.createAssetAsync(image);
         alert("Receipt Saved! 🎉");
         setImage(null);
+        //should navigate to another page, possibly history
+        navigation.navigate("AddDiners");
       } catch (error) {
         console.error(error);
       }
@@ -58,13 +63,28 @@ const ReceiptCapture = () => {
           flashMode={flash}
           ref={cameraRef}>
           <View style={styles.cameraButtons}>
-            <PrimaryButton>
-              <Ionicons name="ios-exit-outline" size={24} color="white" />
-              <Text style={styles.cameraText}>Exit</Text>
+            <PrimaryButton padding={5} width={40}>
+              <Feather name="x-circle" size={24} color="white" />
+              <Text style={styles.cameraText}></Text>
             </PrimaryButton>
-            <PrimaryButton>
-              <Entypo name="flash" size={24} color="white" />
-              <Text style={styles.cameraText}>Flash</Text>
+            <PrimaryButton
+              padding={5}
+              width={40}
+              onPress={() => {
+                setFlash(
+                  flash === Camera.Constants.FlashMode.off
+                    ? Camera.Constants.FlashMode.on
+                    : Camera.Constants.FlashMode.off
+                );
+              }}>
+              <Entypo
+                name="flash"
+                size={24}
+                color={
+                  flash === Camera.Constants.FlashMode.off ? "gray" : "white"
+                }
+              />
+              <Text style={styles.cameraText}></Text>
             </PrimaryButton>
           </View>
         </Camera>

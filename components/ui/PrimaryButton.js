@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../../constants/colors";
 
-const PrimaryButton = ({ children, onPress, padding }) => {
+const PrimaryButton = ({ children, onPress, padding, width }) => {
   const buttonContainerStyle = {
     padding: padding !== undefined ? padding : 10,
+    width: width !== undefined ? width : 150,
   };
   return (
     <View style={styles.buttonOuterContainer}>
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     margin: 2,
-    width: 150,
     borderColor: "black",
     borderWidth: 3,
     borderStyle: "solid",
