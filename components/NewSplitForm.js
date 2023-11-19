@@ -15,6 +15,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../utils";
+import LocateRestaurants from "./LocateRestaurants";
 
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -53,6 +54,8 @@ const NewSplitForm = () => {
   const changeRestaurantHandler = (handleChange) => {
     handleChange("selectedRestaurant")("");
   };
+
+  //SEND TO DATABASE AS DINING EXPERIENCE BEGINNING
 
   // const handleFormSubmit = async (values) => {
   //   const userInfo = {
@@ -94,7 +97,6 @@ const NewSplitForm = () => {
           style={styles.friendsImage}
           source={require("../images/friends.png")}
         />
-
         <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
         <View style={styles.container}>
           <Formik

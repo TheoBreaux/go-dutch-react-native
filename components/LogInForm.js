@@ -9,22 +9,21 @@ import {
 import Logo from "./Logo";
 import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentCity, setRestaurantList, setUser } from "../store/store";
-import * as Location from "expo-location";
-import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
+import { useCallback } from "react";
+import LocateRestaurants from "./LocateRestaurants";
 
 const LogInForm = () => {
-  const [hasLocationPermission, setHasLocationPermission] = useState(false);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -52,58 +51,14 @@ const LogInForm = () => {
     return errors;
   };
 
-  useEffect(() => {
-    getLocationAsync();
-  }, []);
-
-  //get current location coordinates
-  const getLocationAsync = useCallback(async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status === "granted") {
-      try {
-        let location = await Location.getCurrentPositionAsync({});
-
-        setHasLocationPermission(true);
-        setLatitude(location.coords.latitude);
-        setLongitude(location.coords.longitude);
-        await handleRestaurantSearch();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("Location permission not granted");
-    }
-  }, []);
+  const handleLocationUpdate = useCallback((lat, long) => {
+    setLatitude(lat);
+    setLongitude(long);
+  });
 
   const handleLocationSearch = async () => {
     const city = await getCityFromCoordinates(latitude, longitude, apiKey);
     dispatch(setCurrentCity(city));
-  };
-
-  const handleRestaurantSearch = async () => {
-    if (hasLocationPermission) {
-      const url =
-        "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-      const location = `location=${latitude},${longitude}`;
-      const radius = "&radius=2000";
-      const type = "&keyword=restaurant";
-      const key = "&key=AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
-      const restaurantSearchUrl = url + location + radius + type + key;
-
-      try {
-        const response = await fetch(restaurantSearchUrl);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        const data = result.results;
-        dispatch(setRestaurantList(data));
-        return data;
-      } catch (error) {
-        console.error("Error fetching restaurant data:", error);
-      }
-    }
   };
 
   const handleFormSubmit = async (values) => {
@@ -138,13 +93,9 @@ const LogInForm = () => {
     Keyboard.dismiss();
   };
 
-  const restaurantList = useSelector((state) => state.userInfo.restaurantList);
- 
-
-
-
   return (
     <>
+      <LocateRestaurants onLocationUpdate={handleLocationUpdate} />
       <Logo />
       <View style={styles.container}>
         <Formik
