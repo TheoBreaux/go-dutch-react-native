@@ -12,6 +12,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Go Dutch! to access your camera."
+        }
+      ]
+    ]
   }
 }

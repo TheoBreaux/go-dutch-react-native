@@ -18,6 +18,7 @@ import WelcomeScreen from "./components/WelcomeScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import LogOutScreen from "./components/LogOutScreen";
+import AddDiners from "./components/AddDiners";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -109,6 +110,7 @@ const App = () => {
           <Stack.Screen name="SignUp" component={SignUpForm} />
           <Stack.Screen name="LogIn" component={LogInForm} />
           <Stack.Screen name="PaymentSources" component={PaymentSources} />
+          <Stack.Screen name="AddDiners" component={AddDiners} />
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}

@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../../constants/colors";
 
-const PrimaryButton = ({ children, onPress }) => {
+const PrimaryButton = ({ children, onPress, padding }) => {
+  const buttonContainerStyle = {
+    padding: padding !== undefined ? padding : 10,
+  };
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
         onPress={onPress}
         android_ripple={{ color: Colors.goDutchBlue }}>
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, buttonContainerStyle]}>
           <Text style={styles.buttonText}>{children}</Text>
         </View>
       </Pressable>
@@ -30,7 +33,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 3,
     borderStyle: "solid",
-    padding: 10,
     alignItems: "center",
   },
   buttonText: {

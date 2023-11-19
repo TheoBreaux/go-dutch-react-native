@@ -15,7 +15,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 const UserHomePage = () => {
   const userName = useSelector((state) => state.userInfo.user.firstName);
-  const userCity = useSelector((state) => state.userInfo.user.cityTown);
   const currentCity = useSelector((state) => state.userInfo.currentCity);
 
   const renderItem = ({ item }) => {

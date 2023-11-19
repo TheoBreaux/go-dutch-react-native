@@ -15,14 +15,21 @@ import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../utils";
-import LocateRestaurants from "./LocateRestaurants";
+import { useNavigation } from "@react-navigation/native";
+import ReceiptCapture from "./ReceiptCapture";
 
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [eventId, setEventId] = useState(0);
+  const [isCapturingReceipt, setIsCapturingReceipt] = useState(false);
 
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
+  const primaryDinerUsername = useSelector(
+    (state) => state.userInfo.user.username
+  );
+  const navigation = useNavigation();
 
   const sortedRestaurantList = restaurantList
     .slice()
@@ -53,159 +60,165 @@ const NewSplitForm = () => {
 
   const changeRestaurantHandler = (handleChange) => {
     handleChange("selectedRestaurant")("");
+    handleChange("enteredSelectedRestaurant")("");
   };
 
   //SEND TO DATABASE AS DINING EXPERIENCE BEGINNING
 
-  // const handleFormSubmit = async (values) => {
-  //   const userInfo = {
-  //     username: values.username,
-  //     password: values.password,
-  //   };
-  //   try {
-  //     const response = await fetch(
-  //       "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/login",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(userInfo),
-  //       }
-  //     );
+  const handleFormSubmit = async (values, actions) => {
+    actions.resetForm();
+    const diningEventInfo = {
+      dining_date: getCurrentDate(),
+      restaurant_bar: values.selectedRestaurant,
+      title: values.eventTitle,
+      primary_diner_username: primaryDinerUsername,
+      tax: null,
+      tip: null,
+      total_meal_cost: null,
+    };
+    try {
+      const response = await fetch(
+        "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(diningEventInfo),
+        }
+      );
+      const result = await response.json();
+      setEventId(result.event_id);
+      setIsCapturingReceipt(!isCapturingReceipt);
+      // navigation.navigate("AddDiners");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //     const data = await response.json();
-
-  //     if (data.detail) {
-  //       setError(data.detail);
-  //     } else {
-  //       dispatch(setUser(data));
-  //       handleLocationSearch();
-  //       navigation.navigate("Main", { screen: "Home" });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  //   Keyboard.dismiss();
-  // };
+  console.log(eventId);
 
   return (
     <>
       <Logo />
-      <ScrollView>
-        <Image
-          style={styles.friendsImage}
-          source={require("../images/friends.png")}
-        />
-        <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
-        <View style={styles.container}>
-          <Formik
-            initialValues={initialValues}
-            validate={validateForm}
-            onSubmit={(values, actions) => {
-              actions.resetForm();
-              console.log(values);
-            }}>
-            {({ handleChange, handleSubmit, handleBlur, values }) => (
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Date:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={getCurrentDate()}
-                  editable={false}
-                />
-
+      {!isCapturingReceipt && (
+        <ScrollView>
+          <Image
+            style={styles.friendsImage}
+            source={require("../images/friends.png")}
+          />
+          <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
+          <View style={styles.container}>
+            <Formik
+              initialValues={initialValues}
+              validate={validateForm}
+              onSubmit={handleFormSubmit}>
+              {({ handleChange, handleSubmit, handleBlur, values }) => (
                 <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Select a dining experience:</Text>
-                </View>
-
-                <View>
-                  <View>
-                    <Picker
-                      style={styles.input}
-                      selectedValue={values.selectedRestaurant}
-                      onValueChange={(itemValue, itemIndex) =>
-                        handleChange("selectedRestaurant")(itemValue)
-                      }>
-                      <Picker.Item label="Select a restaurant..." value="" />
-                      {sortedRestaurantList.map((restaurant) => (
-                        <Picker.Item
-                          key={restaurant.place_id}
-                          label={restaurant.name + ", " + restaurant.vicinity}
-                          value={restaurant.name}
-                          id={restaurant.vicinity}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
-                  <ErrorMessage
-                    name="selectedRestaurant"
-                    component={Text}
-                    style={styles.errorText}
+                  <Text style={styles.label}>Date:</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={getCurrentDate()}
+                    editable={false}
                   />
-                </View>
 
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Restaurant/Bar:</Text>
-                  <View style={styles.exitRestaurant}>
-                    <View style={styles.button}>
-                      <Button
-                        color={Colors.goDutchRed}
-                        title="X"
-                        onPress={() => changeRestaurantHandler(handleChange)}
-                      />
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.label}>
+                      Select a dining experience:
+                    </Text>
+                  </View>
+
+                  <View>
+                    <View>
+                      <Picker
+                        style={styles.input}
+                        selectedValue={values.selectedRestaurant}
+                        onValueChange={(itemValue, itemIndex) =>
+                          handleChange("selectedRestaurant")(itemValue)
+                        }>
+                        <Picker.Item label="Select a restaurant..." value="" />
+                        {sortedRestaurantList.map((restaurant) => (
+                          <Picker.Item
+                            key={restaurant.place_id}
+                            label={restaurant.name + ", " + restaurant.vicinity}
+                            value={restaurant.name}
+                            id={restaurant.vicinity}
+                          />
+                        ))}
+                      </Picker>
                     </View>
-                    <TextInput
-                      style={styles.restaurantInput}
-                      value={values.selectedRestaurant}
-                      editable={false}
+                    <ErrorMessage
+                      name="selectedRestaurant"
+                      component={Text}
+                      style={styles.errorText}
                     />
                   </View>
-                  <Text style={styles.notListedText}>
-                    Not listed? Input below
-                  </Text>
-                </View>
 
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Input unlisted restaurant:</Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={handleChange("enteredSelectedRestaurant")}
-                    onBlur={handleBlur("enteredSelectedRestaurant")}
-                    value={values.enteredSelectedRestaurant}
-                  />
-                  <ErrorMessage
-                    name="enteredSelectedRestaurant"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Restaurant/Bar:</Text>
+                    <View style={styles.exitRestaurant}>
+                      <View style={styles.button}>
+                        <Button
+                          color={Colors.goDutchRed}
+                          title="X"
+                          onPress={() => changeRestaurantHandler(handleChange)}
+                        />
+                      </View>
+                      <TextInput
+                        style={styles.restaurantInput}
+                        value={values.enteredSelectedRestaurant}
+                        editable={false}
+                      />
+                    </View>
+                    <Text style={styles.notListedText}>
+                      Not listed? Input below
+                    </Text>
+                  </View>
 
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Title:</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={values.eventTitle}
-                    onChangeText={handleChange("eventTitle")}
-                    onBlur={handleBlur("eventTitle")}
-                  />
-                  <ErrorMessage
-                    name="eventTitle"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Input unlisted restaurant:</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={handleChange("enteredSelectedRestaurant")}
+                      onBlur={handleBlur("enteredSelectedRestaurant")}
+                      value={values.enteredSelectedRestaurant}
+                      placeholder="Input unlisted restaurant"
+                    />
+                    <ErrorMessage
+                      name="enteredSelectedRestaurant"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
 
-                <View>
-                  <SecondaryButton onPress={handleSubmit}>
-                    Continue
-                  </SecondaryButton>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Title:</Text>
+                    <TextInput
+                      style={styles.input}
+                      value={values.eventTitle}
+                      onChangeText={handleChange("eventTitle")}
+                      onBlur={handleBlur("eventTitle")}
+                      placeholder="ex. Tonya's birthday dinner"
+                    />
+                    <ErrorMessage
+                      name="eventTitle"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
+
+                  <View>
+                    <SecondaryButton onPress={handleSubmit}>
+                      Continue
+                    </SecondaryButton>
+                  </View>
                 </View>
-              </View>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
+              )}
+            </Formik>
+          </View>
+        </ScrollView>
+      )}
+      {isCapturingReceipt && <ReceiptCapture />}
     </>
   );
 };
@@ -238,8 +251,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   label: {
-    marginTop: 5,
-    fontFamily: "red-hat-regular",
+    marginTop: 2,
+    fontFamily: "red-hat-bold",
   },
   input: {
     backgroundColor: Colors.inputBackground,
