@@ -1,5 +1,5 @@
 import Logo from "./Logo";
-import { Text } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 const AddDiners = () => {
   return (

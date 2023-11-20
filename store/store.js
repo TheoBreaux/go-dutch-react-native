@@ -23,12 +23,38 @@ const userInfoSlice = createSlice({
   },
 });
 
+const diningEventSlice = createSlice({
+  name: "diningEvent",
+  initialState: {
+    event: {
+      eventId: "",
+      eventDate: "",
+      selectedRestaurant: "",
+      enteredSelectedRestaurant: "",
+      eventTitle: "",
+      primaryDinerUsername: "",
+      tax: "",
+      tip: "",
+      totalMealCost: "",
+      receiptImageSource: "",
+    },
+  },
+  reducers: {
+    setDiningEvent: (state, action) => {
+      state.event = action.payload;
+    },
+  },
+});
+
 export const { setUser, setCurrentCity, setRestaurantList, logOut } =
   userInfoSlice.actions;
+
+export const { setDiningEvent } = diningEventSlice.actions;
 
 const store = configureStore({
   reducer: {
     userInfo: userInfoSlice.reducer,
+    diningEvent: diningEventSlice.reducer,
   },
 });
 

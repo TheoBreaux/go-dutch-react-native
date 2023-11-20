@@ -13,21 +13,18 @@ import Colors from "../constants/colors";
 import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCurrentDate } from "../utils";
 import ReceiptCapture from "./ReceiptCapture";
+import { setDiningEvent } from "../store/store";
 
 const NewSplitForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [eventId, setEventId] = useState(0);
   const [isCapturingReceipt, setIsCapturingReceipt] = useState(false);
 
+  const dispatch = useDispatch();
+
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
-  const primaryDinerUsername = useSelector(
-    (state) => state.userInfo.user.username
-  );
 
   const sortedRestaurantList = restaurantList
     .slice()
@@ -44,7 +41,8 @@ const NewSplitForm = () => {
     const errors = {};
 
     if (!values.selectedRestaurant && !values.enteredSelectedRestaurant) {
-      errors.selectedRestaurant = "Please select or enter your restaurant";
+      errors.selectedRestaurant =
+        "Please select or enter your restaurant below";
     }
 
     if (!values.eventTitle) {
@@ -61,39 +59,10 @@ const NewSplitForm = () => {
     handleChange("enteredSelectedRestaurant")("");
   };
 
-  //SEND TO DATABASE AS DINING EXPERIENCE BEGINNING
-
-  const handleFormSubmit = async (values, actions) => {
-    actions.resetForm();
-    const diningEventInfo = {
-      dining_date: getCurrentDate(),
-      restaurant_bar: values.selectedRestaurant,
-      title: values.eventTitle,
-      primary_diner_username: primaryDinerUsername,
-      tax: null,
-      tip: null,
-      total_meal_cost: null,
-    };
-    try {
-      const response = await fetch(
-        "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(diningEventInfo),
-        }
-      );
-      const result = await response.json();
-      setEventId(result.event_id);
-      setIsCapturingReceipt(!isCapturingReceipt);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleDiningEventSubmit = (values) => {
+    dispatch(setDiningEvent(values));
+    setIsCapturingReceipt(!isCapturingReceipt);
   };
-
-  console.log(eventId);
 
   return (
     <>
@@ -109,7 +78,7 @@ const NewSplitForm = () => {
             <Formik
               initialValues={initialValues}
               validate={validateForm}
-              onSubmit={handleFormSubmit}>
+              onSubmit={handleDiningEventSubmit}>
               {({ handleChange, handleSubmit, handleBlur, values }) => (
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Date:</Text>
@@ -163,7 +132,10 @@ const NewSplitForm = () => {
                       </View>
                       <TextInput
                         style={styles.restaurantInput}
-                        value={values.enteredSelectedRestaurant}
+                        value={
+                          values.enteredSelectedRestaurant ||
+                          values.selectedRestaurant
+                        }
                         editable={false}
                       />
                     </View>
@@ -215,7 +187,12 @@ const NewSplitForm = () => {
           </View>
         </ScrollView>
       )}
-      {isCapturingReceipt && <ReceiptCapture />}
+      {isCapturingReceipt && (
+        <ReceiptCapture
+          setIsCapturingReceipt={setIsCapturingReceipt}
+          isCapturingReceipt={isCapturingReceipt}
+        />
+      )}
     </>
   );
 };
