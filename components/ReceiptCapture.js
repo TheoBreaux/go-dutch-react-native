@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Modal } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
@@ -124,8 +124,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         console.log("RETURNED RECEIPT DATA:", responseData);
         dispatch(setReceiptValues(responseData));
         setLoading(false);
-        //AddDinerModal - data is posted onpress postData() is run
-
         // postData();
         // alert("Receipt submitted and saved! 💸🎉");
         setIsCapturingReceipt(!isCapturingReceipt);
@@ -150,15 +148,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
   return (
     <>
-      {<Modal>
-        <Logo />
-        <View>
-          <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
-        </View>
-        <Text style={styles.title}>DINERS</Text>
-        <PrimaryDiner/>
-      </Modal>}
-
       <View style={styles.container}>
         {loading && (
           <View style={styles.spinnerContainer}>
@@ -244,19 +233,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 };
 
 const styles = StyleSheet.create({
-  eventTitle: {
-    textAlign: "center",
-    fontFamily: "red-hat-bold",
-    color: Colors.goDutchRed,
-    fontSize: 40,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 30,
-    fontFamily: "red-hat-regular",
-    color: Colors.goDutchBlue,
-  },
-
   container: {
     flex: 1,
     paddingHorizontal: 10,
