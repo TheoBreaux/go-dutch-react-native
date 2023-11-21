@@ -23,7 +23,7 @@ CREATE TABLE dining_events (
     tax DECIMAL(10, 2),
     tip DECIMAL(10, 2),
     total_meal_cost DECIMAL(10, 2),
-    receipt_image bytea
+    receipt_image_path VARCHAR(300)
 );
 
 CREATE TABLE additional_diners (

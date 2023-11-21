@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
@@ -11,9 +11,6 @@ import { setDiningEvent, setEventId, setReceiptValues } from "../store/store";
 import axios from "axios";
 import Spinner from "./Spinner";
 import { getCurrentDate } from "../utils";
-import Logo from "./Logo";
-import Colors from "../constants/colors";
-import PrimaryDiner from "./PrimaryDiner";
 
 const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -29,14 +26,14 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
 
-  //   const restaurantBar =
-  //     diningEvent.selectedRestaurant === ""
-  //       ? diningEvent.enteredSelectedRestaurant
-  //       : diningEvent.selectedRestaurant;
+  const restaurantBar =
+    diningEvent.selectedRestaurant === ""
+      ? diningEvent.enteredSelectedRestaurant
+      : diningEvent.selectedRestaurant;
 
-  //   const primaryDinerUsername = useSelector(
-  //     (state) => state.userInfo.user.username
-  //   );
+  const primaryDinerUsername = useSelector(
+    (state) => state.userInfo.user.username
+  );
 
   console.log("ReceiptCapture 1 - CURRENTLY IN REDUX STORE:", diningEvent);
 
@@ -63,35 +60,49 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     setIsCapturingReceipt(!isCapturingReceipt);
   };
 
-  //   const postData = async () => {
-  //     const diningEventInfo = {
-  //       event_id: diningEvent.eventId,
-  //       dining_date: getCurrentDate(),
-  //       restaurant_bar: restaurantBar,
-  //       title: diningEvent.eventTitle,
-  //       primary_diner_username: primaryDinerUsername,
-  //       tax: null,
-  //       tip: null,
-  //       total_meal_cost: null,
-  //       receipt_image: null,
-  //     };
+  const postData = async () => {
+    const diningEventInfo = {
+      event_id: diningEvent.eventId,
+      dining_date: getCurrentDate(),
+      restaurant_bar: restaurantBar,
+      title: diningEvent.eventTitle,
+      primary_diner_username: primaryDinerUsername,
+      tax: null,
+      tip: null,
+      total_meal_cost: null,
+      receipt_image_path: image,
+    };
 
-  //     try {
-  //       const response = await fetch(
-  //         "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
+    try {
+      const response = await fetch(
+        "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(diningEventInfo),
+        }
+      );
+      const result = await response.json();
+      dispatch(setEventId(result.event_id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //   const showAlert = () => {
+  //     Alert.alert(
+  //       "Receipt submitted and saved! 💸🎉",
+  //       "",
+  //       [
   //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(diningEventInfo),
-  //         }
-  //       );
-  //       const result = await response.json();
-  //       dispatch(setEventId(result.event_id));
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
+  //           text: "Close",
+  //           onPress: () => submitTaxInfoOnOkPress(),
+  //         },
+  //       ],
+  //       { cancelable: false }
+  //     );
   //   };
 
   const saveAndSubmitReceiptImage = async () => {
@@ -124,13 +135,13 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         console.log("RETURNED RECEIPT DATA:", responseData);
         dispatch(setReceiptValues(responseData));
         setLoading(false);
-        // postData();
-        // alert("Receipt submitted and saved! 💸🎉");
         setIsCapturingReceipt(!isCapturingReceipt);
+        postData();
         setImage(null);
       } catch (error) {
         console.error(error);
       }
+      alert("Receipt submitted and saved! 💸🎉");
       //should navigate to another page, possibly history
       navigation.navigate("AddDiners");
     }
@@ -140,11 +151,36 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     return <Text>No access to camera</Text>;
   }
 
+  //   const submitTaxInfoOnOkPress = async () => {
+  //     const taxInfo = {
+  //       event_id: diningEvent.eventId,
+  //       tax: receiptValues.taxAmount.data,
+  //     };
+  //     try {
+  //       const response = await fetch(
+  //         "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(taxInfo),
+  //         }
+  //       );
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         // Handle the result if needed
+  //       } else {
+  //         console.error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
   console.log("AFTER save and submit happens theses are the values");
   console.log("ReceiptCapture 2 - CURRENTLY IN REDUX STORE:", diningEvent);
   console.log("Receipt Values - CURRENTLY IN REDUX STORE:", receiptValues);
-  //   console.log(receiptValues.taxAmount);
-  //   console.log(receiptValues.taxAmount.data);
 
   return (
     <>

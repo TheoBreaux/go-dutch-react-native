@@ -130,11 +130,12 @@ app.post("/diningevents", async (req, res) => {
     tax,
     tip,
     total_meal_cost,
+    receipt_image_path,
   } = req.body;
 
   try {
     const newDiningEvent = await pool.query(
-      `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING event_id`,
+      `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost, receipt_image_path) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING event_id`,
       [
         dining_date,
         restaurant_bar,
@@ -143,6 +144,7 @@ app.post("/diningevents", async (req, res) => {
         tax,
         tip,
         total_meal_cost,
+        receipt_image_path,
       ]
     );
     const eventId = newDiningEvent.rows[0].event_id;
@@ -153,10 +155,62 @@ app.post("/diningevents", async (req, res) => {
 });
 
 
+// AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
+app.get("/additionaldiners/suggestions", async (req, res) => {
+  const userInput = req.query.input;
+
+  try {
+    const autoCompleteDiner = await pool.query(
+      `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      [`%${userInput}%`]
+    );
+    const suggestions = autoCompleteDiner.rows.map((row) => ({
+      username: row.username,
+      firstName: row.first_name,
+      lastName: row.last_name,
+    }));
+    res.json(suggestions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+// SEND TAX ON RECEIPT TO DATABASE(dining_events)
+// app.post("/diningevents", async (req, res) => {
+//   const { tax, event_id } = req.body;
+//   console.log(tax);
+//   console.log(event_id);
+
+//   try {
+//     const addTax = await pool.query(
+//       `UPDATE dining_events
+//       SET tax = $1
+//       WHERE event_id = $2`,
+//       [tax, event_id]
+//     );
+//     res.json({
+//       success: true,
+//       message: "Tax information updated successfully",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, error: "Internal server error" });
+//   }
+// });
 
 // AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
 // app.get("/additionaldiners/suggestions", async (req, res) => {
