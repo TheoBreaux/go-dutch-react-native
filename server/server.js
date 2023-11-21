@@ -152,26 +152,32 @@ app.post("/diningevents", async (req, res) => {
   }
 });
 
-// AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
-app.get("/additionaldiners/suggestions", async (req, res) => {
-  const userInput = req.query.input;
 
-  try {
-    const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
-      [`%${userInput}%`]
-    );
-    const suggestions = autoCompleteDiner.rows.map((row) => ({
-      username: row.username,
-      firstName: row.first_name,
-      lastName: row.last_name,
-    }));
-    res.json(suggestions);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+
+
+
+
+
+// AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
+// app.get("/additionaldiners/suggestions", async (req, res) => {
+//   const userInput = req.query.input;
+
+//   try {
+//     const autoCompleteDiner = await pool.query(
+//       `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+//       [`%${userInput}%`]
+//     );
+//     const suggestions = autoCompleteDiner.rows.map((row) => ({
+//       username: row.username,
+//       firstName: row.first_name,
+//       lastName: row.last_name,
+//     }));
+//     res.json(suggestions);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
 // app.get("/users", (req, res) => {
 //   pool.query("SELECT * FROM users", (err, result) => {

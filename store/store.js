@@ -33,15 +33,21 @@ const diningEventSlice = createSlice({
       enteredSelectedRestaurant: "",
       eventTitle: "",
       primaryDinerUsername: "",
-      tax: "",
+      // tax: "",
       tip: "",
       totalMealCost: "",
-      receiptImageSource: "",
     },
+    receiptValues: {},
   },
   reducers: {
     setDiningEvent: (state, action) => {
       state.event = action.payload;
+    },
+    setEventId: (state, action) => {
+      state.event.eventId = action.payload;
+    },
+    setReceiptValues: (state, action) => {
+      state.receiptValues = action.payload;
     },
   },
 });
@@ -49,7 +55,8 @@ const diningEventSlice = createSlice({
 export const { setUser, setCurrentCity, setRestaurantList, logOut } =
   userInfoSlice.actions;
 
-export const { setDiningEvent } = diningEventSlice.actions;
+export const { setDiningEvent, setEventId, setReceiptValues } =
+  diningEventSlice.actions;
 
 const store = configureStore({
   reducer: {

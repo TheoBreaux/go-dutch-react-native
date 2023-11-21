@@ -31,7 +31,7 @@ const NewSplitForm = () => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const initialValues = {
-    eventDate: getCurrentDate(),
+    eventDate: "",
     selectedRestaurant: "",
     enteredSelectedRestaurant: "",
     eventTitle: "",
@@ -67,131 +67,144 @@ const NewSplitForm = () => {
   return (
     <>
       <Logo />
-      {!isCapturingReceipt && (
-        <ScrollView>
-          <Image
-            style={styles.friendsImage}
-            source={require("../images/friends.png")}
-          />
-          <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
-          <View style={styles.container}>
-            <Formik
-              initialValues={initialValues}
-              validate={validateForm}
-              onSubmit={handleDiningEventSubmit}>
-              {({ handleChange, handleSubmit, handleBlur, values }) => (
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Date:</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={getCurrentDate()}
-                    editable={false}
-                  />
-
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>
-                      Select a dining experience:
-                    </Text>
-                  </View>
-
-                  <View>
-                    <View>
-                      <Picker
-                        style={styles.input}
-                        selectedValue={values.selectedRestaurant}
-                        onValueChange={(itemValue, itemIndex) =>
-                          handleChange("selectedRestaurant")(itemValue)
-                        }>
-                        <Picker.Item label="Select a restaurant..." value="" />
-                        {sortedRestaurantList.map((restaurant) => (
-                          <Picker.Item
-                            key={restaurant.place_id}
-                            label={restaurant.name + ", " + restaurant.vicinity}
-                            value={restaurant.name}
-                            id={restaurant.vicinity}
-                          />
-                        ))}
-                      </Picker>
-                    </View>
-                    <ErrorMessage
-                      name="selectedRestaurant"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Restaurant/Bar:</Text>
-                    <View style={styles.exitRestaurant}>
-                      <View style={styles.button}>
-                        <Button
-                          color={Colors.goDutchRed}
-                          title="X"
-                          onPress={() => changeRestaurantHandler(handleChange)}
-                        />
-                      </View>
-                      <TextInput
-                        style={styles.restaurantInput}
-                        value={
-                          values.enteredSelectedRestaurant ||
-                          values.selectedRestaurant
-                        }
-                        editable={false}
-                      />
-                    </View>
-                    <Text style={styles.notListedText}>
-                      Not listed? Input below
-                    </Text>
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Input unlisted restaurant:</Text>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={handleChange("enteredSelectedRestaurant")}
-                      onBlur={handleBlur("enteredSelectedRestaurant")}
-                      value={values.enteredSelectedRestaurant}
-                      placeholder="Input unlisted restaurant"
-                    />
-                    <ErrorMessage
-                      name="enteredSelectedRestaurant"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Title:</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={values.eventTitle}
-                      onChangeText={handleChange("eventTitle")}
-                      onBlur={handleBlur("eventTitle")}
-                      placeholder="ex. Tonya's birthday dinner"
-                    />
-                    <ErrorMessage
-                      name="eventTitle"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
-
-                  <View>
-                    <SecondaryButton onPress={handleSubmit}>
-                      Continue
-                    </SecondaryButton>
-                  </View>
-                </View>
-              )}
-            </Formik>
-          </View>
-        </ScrollView>
-      )}
-      {isCapturingReceipt && (
+      {isCapturingReceipt ? (
         <ReceiptCapture
           setIsCapturingReceipt={setIsCapturingReceipt}
           isCapturingReceipt={isCapturingReceipt}
         />
+      ) : (
+        <>
+          {!isCapturingReceipt && (
+            <ScrollView>
+              <Image
+                style={styles.friendsImage}
+                source={require("../images/friends.png")}
+              />
+              <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
+              <View style={styles.container}>
+                <Formik
+                  initialValues={initialValues}
+                  validate={validateForm}
+                  onSubmit={handleDiningEventSubmit}>
+                  {({ handleChange, handleSubmit, handleBlur, values }) => (
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.label}>Date:</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={getCurrentDate()}
+                        editable={false}
+                      />
+
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.label}>
+                          Select a dining experience:
+                        </Text>
+                      </View>
+
+                      <View>
+                        <View>
+                          <Picker
+                            style={styles.input}
+                            selectedValue={values.selectedRestaurant}
+                            onValueChange={(itemValue, itemIndex) =>
+                              handleChange("selectedRestaurant")(itemValue)
+                            }>
+                            <Picker.Item
+                              label="Select a restaurant..."
+                              value=""
+                            />
+                            {sortedRestaurantList.map((restaurant) => (
+                              <Picker.Item
+                                key={restaurant.place_id}
+                                label={
+                                  restaurant.name + ", " + restaurant.vicinity
+                                }
+                                value={restaurant.name}
+                                id={restaurant.vicinity}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+                        <ErrorMessage
+                          name="selectedRestaurant"
+                          component={Text}
+                          style={styles.errorText}
+                        />
+                      </View>
+
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Restaurant/Bar:</Text>
+                        <View style={styles.exitRestaurant}>
+                          <View style={styles.button}>
+                            <Button
+                              color={Colors.goDutchRed}
+                              title="X"
+                              onPress={() =>
+                                changeRestaurantHandler(handleChange)
+                              }
+                            />
+                          </View>
+                          <TextInput
+                            style={styles.restaurantInput}
+                            value={
+                              values.enteredSelectedRestaurant ||
+                              values.selectedRestaurant
+                            }
+                            editable={false}
+                          />
+                        </View>
+                        <Text style={styles.notListedText}>
+                          Not listed? Input below
+                        </Text>
+                      </View>
+
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.label}>
+                          Input unlisted restaurant:
+                        </Text>
+                        <TextInput
+                          style={styles.input}
+                          onChangeText={handleChange(
+                            "enteredSelectedRestaurant"
+                          )}
+                          onBlur={handleBlur("enteredSelectedRestaurant")}
+                          value={values.enteredSelectedRestaurant}
+                          placeholder="Input unlisted restaurant"
+                        />
+                        <ErrorMessage
+                          name="enteredSelectedRestaurant"
+                          component={Text}
+                          style={styles.errorText}
+                        />
+                      </View>
+
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Title:</Text>
+                        <TextInput
+                          style={styles.input}
+                          value={values.eventTitle}
+                          onChangeText={handleChange("eventTitle")}
+                          onBlur={handleBlur("eventTitle")}
+                          placeholder="ex. Tonya's birthday dinner"
+                        />
+                        <ErrorMessage
+                          name="eventTitle"
+                          component={Text}
+                          style={styles.errorText}
+                        />
+                      </View>
+                      <View>
+                        <SecondaryButton onPress={handleSubmit}>
+                          Continue
+                        </SecondaryButton>
+                      </View>
+                    </View>
+                  )}
+                </Formik>
+              </View>
+            </ScrollView>
+          )}
+        </>
       )}
     </>
   );
