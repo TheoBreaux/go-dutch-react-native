@@ -132,13 +132,13 @@ const AddDiners = () => {
     setShowAllDinersAddedModal(false);
   };
 
-  const birthdayHandler = () => {
-    console.log("yes");
-    //do some stuff
+  const addMoreDinersHandler = () => {
+    setShowAllDinersAddedModal(false);
   };
 
-  const noBirthdayHandler = () => {
-    console.log("no");
+  const allDinersAddedHandler = () => {
+    console.log("yes");
+    //do some stuff
   };
 
   // const handleAutocomplete = (e) => {
@@ -214,11 +214,11 @@ const AddDiners = () => {
               <Text style={styles.modalText}>All diners added?</Text>
 
               <View style={styles.buttonsContainer}>
-                <PrimaryButton onPress={birthdayHandler} width={100}>
+                <PrimaryButton onPress={allDinersAddedHandler} width={100}>
                   Yes
                 </PrimaryButton>
 
-                <PrimaryButton onPress={noBirthdayHandler} width={100}>
+                <PrimaryButton onPress={addMoreDinersHandler} width={100}>
                   No
                 </PrimaryButton>
               </View>
