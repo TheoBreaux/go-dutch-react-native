@@ -1,4 +1,4 @@
-import { StyleSheet, Image, View } from "react-native";
+import { Image, View } from "react-native";
 
 const CustomIcon = ({ color, size }) => (
   <View>

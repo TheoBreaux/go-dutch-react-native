@@ -170,7 +170,7 @@ const AddDiners = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Name, @username"
+          placeholder="Name, username..."
           // ref={addDinerUsernameRef}
           value={inputValue}
           onChangeText={handleInputChange}
