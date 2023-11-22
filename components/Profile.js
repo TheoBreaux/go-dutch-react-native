@@ -1,10 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 
 const Profile = ({ username, userFullName }) => {
+  const onPress = () => {
+    console.log("IM GETTIN PRESSED OVER HERE!");
+  };
+
   return (
-    <View style={styles.profileInfoContainer}>
+    <TouchableOpacity style={styles.profileInfoContainer} onPress={onPress}>
       <View>
         <MaterialCommunityIcons
           name="face-man-profile"
@@ -18,7 +22,7 @@ const Profile = ({ username, userFullName }) => {
           <Text style={styles.profileInfoText}>@{username}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
