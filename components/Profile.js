@@ -2,10 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 
-const Profile = ({ username, userFullName }) => {
-  const onPress = () => {
-    console.log("IM GETTIN PRESSED OVER HERE!");
-  };
+const Profile = ({ username, userFullName, onPress }) => {
 
   return (
     <TouchableOpacity style={styles.profileInfoContainer} onPress={onPress}>
@@ -40,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "88%",
-    elevation: 20,
+    elevation: 5,
     backgroundColor: "white",
     // shadowColor: '#000', // Shadow properties for iOS
     // shadowOffset: { width: 0, height: 1 },

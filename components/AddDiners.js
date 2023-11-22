@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   FlatList,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -76,23 +77,53 @@ const AddDiners = () => {
     // setShowBirthdayModal(true);
     // const username = addDinerUsernameRef.current.value;
     console.log("INPUT VALUE:", inputValue);
-    dispatch(
-      addDiner({
-        event_id: eventId,
-        id: Date.now(),
-        additional_diner_username: inputValue,
-        diner_meal_cost: null,
-        items: [],
-        birthday: null,
-      })
+
+    const isValuePresent = diners.some((obj) =>
+      Object.values(obj).includes(inputValue)
     );
-    setInputValue("");
-    setShowDiners(!showDiners);
+    //If diner is already added, show alert and on't allow
+    if (isValuePresent) {
+      Alert.alert(
+        "Not Allowed 🤦🏾‍♂️", // Alert title
+        "This diner is already included in the split!", // Alert message
+        [
+          {
+            text: "OK", // Button text
+            onPress: () => {
+              // Optional: Code to run when OK button is pressed
+              setInputValue("");
+              setShowDiners(true);
+              console.log("OK Pressed");
+            },
+          },
+        ]
+      );
+    } else {
+      dispatch(
+        addDiner({
+          event_id: eventId,
+          id: Date.now(),
+          additional_diner_username: inputValue,
+          diner_meal_cost: null,
+          items: [],
+          birthday: null,
+        })
+      );
+      setInputValue("");
+      setShowDiners(true);
+    }
   };
 
   const handleInputChange = (text) => {
     setInputValue(text);
     setShowSuggestions(true);
+    setShowDiners(false);
+  };
+
+  const handleSelectUsername = () => {
+    const user = suggestions[0].firstName + " " + suggestions[0].lastName;
+    setInputValue(user);
+    setShowSuggestions(false);
   };
 
   // const handleAutocomplete = (e) => {
@@ -103,11 +134,6 @@ const AddDiners = () => {
   // const handleSelectChange = (e) => {
   //   const selectedValue = e.target.value;
   //   setInputValue(selectedValue);
-  // };
-
-  // const handleSelectUsername = (e) => {
-  //   setInputValue(e.target.innerText.split("@")[1]);
-  //   setShowSuggestions(false);
   // };
 
   // const noBirthdayClickHandler = () => {
@@ -158,7 +184,9 @@ const AddDiners = () => {
       <Logo />
 
       <View>
-        <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
+        <Text style={styles.eventTitle}>
+          {diningEvent.eventTitle}Kevin's Birthday Dinner
+        </Text>
       </View>
       <Text style={styles.title}>DINERS</Text>
       <PrimaryDiner />
@@ -170,13 +198,15 @@ const AddDiners = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Name, username..."
+          placeholder="Input name, username..."
           // ref={addDinerUsernameRef}
           value={inputValue}
           onChangeText={handleInputChange}
         />
 
-        <PrimaryButton onPress={addDinerClickHandler}>Add diner</PrimaryButton>
+        <PrimaryButton width={130} onPress={addDinerClickHandler}>
+          Add diner
+        </PrimaryButton>
       </View>
 
       {showDiners && (
@@ -194,12 +224,14 @@ const AddDiners = () => {
 
       {showSuggestions && (
         <FlatList
+          style={styles.showSuggestionsContainer}
           data={suggestions}
           renderItem={({ item, index }) => (
             <Profile
               key={index}
               userFullName={item.firstName + " " + item.lastName}
               username={item.username}
+              onPress={handleSelectUsername}
             />
           )}
         />
@@ -246,8 +278,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 14,
     paddingLeft: 50,
-    width: "55%",
+    width: "60%",
   },
+  showSuggestionsContainer: { padding: 10 },
 });
 
 export default AddDiners;
