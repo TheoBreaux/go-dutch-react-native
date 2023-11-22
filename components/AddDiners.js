@@ -14,17 +14,19 @@ import PrimaryButton from "./ui/PrimaryButton";
 import { useEffect, useState, useRef } from "react";
 import Diner from "./Diner";
 import { addDiner } from "../store/store";
+import Profile from "./Profile";
 
 const AddDiners = () => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showDiners, setShowDiners] = useState(false);
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const diners = useSelector((state) => state.diningEvent.diners);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
 
-  const addDinerUsernameRef = useRef(null);
+  // const addDinerUsernameRef = useRef(null);
   const dispatch = useDispatch();
 
   // const [dinersComplete, setDinersComplete] = useState(false);
@@ -53,27 +55,27 @@ const AddDiners = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   const autoCompleteDiner = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:8000/additionaldiners/suggestions?input=${inputValue}`
-  //       );
-  //       const data = await response.json();
-  //       setSuggestions(
-  //         data.sort((a, b) => a.username.localeCompare(b.username))
-  //       );
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   };
-  //   autoCompleteDiner();
-  // }, [inputValue]);
+  useEffect(() => {
+    const autoCompleteDiner = async () => {
+      try {
+        const response = await fetch(
+          `https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+        );
+        const data = await response.json();
+        setSuggestions(
+          data.sort((a, b) => a.username.localeCompare(b.username))
+        );
+      } catch (error) {
+        throw error;
+      }
+    };
+    autoCompleteDiner();
+  }, [inputValue]);
 
   const addDinerClickHandler = () => {
     // setShowBirthdayModal(true);
-    setShowSuggestions(false);
-    const inputValue = addDinerUsernameRef.current.value;
+    // const username = addDinerUsernameRef.current.value;
+    console.log("INPUT VALUE:", inputValue);
     dispatch(
       addDiner({
         event_id: eventId,
@@ -85,10 +87,12 @@ const AddDiners = () => {
       })
     );
     setInputValue("");
+    setShowDiners(!showDiners);
   };
 
   const handleInputChange = (text) => {
     setInputValue(text);
+    setShowSuggestions(true);
   };
 
   // const handleAutocomplete = (e) => {
@@ -145,9 +149,9 @@ const AddDiners = () => {
   //     setBirthdayPeople([]);
   //   };
   // }, [dispatch]);
-  console.log(inputValue);
-  console.log(diners);
-  console.log(diners);
+
+  console.log("CURRENT DINERS:", diners);
+  console.log("SUGGESTIONS:", suggestions);
 
   return (
     <View style={styles.container}>
@@ -167,7 +171,7 @@ const AddDiners = () => {
         <TextInput
           style={styles.textInput}
           placeholder="Name, @username"
-          ref={addDinerUsernameRef}
+          // ref={addDinerUsernameRef}
           value={inputValue}
           onChangeText={handleInputChange}
         />
@@ -175,7 +179,7 @@ const AddDiners = () => {
         <PrimaryButton onPress={addDinerClickHandler}>Add diner</PrimaryButton>
       </View>
 
-      {diners && (
+      {showDiners && (
         <FlatList
           data={diners}
           renderItem={({ item }) => (
@@ -183,6 +187,19 @@ const AddDiners = () => {
               key={item.id}
               additionalDinerUsername={item.additional_diner_username}
               diner={item}
+            />
+          )}
+        />
+      )}
+
+      {showSuggestions && (
+        <FlatList
+          data={suggestions}
+          renderItem={({ item, index }) => (
+            <Profile
+              key={index}
+              userFullName={item.firstName + " " + item.lastName}
+              username={item.username}
             />
           )}
         />

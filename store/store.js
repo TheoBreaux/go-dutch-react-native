@@ -53,12 +53,15 @@ const diningEventSlice = createSlice({
     addDiner: (state, action) => {
       state.diners.push(action.payload);
     },
+    clearDiners: (state, action) => {
+      state.diners = [];
+    },
     removeDiner: (state, action) => {
       const index = state.diners.findIndex((diner) => {
         return diner.id === action.payload.id;
       });
       if (index !== -1) {
-        state.event.diners.splice(index, 1);
+        state.diners.splice(index, 1);
       }
     },
   },

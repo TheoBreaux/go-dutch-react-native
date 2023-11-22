@@ -27,19 +27,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.goDutchRed,
     borderWidth: 1,
     marginTop: 5,
+    height: 75,
   },
   text: {
     color: Colors.goDutchBlue,
     fontSize: 18,
     fontFamily: "red-hat-regular",
     padding: 5,
-  },
-  primaryName: {
-    fontSize: 25,
-    color: Colors.goDutchBlue,
-  },
-  userInfo: {
-    alignItems: "center",
   },
 });
 export default Diner;

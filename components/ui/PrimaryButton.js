@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../../constants/colors";
 
-const PrimaryButton = ({ children, onPress, padding, width }) => {
+const PrimaryButton = ({ children, onPress, padding, width, height }) => {
   const buttonContainerStyle = {
     padding: padding !== undefined ? padding : 10,
     width: width !== undefined ? width : 150,
