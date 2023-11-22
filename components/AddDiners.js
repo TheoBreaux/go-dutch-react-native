@@ -26,6 +26,7 @@ const AddDiners = () => {
   const [showDiners, setShowDiners] = useState(false);
   const [allDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
   const [dinersComplete, setDinersComplete] = useState(false);
+  // const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const diners = useSelector((state) => state.diningEvent.diners);
@@ -34,7 +35,6 @@ const AddDiners = () => {
   // const addDinerUsernameRef = useRef(null);
   const dispatch = useDispatch();
 
-  // const [showBirthdayModal, setShowBirthdayModal] = useState(false);
   // const [showSelectBirthdayModal, setShowSelectBirthdayModal] = useState(false);
   // const [birthdayPeople, setBirthdayPeople] = useState([]);
   // const eventTitle = useSelector((state) => state.diningEvent.eventTitle);
@@ -134,6 +134,7 @@ const AddDiners = () => {
 
   const birthdayHandler = () => {
     console.log("yes");
+    //do some stuff
   };
 
   const noBirthdayHandler = () => {
@@ -197,7 +198,37 @@ const AddDiners = () => {
     <View style={styles.container}>
       <Logo />
 
+      {/* all diners have been added modal */}
       <Modal
+        animationType="slide"
+        transparent={true}
+        visible={allDinersAddedModal}
+        onRequestClose={closeModal}>
+        <View style={styles.overlay}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Image
+                style={styles.dinerModalImage}
+                source={require("../images/go-dutch-split-button.png")}
+              />
+              <Text style={styles.modalText}>All diners added?</Text>
+
+              <View style={styles.buttonsContainer}>
+                <PrimaryButton onPress={birthdayHandler} width={100}>
+                  Yes
+                </PrimaryButton>
+
+                <PrimaryButton onPress={noBirthdayHandler} width={100}>
+                  No
+                </PrimaryButton>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* birthday modal */}
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={allDinersAddedModal}
@@ -211,7 +242,7 @@ const AddDiners = () => {
               />
               <Text style={styles.modalText}>Is it someone's birthday?</Text>
 
-              <View style={styles.birthdaysContainer}>
+              <View style={styles.buttonsContainer}>
                 <TouchableOpacity
                   onPress={birthdayHandler}
                   style={styles.pressableContainer}>
@@ -227,7 +258,7 @@ const AddDiners = () => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <View>
         <Text style={styles.eventTitle}>
@@ -348,6 +379,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  dinerModalImage: {
+    width: 250,
+    height: 200,
+    resizeMode: "center",
+  },
   modalImage: {
     width: 300,
     height: 300,
@@ -356,27 +392,27 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-regular",
     fontSize: 25,
   },
-  birthdaysContainer: {
+  buttonsContainer: {
     flexDirection: "row",
   },
-  pressableContainer: {
-    width: 100,
-    alignItems: "center",
-    padding: 10,
-    borderWidth: 1,
-    marginVertical: 10,
-    marginHorizontal: 10,
-  },
-  birthdayYesBtn: {
-    fontFamily: "red-hat-bold",
-    fontSize: 20,
-    color: "green",
-  },
-  birthdayNoBtn: {
-    fontFamily: "red-hat-bold",
-    fontSize: 20,
-    color: "red",
-  },
+  // pressableContainer: {
+  //   width: 100,
+  //   alignItems: "center",
+  //   padding: 10,
+  //   borderWidth: 1,
+  //   marginVertical: 10,
+  //   marginHorizontal: 10,
+  // },
+  // birthdayYesBtn: {
+  //   fontFamily: "red-hat-bold",
+  //   fontSize: 20,
+  //   color: "green",
+  // },
+  // birthdayNoBtn: {
+  //   fontFamily: "red-hat-bold",
+  //   fontSize: 20,
+  //   color: "red",
+  // },
   closeButton: {
     color: "blue",
     marginTop: 10,
