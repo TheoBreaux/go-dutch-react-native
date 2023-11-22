@@ -6,6 +6,8 @@ import {
   Image,
   FlatList,
   Alert,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -22,6 +24,8 @@ const AddDiners = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showDiners, setShowDiners] = useState(false);
+  const [allDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
+  const [dinersComplete, setDinersComplete] = useState(false);
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const diners = useSelector((state) => state.diningEvent.diners);
@@ -30,7 +34,6 @@ const AddDiners = () => {
   // const addDinerUsernameRef = useRef(null);
   const dispatch = useDispatch();
 
-  // const [dinersComplete, setDinersComplete] = useState(false);
   // const [showBirthdayModal, setShowBirthdayModal] = useState(false);
   // const [showSelectBirthdayModal, setShowSelectBirthdayModal] = useState(false);
   // const [birthdayPeople, setBirthdayPeople] = useState([]);
@@ -84,16 +87,14 @@ const AddDiners = () => {
     //If diner is already added, show alert and on't allow
     if (isValuePresent) {
       Alert.alert(
-        "Not Allowed 🤦🏾‍♂️", // Alert title
+        "🤦🏾‍♂️Not Allowed! ", // Alert title
         "This diner is already included in the split!", // Alert message
         [
           {
             text: "OK", // Button text
             onPress: () => {
-              // Optional: Code to run when OK button is pressed
               setInputValue("");
               setShowDiners(true);
-              console.log("OK Pressed");
             },
           },
         ]
@@ -111,6 +112,7 @@ const AddDiners = () => {
       );
       setInputValue("");
       setShowDiners(true);
+      setShowAllDinersAddedModal(true);
     }
   };
 
@@ -124,6 +126,18 @@ const AddDiners = () => {
     const user = suggestions[0].firstName + " " + suggestions[0].lastName;
     setInputValue(user);
     setShowSuggestions(false);
+  };
+
+  const closeModal = () => {
+    setShowAllDinersAddedModal(false);
+  };
+
+  const birthdayHandler = () => {
+    console.log("yes");
+  };
+
+  const noBirthdayHandler = () => {
+    console.log("no");
   };
 
   // const handleAutocomplete = (e) => {
@@ -182,6 +196,38 @@ const AddDiners = () => {
   return (
     <View style={styles.container}>
       <Logo />
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={allDinersAddedModal}
+        onRequestClose={closeModal}>
+        <View style={styles.overlay}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Image
+                style={styles.modalImage}
+                source={require("../images/birthday-cake.png")}
+              />
+              <Text style={styles.modalText}>Is it someone's birthday?</Text>
+
+              <View style={styles.birthdaysContainer}>
+                <TouchableOpacity
+                  onPress={birthdayHandler}
+                  style={styles.pressableContainer}>
+                  <Text style={styles.birthdayYesBtn}>Yes</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={noBirthdayHandler}
+                  style={styles.pressableContainer}>
+                  <Text style={styles.birthdayNoBtn}>No</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <View>
         <Text style={styles.eventTitle}>
@@ -245,6 +291,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   eventTitle: {
     textAlign: "center",
     fontFamily: "red-hat-bold",
@@ -281,6 +333,54 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   showSuggestionsContainer: { padding: 10 },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 40,
+    borderRadius: 10,
+    // width: "80%",
+    height: 400,
+    elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: 300,
+    height: 300,
+  },
+  modalText: {
+    fontFamily: "red-hat-regular",
+    fontSize: 25,
+  },
+  birthdaysContainer: {
+    flexDirection: "row",
+  },
+  pressableContainer: {
+    width: 100,
+    alignItems: "center",
+    padding: 10,
+    borderWidth: 1,
+    marginVertical: 10,
+    marginHorizontal: 10,
+  },
+  birthdayYesBtn: {
+    fontFamily: "red-hat-bold",
+    fontSize: 20,
+    color: "green",
+  },
+  birthdayNoBtn: {
+    fontFamily: "red-hat-bold",
+    fontSize: 20,
+    color: "red",
+  },
+  closeButton: {
+    color: "blue",
+    marginTop: 10,
+  },
 });
 
 export default AddDiners;
