@@ -148,6 +148,10 @@ const AddDiners = () => {
   const noBirthdayHandler = () => {};
 
   const postData = async () => {
+    setShowSelectBirthday(false);
+    setShowBirthdayModal(false);
+    //navigate to draggable screen
+    navigation.navigate("AssignItems");
     // create data object to send to db
     const data = {
       event_id: eventId,
@@ -163,8 +167,6 @@ const AddDiners = () => {
           body: JSON.stringify(data),
         }
       );
-      //navigate to draggable screen
-      navigation.navigate("AssignItems");
     } catch (error) {
       console.error("Network error:", error);
     }

@@ -19,6 +19,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import LogOutScreen from "./components/LogOutScreen";
 import AddDiners from "./components/AddDiners";
+import AssignItems from "./components/AssignItems";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -111,6 +112,7 @@ const App = () => {
           <Stack.Screen name="LogIn" component={LogInForm} />
           <Stack.Screen name="PaymentSources" component={PaymentSources} />
           <Stack.Screen name="AddDiners" component={AddDiners} />
+          <Stack.Screen name="AssignItems" component={AssignItems} />
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}
