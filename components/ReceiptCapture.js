@@ -141,7 +141,9 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       } catch (error) {
         console.error(error);
       }
+
       alert("Receipt submitted and saved! 💸🎉");
+
       //should navigate to another page, possibly history
       navigation.navigate("AddDiners");
     }

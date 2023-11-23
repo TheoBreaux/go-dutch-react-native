@@ -41,6 +41,9 @@ const diningEventSlice = createSlice({
     diners: [],
   },
   reducers: {
+    setInitialPrimaryDiner: (state, action) => {
+      state.diners.push(action.payload);
+    },
     setDiningEvent: (state, action) => {
       state.event = action.payload;
     },
@@ -56,12 +59,24 @@ const diningEventSlice = createSlice({
     clearDiners: (state, action) => {
       state.diners = [];
     },
+    updateDiners: (state, action) => {
+      state.diners = action.payload;
+    },
     removeDiner: (state, action) => {
       const index = state.diners.findIndex((diner) => {
         return diner.id === action.payload.id;
       });
       if (index !== -1) {
         state.diners.splice(index, 1);
+      }
+    },
+    updateBirthdayStatus: (state, action) => {
+      const dinerToUpdate = state.diners.find(
+        (diner) => diner.additional_diner_username === action.payload.username
+      );
+
+      if (dinerToUpdate) {
+        dinerToUpdate.birthday = action.payload.birthday;
       }
     },
   },
@@ -72,10 +87,13 @@ export const { setUser, setCurrentCity, setRestaurantList, logOut } =
 
 export const {
   setDiningEvent,
+  setInitialPrimaryDiner,
   setEventId,
   setReceiptValues,
+  updateDiners,
   addDiner,
   removeDiner,
+  updateBirthdayStatus,
 } = diningEventSlice.actions;
 
 const store = configureStore({

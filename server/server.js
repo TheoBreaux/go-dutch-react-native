@@ -154,7 +154,6 @@ app.post("/diningevents", async (req, res) => {
   }
 });
 
-
 // AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
 app.get("/additionaldiners/suggestions", async (req, res) => {
   const userInput = req.query.input;
@@ -176,18 +175,21 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
   }
 });
 
+// ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
+app.post("/additionaldiners/", async (req, res) => {
+  const { event_id, additionalDiners } = req.body;
 
-
-
-
-
-
-
-
-
-
-
-
+  try {
+    for (const diner of additionalDiners) {
+      await pool.query(
+        `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost) VALUES($1, $2, $3)`,
+        [event_id, diner.additional_diner_username, diner.diner_meal_cost]
+      );
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // SEND TAX ON RECEIPT TO DATABASE(dining_events)
 // app.post("/diningevents", async (req, res) => {
@@ -209,27 +211,6 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 //   } catch (error) {
 //     console.error(error);
 //     res.status(500).json({ success: false, error: "Internal server error" });
-//   }
-// });
-
-// AUTOCOMPLETE TO SEE IF DINER IS ALREADY IN DATABASE
-// app.get("/additionaldiners/suggestions", async (req, res) => {
-//   const userInput = req.query.input;
-
-//   try {
-//     const autoCompleteDiner = await pool.query(
-//       `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
-//       [`%${userInput}%`]
-//     );
-//     const suggestions = autoCompleteDiner.rows.map((row) => ({
-//       username: row.username,
-//       firstName: row.first_name,
-//       lastName: row.last_name,
-//     }));
-//     res.json(suggestions);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error");
 //   }
 // });
 

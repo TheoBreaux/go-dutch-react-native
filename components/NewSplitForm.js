@@ -31,7 +31,7 @@ const NewSplitForm = () => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const initialValues = {
-    eventDate: "",
+    eventDate: getCurrentDate(),
     selectedRestaurant: "",
     enteredSelectedRestaurant: "",
     eventTitle: "",

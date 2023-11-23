@@ -102,7 +102,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="AddDiners" //change this back to welcome after developing
+          initialRouteName="Welcome" //change this back to welcome after developing
           screenOptions={{
             headerShown: false,
           }}>

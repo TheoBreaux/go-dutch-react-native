@@ -7,7 +7,6 @@ import {
   FlatList,
   Alert,
   Modal,
-  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -15,9 +14,11 @@ import Logo from "./Logo";
 import PrimaryDiner from "./PrimaryDiner";
 import PrimaryButton from "./ui/PrimaryButton";
 import { useEffect, useState, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
-import { addDiner } from "../store/store";
+import { addDiner, setInitialPrimaryDiner, updateDiners } from "../store/store";
 import Profile from "./Profile";
+import BirthdayDiner from "./BirthdayDiner";
 
 const AddDiners = () => {
   const [inputValue, setInputValue] = useState("");
@@ -25,39 +26,40 @@ const AddDiners = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showDiners, setShowDiners] = useState(false);
   const [allDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
-  const [dinersComplete, setDinersComplete] = useState(false);
-  // const [showBirthdayModal, setShowBirthdayModal] = useState(false);
+  const [showBirthdayModal, setShowBirthdayModal] = useState(false);
+  const [showSelectBirthday, setShowSelectBirthday] = useState(false);
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const diners = useSelector((state) => state.diningEvent.diners);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
+  const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
-  // const addDinerUsernameRef = useRef(null);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  // const [showSelectBirthdayModal, setShowSelectBirthdayModal] = useState(false);
-  // const [birthdayPeople, setBirthdayPeople] = useState([]);
-  // const eventTitle = useSelector((state) => state.diningEvent.eventTitle);
+  console.log("BEFORE DISPATCH:", eventId);
 
-  // const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(
+      setInitialPrimaryDiner({
+        event_id: eventId,
+        id: Date.now(),
+        additional_diner_username: goDutchUsername,
+        primary_diner: true,
+        diner_meal_cost: null,
+        items: [],
+        birthday: false,
+      })
+    );
+  }, [eventId]);
 
-  // const postData = async () => {
-  //   // create data object to send to db
-  //   const data = {
-  //     event_id: eventId,
-  //     additionalDiners: diners,
-  //     diner_meal_cost: null,
-  //   };
-  //   try {
-  //     const response = await fetch(`http://localhost:8000/additionaldiners/`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(data),
-  //     });
-  //   } catch (error) {
-  //     console.error("Network error:", error);
-  //   }
-  // };
+  //update diners in redux state with primary diner with eventId
+  useEffect(() => {
+    //removing duplicate of primary diner after component re-render due to eventId value change
+    //maybe i need to think about useing ref here if needed
+    const newDiners = diners.slice(1);
+    dispatch(updateDiners(newDiners));
+  }, []);
 
   useEffect(() => {
     const autoCompleteDiner = async () => {
@@ -77,13 +79,15 @@ const AddDiners = () => {
   }, [inputValue]);
 
   const addDinerClickHandler = () => {
-    // setShowBirthdayModal(true);
-    // const username = addDinerUsernameRef.current.value;
-    console.log("INPUT VALUE:", inputValue);
+    //disable add diner button if no value is entered
+    if (inputValue === "") {
+      return;
+    }
 
-    const isValuePresent = diners.some((obj) =>
-      Object.values(obj).includes(inputValue)
-    );
+    const isValuePresent =
+      diners.some((obj) => Object.values(obj).includes(inputValue)) ||
+      inputValue === goDutchUsername;
+
     //If diner is already added, show alert and on't allow
     if (isValuePresent) {
       Alert.alert(
@@ -105,9 +109,10 @@ const AddDiners = () => {
           event_id: eventId,
           id: Date.now(),
           additional_diner_username: inputValue,
+          primary_diner: false,
           diner_meal_cost: null,
           items: [],
-          birthday: null,
+          birthday: false,
         })
       );
       setInputValue("");
@@ -123,13 +128,9 @@ const AddDiners = () => {
   };
 
   const handleSelectUsername = () => {
-    const user = suggestions[0].firstName + " " + suggestions[0].lastName;
+    const user = suggestions[0].username;
     setInputValue(user);
     setShowSuggestions(false);
-  };
-
-  const closeModal = () => {
-    setShowAllDinersAddedModal(false);
   };
 
   const addMoreDinersHandler = () => {
@@ -137,62 +138,39 @@ const AddDiners = () => {
   };
 
   const allDinersAddedHandler = () => {
-    console.log("yes");
-    //do some stuff
+    setShowBirthdayModal(true);
+    setShowAllDinersAddedModal(false);
   };
 
-  // const handleAutocomplete = (e) => {
-  //   setInputValue(e.target.value);
-  //   setShowSuggestions(true);
-  // };
+  const birthdayHandler = () => {
+    setShowSelectBirthday(true);
+  };
+  const noBirthdayHandler = () => {};
 
-  // const handleSelectChange = (e) => {
-  //   const selectedValue = e.target.value;
-  //   setInputValue(selectedValue);
-  // };
-
-  // const noBirthdayClickHandler = () => {
-  //   postData();
-  //   setShowBirthdayModal(false);
-  //   navigate("/dining-history");
-  // };
-
-  // const handleBirthdayClickHandler = () => {
-  //   setShowBirthdayModal(false);
-  //   setShowSelectBirthdayModal(true);
-  // };
-
-  // const setBirthdayClickHandler = () => {
-  //   setShowSelectBirthdayModal(false);
-  //   setDinersComplete(true);
-  //   postData();
-  // };
-
-  // const addBirthdayStatusClickHandler = (e) => {
-  //   setBirthdayPeople([...birthdayPeople, e.target.name]);
-  // };
-
-  // const handleReceiptCapture = () => {
-  //   setShowBirthdayModal(true);
-  // };
-
-  // Reset state when the component unmounts or when navigating away
-  // useEffect(() => {
-  //   return () => {
-  //     // Reset the state to initial values
-  //     dispatch(clearDiners());
-  //     setDinersComplete(false);
-  //     setInputValue("");
-  //     setSuggestions([]);
-  //     setShowSuggestions(false);
-  //     setShowBirthdayModal(false);
-  //     setShowSelectBirthdayModal(false);
-  //     setBirthdayPeople([]);
-  //   };
-  // }, [dispatch]);
+  const postData = async () => {
+    // create data object to send to db
+    const data = {
+      event_id: eventId,
+      additionalDiners: diners,
+      diner_meal_cost: null,
+    };
+    try {
+      const response = await fetch(
+        `https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/additionaldiners/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+      //navigate to draggable screen
+      navigation.navigate("AssignItems");
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
 
   console.log("CURRENT DINERS:", diners);
-  console.log("SUGGESTIONS:", suggestions);
 
   return (
     <View style={styles.container}>
@@ -202,8 +180,7 @@ const AddDiners = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={allDinersAddedModal}
-        onRequestClose={closeModal}>
+        visible={allDinersAddedModal}>
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -228,42 +205,75 @@ const AddDiners = () => {
       </Modal>
 
       {/* birthday modal */}
-      {/* <Modal
+      <Modal
         animationType="slide"
         transparent={true}
-        visible={allDinersAddedModal}
-        onRequestClose={closeModal}>
+        visible={showBirthdayModal}>
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Image
-                style={styles.modalImage}
-                source={require("../images/birthday-cake.png")}
-              />
-              <Text style={styles.modalText}>Is it someone's birthday?</Text>
+              {!showSelectBirthday && (
+                <>
+                  <Image
+                    style={styles.modalImage}
+                    source={require("../images/birthday-cake.png")}
+                  />
+                  <Text style={styles.modalText}>
+                    Is it someone's birthday?
+                  </Text>
+                  <View style={styles.buttonsContainer}>
+                    <PrimaryButton width={100} onPress={birthdayHandler}>
+                      Yes
+                    </PrimaryButton>
 
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  onPress={birthdayHandler}
-                  style={styles.pressableContainer}>
-                  <Text style={styles.birthdayYesBtn}>Yes</Text>
-                </TouchableOpacity>
+                    <PrimaryButton width={100} onPress={noBirthdayHandler}>
+                      No
+                    </PrimaryButton>
+                  </View>
+                </>
+              )}
 
-                <TouchableOpacity
-                  onPress={noBirthdayHandler}
-                  style={styles.pressableContainer}>
-                  <Text style={styles.birthdayNoBtn}>No</Text>
-                </TouchableOpacity>
-              </View>
+              {showSelectBirthday && (
+                <>
+                  <Image
+                    style={[styles.modalImage, styles.birthdayCake]}
+                    source={require("../images/birthday-cake.png")}
+                  />
+                  <View style={styles.birthdaySelects}>
+                    <Text style={styles.modalText}>
+                      Select the birthday(s)!
+                    </Text>
+                    <FlatList
+                      contentContainerStyle={styles.birthdaySelects}
+                      data={diners}
+                      renderItem={({ item }) => (
+                        <BirthdayDiner
+                          key={item.id}
+                          additionalDinerUsername={
+                            item.additional_diner_username
+                          }
+                          diner={item}
+                        />
+                      )}
+                    />
+                    <View
+                      style={[
+                        styles.buttonContainer,
+                        styles.birthdayButtonContainer,
+                      ]}>
+                      {/* SEND ALL INFO TO DATABASE */}
+                      <PrimaryButton onPress={postData}>Continue</PrimaryButton>
+                    </View>
+                  </View>
+                </>
+              )}
             </View>
           </View>
         </View>
-      </Modal> */}
+      </Modal>
 
       <View>
-        <Text style={styles.eventTitle}>
-          {diningEvent.eventTitle}Kevin's Birthday Dinner
-        </Text>
+        <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
       </View>
       <Text style={styles.title}>DINERS</Text>
       <PrimaryDiner />
@@ -276,7 +286,6 @@ const AddDiners = () => {
         <TextInput
           style={styles.textInput}
           placeholder="Input name, username..."
-          // ref={addDinerUsernameRef}
           value={inputValue}
           onChangeText={handleInputChange}
         />
@@ -373,8 +382,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 40,
     borderRadius: 10,
-    // width: "80%",
-    height: 400,
+    height: 600,
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -388,6 +396,9 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
   },
+  birthdayCake: {
+    marginTop: 250,
+  },
   modalText: {
     fontFamily: "red-hat-regular",
     fontSize: 25,
@@ -395,24 +406,16 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: "row",
   },
-  // pressableContainer: {
-  //   width: 100,
-  //   alignItems: "center",
-  //   padding: 10,
-  //   borderWidth: 1,
-  //   marginVertical: 10,
-  //   marginHorizontal: 10,
-  // },
-  // birthdayYesBtn: {
-  //   fontFamily: "red-hat-bold",
-  //   fontSize: 20,
-  //   color: "green",
-  // },
-  // birthdayNoBtn: {
-  //   fontFamily: "red-hat-bold",
-  //   fontSize: 20,
-  //   color: "red",
-  // },
+  buttonContainer: {
+    marginBottom: 125,
+  },
+  birthdayButtonContainer: {
+    marginBottom: 245,
+  },
+  birthdaySelects: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   closeButton: {
     color: "blue",
     marginTop: 10,

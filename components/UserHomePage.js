@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 
 const UserHomePage = () => {
-  const userName = useSelector((state) => state.userInfo.user.firstName);
+  const username = useSelector((state) => state.userInfo.user.firstName);
   const currentCity = useSelector((state) => state.userInfo.currentCity);
 
   const renderItem = ({ item }) => {
@@ -53,7 +53,7 @@ const UserHomePage = () => {
       <Logo />
       <View style={styles.container}>
         <View style={styles.titlesContainer}>
-          <Text style={styles.title}>Welcome, {userName}!</Text>
+          <Text style={styles.title}>Welcome, {username}!</Text>
           <Text style={styles.subtitle}>
             Featured restaurants near {currentCity}!
           </Text>
