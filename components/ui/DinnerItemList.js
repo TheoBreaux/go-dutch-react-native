@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 
-const DinnerItemList = () => {
+const DinnerItemList = ({}) => {
   return (
     <View>
-      <Text>DINNER ITEM LIST</Text>
+      <Text>DinnerItemList</Text>
     </View>
   );
 };
