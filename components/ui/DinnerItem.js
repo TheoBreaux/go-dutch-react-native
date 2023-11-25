@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
+import Colors from "../../constants/colors";
 
-const DinnerItem = ({ item }) => {
+const DinnerItem = ({ item, onLongPress, isActive, backgroundColor }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.count}>Count: {item.count}</Text>
+    <View
+      style={[
+        styles.itemContainer,
+        { backgroundColor },
+        isActive && { borderWidth: 2, borderColor: "yellow" },
+      ]}>
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.price}>${item.price.toFixed(2)}</Text>
     </View>
@@ -11,28 +16,27 @@ const DinnerItem = ({ item }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  itemContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
+    height: 50,
+    borderWidth: 2,
     padding: 5,
+    borderRadius: 10,
+    backgroundColor: Colors.goDutchRed,
+    margin: 5,
   },
   name: {
-    fontFamily: 'red-hat-bold',
+    fontFamily: "red-hat-bold",
     fontSize: 20,
-    color: 'white'
+    color: "white",
   },
   price: {
     fontSize: 20,
     color: "green",
-    fontFamily: 'red-hat-bold',
-    color: 'white'
-  },
-  count: {
-    fontSize: 20,
-    color: 'white',
-    fontFamily: 'red-hat-bold',
+    fontFamily: "red-hat-bold",
+    color: "white",
   },
 });
 
