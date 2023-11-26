@@ -3,13 +3,30 @@ import Colors from "../../constants/colors";
 import { useRef } from "react";
 import { useState } from "react";
 
-const DinnerItem = ({ item, handleDrop }) => {
+const DinnerItem = ({
+  item,
+  handleDrop,
+  separatedDinnerItems,
+  setFoodItems,
+  foodItems,
+}) => {
   const [showDinnerItem, setShowDinerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
+
+  // const assignedAndRemoved = (item) => {
+  //     const index = foodItems.indexOf(item);
+  //   if (index !== -1) {
+  //     const updatedSeparatedDinnerItems = [...separatedDinnerItems];
+  //     updatedSeparatedDinnerItems.splice(index, 1);
+  //     setFoodItems(updatedSeparatedDinnerItems);
+  //   }
+  // };
+
+  console.log("FOOD ITEMS:", foodItems.length);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -29,7 +46,7 @@ const DinnerItem = ({ item, handleDrop }) => {
         },
       ],
       {
-        useNativeDriver: false, // Adjust this as needed
+        useNativeDriver: false,
       }
     ),
     onPanResponderRelease: (e, gesture) => {
@@ -40,11 +57,13 @@ const DinnerItem = ({ item, handleDrop }) => {
         }).start(() => setShowDinerItem(false));
         //cause icon to move or something
         handleDrop();
+        //item needs to be removed from array and assigned to the diner
+        // assignedAndRemoved();
       } else {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
           friction: 3,
-          useNativeDriver: false, // Adjust this as needed
+          useNativeDriver: false,
         }).start();
       }
     },

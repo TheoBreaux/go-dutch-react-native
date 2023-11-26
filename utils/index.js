@@ -23,7 +23,8 @@ export const getCityFromCoordinates = async (latitude, longitude, apiKey) => {
     return city;
   } catch (error) {
     console.error("Error fetching city:", error);
-    return "Error fetching city";
+    //find a better way to handle this
+    return "you";
   }
 };
 
