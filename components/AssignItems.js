@@ -3,6 +3,7 @@ import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
 import { useSelector } from "react-redux";
 import FoodItemDropArea from "./FoodItemDropArea";
+import { useState } from "react";
 
 const dinnerItems = [
   { count: 1, name: "Chocolate Cake", price: 25.95 },
@@ -23,25 +24,31 @@ dinnerItems.forEach((item) => {
   }
 });
 
-console.log(dinnerItems);
-
 const AssignItems = () => {
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
   console.log("IN ASSIGNITEMS - RECEIPT VALUES:", receiptValues);
 
+  const [addedToDiner, setAddedToDiner] = useState(false);
+
+  const handleDrop = () => {
+    setAddedToDiner(true);
+  };
+
   return (
     <>
       <Logo />
       <View style={styles.container}>
-        <FoodItemDropArea />
+        <FoodItemDropArea
+          addedToDiner={addedToDiner}
+          setAddedToDiner={setAddedToDiner}
+        />
         <View style={styles.spacer} />
         <View style={styles.foodItemsListContainer}>
-          {updatedDinnerItems.map((item, index) => {
-            console.log(`DinnerItem key: ${item.id}`);
+          {updatedDinnerItems.map((item) => {
             return (
               <View key={item.id}>
-                <DinnerItem item={item} />
+                <DinnerItem item={item} handleDrop={handleDrop} />
               </View>
             );
           })}

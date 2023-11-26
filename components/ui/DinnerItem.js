@@ -3,7 +3,7 @@ import Colors from "../../constants/colors";
 import { useRef } from "react";
 import { useState } from "react";
 
-const DinnerItem = ({ item, onLongPress, isActive, backgroundColor }) => {
+const DinnerItem = ({ item, handleDrop }) => {
   const [showDinnerItem, setShowDinerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
@@ -20,20 +20,40 @@ const DinnerItem = ({ item, onLongPress, isActive, backgroundColor }) => {
       });
       pan.setValue({ x: 0, y: 0 });
     },
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-      useNativeDriver: false,
-    }),
+    onPanResponderMove: Animated.event(
+      [
+        null,
+        {
+          dx: pan.x,
+          dy: pan.y,
+        },
+      ],
+      {
+        useNativeDriver: false, // Adjust this as needed
+      }
+    ),
     onPanResponderRelease: (e, gesture) => {
       if (isDropArea(gesture)) {
         Animated.timing(opacity, {
           toValue: 0,
-          duration: 1000,
+          duration: 500,
         }).start(() => setShowDinerItem(false));
+        //cause icon to move or something
+        handleDrop();
+      } else {
+        Animated.spring(pan, {
+          toValue: { x: 0, y: 0 },
+          friction: 3,
+          useNativeDriver: false, // Adjust this as needed
+        }).start();
       }
+    },
+    isDropArea(gesture) {
+      return gesture.moveY < 250;
     },
   });
 
-  const isDropArea = (gesture) => gesture.moveY < 200;
+  const isDropArea = (gesture) => gesture.moveY < 250;
 
   const panStyle = {
     transform: pan.getTranslateTransform(),
