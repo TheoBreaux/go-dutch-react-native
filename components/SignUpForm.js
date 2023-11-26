@@ -14,6 +14,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/store";
+import UploadProfileImage from "./UploadProfileImage";
 
 const SignUpForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -112,6 +113,7 @@ const SignUpForm = () => {
   return (
     <>
       <Logo />
+      <UploadProfileImage/>
       <ScrollView>
         <View style={styles.inputContainer}>
           <Formik
@@ -231,6 +233,8 @@ const SignUpForm = () => {
                     style={styles.errorText}
                   />
                 </View>
+
+                
 
                 <View style={styles.buttonContainer}>
                   <SecondaryButton onPress={handleSubmit}>
