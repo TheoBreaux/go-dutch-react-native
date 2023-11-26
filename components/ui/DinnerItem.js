@@ -3,7 +3,8 @@ import Colors from "../../constants/colors";
 import { useRef } from "react";
 import { useState } from "react";
 
-const DinnerItem = ({ item }) => {
+const DinnerItem = ({ item, onLongPress, isActive, backgroundColor }) => {
+  const [showDinnerItem, setShowDinerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
@@ -19,13 +20,15 @@ const DinnerItem = ({ item }) => {
       });
       pan.setValue({ x: 0, y: 0 });
     },
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
+    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+      useNativeDriver: false,
+    }),
     onPanResponderRelease: (e, gesture) => {
       if (isDropArea(gesture)) {
         Animated.timing(opacity, {
           toValue: 0,
           duration: 1000,
-        }).start(() => setShowDraggable(false));
+        }).start(() => setShowDinerItem(false));
       }
     },
   });
@@ -37,8 +40,8 @@ const DinnerItem = ({ item }) => {
   };
 
   return (
-    <View>
-      <View>
+    <>
+      {showDinnerItem && (
         <Animated.View
           style={[
             panStyle,
@@ -51,8 +54,8 @@ const DinnerItem = ({ item }) => {
           <Text style={styles.foodInfo}>{item.name}</Text>
           <Text style={styles.foodInfo}>${item.price.toFixed(2)}</Text>
         </Animated.View>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 

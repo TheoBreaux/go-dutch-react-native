@@ -9,10 +9,6 @@ const dinnerItems = [
   { count: 2, name: "Chicken Tacos", price: 5.95 },
   { count: 2, name: "Casamigos Blanco", price: 32.0 },
   { count: 1, name: "Mule", price: 20.0 },
-  { count: 1, name: "Chocolate Cake", price: 25.95 },
-  { count: 2, name: "Chicken Tacos", price: 5.95 },
-  { count: 2, name: "Casamigos Blanco", price: 32.0 },
-  { count: 1, name: "Mule", price: 20.0 },
 ];
 
 //initialize array for seperate quantities of more than 1 into individual dinner items
@@ -44,8 +40,8 @@ const AssignItems = () => {
           {updatedDinnerItems.map((item, index) => {
             console.log(`DinnerItem key: ${item.id}`);
             return (
-              <View>
-                <DinnerItem key={item.id} item={item} />
+              <View key={item.id}>
+                <DinnerItem item={item} />
               </View>
             );
           })}
