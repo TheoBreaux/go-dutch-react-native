@@ -1,3 +1,11 @@
+export const getCurrentDate = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${month}-${day}-${year}`;
+};
+
 //get the name of my current city from the provided coordinates
 export const getCityFromCoordinates = async (latitude, longitude, apiKey) => {
   const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
@@ -24,14 +32,9 @@ export const getCityFromCoordinates = async (latitude, longitude, apiKey) => {
   } catch (error) {
     console.error("Error fetching city:", error);
     //find a better way to handle this
-    return "you";
+    return {
+      city: null,
+      error: "Currently unable to retrieve city information",
+    };
   }
-};
-
-export const getCurrentDate = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${month}-${day}-${year}`;
 };

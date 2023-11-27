@@ -17,7 +17,9 @@ const PaymentSources = () => {
   const userName = useSelector((state) => state.userInfo.user.firstName);
   const email = useSelector((state) => state.userInfo.user.email);
 
-  
+  const userInfo = useSelector((state) => state.userInfo.user);
+
+  console.log("PAYMENT SOURCES:", userInfo);
 
   const initialValues = {
     selectedPrimaryPayment: "",

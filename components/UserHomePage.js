@@ -15,7 +15,19 @@ import { Ionicons } from "@expo/vector-icons";
 
 const UserHomePage = () => {
   const username = useSelector((state) => state.userInfo.user.firstName);
-  const currentCity = useSelector((state) => state.userInfo.currentCity);
+  const currentCityResponse = useSelector(
+    (state) => state.userInfo.currentCity
+  );
+
+  let currentCity, error;
+
+  if (typeof currentCityResponse === "object" && currentCityResponse !== null) {
+    currentCity = currentCityResponse.city;
+    error = currentCityResponse.error;
+  } else {
+    currentCity = currentCityResponse;
+    error = null;
+  }
 
   const renderItem = ({ item }) => {
     const handleExternalLink = () => {
@@ -54,9 +66,13 @@ const UserHomePage = () => {
       <View style={styles.container}>
         <View style={styles.titlesContainer}>
           <Text style={styles.title}>Welcome, {username}!</Text>
-          <Text style={styles.subtitle}>
-            Featured restaurants near {currentCity}!
-          </Text>
+          {error ? (
+            <Text style={styles.subtitle}>{error}!</Text>
+          ) : (
+            <Text style={styles.subtitle}>
+              Featured restaurants near {currentCity}!
+            </Text>
+          )}
         </View>
         <Carousel
           data={featuredRestaurants}

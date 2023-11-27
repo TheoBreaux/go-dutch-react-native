@@ -43,7 +43,7 @@ const UploadProfileImage = ({ handleImageChange }) => {
       setImagePath(selectedImage.assets[0].uri);
       handleImageChange(selectedImage.assets[0].uri);
     } else {
-      setImagePath(defaultProfileIcon);
+      setImagePath(null);
       handleImageChange(null);
     }
   };
