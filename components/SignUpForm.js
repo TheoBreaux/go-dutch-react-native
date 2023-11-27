@@ -13,8 +13,11 @@ import SecondaryButton from "./ui/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/store";
+import { setCurrentCity, setUser } from "../store/store";
 import UploadProfileImage from "./UploadProfileImage";
+import { getCityFromCoordinates } from "../utils";
+import { useCallback } from "react";
+import LocateRestaurants from "./LocateRestaurants";
 
 const SignUpForm = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -23,8 +26,15 @@ const SignUpForm = () => {
   const [confirmedPassword, setConfirmedPassword] = useState(false);
   const [imagePath, setImagePath] = useState(null);
   const [error, setError] = useState("");
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const defaultImagePath =
+    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/adc5e1e9-d93d-4f60-be15-6736659823b2.jpeg";
+
+  const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
 
   const initialValues = {
     firstName: "",
@@ -38,6 +48,16 @@ const SignUpForm = () => {
 
   const handleImageChange = (path) => {
     setImagePath(path);
+  };
+
+  const handleLocationUpdate = useCallback((lat, long) => {
+    setLatitude(lat);
+    setLongitude(long);
+  });
+
+  const handleLocationSearch = async () => {
+    const city = await getCityFromCoordinates(latitude, longitude, apiKey);
+    dispatch(setCurrentCity(city));
   };
 
   const validateForm = (values) => {
@@ -91,7 +111,7 @@ const SignUpForm = () => {
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
-      profilePicPath: imagePath,
+      profilePicPath: imagePath || defaultImagePath,
     };
 
     try {
@@ -110,6 +130,7 @@ const SignUpForm = () => {
         setError(data.detail);
       } else {
         dispatch(setUser(data));
+        handleLocationSearch();
         navigation.navigate("PaymentSources");
       }
     } catch (error) {
@@ -119,6 +140,7 @@ const SignUpForm = () => {
 
   return (
     <>
+      <LocateRestaurants onLocationUpdate={handleLocationUpdate} />
       <Logo />
       <UploadProfileImage handleImageChange={handleImageChange} />
       <ScrollView>

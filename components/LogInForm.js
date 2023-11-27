@@ -12,7 +12,7 @@ import SecondaryButton from "./ui/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
