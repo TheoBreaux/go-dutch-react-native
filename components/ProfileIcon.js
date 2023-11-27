@@ -1,15 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "../constants/colors";
-import { useSelector } from "react-redux";
+import ProfileImageMedallion from "./ProfileImageMedallion";
 
 const ProfileIcon = ({ username, userFullName, onPress }) => {
-  const profilePicPath = useSelector((state) => state.userInfo.user.profilePicPath);
-
   return (
     <TouchableOpacity style={styles.profileInfoContainer} onPress={onPress}>
       <View style={styles.suggestionContainer}>
-        <Image source={{ uri: profilePicPath }} style={styles.profilePic} />
+        <ProfileImageMedallion />
         <View style={styles.textContainer}>
           <Text style={styles.profileInfoText}>{userFullName}</Text>
           <Text style={styles.profileInfoText}>@{username}</Text>
@@ -22,12 +18,6 @@ const ProfileIcon = ({ username, userFullName, onPress }) => {
 const styles = StyleSheet.create({
   profileInfoContainer: {
     marginBottom: 5,
-  },
-  profilePic: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    resizeMode: "cover",
   },
   suggestionContainer: {
     flexDirection: "row",
