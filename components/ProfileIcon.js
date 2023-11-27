@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const ProfileIcon = ({ username, userFullName, onPress }) => {
+const ProfileIcon = ({ username, userFullName, onPress, profileImagePath }) => {
   return (
     <TouchableOpacity style={styles.profileInfoContainer} onPress={onPress}>
       <View style={styles.suggestionContainer}>
-        <ProfileImageMedallion />
+        <ProfileImageMedallion profileImagePath={profileImagePath} />
         <View style={styles.textContainer}>
           <Text style={styles.profileInfoText}>{userFullName}</Text>
           <Text style={styles.profileInfoText}>@{username}</Text>
@@ -17,7 +17,7 @@ const ProfileIcon = ({ username, userFullName, onPress }) => {
 
 const styles = StyleSheet.create({
   profileInfoContainer: {
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   suggestionContainer: {
     flexDirection: "row",
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     width: "100%",
     elevation: 5,
     backgroundColor: "white",
+    marginBottom: 5,
   },
   textContainer: {
     marginLeft: 5,

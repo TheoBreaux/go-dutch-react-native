@@ -1,13 +1,9 @@
 import { StyleSheet, View, Image } from "react-native";
-import { useSelector } from "react-redux";
 
-const ProfileImageMedallion = () => {
-  const profilePicPath = useSelector(
-    (state) => state.userInfo.user.profilePicPath
-  );
+const ProfileImageMedallion = ({ profileImagePath }) => {
   return (
     <View>
-      <Image source={{ uri: profilePicPath }} style={styles.profilePic} />
+      <Image source={{ uri: profileImagePath }} style={styles.profilePic} />
     </View>
   );
 };

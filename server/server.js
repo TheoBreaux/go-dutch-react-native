@@ -163,13 +163,14 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 
   try {
     const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      `SELECT username, first_name, last_name, profile_pic_image_path FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
       [`%${userInput}%`]
     );
     const suggestions = autoCompleteDiner.rows.map((row) => ({
       username: row.username,
       firstName: row.first_name,
       lastName: row.last_name,
+      profilePicPath: row.profile_pic_image_path,
     }));
     res.json(suggestions);
   } catch (error) {

@@ -173,6 +173,7 @@ const AddDiners = () => {
   };
 
   console.log("CURRENT DINERS:", diners);
+  console.log("Suggestions:", suggestions);
 
   return (
     <View style={styles.container}>
@@ -320,6 +321,7 @@ const AddDiners = () => {
               userFullName={item.firstName + " " + item.lastName}
               username={item.username}
               onPress={handleSelectUsername}
+              profileImagePath={item.profilePicPath}
             />
           )}
         />
@@ -374,7 +376,7 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     width: "60%",
   },
-  showSuggestionsContainer: { padding: 10 },
+  showSuggestionsContainer: { padding: 5 },
   modalContainer: {
     flex: 1,
     justifyContent: "center",

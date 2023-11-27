@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 
 const PrimaryDiner = () => {
   const userFullName = useSelector(
-    (state) =>
-      state.userInfo.user.firstName + " " + state.userInfo.user.lastName
+    (state) => state.userInfo.user.firstName + " " + state.userInfo.user.lastName
   );
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
