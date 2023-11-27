@@ -27,20 +27,22 @@ pool.query("SELECT NOW()", (err, result) => {
 
 //SIGN UP TO GO DUTCH - INITIAL USER INFO
 app.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, username, password } = req.body;
+  const { firstName, lastName, email, username, password, profilePicPath } =
+    req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
+  console.log(profilePicPath);
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password) VALUES($1, $2, $3, $4, $5)`,
-      [firstName, lastName, email, username, hashedPassword]
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_pic_image_path) VALUES($1, $2, $3, $4, $5, $6)`,
+      [firstName, lastName, email, username, hashedPassword, profilePicPath]
     );
 
     const token = jwt.sign({ email, username, firstName, lastName }, "secret", {
       expiresIn: "1hr",
     });
-    res.json({ email, username, firstName, lastName, token });
+    res.json({ email, username, firstName, lastName, token, profilePicPath });
   } catch (error) {
     console.error(error);
     if (error) {
@@ -110,6 +112,7 @@ app.post("/login", async (req, res) => {
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
+        profilePicPath: users.rows[0].profile_pic_image_path,
         token,
       });
     } else {

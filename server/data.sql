@@ -11,6 +11,7 @@ CREATE TABLE users (
     primary_payment_source_username VARCHAR(255),
     secondary_payment_source VARCHAR(255),
     secondary_payment_source_username VARCHAR(255),
+    profile_pic_image_path VARCHAR(300),
     date_joined DATE DEFAULT CURRENT_DATE
 );
 

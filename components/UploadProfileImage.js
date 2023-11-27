@@ -5,7 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const UploadProfileImage = () => {
+const UploadProfileImage = ({ handleImageChange }) => {
   const defaultProfileIcon = (
     <MaterialCommunityIcons
       name="face-man-profile"
@@ -14,7 +14,7 @@ const UploadProfileImage = () => {
     />
   );
 
-  const [image, setImage] = useState(null);
+  const [imagePath, setImagePath] = useState(null);
 
   const checkForCameraRollPermission = async () => {
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -32,25 +32,34 @@ const UploadProfileImage = () => {
   }, []);
 
   const addImage = async () => {
-    let image = await ImagePicker.launchImageLibraryAsync({
+    let selectedImage = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
-    if (!image.canceled) {
-      setImage(image.assets[0].uri);
+    if (!selectedImage.canceled) {
+      setImagePath(selectedImage.assets[0].uri);
+      handleImageChange(selectedImage.assets[0].uri);
     } else {
-      setImage(defaultProfileIcon);
+      setImagePath(defaultProfileIcon);
+      handleImageChange(null);
     }
   };
 
+  const profilePicSelectedStyles = imagePath
+    ? { borderColor: Colors.goDutchRed, borderWidth: 1 }
+    : "";
+
   return (
     <View style={styles.imageIconUploadContainer}>
-      <View style={styles.container}>
-        {image ? (
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+      <View style={[styles.container, profilePicSelectedStyles]}>
+        {imagePath ? (
+          <Image
+            source={{ uri: imagePath }}
+            style={{ width: 200, height: 200 }}
+          />
         ) : (
           <View style={styles.defaultIconContainer}>
             <MaterialCommunityIcons
@@ -64,13 +73,15 @@ const UploadProfileImage = () => {
         <View style={styles.uploadBtnContainer}>
           <TouchableOpacity onPress={addImage} style={styles.uploadBtn}>
             <Text style={styles.text}>
-              {image ? "Edit" : "Upload"} Profile Image
+              {imagePath ? "Edit" : "Upload"} Profile Image
             </Text>
             <AntDesign name="camera" size={30} color={Colors.goDutchBlue} />
           </TouchableOpacity>
         </View>
       </View>
-      {/* <Text style={styles.text}>Please upload profile image</Text> */}
+      {!imagePath && (
+        <Text style={styles.text}>Please upload profile image</Text>
+      )}
     </View>
   );
 };

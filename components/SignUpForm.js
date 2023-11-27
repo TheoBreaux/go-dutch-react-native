@@ -21,6 +21,7 @@ const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState(false);
+  const [imagePath, setImagePath] = useState(null);
   const [error, setError] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -32,6 +33,11 @@ const SignUpForm = () => {
     createUsername: "",
     password: "",
     confirmedPassword: "",
+    profilePicPath: "",
+  };
+
+  const handleImageChange = (path) => {
+    setImagePath(path);
   };
 
   const validateForm = (values) => {
@@ -85,6 +91,7 @@ const SignUpForm = () => {
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
+      profilePicPath: imagePath,
     };
 
     try {
@@ -113,7 +120,7 @@ const SignUpForm = () => {
   return (
     <>
       <Logo />
-      <UploadProfileImage/>
+      <UploadProfileImage handleImageChange={handleImageChange} />
       <ScrollView>
         <View style={styles.inputContainer}>
           <Formik
@@ -233,8 +240,6 @@ const SignUpForm = () => {
                     style={styles.errorText}
                   />
                 </View>
-
-                
 
                 <View style={styles.buttonContainer}>
                   <SecondaryButton onPress={handleSubmit}>

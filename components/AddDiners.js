@@ -17,7 +17,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
 import { addDiner, setInitialPrimaryDiner, updateDiners } from "../store/store";
-import Profile from "./Profile";
+import ProfileIcon from "./ProfileIcon";
 import BirthdayDiner from "./BirthdayDiner";
 
 const AddDiners = () => {
@@ -315,7 +315,7 @@ const AddDiners = () => {
           style={styles.showSuggestionsContainer}
           data={suggestions}
           renderItem={({ item, index }) => (
-            <Profile
+            <ProfileIcon
               key={index}
               userFullName={item.firstName + " " + item.lastName}
               username={item.username}
