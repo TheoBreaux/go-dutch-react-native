@@ -1,9 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const ProfileIcon = ({ username, userFullName, onPress, profileImagePath }) => {
+const ProfileIcon = ({
+  username,
+  userFullName,
+  onPress,
+  profileImagePath,
+  item,
+}) => {
   return (
-    <TouchableOpacity style={styles.profileInfoContainer} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.profileInfoContainer}
+      onPress={() => onPress(item.username)}>
       <View style={styles.suggestionContainer}>
         <ProfileImageMedallion profileImagePath={profileImagePath} />
         <View style={styles.textContainer}>

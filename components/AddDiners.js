@@ -125,9 +125,8 @@ const AddDiners = () => {
     setShowDiners(false);
   };
 
-  const handleSelectUsername = () => {
-    const user = suggestions[0].username;
-    setInputValue(user);
+  const handleSelectUsername = (selectedUsername) => {
+    setInputValue(selectedUsername);
     setShowSuggestions(false);
   };
 
@@ -317,6 +316,7 @@ const AddDiners = () => {
               username={item.username}
               onPress={handleSelectUsername}
               profileImagePath={item.profilePicPath}
+              item={item}
             />
           )}
         />
