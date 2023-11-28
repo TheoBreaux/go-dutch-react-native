@@ -85,7 +85,6 @@ const LogInForm = () => {
       } else {
         dispatch(setUser(data));
         handleLocationSearch();
-
         navigation.navigate("Main", { screen: "Home" });
       }
     } catch (error) {

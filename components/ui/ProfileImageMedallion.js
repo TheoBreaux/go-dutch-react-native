@@ -1,9 +1,9 @@
 import { StyleSheet, View, Image } from "react-native";
 
-const ProfileImageMedallion = ({ profileImagePath }) => {
+const ProfileImageMedallion = ({ profileImagePath, picPath }) => {
   return (
     <View>
-      <Image source={{ uri: profileImagePath }} style={styles.profilePic} />
+      <Image source={{ uri: profileImagePath || picPath }} style={styles.profilePic} />
     </View>
   );
 };

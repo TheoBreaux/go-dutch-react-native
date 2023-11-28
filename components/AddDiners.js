@@ -37,8 +37,6 @@ const AddDiners = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log("BEFORE DISPATCH:", eventId);
-
   useEffect(() => {
     dispatch(
       setInitialPrimaryDiner({
@@ -171,9 +169,6 @@ const AddDiners = () => {
       console.error("Network error:", error);
     }
   };
-
-  console.log("CURRENT DINERS:", diners);
-  console.log("Suggestions:", suggestions);
 
   return (
     <View style={styles.container}>

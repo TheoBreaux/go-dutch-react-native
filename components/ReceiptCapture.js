@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setDiningEvent, setEventId, setReceiptValues } from "../store/store";
 import axios from "axios";
-import Spinner from "./Spinner";
+import Spinner from "../components/ui/Spinner";
 import { getCurrentDate } from "../utils";
 
 const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
@@ -34,8 +34,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const primaryDinerUsername = useSelector(
     (state) => state.userInfo.user.username
   );
-
-  console.log("ReceiptCapture 1 - CURRENTLY IN REDUX STORE:", diningEvent);
 
   useEffect(() => {
     (async () => {
@@ -132,7 +130,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
           },
         });
         const responseData = response.data;
-        console.log("RETURNED RECEIPT DATA:", responseData);
         dispatch(setReceiptValues(responseData));
         setLoading(false);
         setIsCapturingReceipt(!isCapturingReceipt);
@@ -179,10 +176,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   //       console.error(error);
   //     }
   //   };
-
-  console.log("AFTER save and submit happens theses are the values");
-  console.log("ReceiptCapture 2 - CURRENTLY IN REDUX STORE:", diningEvent);
-  console.log("Receipt Values - CURRENTLY IN REDUX STORE:", receiptValues);
 
   return (
     <>

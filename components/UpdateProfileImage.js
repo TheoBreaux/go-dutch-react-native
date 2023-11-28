@@ -4,8 +4,10 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Logo from "./Logo";
+import PrimaryButton from "../components/ui/PrimaryButton";
 
-const UploadProfileImage = ({ handleImageChange }) => {
+const UpdateProfileImage = () => {
   const [imagePath, setImagePath] = useState(null);
 
   const checkForCameraRollPermission = async () => {
@@ -33,9 +35,8 @@ const UploadProfileImage = ({ handleImageChange }) => {
 
     if (!selectedImage.canceled) {
       setImagePath(selectedImage.assets[0].uri);
-      handleImageChange(selectedImage.assets[0].uri);
     } else {
-      handleImageChange(null);
+      setImagePath(null);
     }
   };
 
@@ -43,45 +44,63 @@ const UploadProfileImage = ({ handleImageChange }) => {
     ? { borderColor: Colors.goDutchRed, borderWidth: 1 }
     : "";
 
-  return (
-    <View style={styles.imageIconUploadContainer}>
-      <View style={[styles.container, profilePicSelectedStyles]}>
-        {imagePath ? (
-          <Image
-            source={{ uri: imagePath }}
-            style={{ width: 200, height: 200 }}
-          />
-        ) : (
-          <View style={styles.defaultIconContainer}>
-            <MaterialCommunityIcons
-              name="face-man-profile"
-              size={100}
-              color={Colors.goDutchRed}
-            />
-          </View>
-        )}
+  const updateProfileImage = () => {
+    //make call to backend to update file path
+    //navigate back to user home page
+    console.log("UPDATING PIC");
+  };
 
-        <View style={styles.uploadBtnContainer}>
-          <TouchableOpacity onPress={addImage} style={styles.uploadBtn}>
-            <Text style={styles.text}>
-              {imagePath ? "Edit" : "Upload"} Profile Image
-            </Text>
-            <AntDesign name="camera" size={30} color={Colors.goDutchBlue} />
-          </TouchableOpacity>
+  console.log("IMAGE PATH:", imagePath);
+
+  return (
+    <>
+      <Logo />
+      <View style={styles.imageIconUploadContainer}>
+        <View style={[styles.container, profilePicSelectedStyles]}>
+          {imagePath ? (
+            <>
+              <Image
+                source={{ uri: imagePath }}
+                style={{ width: 200, height: 200 }}
+              />
+            </>
+          ) : (
+            <View style={styles.defaultIconContainer}>
+              <MaterialCommunityIcons
+                name="face-man-profile"
+                size={150}
+                color={Colors.goDutchRed}
+              />
+            </View>
+          )}
+
+          <View style={styles.uploadBtnContainer}>
+            <TouchableOpacity onPress={addImage} style={styles.uploadBtn}>
+              <Text style={styles.text}>
+                {imagePath ? "Edit" : "Update"} Profile Image
+              </Text>
+              <AntDesign name="camera" size={30} color={Colors.goDutchBlue} />
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {imagePath && (
+          <PrimaryButton onPress={updateProfileImage}>Update</PrimaryButton>
+        )}
+        {!imagePath && (
+          <Text style={styles.text}>Please update profile image</Text>
+        )}
       </View>
-      {!imagePath && (
-        <Text style={styles.text}>Please upload profile image</Text>
-      )}
-    </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
   imageIconUploadContainer: {
+    flex: 1,
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginTop: -150,
   },
   container: {
     elevation: 4,
@@ -91,11 +110,13 @@ const styles = StyleSheet.create({
     position: "relative",
     borderRadius: 100,
     overflow: "hidden",
+    marginBottom: 10,
   },
   defaultIconContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 5,
   },
   uploadBtnContainer: {
     opacity: 0.7,
@@ -118,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadProfileImage;
+export default UpdateProfileImage;

@@ -20,7 +20,7 @@ import store from "./store/store";
 import LogOutScreen from "./components/LogOutScreen";
 import AddDiners from "./components/AddDiners";
 import AssignItems from "./components/AssignItems";
-import UploadProfileImage from "./components/UploadProfileImage";
+import UpdateProfileImage from "./components/UpdateProfileImage";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -104,7 +104,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Welcome" //change this back to welcome after developing
+          initialRouteName="LogIn" //change this back to welcome after developing
           screenOptions={{
             headerShown: false,
           }}>
@@ -115,9 +115,10 @@ const App = () => {
           <Stack.Screen name="AddDiners" component={AddDiners} />
           <Stack.Screen name="AssignItems" component={AssignItems} />
           <Stack.Screen
-            name="UploadProfileImage"
-            component={UploadProfileImage}
+            name="UpdateProfileImage"
+            component={UpdateProfileImage}
           />
+
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}

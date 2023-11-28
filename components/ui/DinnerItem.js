@@ -26,8 +26,6 @@ const DinnerItem = ({
   //   }
   // };
 
-  console.log("FOOD ITEMS:", foodItems.length);
-
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: (e, gesture) => {

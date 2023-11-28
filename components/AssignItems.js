@@ -2,37 +2,56 @@ import { StyleSheet, View, Text } from "react-native";
 import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
 import { useSelector } from "react-redux";
-import FoodItemDropArea from "../components/ui/FoodItemDropArea"
-import { useState } from "react";
-import Colors from "../constants/colors";
+import FoodItemDropArea from "../components/ui/FoodItemDropArea";
+import { useState, useEffect } from "react";
 
-const dinnerItems = [
-  { count: 1, name: "Chocolate Cake", price: 25.95 },
-  { count: 2, name: "Chicken Tacos", price: 5.95 },
-  { count: 2, name: "Casamigos Blanco", price: 32.0 },
-  { count: 1, name: "Mule", price: 20.0 },
-];
+//loop through receiptAmounts array to configure data for use
+const configureReceiptData = (receiptAmounts) => {
+  const configuredData = [];
 
-//initialize array for seperate quantities of more than 1 into individual dinner items
-const separatedDinnerItems = [];
+  for (let i = 0; i < receiptAmounts.length; i++) {
+    let lineItem = receiptAmounts[i].text;
+    console.log("LINE ITEM:", lineItem);
+    let match = lineItem.match(/^(\d*\.?\d+)\s+([a-zA-Z\s]+)\s+(\d*\.?\d+)$/);
 
-dinnerItems.forEach((item) => {
-  for (let i = 0; i < item.count; i++) {
-    separatedDinnerItems.push({
-      ...item,
-      id: (Date.now() + Math.random() + item.name).toString(),
-    });
+    if (match) {
+      let count = parseInt(match[1], 10);
+      let name = match[2];
+      let price = parseFloat(match[3]); // Convert the price to a floating-point number
+
+      if (count > 1) {
+        price /= count;
+      }
+      configuredData.push({ count, name, price });
+    }
   }
-});
+  return configuredData;
+};
 
 const AssignItems = () => {
   const [addedToDiner, setAddedToDiner] = useState(false);
-  const [foodItems, setFoodItems] = useState(separatedDinnerItems);
+  const [parsedFoodItems, setParsedFoodItems] = useState([]);
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
+      const receiptAmounts = receiptValues.amounts;
 
-  console.log("IN ASSIGNITEMS - RECEIPT VALUES:", receiptValues);
+  useEffect(() => {
+    const configuredData = configureReceiptData(receiptAmounts);
+    setParsedFoodItems(configuredData);
+  }, [receiptAmounts]);
+
+  //initialize array for seperate quantities of more than 1 into individual dinner items
+  const separatedDinnerItems = [];
+
+  parsedFoodItems.forEach((item) => {
+    for (let i = 0; i < item.count; i++) {
+      separatedDinnerItems.push({
+        ...item,
+        id: (Date.now() + Math.random() + item.name).toString(),
+      });
+    }
+  });
 
   const handleDrop = () => {
     setAddedToDiner(true);
@@ -56,8 +75,6 @@ const AssignItems = () => {
                   item={item}
                   handleDrop={handleDrop}
                   separatedDinnerItems={separatedDinnerItems}
-                  setFoodItems={setFoodItems}
-                  foodItems={foodItems}
                 />
               </View>
             );
@@ -77,13 +94,15 @@ const styles = StyleSheet.create({
   },
   foodItemsListContainer: {
     padding: 10,
+    marginBottom: 10,
   },
   dinerInfo: {
-    // marginTop: 20,
+    marginTop: 20,
     fontFamily: "red-hat-regular",
     fontSize: 25,
     color: "black",
     textAlign: "center",
+    letterSpacing: 3,
   },
 });
 
