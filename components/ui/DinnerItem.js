@@ -68,11 +68,11 @@ const DinnerItem = ({
       }
     },
     isDropArea(gesture) {
-      return gesture.moveY < 250;
+      return gesture.moveY < 300;
     },
   });
 
-  const isDropArea = (gesture) => gesture.moveY < 250;
+  const isDropArea = (gesture) => gesture.moveY < 300;
 
   const panStyle = {
     transform: pan.getTranslateTransform(),

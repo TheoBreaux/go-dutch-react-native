@@ -2,7 +2,7 @@ import { StyleSheet, View, Text } from "react-native";
 import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
 import { useSelector } from "react-redux";
-import FoodItemDropArea from "./FoodItemDropArea";
+import FoodItemDropArea from "../components/ui/FoodItemDropArea"
 import { useState } from "react";
 import Colors from "../constants/colors";
 

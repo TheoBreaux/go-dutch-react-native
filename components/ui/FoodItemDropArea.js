@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Animated, Easing } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
