@@ -17,7 +17,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
 import { addDiner, setInitialPrimaryDiner, updateDiners } from "../store/store";
-import ProfileIcon from "./ProfileIcon";
+import ProfileIcon from "../components/ui/ProfileIcon";
 import BirthdayDiner from "./BirthdayDiner";
 
 const AddDiners = () => {
