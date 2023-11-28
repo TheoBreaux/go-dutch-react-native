@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import ProfileImageMedallion from "../ui/ProfileImageMedallion";
+import ProfileImageMedallion from "./ProfileImageMedallion";
 
 const ProfileIcon = ({ username, userFullName, onPress, profileImagePath }) => {
   return (

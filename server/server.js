@@ -31,7 +31,6 @@ app.post("/signup", async (req, res) => {
     req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
-  console.log(profilePicPath);
 
   try {
     const newUser = await pool.query(
@@ -180,7 +179,7 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 });
 
 // ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
-app.post("/additionaldiners/", async (req, res) => {
+app.post("/additionaldiners", async (req, res) => {
   const { event_id, additionalDiners } = req.body;
 
   try {
@@ -192,6 +191,30 @@ app.post("/additionaldiners/", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+  }
+});
+
+//UPDATE DEFAULT PHOTO TO REAL PHOTO
+app.post("/profilephoto", async (req, res) => {
+  const { profilePicPath, username } = req.body;
+
+  console.log(profilePicPath, username);
+
+  try {
+    const newUserData = await pool.query(
+      `UPDATE users 
+      SET profile_pic_image_path = $1
+      WHERE username = $2`,
+      [profilePicPath, username]
+    );
+
+    // On success, send a 200 OK response
+    res.status(200).json({ success: true });
+    console.log("From server:", newUserData);
+  } catch (error) {
+    console.error(error);
+    // On error, send a 500 Internal Server Error response with an error message
+    res.status(500).json({ detail: error.detail });
   }
 });
 

@@ -6,9 +6,14 @@ import Colors from "../constants/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "./Logo";
 import PrimaryButton from "../components/ui/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const UpdateProfileImage = () => {
   const [imagePath, setImagePath] = useState(null);
+  const username = useSelector((state) => state.userInfo.user.username);
+
+  const navigation = useNavigation();
 
   const checkForCameraRollPermission = async () => {
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -44,13 +49,34 @@ const UpdateProfileImage = () => {
     ? { borderColor: Colors.goDutchRed, borderWidth: 1 }
     : "";
 
-  const updateProfileImage = () => {
-    //make call to backend to update file path
-    //navigate back to user home page
-    console.log("UPDATING PIC");
+  const postData = async () => {
+    const userData = {
+      profilePicPath: imagePath,
+      username: username,
+    };
+
+    try {
+      const response = await fetch(
+        "https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/profilephoto",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        }
+      );
+
+      const data = await response.json();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log("IMAGE PATH:", imagePath);
+  const updateProfileImage = () => {
+    //make call to backend to update file path
+    postData();
+    //navigate back to user home page
+    navigation.navigate("Main", { screen: "Home" });
+  };
 
   return (
     <>
@@ -134,6 +160,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "red-hat-bold",
+    fontSize: 15,
     color: Colors.goDutchBlue,
     marginTop: 5,
   },

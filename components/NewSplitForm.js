@@ -64,6 +64,7 @@ const NewSplitForm = () => {
     setIsCapturingReceipt(!isCapturingReceipt);
   };
 
+
   return (
     <>
       <Logo />
