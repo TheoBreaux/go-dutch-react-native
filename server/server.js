@@ -241,8 +241,21 @@ app.get("/diningevents/:username", async (req, res) => {
   }
 });
 
+// GETS ALL ADDITIONAL DINERS FROM DATABASE WHERE LOGGED IN USER IS INVOLVED
+app.get("/additionaldiners/:eventId", async (req, res) => {
+  const { eventId } = req.params;
 
-
+  try {
+    const diningEvents = await pool.query(
+      `SELECT * FROM additional_diners WHERE event_id = $1`,
+      [eventId]
+    );
+    res.json(diningEvents.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // SEND TAX ON RECEIPT TO DATABASE(dining_events)
 // app.post("/diningevents", async (req, res) => {

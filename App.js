@@ -20,7 +20,8 @@ import store from "./store/store";
 import LogOutScreen from "./components/LogOutScreen";
 import AddDiners from "./components/AddDiners";
 import AssignItems from "./components/AssignItems";
-import UpdateProfileImage from "./components/UpdateProfileImage";
+import DiningEventDetails from "./components/DiningEventDetails";
+import FeaturedRestaurants from "./components/FeaturedRestaurants";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -69,11 +70,11 @@ const MainTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="Image Logs"
-        component={ImageLogs}
+        name="Restaurants"
+        component={FeaturedRestaurants}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="images-outline" size={35} color="white" />
+            <Ionicons name="restaurant" size={35} color="white" />
           ),
         }}
       />
@@ -115,6 +116,10 @@ const App = () => {
           <Stack.Screen name="AddDiners" component={AddDiners} />
           <Stack.Screen name="AssignItems" component={AssignItems} />
           <Stack.Screen name="History" component={DiningEventHistory} />
+          <Stack.Screen
+            name="DiningEventDetails"
+            component={DiningEventDetails}
+          />
           {/* <Stack.Screen
             name="UpdateProfileImage"
             component={UpdateProfileImage}
