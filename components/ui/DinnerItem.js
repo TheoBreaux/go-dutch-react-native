@@ -1,30 +1,24 @@
 import { StyleSheet, Text, View, PanResponder, Animated } from "react-native";
 import Colors from "../../constants/colors";
-import { useRef } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { assignAndRemoveFoodItem } from "../../store/store";
 
-const DinnerItem = ({
-  item,
-  handleDrop,
-  separatedDinnerItems,
-  setFoodItems,
-  foodItems,
-}) => {
+const DinnerItem = ({ item, handleDrop }) => {
   const [showDinnerItem, setShowDinerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
+  const allReceiptItems = useSelector(
+    (state) => state.diningEvent.allReceiptItems
+  );
+
+  const dispatch = useDispatch();
+
+  console.log("ALL RECEIPT ITEMS BEFORE:", allReceiptItems);
+
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
-
-  // const assignedAndRemoved = (item) => {
-  //     const index = foodItems.indexOf(item);
-  //   if (index !== -1) {
-  //     const updatedSeparatedDinnerItems = [...separatedDinnerItems];
-  //     updatedSeparatedDinnerItems.splice(index, 1);
-  //     setFoodItems(updatedSeparatedDinnerItems);
-  //   }
-  // };
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -52,11 +46,16 @@ const DinnerItem = ({
         Animated.timing(opacity, {
           toValue: 0,
           duration: 500,
-        }).start(() => setShowDinerItem(false));
-        //cause icon to move or something
-        handleDrop();
-        //item needs to be removed from array and assigned to the diner
-        // assignedAndRemoved();
+        }).start(() => {
+          setShowDinerItem(false);
+          dispatch(assignAndRemoveFoodItem(item));
+          //i now need to move those removed items to the person that had thems items array
+
+
+
+          
+          // handleDrop();
+        });
       } else {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
@@ -75,6 +74,8 @@ const DinnerItem = ({
   const panStyle = {
     transform: pan.getTranslateTransform(),
   };
+
+  console.log("ALL RECEIPT ITEMS AFTER:", allReceiptItems);
 
   return (
     <>

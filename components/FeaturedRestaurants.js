@@ -17,3 +17,5 @@ const styles = StyleSheet.create({
 });
 
 export default FeaturedRestaurants;
+
+// POSSIBLY CARDS WITH INFO FOR ALL PAYING ADVERTISERS WITH LINKS IN A FLATLIST

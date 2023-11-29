@@ -1,9 +1,10 @@
 import { StyleSheet, View, Text } from "react-native";
 import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FoodItemDropArea from "../components/ui/FoodItemDropArea";
 import { useState, useEffect } from "react";
+import { setAllReceiptItems } from "../store/store";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -11,7 +12,6 @@ const configureReceiptData = (receiptAmounts) => {
 
   for (let i = 0; i < receiptAmounts.length; i++) {
     let lineItem = receiptAmounts[i].text;
-    console.log("LINE ITEM:", lineItem);
     let match = lineItem.match(/^(\d*\.?\d+)\s+([a-zA-Z\s]+)\s+(\d*\.?\d+)$/);
 
     if (match) {
@@ -34,7 +34,9 @@ const AssignItems = () => {
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
-      const receiptAmounts = receiptValues.amounts;
+  const receiptAmounts = receiptValues.amounts;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const configuredData = configureReceiptData(receiptAmounts);
@@ -52,6 +54,13 @@ const AssignItems = () => {
       });
     }
   });
+
+  dispatch(setAllReceiptItems(separatedDinnerItems));
+
+  console.log(useSelector((state) => state.diningEvent.diners));
+
+
+
 
   const handleDrop = () => {
     setAddedToDiner(true);
@@ -74,7 +83,6 @@ const AssignItems = () => {
                 <DinnerItem
                   item={item}
                   handleDrop={handleDrop}
-                  separatedDinnerItems={separatedDinnerItems}
                 />
               </View>
             );

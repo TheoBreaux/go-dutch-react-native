@@ -11,6 +11,12 @@ import { useNavigation } from "@react-navigation/native";
 
 const PaymentSources = () => {
   const [isFormValid, setIsFormValid] = useState(false);
+  const [availablePrimaryPaymentOptions, setAvailablePrimaryPaymentOptions] =
+    useState(paymentOptions);
+  const [
+    availableSecondaryPaymentOptions,
+    setAvailableSecondaryPaymentOptions,
+  ] = useState(paymentOptions);
   const [error, setError] = useState("");
   const navigation = useNavigation();
 
@@ -50,6 +56,15 @@ const PaymentSources = () => {
     const isValid = Object.keys(errors).length === 0;
     setIsFormValid(isValid);
     return errors;
+  };
+
+  const handlePrimaryPaymentChange = (value) => {
+    setAvailableSecondaryPaymentOptions((prevOptions) => {
+      const updatedOptions = prevOptions.filter(
+        (option) => option.source !== value
+      );
+      return updatedOptions;
+    });
   };
 
   const handleFormSubmit = async (values, actions) => {
@@ -107,9 +122,12 @@ const PaymentSources = () => {
                   <Picker
                     style={styles.input}
                     selectedValue={values.selectedPrimaryPayment}
-                    onValueChange={handleChange("selectedPrimaryPayment")}
+                    onValueChange={(value) => {
+                      handleChange("selectedPrimaryPayment")(value);
+                      handlePrimaryPaymentChange(value);
+                    }}
                     onBlur={handleBlur("selectedPrimaryPayment")}>
-                    {paymentOptions.map((item, index) => (
+                    {availablePrimaryPaymentOptions.map((item, index) => (
                       <Picker.Item
                         key={index}
                         label={item.label}
@@ -130,7 +148,7 @@ const PaymentSources = () => {
                   </Text>
                   <TextInput
                     style={styles.input}
-                    placeholder="@john-smith"
+                    placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
                     value={values.primaryPaymentUsername}
                     onChangeText={handleChange("primaryPaymentUsername")}
                     onBlur={handleBlur("primaryPaymentUsername")}
@@ -154,7 +172,7 @@ const PaymentSources = () => {
                     selectedValue={values.selectedSecondaryPayment}
                     onValueChange={handleChange("selectedSecondaryPayment")}
                     onBlur={handleBlur("selectedSecondaryPayment")}>
-                    {paymentOptions.map((item, index) => (
+                    {availableSecondaryPaymentOptions.map((item, index) => (
                       <Picker.Item
                         key={index}
                         label={item.label}
@@ -174,7 +192,7 @@ const PaymentSources = () => {
                   </Text>
                   <TextInput
                     style={styles.input}
-                    placeholder="@john-smith"
+                    placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
                     value={values.secondaryPaymentUsername}
                     onChangeText={handleChange("secondaryPaymentUsername")}
                     onBlur={handleBlur("secondaryPaymentUsername")}

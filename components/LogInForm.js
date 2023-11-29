@@ -79,7 +79,6 @@ const LogInForm = () => {
       );
 
       const data = await response.json();
-      console.log("RETURNED DATA:", data);
 
       if (data.detail) {
         setError(data.detail);

@@ -38,6 +38,7 @@ const diningEventSlice = createSlice({
       totalMealCost: "",
     },
     receiptValues: {},
+    allReceiptItems: [],
     diners: [],
   },
   reducers: {
@@ -52,6 +53,17 @@ const diningEventSlice = createSlice({
     },
     setReceiptValues: (state, action) => {
       state.receiptValues = action.payload;
+    },
+    setAllReceiptItems: (state, action) => {
+      state.allReceiptItems = action.payload;
+    },
+    assignAndRemoveFoodItem: (state, action) => {
+      const index = state.allReceiptItems.findIndex((foodItem) => {
+        return foodItem.id === action.payload.id;
+      });
+      if (index !== -1) {
+        state.allReceiptItems.splice(index, 1);
+      }
     },
     addDiner: (state, action) => {
       state.diners.push(action.payload);
@@ -90,6 +102,8 @@ export const {
   setInitialPrimaryDiner,
   setEventId,
   setReceiptValues,
+  setAllReceiptItems,
+  assignAndRemoveFoodItem,
   updateDiners,
   addDiner,
   removeDiner,

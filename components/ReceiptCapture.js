@@ -89,20 +89,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     }
   };
 
-  //   const showAlert = () => {
-  //     Alert.alert(
-  //       "Receipt submitted and saved! 💸🎉",
-  //       "",
-  //       [
-  //         {
-  //           text: "Close",
-  //           onPress: () => submitTaxInfoOnOkPress(),
-  //         },
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //   };
-
   const saveAndSubmitReceiptImage = async () => {
     setLoading(true);
     if (image) {

@@ -34,6 +34,7 @@ const AddDiners = () => {
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -142,7 +143,6 @@ const AddDiners = () => {
   const birthdayHandler = () => {
     setShowSelectBirthday(true);
   };
-  const noBirthdayHandler = () => {};
 
   const postData = async () => {
     setShowSelectBirthday(false);
@@ -223,7 +223,7 @@ const AddDiners = () => {
                       Yes
                     </PrimaryButton>
 
-                    <PrimaryButton width={100} onPress={noBirthdayHandler}>
+                    <PrimaryButton width={100} onPress={postData}>
                       No
                     </PrimaryButton>
                   </View>
