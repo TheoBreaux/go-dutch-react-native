@@ -218,6 +218,32 @@ app.post("/profilephoto", async (req, res) => {
   }
 });
 
+// GETS ALL DINING EVENTS FROM DATABASE WHERE LOGGED IN USER IS INVOLVED
+app.get("/diningevents/:username", async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const diningEvents = await pool.query(
+      `SELECT *
+      FROM dining_events
+      WHERE primary_diner_username = $1
+      UNION 
+      SELECT dining_events.* 
+      FROM dining_events
+      JOIN additional_diners ON additional_diners.event_id = dining_events.event_id
+      WHERE additional_diners.additional_diner_username = $1;`,
+      [username]
+    );
+    res.json(diningEvents.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
+
 // SEND TAX ON RECEIPT TO DATABASE(dining_events)
 // app.post("/diningevents", async (req, res) => {
 //   const { tax, event_id } = req.body;
