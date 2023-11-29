@@ -104,7 +104,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Welcome" //change this back to welcome after developing
+          initialRouteName="History" //change this back to welcome after developing
           screenOptions={{
             headerShown: false,
           }}>
@@ -114,6 +114,7 @@ const App = () => {
           <Stack.Screen name="PaymentSources" component={PaymentSources} />
           <Stack.Screen name="AddDiners" component={AddDiners} />
           <Stack.Screen name="AssignItems" component={AssignItems} />
+          <Stack.Screen name="History" component={DiningEventHistory} />
           <Stack.Screen
             name="UpdateProfileImage"
             component={UpdateProfileImage}
