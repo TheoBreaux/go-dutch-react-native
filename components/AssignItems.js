@@ -82,7 +82,7 @@ const AssignItems = () => {
               <View key={item.id}>
                 <DinnerItem
                   item={item}
-                  handleDrop={handleDrop}
+                  // handleDrop={handleDrop}
                 />
               </View>
             );
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   dinerInfo: {
-    marginTop: 20,
     fontFamily: "red-hat-regular",
     fontSize: 25,
     color: "black",

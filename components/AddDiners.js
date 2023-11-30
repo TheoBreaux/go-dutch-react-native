@@ -34,7 +34,6 @@ const AddDiners = () => {
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -46,6 +45,7 @@ const AddDiners = () => {
         additional_diner_username: goDutchUsername,
         primary_diner: true,
         diner_meal_cost: null,
+        assignedItemsComplete: false,
         items: [],
         birthday: false,
       })
@@ -110,6 +110,7 @@ const AddDiners = () => {
           additional_diner_username: inputValue,
           primary_diner: false,
           diner_meal_cost: null,
+          assignedItemsComplete: false,
           items: [],
           birthday: false,
         })

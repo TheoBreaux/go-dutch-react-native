@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, PanResponder, Animated } from "react-native";
 import Colors from "../../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { assignAndRemoveFoodItem } from "../../store/store";
+import { addItemToDiner, assignAndRemoveFoodItem } from "../../store/store";
 
 const DinnerItem = ({ item, handleDrop }) => {
   const [showDinnerItem, setShowDinerItem] = useState(true);
@@ -13,6 +13,8 @@ const DinnerItem = ({ item, handleDrop }) => {
     (state) => state.diningEvent.allReceiptItems
   );
 
+  const diners = useSelector((state) => state.diningEvent.diners);
+  const dinerId = diners[0].id;
   const dispatch = useDispatch();
 
   console.log("ALL RECEIPT ITEMS BEFORE:", allReceiptItems);
@@ -49,11 +51,13 @@ const DinnerItem = ({ item, handleDrop }) => {
         }).start(() => {
           setShowDinerItem(false);
           dispatch(assignAndRemoveFoodItem(item));
+
+          console.log(item)
+          console.log("DINER_ID:", dinerId);
+
           //i now need to move those removed items to the person that had thems items array
+          dispatch(addItemToDiner({ item, dinerId }));
 
-
-
-          
           // handleDrop();
         });
       } else {
@@ -76,6 +80,7 @@ const DinnerItem = ({ item, handleDrop }) => {
   };
 
   console.log("ALL RECEIPT ITEMS AFTER:", allReceiptItems);
+  console.log("DINERS AFTER:", diners);
 
   return (
     <>
