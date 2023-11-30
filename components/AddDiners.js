@@ -317,7 +317,7 @@ const AddDiners = () => {
                 justifyContent: "center",
               }}>
               <PrimaryButton width={100} onPress={allDinersAddedHandler}>
-                Yes
+                Confirm
               </PrimaryButton>
               {/* <PrimaryButton width={100} onPress={addMoreDinersHandler}>
                 No
