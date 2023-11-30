@@ -37,6 +37,8 @@ const AddDiners = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
+  console.log("FIRST DINERS VALUE IN ADD DINERS:", diners);
+
   useEffect(() => {
     dispatch(
       setInitialPrimaryDiner({
@@ -50,14 +52,6 @@ const AddDiners = () => {
         birthday: false,
       })
     );
-  }, [eventId]);
-
-  //update diners in redux state with primary diner with eventId
-  useEffect(() => {
-    //removing duplicate of primary diner after component re-render due to eventId value change
-    //maybe i need to think about useing ref here if needed
-    const newDiners = diners.slice(1);
-    dispatch(updateDiners(newDiners));
   }, []);
 
   useEffect(() => {
@@ -175,7 +169,7 @@ const AddDiners = () => {
       <Logo />
 
       {/* all diners have been added modal */}
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={allDinersAddedModal}>
@@ -200,7 +194,7 @@ const AddDiners = () => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       {/* birthday modal */}
       <Modal
@@ -273,8 +267,8 @@ const AddDiners = () => {
       <View>
         <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
       </View>
-      <Text style={styles.title}>DINERS</Text>
       <PrimaryDiner />
+      <Text style={styles.title}>↓ Add diners ↓</Text>
       <View style={styles.addDinersContainer}>
         <Image
           style={styles.iconImage}
@@ -294,16 +288,43 @@ const AddDiners = () => {
       </View>
 
       {showDiners && (
-        <FlatList
-          data={diners}
-          renderItem={({ item }) => (
-            <Diner
-              key={item.id}
-              additionalDinerUsername={item.additional_diner_username}
-              diner={item}
-            />
-          )}
-        />
+        <View>
+          <FlatList
+            data={diners}
+            renderItem={({ item }) => (
+              <Diner
+                key={item.id}
+                additionalDinerUsername={item.additional_diner_username}
+                diner={item}
+              />
+            )}
+          />
+
+          <View style={styles.miniModalContent}>
+            <View>
+              <Text
+                style={[
+                  styles.modalText,
+                  { textAlign: "center", marginTop: 5 },
+                ]}>
+                All diners added?
+              </Text>
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}>
+              <PrimaryButton width={100} onPress={allDinersAddedHandler}>
+                Yes
+              </PrimaryButton>
+              {/* <PrimaryButton width={100} onPress={addMoreDinersHandler}>
+                No
+              </PrimaryButton> */}
+            </View>
+          </View>
+        </View>
       )}
 
       {showSuggestions && (
@@ -346,7 +367,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: 30,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchBlue,
   },
   addDinersContainer: {
@@ -384,6 +405,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 600,
     elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  miniModalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 150,
+    elevation: 5,
+    marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
   },

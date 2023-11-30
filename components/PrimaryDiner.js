@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 
 const PrimaryDiner = () => {
   const userFullName = useSelector(
-    (state) => state.userInfo.user.firstName + " " + state.userInfo.user.lastName
+    (state) =>
+      state.userInfo.user.firstName + " " + state.userInfo.user.lastName
   );
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
@@ -26,12 +27,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     margin: 2,
     borderColor: Colors.goDutchRed,
     borderWidth: 3,
     borderStyle: "solid",
     backgroundColor: "#fc8181",
+    elevation: 5,
   },
   text: {
     color: "white",

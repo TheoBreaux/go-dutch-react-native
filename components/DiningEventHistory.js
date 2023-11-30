@@ -62,7 +62,7 @@ const DiningEventHistory = () => {
                 fontFamily: "red-hat-bold",
                 fontSize: 15,
               }}>
-              Check out our featured restaurants in your location!
+              Check out our featured restaurants near you!
             </Text>
             <PrimaryButton width={150} onPress={handleNavigation}>
               <Ionicons name="restaurant" size={25} color="white" />

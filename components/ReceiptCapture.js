@@ -91,77 +91,50 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
   const saveAndSubmitReceiptImage = async () => {
     setLoading(true);
-    if (image) {
-      try {
-        await MediaLibrary.createAssetAsync(image);
-      } catch (error) {
-        console.error(error);
-      }
+    // if (image) {
+    //   try {
+    //     await MediaLibrary.createAssetAsync(image);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
 
-      //SENDING RECEIPT TO GET PARSED
-      const url = "https://api.taggun.io/api/receipt/v1/verbose/file";
-      const fileUri = image;
-      const formData = new FormData();
-      formData.append("file", {
-        uri: fileUri,
-        type: "image/jpeg",
-        name: "image.jpg",
+    //SENDING RECEIPT TO GET PARSED
+    const url = "https://api.taggun.io/api/receipt/v1/verbose/file";
+    const fileUri = image;
+    const formData = new FormData();
+    formData.append("file", {
+      uri: fileUri,
+      type: "image/jpeg",
+      name: "image.jpg",
+    });
+
+    try {
+      const response = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          apikey: "b7dfb6e071e711eea8f313266e4aecd5",
+        },
       });
-
-      try {
-        const response = await axios.post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            apikey: "b7dfb6e071e711eea8f313266e4aecd5",
-          },
-        });
-        const responseData = response.data;
-        dispatch(setReceiptValues(responseData));
-        setLoading(false);
-        setIsCapturingReceipt(!isCapturingReceipt);
-        postData();
-        setImage(null);
-      } catch (error) {
-        console.error(error);
-      }
-
-      alert("Receipt submitted and saved! 💸🎉");
-
-      //should navigate to another page, possibly history
-      navigation.navigate("AddDiners");
+      const responseData = response.data;
+      dispatch(setReceiptValues(responseData));
+      setLoading(false);
+      setIsCapturingReceipt(!isCapturingReceipt);
+      postData();
+      setImage(null);
+    } catch (error) {
+      console.error(error);
     }
+
+    alert("Receipt submitted and saved! 💸🎉");
+
+    //should navigate to another page, possibly history
+    navigation.navigate("AddDiners");
   };
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
-
-  //   const submitTaxInfoOnOkPress = async () => {
-  //     const taxInfo = {
-  //       event_id: diningEvent.eventId,
-  //       tax: receiptValues.taxAmount.data,
-  //     };
-  //     try {
-  //       const response = await fetch(
-  //         "https://0e24-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/diningevents",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(taxInfo),
-  //         }
-  //       );
-  //       if (response.ok) {
-  //         const result = await response.json();
-  //         // Handle the result if needed
-  //       } else {
-  //         console.error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
 
   return (
     <>

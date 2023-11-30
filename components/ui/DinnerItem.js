@@ -1,13 +1,17 @@
-import { StyleSheet, Text, View, PanResponder, Animated } from "react-native";
+import { StyleSheet, Text, PanResponder, Animated } from "react-native";
 import Colors from "../../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToDiner, assignAndRemoveFoodItem } from "../../store/store";
+import { assignAndRemoveFoodItem } from "../../store/store";
 
 const DinnerItem = ({ item, handleDrop }) => {
   const [showDinnerItem, setShowDinerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
+
+  const allReceiptItemsCopy = useSelector(
+    (state) => state.diningEvent.allReceiptItemsCopy
+  );
 
   const allReceiptItems = useSelector(
     (state) => state.diningEvent.allReceiptItems
@@ -17,7 +21,9 @@ const DinnerItem = ({ item, handleDrop }) => {
   const dinerId = diners[0].id;
   const dispatch = useDispatch();
 
-  console.log("ALL RECEIPT ITEMS BEFORE:", allReceiptItems);
+  console.log("DINERS BEFORE:", diners);
+  console.log("ALL RECEIPT ITEMS COPY BEFORE DROP:", allReceiptItemsCopy);
+  console.log("ALL RECEIPT ITEMS BEFORE DROP:", allReceiptItems);
 
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
@@ -50,14 +56,10 @@ const DinnerItem = ({ item, handleDrop }) => {
           duration: 500,
         }).start(() => {
           setShowDinerItem(false);
-          dispatch(assignAndRemoveFoodItem(item));
-
-          console.log(item)
-          console.log("DINER_ID:", dinerId);
+          dispatch(assignAndRemoveFoodItem({ item, dinerId }));
 
           //i now need to move those removed items to the person that had thems items array
-          dispatch(addItemToDiner({ item, dinerId }));
-
+          // dispatch(addItemToDiner({ item, dinerId }));
           // handleDrop();
         });
       } else {
@@ -79,8 +81,11 @@ const DinnerItem = ({ item, handleDrop }) => {
     transform: pan.getTranslateTransform(),
   };
 
-  console.log("ALL RECEIPT ITEMS AFTER:", allReceiptItems);
   console.log("DINERS AFTER:", diners);
+
+  console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
+
+  console.log("ALL RECEIPT ITEMS AFTER DROP", allReceiptItems);
 
   return (
     <>

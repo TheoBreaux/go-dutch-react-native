@@ -60,25 +60,29 @@ const diningEventSlice = createSlice({
       state.allReceiptItemsCopy = action.payload;
     },
     assignAndRemoveFoodItem: (state, action) => {
-      const index = state.allReceiptItems.findIndex((foodItem) => {
-        return foodItem.id === action.payload.id;
-      });
-      if (index !== -1) {
-        state.allReceiptItems.splice(index, 1);
-      }
-    },
-    addItemToDiner: (state, action) => {
       const { item, dinerId } = action.payload;
 
       console.log("ITEM IN STORE:", item);
       console.log("DINER ID IN STORE:", dinerId);
 
+      //find the index of the item that has been dragged and dropped
+      const index = state.allReceiptItems.findIndex((foodItem) => {
+        return foodItem.id === item.id;
+      });
+
       const diner = state.diners.find((diner) => diner.id === dinerId);
 
-      if (diner) {
+      //when found remove it from the copy of the original all items array
+      if (index !== -1 && diner) {
         diner.items.push(item);
       }
+      state.allReceiptItemsCopy.splice(index, 1);
+
+      // if (diner) {
+      //   diner.items.push(item);
+      // }
     },
+
     addDiner: (state, action) => {
       state.diners.push(action.payload);
     },
@@ -118,7 +122,6 @@ export const {
   setReceiptValues,
   setAllReceiptItems,
   assignAndRemoveFoodItem,
-  addItemToDiner,
   updateDiners,
   addDiner,
   removeDiner,
