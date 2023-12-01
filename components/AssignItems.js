@@ -21,6 +21,7 @@ const configureReceiptData = (receiptAmounts) => {
 
       if (count > 1) {
         price /= count;
+        // count = 1;
       }
       configuredData.push({ count, name, price });
     }
@@ -55,12 +56,9 @@ const AssignItems = () => {
     }
   });
 
-  dispatch(setAllReceiptItems(separatedDinnerItems));
-
-  console.log(useSelector((state) => state.diningEvent.diners));
-
-
-
+  useEffect(() => {
+    dispatch(setAllReceiptItems(separatedDinnerItems));
+  }, [separatedDinnerItems]);
 
   const handleDrop = () => {
     setAddedToDiner(true);

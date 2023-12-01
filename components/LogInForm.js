@@ -12,8 +12,12 @@ import SecondaryButton from "./ui/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-import { setCurrentCity, setUser } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentCity,
+  setInitialPrimaryDiner,
+  setUser,
+} from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "./LocateRestaurants";
@@ -27,6 +31,7 @@ const LogInForm = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const goDutchUsername = useSelector((state) => state.userInfo.user.username);
 
   const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
 
@@ -92,6 +97,21 @@ const LogInForm = () => {
     }
     Keyboard.dismiss();
   };
+
+  // dispatch(
+  //   setInitialPrimaryDiner(
+  //     setInitialPrimaryDiner({
+  //       event_id: null,
+  //       id: Date.now(),
+  //       additional_diner_username: goDutchUsername,
+  //       primary_diner: true,
+  //       diner_meal_cost: null,
+  //       assignedItemsComplete: false,
+  //       items: [],
+  //       birthday: false,
+  //     })
+  //   )
+  // );
 
   return (
     <>

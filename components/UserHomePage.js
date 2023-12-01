@@ -12,9 +12,11 @@ import { featuredRestaurants } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "./ui/PrimaryButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
+import { setInitialPrimaryDiner } from "../store/store";
+import { useEffect } from "react";
 
 const UserHomePage = () => {
   const defaultProfilePicPath =
@@ -29,11 +31,28 @@ const UserHomePage = () => {
     useState(usingDefaultProfilePhoto);
 
   const username = useSelector((state) => state.userInfo.user.firstName);
+  const goDutchUsername = useSelector((state) => state.userInfo.user.username);
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
   );
 
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    dispatch(
+      setInitialPrimaryDiner({
+        event_id: null,
+        id: Date.now(),
+        additional_diner_username: goDutchUsername,
+        primary_diner: true,
+        diner_meal_cost: null,
+        assignedItemsComplete: false,
+        items: [],
+        birthday: false,
+      })
+    );
+  }, [goDutchUsername]);
 
   let currentCity, error;
 

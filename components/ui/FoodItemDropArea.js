@@ -10,30 +10,30 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
   const diners = useSelector((state) => state.diningEvent.diners);
   const scaleValue = new Animated.Value(1.5);
 
-  const startAnimation = () => {
-    Animated.sequence([
-      Animated.timing(scaleValue, {
-        toValue: 1.0,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleValue, {
-        toValue: 1.5,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setAddedToDiner(false);
-    });
-  };
+  // const startAnimation = () => {
+  //   Animated.sequence([
+  //     Animated.timing(scaleValue, {
+  //       toValue: 1.0,
+  //       duration: 500,
+  //       easing: Easing.ease,
+  //       useNativeDriver: true,
+  //     }),
+  //     Animated.timing(scaleValue, {
+  //       toValue: 1.5,
+  //       duration: 500,
+  //       easing: Easing.ease,
+  //       useNativeDriver: true,
+  //     }),
+  //   ]).start(() => {
+  //     setAddedToDiner(false);
+  //   });
+  // };
 
-  useEffect(() => {
-    if (addedToDiner) {
-      startAnimation();
-    }
-  }, [addedToDiner]);
+  // useEffect(() => {
+  //   if (addedToDiner) {
+  //     startAnimation();
+  //   }
+  // }, [addedToDiner]);
 
   console.log("DINERS:", diners);
 
@@ -46,13 +46,13 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
     <View style={styles.mainContainer}>
       <View style={styles.assignmentContainer}>
         {addedToDiner ? (
-          <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+          <View style={{ transform: [{ scale: scaleValue }] }}>
             <MaterialCommunityIcons
               name="face-man-shimmer"
               size={150}
               color={Colors.goDutchRed}
             />
-          </Animated.View>
+          </View>
         ) : (
           <>
             <View style={styles.iconContainer}>

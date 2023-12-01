@@ -16,7 +16,7 @@ import PrimaryButton from "./ui/PrimaryButton";
 import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
-import { addDiner, setInitialPrimaryDiner, updateDiners } from "../store/store";
+import { addDiner, setEventIdForPrimary } from "../store/store";
 import ProfileIcon from "../components/ui/ProfileIcon";
 import BirthdayDiner from "./BirthdayDiner";
 
@@ -37,22 +37,9 @@ const AddDiners = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log("FIRST DINERS VALUE IN ADD DINERS:", diners);
-
   useEffect(() => {
-    dispatch(
-      setInitialPrimaryDiner({
-        event_id: eventId,
-        id: Date.now(),
-        additional_diner_username: goDutchUsername,
-        primary_diner: true,
-        diner_meal_cost: null,
-        assignedItemsComplete: false,
-        items: [],
-        birthday: false,
-      })
-    );
-  }, []);
+    dispatch(setEventIdForPrimary(eventId));
+  }, [eventId]);
 
   useEffect(() => {
     const autoCompleteDiner = async () => {
@@ -163,6 +150,8 @@ const AddDiners = () => {
       console.error("Network error:", error);
     }
   };
+
+  console.log("DINERS", diners);
 
   return (
     <View style={styles.container}>

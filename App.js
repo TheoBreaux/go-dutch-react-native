@@ -4,7 +4,6 @@ import LogInForm from "./components/LogInForm";
 import UserHomePage from "./components/UserHomePage";
 import NewSplitForm from "./components/NewSplitForm";
 import DiningEventHistory from "./components/DiningEventHistory";
-import ImageLogs from "./components/ImageLogs";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -120,11 +119,6 @@ const App = () => {
             name="DiningEventDetails"
             component={DiningEventDetails}
           />
-          {/* <Stack.Screen
-            name="UpdateProfileImage"
-            component={UpdateProfileImage}
-          /> */}
-
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}

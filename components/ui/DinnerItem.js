@@ -23,7 +23,6 @@ const DinnerItem = ({ item, handleDrop }) => {
 
   console.log("DINERS BEFORE:", diners);
   console.log("ALL RECEIPT ITEMS COPY BEFORE DROP:", allReceiptItemsCopy);
-  console.log("ALL RECEIPT ITEMS BEFORE DROP:", allReceiptItems);
 
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
@@ -82,10 +81,8 @@ const DinnerItem = ({ item, handleDrop }) => {
   };
 
   console.log("DINERS AFTER:", diners);
-
   console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
-
-  console.log("ALL RECEIPT ITEMS AFTER DROP", allReceiptItems);
+  console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
 
   return (
     <>
