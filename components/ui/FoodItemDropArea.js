@@ -1,11 +1,20 @@
-import { StyleSheet, Text, View, Animated, Easing } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  Modal,
+  Image,
+  Easing,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../../constants/colors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 
 const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const username = useSelector((state) => state.userInfo.user.username);
   const diners = useSelector((state) => state.diningEvent.diners);
   const scaleValue = new Animated.Value(1.5);
@@ -37,39 +46,58 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
 
   console.log("DINERS:", diners);
 
-  const handleAssignedItemsComplete = () => {
-    //update current diner status to assignedItemsComplete True and move on to next dinner in array
-    console.log("ON TO THE NEXT!");
+  const handleAssignedItemsReview = () => {
+    setShowReviewModal(true);
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.assignmentContainer}>
-        {addedToDiner ? (
-          <View style={{ transform: [{ scale: scaleValue }] }}>
-            <MaterialCommunityIcons
-              name="face-man-shimmer"
-              size={150}
-              color={Colors.goDutchRed}
-            />
+    <>
+      {setShowReviewModal && (
+        <Modal
+          visible={showReviewModal}
+          animationType="slide"
+          transparent={true}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Review Items</Text>
+              {/* need to get the current dinners items array and map over it */}
+              {/* {separatedDinnerItems.map((item) => (
+                <Text key={item.id}>{item.name}</Text>
+              ))} */}
+              <Button title="Close" onPress={closeModal} />
+            </View>
           </View>
-        ) : (
-          <>
-            <View style={styles.iconContainer}>
+        </Modal>
+      )}
+
+      <View style={styles.mainContainer}>
+        <View style={styles.assignmentContainer}>
+          {addedToDiner ? (
+            <View style={{ transform: [{ scale: scaleValue }] }}>
               <MaterialCommunityIcons
-                name="face-man-profile"
+                name="face-man-shimmer"
                 size={150}
-                color={Colors.goDutchBlue}
+                color={Colors.goDutchRed}
               />
             </View>
-            <Text style={styles.dinerInfo}>{username}</Text>
-            <PrimaryButton width={100} onPress={handleAssignedItemsComplete}>
-              Review
-            </PrimaryButton>
-          </>
-        )}
+          ) : (
+            <>
+              <View style={styles.iconContainer}>
+                <MaterialCommunityIcons
+                  name="face-man-profile"
+                  size={150}
+                  color={Colors.goDutchBlue}
+                />
+              </View>
+              <Text style={styles.dinerInfo}>{username}</Text>
+              <PrimaryButton width={100} onPress={handleAssignedItemsReview}>
+                Review
+              </PrimaryButton>
+            </>
+          )}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -88,6 +116,23 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 25,
     color: Colors.goDutchBlue,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+
+  modalTitle: {
+    fontSize: 20,
+    marginBottom: 10,
   },
 });
 

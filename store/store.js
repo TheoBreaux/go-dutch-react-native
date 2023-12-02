@@ -83,15 +83,11 @@ const diningEventSlice = createSlice({
         );
       }
     },
-
     addDiner: (state, action) => {
       state.diners.push(action.payload);
     },
     clearDiners: (state, action) => {
       state.diners = [];
-    },
-    updateDiners: (state, action) => {
-      state.diners = action.payload;
     },
     removeDiner: (state, action) => {
       const index = state.diners.findIndex((diner) => {
@@ -124,7 +120,6 @@ export const {
   setReceiptValues,
   setAllReceiptItems,
   assignAndRemoveFoodItem,
-  updateDiners,
   addDiner,
   removeDiner,
   updateBirthdayStatus,

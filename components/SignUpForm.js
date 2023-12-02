@@ -32,7 +32,7 @@ const SignUpForm = () => {
   const dispatch = useDispatch();
 
   const defaultImagePath =
-    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/53346be3-193d-4b15-8b23-a73ccdd4bc78.jpeg";
+    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/803bfd44-71d7-4440-8af0-e1a516ae71e4.jpeg";
 
   const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
 
@@ -116,7 +116,7 @@ const SignUpForm = () => {
 
     try {
       const response = await fetch(
-        "https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/signup",
+        "https://c36f-2603-8000-c0f0-a570-90a8-776d-b366-4a35.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

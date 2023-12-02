@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
@@ -7,7 +7,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { setDiningEvent, setEventId, setReceiptValues } from "../store/store";
+import { setEventId, setReceiptValues } from "../store/store";
 import axios from "axios";
 import Spinner from "../components/ui/Spinner";
 import { getCurrentDate } from "../utils";
@@ -24,7 +24,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const dispatch = useDispatch();
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
-  const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
 
   const restaurantBar =
     diningEvent.selectedRestaurant === ""
@@ -73,7 +72,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/diningevents",
+        "https://c36f-2603-8000-c0f0-a570-90a8-776d-b366-4a35.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {
@@ -127,7 +126,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     }
 
     alert("Receipt submitted and saved! 💸🎉");
-
     //should navigate to another page, possibly history
     navigation.navigate("AddDiners");
   };
@@ -148,42 +146,47 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         {!loading && (
           <View style={styles.contentContainer}>
             {!image ? (
-              <Camera
-                style={styles.camera}
-                type={type}
-                flashMode={flash}
-                ref={cameraRef}>
-                <View style={styles.cameraButtons}>
-                  <PrimaryButton
-                    padding={5}
-                    width={40}
-                    onPress={cancelCaptureReceipt}>
-                    <Feather name="x-circle" size={24} color="white" />
-                    <Text style={styles.cameraText}></Text>
-                  </PrimaryButton>
-                  <PrimaryButton
-                    padding={5}
-                    width={40}
-                    onPress={() => {
-                      setFlash(
-                        flash === Camera.Constants.FlashMode.off
-                          ? Camera.Constants.FlashMode.on
-                          : Camera.Constants.FlashMode.off
-                      );
-                    }}>
-                    <Entypo
-                      name="flash"
-                      size={24}
-                      color={
-                        flash === Camera.Constants.FlashMode.off
-                          ? "gray"
-                          : "white"
-                      }
-                    />
-                    <Text style={styles.cameraText}></Text>
-                  </PrimaryButton>
-                </View>
-              </Camera>
+              <>
+                <Text style={styles.captureText}>
+                  Capture receipt for new split!
+                </Text>
+                <Camera
+                  style={styles.camera}
+                  type={type}
+                  flashMode={flash}
+                  ref={cameraRef}>
+                  <View style={styles.cameraButtons}>
+                    <PrimaryButton
+                      padding={5}
+                      width={40}
+                      onPress={cancelCaptureReceipt}>
+                      <Feather name="x-circle" size={24} color="white" />
+                      <Text style={styles.cameraText}></Text>
+                    </PrimaryButton>
+                    <PrimaryButton
+                      padding={5}
+                      width={40}
+                      onPress={() => {
+                        setFlash(
+                          flash === Camera.Constants.FlashMode.off
+                            ? Camera.Constants.FlashMode.on
+                            : Camera.Constants.FlashMode.off
+                        );
+                      }}>
+                      <Entypo
+                        name="flash"
+                        size={24}
+                        color={
+                          flash === Camera.Constants.FlashMode.off
+                            ? "gray"
+                            : "white"
+                        }
+                      />
+                      <Text style={styles.cameraText}></Text>
+                    </PrimaryButton>
+                  </View>
+                </Camera>
+              </>
             ) : (
               <Image source={{ uri: image }} style={styles.camera} />
             )}
@@ -226,6 +229,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
+  },
+  captureText: {
+    marginTop: -5,
+    marginBottom: 5,
+    textAlign: "center",
+    fontSize: 25,
+    fontFamily: "red-hat-regular",
+    letterSpacing: 2,
   },
   contentContainer: {
     flex: 1,

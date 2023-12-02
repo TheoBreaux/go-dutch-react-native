@@ -23,7 +23,6 @@ const NewSplitForm = () => {
   const [isCapturingReceipt, setIsCapturingReceipt] = useState(false);
 
   const dispatch = useDispatch();
-
   const restaurantList = useSelector((state) => state.userInfo.restaurantList);
 
   const sortedRestaurantList = restaurantList
@@ -63,7 +62,6 @@ const NewSplitForm = () => {
     dispatch(setDiningEvent(values));
     setIsCapturingReceipt(!isCapturingReceipt);
   };
-
 
   return (
     <>

@@ -57,7 +57,7 @@ const UpdateProfileImage = () => {
 
     try {
       const response = await fetch(
-        "https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/profilephoto",
+        "https://c36f-2603-8000-c0f0-a570-90a8-776d-b366-4a35.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

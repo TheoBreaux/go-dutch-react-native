@@ -58,6 +58,7 @@ const DinnerItem = ({ item, handleDrop }) => {
           dispatch(assignAndRemoveFoodItem({ item, dinerId }));
 
           //i now need to move those removed items to the person that had thems items array
+          
           // dispatch(addItemToDiner({ item, dinerId }));
           // handleDrop();
         });

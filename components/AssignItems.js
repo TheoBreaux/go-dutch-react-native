@@ -21,7 +21,6 @@ const configureReceiptData = (receiptAmounts) => {
 
       if (count > 1) {
         price /= count;
-        // count = 1;
       }
       configuredData.push({ count, name, price });
     }

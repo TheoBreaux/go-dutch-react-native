@@ -16,7 +16,7 @@ import PrimaryButton from "./ui/PrimaryButton";
 import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
-import { addDiner, setEventIdForPrimary } from "../store/store";
+import { addDiner, setEventIdForPrimary} from "../store/store";
 import ProfileIcon from "../components/ui/ProfileIcon";
 import BirthdayDiner from "./BirthdayDiner";
 
@@ -33,6 +33,7 @@ const AddDiners = () => {
   const diners = useSelector((state) => state.diningEvent.diners);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
+  const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -45,7 +46,7 @@ const AddDiners = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://c36f-2603-8000-c0f0-a570-90a8-776d-b366-4a35.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -94,6 +95,7 @@ const AddDiners = () => {
           assignedItemsComplete: false,
           items: [],
           birthday: false,
+          profile_pic_image_path: null,
         })
       );
       setInputValue("");
@@ -139,13 +141,14 @@ const AddDiners = () => {
     };
     try {
       const response = await fetch(
-        `https://cd04-2603-8000-c0f0-a570-18c1-a9e4-ab0e-834d.ngrok-free.app/additionaldiners/`,
+        `https://c36f-2603-8000-c0f0-a570-90a8-776d-b366-4a35.ngrok-free.app/additionaldiners/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         }
       );
+      const result = await response.json();
     } catch (error) {
       console.error("Network error:", error);
     }
