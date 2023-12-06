@@ -13,7 +13,7 @@ import Colors from "../constants/colors";
 import Logo from "./Logo";
 import PrimaryDiner from "./PrimaryDiner";
 import PrimaryButton from "./ui/PrimaryButton";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "./Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
@@ -48,9 +48,7 @@ const AddDiners = () => {
         `https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
-      console.log("DATA:", data);
       isDinerInDatabase = data;
-      console.log("IS DINER:", isDinerInDatabase);
       return data;
     } catch (error) {
       console.error("User does not exist in database", error);
@@ -65,11 +63,9 @@ const AddDiners = () => {
           `https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
-        console.log("DATA:", data);
         setSuggestions(
           data.sort((a, b) => a.username.localeCompare(b.username))
         );
-        console.log("SUGGESTIONS:", suggestions);
       } catch (error) {
         throw error;
       }
@@ -137,10 +133,6 @@ const AddDiners = () => {
     setShowSuggestions(false);
   };
 
-  const addMoreDinersHandler = () => {
-    setShowAllDinersAddedModal(false);
-  };
-
   const allDinersAddedHandler = () => {
     setShowBirthdayModal(true);
     setShowAllDinersAddedModal(false);
@@ -182,34 +174,6 @@ const AddDiners = () => {
   return (
     <View style={styles.container}>
       <Logo />
-
-      {/* all diners have been added modal */}
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={allDinersAddedModal}>
-        <View style={styles.overlay}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Image
-                style={styles.dinerModalImage}
-                source={require("../images/go-dutch-split-button.png")}
-              />
-              <Text style={styles.modalText}>All diners added?</Text>
-
-              <View style={styles.buttonsContainer}>
-                <PrimaryButton onPress={allDinersAddedHandler} width={100}>
-                  Yes
-                </PrimaryButton>
-
-                <PrimaryButton onPress={addMoreDinersHandler} width={100}>
-                  No
-                </PrimaryButton>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
 
       {/* birthday modal */}
       <Modal

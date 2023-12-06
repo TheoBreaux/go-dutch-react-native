@@ -9,49 +9,22 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../../constants/colors";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 
-const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
+const FoodItemDropArea = ({ addedToDiner, updatedDiners }) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const username = useSelector((state) => state.userInfo.user.username);
-  const diners = useSelector((state) => state.diningEvent.diners);
-  const scaleValue = new Animated.Value(1.5);
-
-  
-  const startAnimation = () => {
-    Animated.sequence([
-      Animated.timing(scaleValue, {
-        toValue: 1.0,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleValue, {
-        toValue: 1.5,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setAddedToDiner(false);
-    });
-  };
-
-  useEffect(() => {
-    if (addedToDiner) {
-      startAnimation();
-    }
-  }, [addedToDiner]);
-
-  // console.log("-----FOOD-ITEM-DROP-AREA DINERS:", diners);
-  console.log("-----FOOD-ITEM-DROP-AREA:", updatedDiners);
-  console.log("-----FOOD-ITEM-DROP-AREA:", updatedDiners);
 
   const handleAssignedItemsReview = () => {
     setShowReviewModal(true);
   };
+
+  const hasDiner = updatedDiners.length > 0 && updatedDiners[0];
+
+  // console.log(hasDiner)
+  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
 
   return (
     <>
@@ -63,11 +36,11 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Review Items</Text> */}
-              {/* need to get the current dinners items array and map over it */}
-              {/* {separatedDinnerItems.map((item) => (
+      {/* need to get the current dinners items array and map over it */}
+      {/* {separatedDinnerItems.map((item) => (
                 <Text key={item.id}>{item.name}</Text>
               ))} */}
-              {/* <PrimaryButton>Close</PrimaryButton>
+      {/* <PrimaryButton>Close</PrimaryButton>
             </View>
           </View>
         </Modal>
@@ -75,29 +48,21 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
 
       <View style={styles.mainContainer}>
         <View style={styles.assignmentContainer}>
-          {addedToDiner ? (
-            <View style={{ transform: [{ scale: scaleValue }] }}>
-              <MaterialCommunityIcons
-                name="face-man-shimmer"
-                size={150}
-                color={Colors.goDutchRed}
-              />
-            </View>
-          ) : (
-            <>
-              <View style={styles.iconContainer}>
-                <MaterialCommunityIcons
-                  name="face-man-profile"
-                  size={150}
-                  color={Colors.goDutchBlue}
-                />
-              </View>
-              <Text style={styles.dinerInfo}>{username}</Text>
-              <PrimaryButton width={100} onPress={handleAssignedItemsReview}>
-                Review
-              </PrimaryButton>
-            </>
-          )}
+          <View style={styles.iconContainer} />
+          <Text style={styles.title}>What did this diner have?</Text>
+          <Text style={styles.subtitle}>
+            Drag their items to their profile pic & review!
+          </Text>
+          <Image
+            source={{ uri: updatedDiners[0].profile_pic_image_path }}
+            style={styles.profilePic}
+          />
+          <Text style={styles.dinerInfo}>
+            @{updatedDiners[0].additional_diner_username}
+          </Text>
+          <PrimaryButton width={100} onPress={handleAssignedItemsReview}>
+            Review
+          </PrimaryButton>
         </View>
       </View>
     </>
@@ -109,16 +74,40 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 20,
   },
+  profilePic: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    borderColor: Colors.goDutchRed,
+    borderWidth: 2,
+    resizeMode: "cover",
+  },
   assignmentContainer: {
     alignItems: "center",
     justifyContent: "center",
     height: 200,
+    marginTop: 80,
   },
-  iconContainer: { marginTop: 50 },
-  dinerInfo: {
-    fontFamily: "red-hat-bold",
+  iconContainer: { marginTop: 20 },
+  title: {
+    fontFamily: "red-hat-regular",
+    letterSpacing: 2,
     fontSize: 25,
     color: Colors.goDutchBlue,
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontFamily: "red-hat-bold",
+    letterSpacing: 2,
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  dinerInfo: {
+    fontFamily: "red-hat-bold",
+    letterSpacing: 2,
+    fontSize: 25,
+    color: Colors.goDutchBlue,
+    marginTop: 5,
   },
   modalContainer: {
     flex: 1,

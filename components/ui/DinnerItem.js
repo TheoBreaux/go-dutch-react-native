@@ -5,28 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { assignAndRemoveFoodItem } from "../../store/store";
 import { Easing } from "react-native-reanimated";
 
-const DinnerItem = ({ item, handleDrop, updatedDiners, setAddedToDiner }) => {
+const DinnerItem = ({ item, updatedDiners }) => {
   const [showDinnerItem, setShowDinnerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const rotation = useRef(new Animated.Value(0)).current;
 
-  const opacity = useRef(new Animated.Value(1)).current;
-
   const allReceiptItemsCopy = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
   );
 
-  const allReceiptItems = useSelector(
-    (state) => state.diningEvent.allReceiptItems
-  );
-
-  const diners = useSelector((state) => state.diningEvent.diners);
   const dinerId = updatedDiners[0].id;
   const dispatch = useDispatch();
-
-  console.log("DINERS BEFORE:", diners);
-  console.log("ALL RECEIPT ITEMS COPY BEFORE DROP:", allReceiptItemsCopy);
 
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
@@ -109,7 +99,6 @@ const DinnerItem = ({ item, handleDrop, updatedDiners, setAddedToDiner }) => {
     outputRange: ["0deg", "360deg"],
   });
 
-  console.log("DINERS AFTER:", diners);
   console.log("UPDATED DINERS IN DINNER ITEM:", updatedDiners);
   console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
 
@@ -143,7 +132,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 50,
+    height: 40,
     borderWidth: 2,
     padding: 5,
     borderRadius: 10,
