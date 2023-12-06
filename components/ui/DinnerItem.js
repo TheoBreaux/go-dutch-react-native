@@ -54,14 +54,15 @@ const DinnerItem = ({ item, handleDrop }) => {
           toValue: 0,
           duration: 500,
         }).start(() => {
-          setShowDinerItem(false);
           dispatch(assignAndRemoveFoodItem({ item, dinerId }));
+          // setShowDinerItem(false);
+          
 
           //i now need to move those removed items to the person that had thems items array
 
           // dispatch(addItemToDiner({ item, dinerId }));
           // handleDrop();
-          dispatch(updateAllReceiptItemsCopy());
+          // dispatch(updateAllReceiptItemsCopy());
         });
       } else {
         Animated.spring(pan, {

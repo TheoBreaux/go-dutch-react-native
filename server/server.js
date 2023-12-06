@@ -178,6 +178,33 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
   }
 });
 
+// CONFIRM THAT USER EXISTS IN DB SO CAN BE ADDED AS DINER
+app.get("/users/:username", async (req, res) => {
+  const { username } = req.params;
+  console.log(username);
+
+  try {
+    const userExists = await pool.query(
+      `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1)`,
+      [username]
+    );
+    console.log(userExists)
+    res.json(userExists.rows[0].exists);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
+
+
+
+
+
+
+
 // ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
 app.post("/additionaldiners", async (req, res) => {
   const { event_id, additionalDiners } = req.body;

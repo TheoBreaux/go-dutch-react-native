@@ -12,7 +12,7 @@ const configureReceiptData = (receiptAmounts) => {
 
   for (let i = 0; i < receiptAmounts.length; i++) {
     let lineItem = receiptAmounts[i].text;
-    let match = lineItem.match(/^(\d*\.?\d+)\s+([a-zA-Z\s]+)\s+(\d*\.?\d+)$/);
+    let match = lineItem.match(/^(\d+)\s*([^\d]+(?:\(\d+\))?[a-zA-Z\s-]+)\s*(\d*\.?\d+)$/);
 
     if (match) {
       let count = parseInt(match[1], 10);
@@ -41,6 +41,12 @@ const AssignItems = () => {
 
   const dispatch = useDispatch();
 
+
+
+
+  
+
+
   useEffect(() => {
     const configuredData = configureReceiptData(receiptAmounts);
     setParsedFoodItems(configuredData);
@@ -61,6 +67,13 @@ const AssignItems = () => {
   useEffect(() => {
     dispatch(setAllReceiptItems(separatedDinnerItems));
   }, [separatedDinnerItems]);
+
+
+
+
+
+
+
 
   useEffect(() => {
     // Fetch profile pictures when the component mounts
@@ -98,6 +111,7 @@ const AssignItems = () => {
     }
   }
 
+  console.log("------------------------RECEIPT VALUES:", profilePicPaths);
   console.log("------------------------PATHS:", profilePicPaths);
   console.log("------------------------UPDATED DINERS:", updatedDiners);
   console.log("------------------------DINERS:", diners);

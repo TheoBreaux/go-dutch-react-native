@@ -56,23 +56,23 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
 
   return (
     <>
-      {setShowReviewModal && (
+      {/* {setShowReviewModal && (
         <Modal
           visible={showReviewModal}
           animationType="slide"
           transparent={true}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Review Items</Text>
+              <Text style={styles.modalTitle}>Review Items</Text> */}
               {/* need to get the current dinners items array and map over it */}
               {/* {separatedDinnerItems.map((item) => (
                 <Text key={item.id}>{item.name}</Text>
               ))} */}
-              <PrimaryButton>Close</PrimaryButton>
+              {/* <PrimaryButton>Close</PrimaryButton>
             </View>
           </View>
         </Modal>
-      )}
+      )} */}
 
       <View style={styles.mainContainer}>
         <View style={styles.assignmentContainer}>

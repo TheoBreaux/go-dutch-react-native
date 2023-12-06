@@ -41,6 +41,23 @@ const AddDiners = () => {
     dispatch(setEventIdForPrimary(eventId));
   }, [eventId]);
 
+  const checkIfDinerExistsInDatabase = async (username) => {
+    let isDinerInDatabase;
+    try {
+      const response = await fetch(
+        `https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/users/${username}`
+      );
+      const data = await response.json();
+      console.log("DATA:", data);
+      isDinerInDatabase = data;
+      console.log("IS DINER:", isDinerInDatabase);
+      return data;
+    } catch (error) {
+      console.error("User does not exist in database", error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     const autoCompleteDiner = async () => {
       try {
@@ -60,7 +77,7 @@ const AddDiners = () => {
     autoCompleteDiner();
   }, [inputValue]);
 
-  const addDinerClickHandler = () => {
+  const addDinerClickHandler = async () => {
     //disable add diner button if no value is entered
     if (inputValue === "") {
       return;
@@ -70,17 +87,21 @@ const AddDiners = () => {
       diners.some((obj) => Object.values(obj).includes(inputValue)) ||
       inputValue === goDutchUsername;
 
-    //If diner is already added, show alert and on't allow
-    if (isValuePresent) {
+    // Check if diner is in the database
+    const isDinerInDatabase = await checkIfDinerExistsInDatabase(inputValue);
+
+    //If diner is already added, show alert and don't allow
+    if (isValuePresent || !isDinerInDatabase) {
       Alert.alert(
         "🤦🏾‍♂️Not Allowed! ", // Alert title
-        "This diner is already included in the split!", // Alert message
+        "This diner is already included in the split or the username does not exist!", // Alert message
         [
           {
             text: "OK", // Button text
             onPress: () => {
               setInputValue("");
               setShowDiners(true);
+              setShowSuggestions(false);
             },
           },
         ]
@@ -156,6 +177,7 @@ const AddDiners = () => {
   };
 
   console.log("DINERS", diners);
+  // console.log(showSuggestions)
 
   return (
     <View style={styles.container}>
