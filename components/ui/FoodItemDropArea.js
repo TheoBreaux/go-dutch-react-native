@@ -20,31 +20,30 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
   const scaleValue = new Animated.Value(1.5);
 
   
+  const startAnimation = () => {
+    Animated.sequence([
+      Animated.timing(scaleValue, {
+        toValue: 1.0,
+        duration: 500,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleValue, {
+        toValue: 1.5,
+        duration: 500,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setAddedToDiner(false);
+    });
+  };
 
-  // const startAnimation = () => {
-  //   Animated.sequence([
-  //     Animated.timing(scaleValue, {
-  //       toValue: 1.0,
-  //       duration: 500,
-  //       easing: Easing.ease,
-  //       useNativeDriver: true,
-  //     }),
-  //     Animated.timing(scaleValue, {
-  //       toValue: 1.5,
-  //       duration: 500,
-  //       easing: Easing.ease,
-  //       useNativeDriver: true,
-  //     }),
-  //   ]).start(() => {
-  //     setAddedToDiner(false);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (addedToDiner) {
-  //     startAnimation();
-  //   }
-  // }, [addedToDiner]);
+  useEffect(() => {
+    if (addedToDiner) {
+      startAnimation();
+    }
+  }, [addedToDiner]);
 
   // console.log("-----FOOD-ITEM-DROP-AREA DINERS:", diners);
   console.log("-----FOOD-ITEM-DROP-AREA:", updatedDiners);

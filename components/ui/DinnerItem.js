@@ -3,10 +3,14 @@ import Colors from "../../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { assignAndRemoveFoodItem } from "../../store/store";
+import { Easing } from "react-native-reanimated";
 
-const DinnerItem = ({ item, handleDrop, updatedDiners }) => {
+const DinnerItem = ({ item, handleDrop, updatedDiners, setAddedToDiner }) => {
   const [showDinnerItem, setShowDinnerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
+  const scaleValue = useRef(new Animated.Value(1)).current;
+  const rotation = useRef(new Animated.Value(0)).current;
+
   const opacity = useRef(new Animated.Value(1)).current;
 
   const allReceiptItemsCopy = useSelector(
@@ -50,19 +54,36 @@ const DinnerItem = ({ item, handleDrop, updatedDiners }) => {
     ),
     onPanResponderRelease: (e, gesture) => {
       if (isDropArea(gesture)) {
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 500,
-        }).start(() => {
+        Animated.sequence([
+          // 360-degree spin animation
+          Animated.timing(rotation, {
+            toValue: 2, // Number of spins
+            duration: 400, // Duration for one spin
+            easing: Easing.linear,
+            useNativeDriver: false,
+          }),
+          // Shrink the item
+          Animated.timing(scaleValue, {
+            toValue: 0.7,
+            duration: 200,
+            useNativeDriver: false,
+          }),
+          // Then run parallel animations for translation and further scaling
+          Animated.parallel([
+            Animated.timing(pan.x, {
+              toValue: 500,
+              duration: 300,
+              useNativeDriver: false,
+            }),
+            Animated.timing(scaleValue, {
+              toValue: 0,
+              duration: 300,
+              useNativeDriver: false,
+            }),
+          ]),
+        ]).start(() => {
           dispatch(assignAndRemoveFoodItem({ item, dinerId }));
           setShowDinnerItem(false);
-          
-
-          //i now need to move those removed items to the person that had thems items array
-
-          // dispatch(addItemToDiner({ item, dinerId }));
-          // handleDrop();
-          // dispatch(updateAllReceiptItemsCopy());
         });
       } else {
         Animated.spring(pan, {
@@ -83,6 +104,11 @@ const DinnerItem = ({ item, handleDrop, updatedDiners }) => {
     transform: pan.getTranslateTransform(),
   };
 
+  const interpolatedRotation = rotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
   console.log("DINERS AFTER:", diners);
   console.log("UPDATED DINERS IN DINNER ITEM:", updatedDiners);
   console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
@@ -95,7 +121,12 @@ const DinnerItem = ({ item, handleDrop, updatedDiners }) => {
             panStyle,
             styles.itemContainer,
             {
-              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+              transform: [
+                { translateX: pan.x },
+                { translateY: pan.y },
+                { scale: scaleValue },
+                { rotate: interpolatedRotation },
+              ],
             },
           ]}
           {...panResponder.panHandlers}>

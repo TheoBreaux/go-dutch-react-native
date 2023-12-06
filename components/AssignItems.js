@@ -143,6 +143,7 @@ const AssignItems = () => {
                 <DinnerItem
                   item={item}
                   updatedDiners={updatedDiners}
+                  setAddedToDiner={setAddedToDiner}
                   // handleDrop={handleDrop}
                 />
               </View>
