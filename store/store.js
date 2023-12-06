@@ -62,6 +62,12 @@ const diningEventSlice = createSlice({
       state.allReceiptItems = action.payload;
       state.allReceiptItemsCopy = action.payload;
     },
+    setDiners: (state, action) => {
+      state.diners = action.payload;
+    },
+    updateAllReceiptItemsCopy: (state, action) => {
+      state.allReceiptItemsCopy = action.payload;
+    },
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 
@@ -72,7 +78,6 @@ const diningEventSlice = createSlice({
       const index = state.allReceiptItems.findIndex((foodItem) => {
         return foodItem.id === item.id;
       });
-
       const diner = state.diners.find((diner) => diner.id === dinerId);
 
       // when found, remove it by filtering from the copy of the original all items array
@@ -119,6 +124,7 @@ export const {
   setEventIdForPrimary,
   setReceiptValues,
   setAllReceiptItems,
+  setDiners,
   assignAndRemoveFoodItem,
   addDiner,
   removeDiner,

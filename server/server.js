@@ -257,37 +257,23 @@ app.get("/additionaldiners/:eventId", async (req, res) => {
   }
 });
 
-// SEND TAX ON RECEIPT TO DATABASE(dining_events)
-// app.post("/diningevents", async (req, res) => {
-//   const { tax, event_id } = req.body;
-//   console.log(tax);
-//   console.log(event_id);
+// GETS ALL PROFILE PIC PATHS FOR EVENT
+app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
+  const { eventId } = req.params;
 
-//   try {
-//     const addTax = await pool.query(
-//       `UPDATE dining_events
-//       SET tax = $1
-//       WHERE event_id = $2`,
-//       [tax, event_id]
-//     );
-//     res.json({
-//       success: true,
-//       message: "Tax information updated successfully",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: "Internal server error" });
-//   }
-// });
+  try {
+    const profilePicPaths = await pool.query(
+      `SELECT additional_diners.event_id, username, profile_pic_image_path
+      FROM users 
+      JOIN additional_diners on users.username = additional_diners.additional_diner_username
+      WHERE additional_diners.event_id = $1`,
+      [eventId]
+    );
 
-// app.get("/users", (req, res) => {
-//   pool.query("SELECT * FROM users", (err, result) => {
-//     if (err) {
-//       console.error("Database error:", err);
-//       res.status(500).send("Database error");
-//     } else {
-//       res.setHeader("Content-Type", "application/json");
-//       res.send(JSON.stringify(result.rows, null, 2));
-//     }
-//   });
-// });
+    console.log(profilePicPaths);
+    res.json(profilePicPaths.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});

@@ -31,10 +31,13 @@ const configureReceiptData = (receiptAmounts) => {
 const AssignItems = () => {
   const [addedToDiner, setAddedToDiner] = useState(false);
   const [parsedFoodItems, setParsedFoodItems] = useState([]);
+  const [profilePicPaths, setProfilePicPaths] = useState([]);
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
+  const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const receiptAmounts = receiptValues.amounts;
+  const diners = useSelector((state) => state.diningEvent.diners);
 
   const dispatch = useDispatch();
 
@@ -59,9 +62,45 @@ const AssignItems = () => {
     dispatch(setAllReceiptItems(separatedDinnerItems));
   }, [separatedDinnerItems]);
 
+  useEffect(() => {
+    // Fetch profile pictures when the component mounts
+    const fetchProfilePicPaths = async () => {
+      try {
+        const response = await fetch(
+          `https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+        );
+        const data = await response.json();
+        setProfilePicPaths(data);
+      } catch (error) {
+        console.error("Error fetching profile pictures:", error);
+      }
+    };
+    fetchProfilePicPaths();
+  }, [eventId]);
+
   const handleDrop = () => {
     setAddedToDiner(true);
   };
+
+  const updatedDiners = [];
+
+  for (let i = 0; i < profilePicPaths.length; i++) {
+    const diner = profilePicPaths[i];
+    const additional = diners[i];
+
+    if (diner.profile_pic_image_path) {
+      updatedDiners.push({
+        ...additional,
+        profile_pic_image_path: diner.profile_pic_image_path,
+      });
+    } else {
+      updatedDiners.push(diner);
+    }
+  }
+
+  console.log("------------------------PATHS:", profilePicPaths);
+  console.log("------------------------UPDATED DINERS:", updatedDiners);
+  console.log("------------------------DINERS:", diners);
 
   return (
     <>
@@ -71,6 +110,7 @@ const AssignItems = () => {
         <FoodItemDropArea
           addedToDiner={addedToDiner}
           setAddedToDiner={setAddedToDiner}
+          updatedDiners={updatedDiners}
         />
         <View style={styles.spacer} />
         <View style={styles.foodItemsListContainer}>

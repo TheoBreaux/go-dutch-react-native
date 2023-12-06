@@ -20,7 +20,7 @@ import { useEffect } from "react";
 
 const UserHomePage = () => {
   const defaultProfilePicPath =
-    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/803bfd44-71d7-4440-8af0-e1a516ae71e4.jpeg";
+    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/83381774-a8b5-47e5-8b55-21836fd4e707.jpeg";
 
   //check to see if users current profile pic path is the default pic
   const usingDefaultProfilePhoto =

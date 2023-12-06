@@ -58,9 +58,10 @@ const DinnerItem = ({ item, handleDrop }) => {
           dispatch(assignAndRemoveFoodItem({ item, dinerId }));
 
           //i now need to move those removed items to the person that had thems items array
-          
+
           // dispatch(addItemToDiner({ item, dinerId }));
           // handleDrop();
+          dispatch(updateAllReceiptItemsCopy());
         });
       } else {
         Animated.spring(pan, {
@@ -82,7 +83,6 @@ const DinnerItem = ({ item, handleDrop }) => {
   };
 
   console.log("DINERS AFTER:", diners);
-  console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
   console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
 
   return (

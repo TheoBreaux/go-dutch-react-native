@@ -13,11 +13,13 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 
-const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
+const FoodItemDropArea = ({ addedToDiner, setAddedToDiner, updatedDiners }) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const username = useSelector((state) => state.userInfo.user.username);
   const diners = useSelector((state) => state.diningEvent.diners);
   const scaleValue = new Animated.Value(1.5);
+
+  
 
   // const startAnimation = () => {
   //   Animated.sequence([
@@ -44,7 +46,9 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
   //   }
   // }, [addedToDiner]);
 
-  console.log("DINERS:", diners);
+  // console.log("-----FOOD-ITEM-DROP-AREA DINERS:", diners);
+  console.log("-----FOOD-ITEM-DROP-AREA:", updatedDiners);
+  console.log("-----FOOD-ITEM-DROP-AREA:", updatedDiners);
 
   const handleAssignedItemsReview = () => {
     setShowReviewModal(true);
@@ -64,7 +68,7 @@ const FoodItemDropArea = ({ addedToDiner, setAddedToDiner }) => {
               {/* {separatedDinnerItems.map((item) => (
                 <Text key={item.id}>{item.name}</Text>
               ))} */}
-              <Button title="Close" onPress={closeModal} />
+              <PrimaryButton>Close</PrimaryButton>
             </View>
           </View>
         </Modal>
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
 
   modalContent: {
     backgroundColor: "white",
-    padding: 20,
+    padding: 50,
     borderRadius: 10,
     elevation: 5,
   },
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     marginBottom: 10,
+    textAlign: "center",
   },
 });
 
