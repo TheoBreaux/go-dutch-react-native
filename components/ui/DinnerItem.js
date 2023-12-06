@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { assignAndRemoveFoodItem } from "../../store/store";
 
-const DinnerItem = ({ item, handleDrop }) => {
-  const [showDinnerItem, setShowDinerItem] = useState(true);
+const DinnerItem = ({ item, handleDrop, updatedDiners }) => {
+  const [showDinnerItem, setShowDinnerItem] = useState(true);
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
@@ -18,7 +18,7 @@ const DinnerItem = ({ item, handleDrop }) => {
   );
 
   const diners = useSelector((state) => state.diningEvent.diners);
-  const dinerId = diners[0].id;
+  const dinerId = updatedDiners[0].id;
   const dispatch = useDispatch();
 
   console.log("DINERS BEFORE:", diners);
@@ -55,7 +55,7 @@ const DinnerItem = ({ item, handleDrop }) => {
           duration: 500,
         }).start(() => {
           dispatch(assignAndRemoveFoodItem({ item, dinerId }));
-          // setShowDinerItem(false);
+          setShowDinnerItem(false);
           
 
           //i now need to move those removed items to the person that had thems items array
@@ -84,6 +84,7 @@ const DinnerItem = ({ item, handleDrop }) => {
   };
 
   console.log("DINERS AFTER:", diners);
+  console.log("UPDATED DINERS IN DINNER ITEM:", updatedDiners);
   console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
 
   return (

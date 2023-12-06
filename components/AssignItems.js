@@ -3,16 +3,17 @@ import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
 import { useDispatch, useSelector } from "react-redux";
 import FoodItemDropArea from "../components/ui/FoodItemDropArea";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { setAllReceiptItems } from "../store/store";
-
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
   const configuredData = [];
 
   for (let i = 0; i < receiptAmounts.length; i++) {
     let lineItem = receiptAmounts[i].text;
-    let match = lineItem.match(/^(\d+)\s*([^\d]+(?:\(\d+\))?[a-zA-Z\s-]+)\s*(\d*\.?\d+)$/);
+    let match = lineItem.match(
+      /^(\d+)\s*([^\d]+(?:\(\d+\))?[a-zA-Z\s-]+)\s*(\d*\.?\d+)$/
+    );
 
     if (match) {
       let count = parseInt(match[1], 10);
@@ -30,7 +31,8 @@ const configureReceiptData = (receiptAmounts) => {
 
 const AssignItems = () => {
   const [addedToDiner, setAddedToDiner] = useState(false);
-  const [parsedFoodItems, setParsedFoodItems] = useState([]);
+  // const [parsedFoodItems, setParsedFoodItems] = useState([]);
+  const separatedDinnerItemsRef = useRef([]);
   const [profilePicPaths, setProfilePicPaths] = useState([]);
 
   //grab values from redux store for use here, useSelector
@@ -41,39 +43,45 @@ const AssignItems = () => {
 
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   const configuredData = configureReceiptData(receiptAmounts);
+  //   setParsedFoodItems(configuredData);
+  // }, [receiptAmounts]);
 
+  // //initialize array for seperate quantities of more than 1 into individual dinner items
+  // const separatedDinnerItems = [];
 
+  // parsedFoodItems.forEach((item) => {
+  //   for (let i = 0; i < item.count; i++) {
+  //     separatedDinnerItems.push({
+  //       ...item,
+  //       id: (Date.now() + Math.random() + item.name).toString(),
+  //     });
+  //   }
+  // });
 
-  
-
+  // useEffect(() => {
+  //   dispatch(setAllReceiptItems(separatedDinnerItems));
+  // }, [separatedDinnerItems]);
 
   useEffect(() => {
     const configuredData = configureReceiptData(receiptAmounts);
-    setParsedFoodItems(configuredData);
+    // setParsedFoodItems(configuredData);
+
+    // Initialize array for separate quantities of more than 1 into individual dinner items
+    const items = [];
+    configuredData.forEach((item) => {
+      for (let i = 0; i < item.count; i++) {
+        items.push({
+          ...item,
+          id: (Date.now() + Math.random() + item.name).toString(),
+        });
+      }
+    });
+
+    separatedDinnerItemsRef.current = items;
+    dispatch(setAllReceiptItems(items));
   }, [receiptAmounts]);
-
-  //initialize array for seperate quantities of more than 1 into individual dinner items
-  const separatedDinnerItems = [];
-
-  parsedFoodItems.forEach((item) => {
-    for (let i = 0; i < item.count; i++) {
-      separatedDinnerItems.push({
-        ...item,
-        id: (Date.now() + Math.random() + item.name).toString(),
-      });
-    }
-  });
-
-  useEffect(() => {
-    dispatch(setAllReceiptItems(separatedDinnerItems));
-  }, [separatedDinnerItems]);
-
-
-
-
-
-
-
 
   useEffect(() => {
     // Fetch profile pictures when the component mounts
@@ -115,6 +123,7 @@ const AssignItems = () => {
   console.log("------------------------PATHS:", profilePicPaths);
   console.log("------------------------UPDATED DINERS:", updatedDiners);
   console.log("------------------------DINERS:", diners);
+  console.log("------------------------UPDATED DINERS:", updatedDiners);
 
   return (
     <>
@@ -128,11 +137,12 @@ const AssignItems = () => {
         />
         <View style={styles.spacer} />
         <View style={styles.foodItemsListContainer}>
-          {separatedDinnerItems.map((item) => {
+          {separatedDinnerItemsRef.current.map((item) => {
             return (
               <View key={item.id}>
                 <DinnerItem
                   item={item}
+                  updatedDiners={updatedDiners}
                   // handleDrop={handleDrop}
                 />
               </View>
