@@ -5,6 +5,8 @@ import { setAllReceiptItems, setDiners } from "../store/store";
 import Logo from "./Logo";
 import DinnerItem from "./ui/DinnerItem";
 import Colors from "../constants/colors";
+import PrimaryButton from "./ui/PrimaryButton";
+import ConfirmableDinnerItem from "./ui/ConfirmableDinnerItem";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -99,19 +101,18 @@ const ConfirmReceiptItems = () => {
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.title}>
-        Are all of the items on your receipt represented below?
-      </Text>
+
+      <View style={styles.confirmContainer}>
+        <Text style={styles.title}>All items listed below?</Text>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton width={100}>No</PrimaryButton>
+          <PrimaryButton width={100}>Yes</PrimaryButton>
+        </View>
+      </View>
+
       <ScrollView style={styles.foodItemsListContainer}>
         {separatedDinnerItemsRef.current.map((item) => {
-          return (
-            <View key={item.id} style={styles.dinnerItemContainer}>
-              <View style={styles.button}>
-                <Button title="X" color={Colors.goDutchRed} />
-              </View>
-              <DinnerItem item={item} updatedDiners={updatedDiners} />
-            </View>
-          );
+          return <ConfirmableDinnerItem key={item.id} item={item} />;
         })}
       </ScrollView>
     </View>
@@ -124,23 +125,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "stretch",
   },
+  confirmContainer: {
+    backgroundColor: "white",
+    // padding: 20,
+    marginHorizontal: 15,
+    borderRadius: 10,
+    height: 150,
+    elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
     textAlign: "center",
     fontFamily: "red-hat-regular",
     fontSize: 25,
   },
+  buttonContainer: {
+    flexDirection: "row",
+  },
   foodItemsListContainer: {
     padding: 10,
     marginBottom: 5,
-  },
-  dinnerItemContainer: {
-    flexDirection: "row",
-    marginBottom: 5,
-    alignItems: "center",
-  },
-  button: {
-    // backgroundColor: Colors.goDutchRed,
-    width: 30,
   },
 });
 
