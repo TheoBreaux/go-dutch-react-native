@@ -21,30 +21,38 @@ const FoodItemDropArea = ({ addedToDiner, updatedDiners }) => {
     setShowReviewModal(true);
   };
 
+  const dinersupdated = useSelector((state) => state.diningEvent.diners);
+
   const hasDiner = updatedDiners.length > 0 && updatedDiners[0];
 
   // console.log(hasDiner)
   console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
+  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
+  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
+  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
+  console.log("DINERS UPDATED:", dinersupdated);
 
   return (
     <>
-      {/* {setShowReviewModal && (
+      {setShowReviewModal && (
         <Modal
           visible={showReviewModal}
           animationType="slide"
           transparent={true}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Review Items</Text> */}
-      {/* need to get the current dinners items array and map over it */}
-      {/* {separatedDinnerItems.map((item) => (
+              <Text style={styles.modalTitle}>Review Items</Text>
+              {/* need to get the current dinners items array and map over it */}
+              {/* {updatedDiners[0].items.map((item) => (
                 <Text key={item.id}>{item.name}</Text>
               ))} */}
-      {/* <PrimaryButton>Close</PrimaryButton>
+              <PrimaryButton onPress={() => setShowReviewModal(false)}>
+                Close
+              </PrimaryButton>
             </View>
           </View>
         </Modal>
-      )} */}
+      )}
 
       <View style={styles.mainContainer}>
         <View style={styles.assignmentContainer}>

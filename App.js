@@ -23,6 +23,7 @@ import DiningEventDetails from "./components/DiningEventDetails";
 import FeaturedRestaurants from "./components/FeaturedRestaurants";
 import ReceiptCapture from "./components/ReceiptCapture";
 import ConfirmTotals from "./components/ConfirmTotals";
+import ConfirmReceiptItems from "./components/ConfirmReceiptItems";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -116,6 +117,10 @@ const App = () => {
           <Stack.Screen name="PaymentSources" component={PaymentSources} />
           <Stack.Screen name="AddDiners" component={AddDiners} />
           <Stack.Screen name="AssignItems" component={AssignItems} />
+          <Stack.Screen
+            name="ConfirmReceiptItems"
+            component={ConfirmReceiptItems}
+          />
           <Stack.Screen name="History" component={DiningEventHistory} />
           <Stack.Screen
             name="DiningEventDetails"

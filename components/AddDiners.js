@@ -146,7 +146,7 @@ const AddDiners = () => {
     setShowSelectBirthday(false);
     setShowBirthdayModal(false);
     //navigate to draggable screen
-    navigation.navigate("AssignItems");
+    navigation.navigate("ConfirmReceiptItems");
     // create data object to send to db
     const data = {
       event_id: eventId,
