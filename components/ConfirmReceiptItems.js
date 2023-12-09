@@ -8,13 +8,13 @@ import {
   TextInput,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllReceiptItems } from "../store/store";
+import { setAllReceiptItems, setDiners } from "../store/store";
 import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
 import ConfirmableDinnerItem from "./ui/ConfirmableDinnerItem";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import Colors from "../constants/colors";
+import { nanoid } from "@reduxjs/toolkit";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -65,7 +65,7 @@ const ConfirmReceiptItems = () => {
       for (let i = 0; i < item.count; i++) {
         items.push({
           ...item,
-          id: (Date.now() + Math.random() + item.name).toString(),
+          id: nanoid(8),
         });
       }
     });
@@ -96,11 +96,15 @@ const ConfirmReceiptItems = () => {
   }));
 
   const addNewItem = () => {
+    if (newItemName === "" || newItemPrice === "") {
+      return setShowAddItemsModal(false);
+    }
+
     const newItem = {
       count: 1,
       name: newItemName,
       price: parseFloat(newItemPrice),
-      id: (Date.now() + Math.random() + newItemName).toString(),
+      id: nanoid(8),
     };
 
     // Add the new item to the existing array
@@ -120,9 +124,6 @@ const ConfirmReceiptItems = () => {
     );
     setSeparatedDinnerItems(updatedItems);
   };
-
-  console.log(updatedDiners);
-  console.log("CURRENT:", separatedDinnerItems);
 
   return (
     <View style={styles.container}>

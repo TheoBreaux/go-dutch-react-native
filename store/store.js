@@ -79,9 +79,6 @@ const diningEventSlice = createSlice({
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 
-      console.log("ITEM IN STORE:", item);
-      console.log("DINER ID IN STORE:", dinerId);
-
       // find the index of the item that has been dragged and dropped
       const index = state.allReceiptItems.findIndex((foodItem) => {
         return foodItem.id === item.id;

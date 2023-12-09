@@ -3,8 +3,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../../constants/colors";
 import { useState } from "react";
 
-const ProfileImageMedallion = ({ profileImagePath, picPath, iconSize }) => {
-
+const ProfileImageMedallion = ({
+  profileImagePath,
+  iconSize,
+  width,
+  height,
+  borderRadius,
+}) => {
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
@@ -13,19 +18,19 @@ const ProfileImageMedallion = ({ profileImagePath, picPath, iconSize }) => {
 
   return (
     <View>
-      {imageError ? (
-        <MaterialCommunityIcons
-          name="face-man-profile"
-          size={iconSize || 40}
-          color={Colors.goDutchBlue}
-        />
-      ) : (
-        <Image
-          source={{ uri: profileImagePath || picPath }}
-          style={styles.profilePic}
-          onError={handleImageError}
-        />
-      )}
+      <Image
+        source={{ uri: profileImagePath }}
+        style={[
+          styles.profilePic,
+          {
+            width: width || 40,
+            height: height || 40,
+            borderRadius: borderRadius || 20,
+          },
+        ]}
+
+        // onError={handleImageError}
+      />
     </View>
   );
 };
@@ -35,6 +40,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "black",
     resizeMode: "cover",
   },
 });

@@ -72,8 +72,8 @@ const DinnerItem = ({ item, updatedDiners }) => {
             }),
           ]),
         ]).start(() => {
-          dispatch(assignAndRemoveFoodItem({ item, dinerId }));
           setShowDinnerItem(false);
+          dispatch(assignAndRemoveFoodItem({ item, dinerId }));
         });
       } else {
         Animated.spring(pan, {
@@ -84,11 +84,11 @@ const DinnerItem = ({ item, updatedDiners }) => {
       }
     },
     isDropArea(gesture) {
-      return gesture.moveY < 300;
+      return gesture.moveY < 400;
     },
   });
 
-  const isDropArea = (gesture) => gesture.moveY < 300;
+  const isDropArea = (gesture) => gesture.moveY < 400;
 
   const panStyle = {
     transform: pan.getTranslateTransform(),
@@ -99,8 +99,7 @@ const DinnerItem = ({ item, updatedDiners }) => {
     outputRange: ["0deg", "360deg"],
   });
 
-  console.log("UPDATED DINERS IN DINNER ITEM:", updatedDiners);
-  console.log("ALL RECEIPT ITEMS COPY AFTER DROP:", allReceiptItemsCopy);
+
 
   return (
     <>

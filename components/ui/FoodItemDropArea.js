@@ -1,36 +1,21 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Animated,
-  Modal,
-  Image,
-  Easing,
-} from "react-native";
+import { StyleSheet, Text, View, Modal, Image, Easing } from "react-native";
 import Colors from "../../constants/colors";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const FoodItemDropArea = ({ updatedDiners }) => {
+const FoodItemDropArea = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [profilePicError, setProfilePicError] = useState(false);
+
+  const dinersUpdated = useSelector((state) => state.diningEvent.diners);
 
   const handleAssignedItemsReview = () => {
     setShowReviewModal(true);
   };
 
-  const dinersupdated = useSelector((state) => state.diningEvent.diners);
-
-  const hasDiner = updatedDiners.length > 0 && updatedDiners[0];
-
-  // console.log(hasDiner)
-  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
-  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
-  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
-  console.log("UPDATED DINERS IN FOOD ITEM DROP:", updatedDiners);
-  console.log("DINERS UPDATED:", dinersupdated);
+  console.log("FOOD ITEM DROP AREA:", dinersUpdated);
 
   return (
     <>
@@ -59,20 +44,18 @@ const FoodItemDropArea = ({ updatedDiners }) => {
           <View style={styles.iconContainer} />
           <Text style={styles.title}>What did this diner have?</Text>
           <Text style={styles.subtitle}>
-            Drag user items to their profile pic & review!
+            Drag user items to profile pic & review!
           </Text>
 
           <ProfileImageMedallion
-            profileImagePath={
-              profilePicError ? null : updatedDiners[0].profile_pic_image_path
-            }
-            picPath={null}
-            iconSize={200}
-            style={styles.profilePic}
+            profileImagePath={dinersUpdated[0].profile_pic_image_path}
+            width={200}
+            height={200}
+            borderRadius={100}
           />
 
           <Text style={styles.dinerInfo}>
-            @{updatedDiners[0].additional_diner_username}
+            @{dinersUpdated[0].additional_diner_username}
           </Text>
           <PrimaryButton width={100} onPress={handleAssignedItemsReview}>
             Review

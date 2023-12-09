@@ -168,9 +168,6 @@ const AddDiners = () => {
     }
   };
 
-  console.log("DINERS", diners);
-  // console.log(showSuggestions)
-
   return (
     <View style={styles.container}>
       <Logo />
