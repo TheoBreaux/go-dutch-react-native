@@ -1,13 +1,31 @@
 import { StyleSheet, View, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Colors from "../../constants/colors";
+import { useState } from "react";
 
-const ProfileImageMedallion = ({ profileImagePath, picPath }) => {
+const ProfileImageMedallion = ({ profileImagePath, picPath, iconSize }) => {
+
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <View>
-      <Image
-        source={{ uri: profileImagePath || picPath }}
-        style={styles.profilePic}
-        onError={(error) => console.error("Image load error:", error)}
-      />
+      {imageError ? (
+        <MaterialCommunityIcons
+          name="face-man-profile"
+          size={iconSize || 40}
+          color={Colors.goDutchBlue}
+        />
+      ) : (
+        <Image
+          source={{ uri: profileImagePath || picPath }}
+          style={styles.profilePic}
+          onError={handleImageError}
+        />
+      )}
     </View>
   );
 };

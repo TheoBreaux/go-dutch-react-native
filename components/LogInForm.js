@@ -13,11 +13,7 @@ import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCurrentCity,
-  setInitialPrimaryDiner,
-  setUser,
-} from "../store/store";
+import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "./LocateRestaurants";
@@ -73,7 +69,7 @@ const LogInForm = () => {
     };
     try {
       const response = await fetch(
-        "https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/login",
+        "https://7801-2603-8000-c0f0-a570-a5c3-cab-6f7c-add2.ngrok-free.app/login",
         {
           method: "POST",
           headers: {
@@ -97,21 +93,6 @@ const LogInForm = () => {
     }
     Keyboard.dismiss();
   };
-
-  // dispatch(
-  //   setInitialPrimaryDiner(
-  //     setInitialPrimaryDiner({
-  //       event_id: null,
-  //       id: Date.now(),
-  //       additional_diner_username: goDutchUsername,
-  //       primary_diner: true,
-  //       diner_meal_cost: null,
-  //       assignedItemsComplete: false,
-  //       items: [],
-  //       birthday: false,
-  //     })
-  //   )
-  // );
 
   return (
     <>

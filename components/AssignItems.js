@@ -1,20 +1,20 @@
 import { StyleSheet, View } from "react-native";
 import Logo from "./Logo";
-import DinnerItem from "./ui/DinnerItem";
-import { useDispatch, useSelector } from "react-redux";
 import FoodItemDropArea from "../components/ui/FoodItemDropArea";
-import { useState, useEffect, useRef } from "react";
-import { setAllReceiptItems } from "../store/store";
+import { useRoute } from "@react-navigation/native";
 
 const AssignItems = () => {
+  const route = useRoute();
+  const { updatedDiners, separatedDinnerItems } = route.params;
+
+  console.log("IN ASSIGN ITEMS - updatedDiners", updatedDiners);
+  console.log("IN ASSIGN ITEMS - separatedDinnerItems", separatedDinnerItems);
+
   return (
     <>
       <View style={styles.container}>
         <Logo />
-        <FoodItemDropArea
-          addedToDiner={addedToDiner}
-          updatedDiners={updatedDiners}
-        />
+        <FoodItemDropArea updatedDiners={updatedDiners} />
         <View style={styles.spacer} />
       </View>
     </>

@@ -7,15 +7,15 @@ import {
   Image,
   Easing,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../../constants/colors";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
+import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const FoodItemDropArea = ({ addedToDiner, updatedDiners }) => {
+const FoodItemDropArea = ({ updatedDiners }) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
-  const username = useSelector((state) => state.userInfo.user.username);
+  const [profilePicError, setProfilePicError] = useState(false);
 
   const handleAssignedItemsReview = () => {
     setShowReviewModal(true);
@@ -59,12 +59,18 @@ const FoodItemDropArea = ({ addedToDiner, updatedDiners }) => {
           <View style={styles.iconContainer} />
           <Text style={styles.title}>What did this diner have?</Text>
           <Text style={styles.subtitle}>
-            Drag their items to their profile pic & review!
+            Drag user items to their profile pic & review!
           </Text>
-          <Image
-            source={{ uri: updatedDiners[0].profile_pic_image_path }}
+
+          <ProfileImageMedallion
+            profileImagePath={
+              profilePicError ? null : updatedDiners[0].profile_pic_image_path
+            }
+            picPath={null}
+            iconSize={200}
             style={styles.profilePic}
           />
+
           <Text style={styles.dinerInfo}>
             @{updatedDiners[0].additional_diner_username}
           </Text>
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: "red-hat-bold",
     letterSpacing: 2,
-    fontSize: 15,
+    fontSize: 16,
     marginBottom: 5,
   },
   dinerInfo: {

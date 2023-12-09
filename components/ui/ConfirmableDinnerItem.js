@@ -1,13 +1,12 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
 
-const ConfirmableDinnerItem = ({ item }) => {
+const ConfirmableDinnerItem = ({ item, onDelete }) => {
   return (
     <View style={styles.itemContainer}>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>X</Text>
+      <TouchableOpacity onPress={onDelete}>
+        <Text style={styles.delete}>DELETE</Text>
       </TouchableOpacity>
-
       <Text style={styles.foodInfo}>{item.name}</Text>
       <Text style={styles.foodInfo}>${item.price.toFixed(2)}</Text>
     </View>
@@ -25,24 +24,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.goDutchRed,
     marginBottom: 5,
     width: "100%",
+    height: 60,
+    elevation: 5,
+  },
+  delete: {
+    fontFamily: "red-hat-bold",
+    color: "white",
   },
   foodInfo: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
     color: "white",
-  },
-  button: {
-    width: 30,
-    height: 50,
-    borderWidth: 2,
-    backgroundColor: Colors.goDutchRed,
-    justifyContent: "center", // Center the text vertically
-    alignItems: "center", // Center the text horizontally
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 25,
-    fontFamily: "red-hat-bold",
   },
 });
 

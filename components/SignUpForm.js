@@ -116,7 +116,7 @@ const SignUpForm = () => {
 
     try {
       const response = await fetch(
-        "https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/signup",
+        "https://7801-2603-8000-c0f0-a570-a5c3-cab-6f7c-add2.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

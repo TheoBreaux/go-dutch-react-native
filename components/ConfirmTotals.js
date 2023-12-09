@@ -33,32 +33,28 @@ const ConfirmTotals = () => {
   return (
     <>
       <Logo />
+
       <View style={styles.cardContainer}>
-        <View style={{flexDirection: "row",alignItems: "center"}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text>Restaurant name: </Text>
           <View style={styles.button}>
-          <Button
-            color={Colors.goDutchRed}
-            title="X"
-            onPress={() => changeRestaurantHandler(handleChange)}
-          />
+            <Button
+              color={Colors.goDutchRed}
+              title="X"
+              onPress={() => changeRestaurantHandler(handleChange)}
+            />
+          </View>
         </View>
-        </View>
-        <View style={{flexDirection: "row",alignItems: "center"}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text>Tax: </Text>
           <View style={styles.button}>
-          <Button
-            color={Colors.goDutchRed}
-            title="X"
-            onPress={() => changeRestaurantHandler(handleChange)}
-          />
+            <Button
+              color={Colors.goDutchRed}
+              title="X"
+              onPress={() => changeRestaurantHandler(handleChange)}
+            />
+          </View>
         </View>
-        </View>
-
-
-
-
-
 
         {/* <View style={styles.button}>
           <Button

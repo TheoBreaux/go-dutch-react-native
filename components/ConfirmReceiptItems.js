@@ -1,12 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Modal,
+  TextInput,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllReceiptItems, setDiners } from "../store/store";
+import { setAllReceiptItems } from "../store/store";
 import Logo from "./Logo";
-import DinnerItem from "./ui/DinnerItem";
-import Colors from "../constants/colors";
 import PrimaryButton from "./ui/PrimaryButton";
 import ConfirmableDinnerItem from "./ui/ConfirmableDinnerItem";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import Colors from "../constants/colors";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -33,9 +41,11 @@ const configureReceiptData = (receiptAmounts) => {
 };
 
 const ConfirmReceiptItems = () => {
-  const [addedToDiner, setAddedToDiner] = useState(false);
-  const separatedDinnerItemsRef = useRef([]);
+  const [separatedDinnerItems, setSeparatedDinnerItems] = useState([]);
   const [profilePicPaths, setProfilePicPaths] = useState([]);
+  const [showAddItemsModal, setShowAddItemsModal] = useState(false);
+  const [newItemName, setNewItemName] = useState("");
+  const [newItemPrice, setNewItemPrice] = useState("");
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -44,6 +54,7 @@ const ConfirmReceiptItems = () => {
   const diners = useSelector((state) => state.diningEvent.diners);
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     const configuredData = configureReceiptData(receiptAmounts);
@@ -58,8 +69,7 @@ const ConfirmReceiptItems = () => {
         });
       }
     });
-
-    separatedDinnerItemsRef.current = items;
+    setSeparatedDinnerItems(items);
     dispatch(setAllReceiptItems(items));
   }, [receiptAmounts]);
 
@@ -68,7 +78,7 @@ const ConfirmReceiptItems = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://362d-2603-8000-c0f0-a570-5920-d82-cda4-62e5.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://7801-2603-8000-c0f0-a570-a5c3-cab-6f7c-add2.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);
@@ -79,40 +89,115 @@ const ConfirmReceiptItems = () => {
     fetchProfilePicPaths();
   }, [eventId]);
 
-  const updatedDiners = [];
+  const updatedDiners = profilePicPaths.map((diner, i) => ({
+    ...diners[i],
+    profile_pic_image_path:
+      diner.profile_pic_image_path || diners[i]?.profile_pic_image_path,
+  }));
 
-  for (let i = 0; i < profilePicPaths.length; i++) {
-    const diner = profilePicPaths[i];
-    const additional = diners[i];
+  const addNewItem = () => {
+    const newItem = {
+      count: 1,
+      name: newItemName,
+      price: parseFloat(newItemPrice),
+      id: (Date.now() + Math.random() + newItemName).toString(),
+    };
 
-    if (diner.profile_pic_image_path) {
-      updatedDiners.push({
-        ...additional,
-        profile_pic_image_path: diner.profile_pic_image_path,
-      });
-    } else {
-      updatedDiners.push(diner);
-    }
-  }
+    // Add the new item to the existing array
+    setSeparatedDinnerItems((prevItems) => [...prevItems, newItem]);
 
-  console.log(separatedDinnerItemsRef);
+    // Optionally, you can reset the input fields
+    setNewItemName("");
+    setNewItemPrice("");
+
+    // Close the modal
+    setShowAddItemsModal(false);
+  };
+
+  const deleteItem = (itemId) => {
+    const updatedItems = separatedDinnerItems.filter(
+      (item) => item.id !== itemId
+    );
+    setSeparatedDinnerItems(updatedItems);
+  };
+
   console.log(updatedDiners);
+  console.log("CURRENT:", separatedDinnerItems);
 
   return (
     <View style={styles.container}>
       <Logo />
 
+      {showAddItemsModal && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAddItemsModal}>
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>
+                  Please enter missing item info
+                </Text>
+                <View style={styles.inputsContainer}>
+                  <Text style={styles.inputLabels}>Name:</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={newItemName}
+                    onChangeText={(text) => setNewItemName(text)}
+                  />
+                  <Text style={styles.inputLabels}>Price:</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={newItemPrice}
+                    onChangeText={(text) => setNewItemPrice(text)}
+                  />
+
+                  <View style={{ flexDirection: "row" }}>
+                    <PrimaryButton
+                      width={100}
+                      onPress={() => setShowAddItemsModal(false)}>
+                      Close
+                    </PrimaryButton>
+                    <PrimaryButton width={100} onPress={addNewItem}>
+                      Submit
+                    </PrimaryButton>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+
       <View style={styles.confirmContainer}>
-        <Text style={styles.title}>All items listed below?</Text>
+        <Text style={styles.title}>Confirm or add missing items!</Text>
         <View style={styles.buttonContainer}>
-          <PrimaryButton width={100}>No</PrimaryButton>
-          <PrimaryButton width={100}>Yes</PrimaryButton>
+          <PrimaryButton
+            width={90}
+            onPress={() =>
+              navigation.navigate("AssignItems", {
+                updatedDiners: updatedDiners,
+                separatedDinnerItems: separatedDinnerItems,
+              })
+            }>
+            <Ionicons name="checkmark-sharp" size={30} color="white" />
+          </PrimaryButton>
+          <PrimaryButton width={90} onPress={() => setShowAddItemsModal(true)}>
+            <Ionicons name="ios-add-sharp" size={30} color="white" />
+          </PrimaryButton>
         </View>
       </View>
 
       <ScrollView style={styles.foodItemsListContainer}>
-        {separatedDinnerItemsRef.current.map((item) => {
-          return <ConfirmableDinnerItem key={item.id} item={item} />;
+        {separatedDinnerItems.map((item) => {
+          return (
+            <ConfirmableDinnerItem
+              key={item.id}
+              item={item}
+              onDelete={() => deleteItem(item.id)}
+            />
+          );
         })}
       </ScrollView>
     </View>
@@ -125,12 +210,52 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "stretch",
   },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
+  modalContent: {
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "red-hat-bold",
+    marginBottom: 20,
+  },
+  inputsContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  inputLabels: {
+    fontSize: 18,
+    marginBottom: 5,
+    fontFamily: "red-hat-bold",
+  },
+  textInput: {
+    width: "80%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingLeft: 10,
+    textAlign: "center",
+    color: "black",
+    fontFamily: "red-hat-regular",
+    fontSize: 25,
+  },
   confirmContainer: {
     backgroundColor: "white",
-    // padding: 20,
     marginHorizontal: 15,
     borderRadius: 10,
-    height: 150,
+    height: 125,
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -138,7 +263,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontFamily: "red-hat-regular",
-    fontSize: 25,
+    fontSize: 20,
   },
   buttonContainer: {
     flexDirection: "row",
