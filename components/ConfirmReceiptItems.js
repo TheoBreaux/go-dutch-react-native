@@ -47,6 +47,15 @@ const ConfirmReceiptItems = () => {
   const [newItemName, setNewItemName] = useState("");
   const [newItemPrice, setNewItemPrice] = useState("");
 
+  // const DUMMY_DATA = [
+  //   { count: 1, name: "Mango Margarita", price: 11.95 },
+  //   { count: 2, name: "Modelo", price: 29.9 },
+  //   { count: 1, name: "Quesa-Birria Tacos (3)", price: 14.95 },
+  //   { count: 1, name: "Breakfast Torta", price: 12.95 },
+  //   { count: 1, name: "Mangoneada Margarita", price: 15.95 },
+  //   { count: 1, name: "Pork Belly Bites", price: 16.95 },
+  // ];
+
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
