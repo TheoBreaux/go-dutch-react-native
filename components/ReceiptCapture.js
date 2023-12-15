@@ -72,7 +72,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://7801-2603-8000-c0f0-a570-a5c3-cab-6f7c-add2.ngrok-free.app/diningevents",
+        "https://e546-2603-8000-c0f0-a570-a890-42c9-3fd9-d31c.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {

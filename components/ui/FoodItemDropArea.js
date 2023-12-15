@@ -6,20 +6,23 @@ import PrimaryButton from "./PrimaryButton";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
 const FoodItemDropArea = () => {
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [profilePicError, setProfilePicError] = useState(false);
-
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
+
+  const currDinerItems = dinersUpdated[0].items;
+
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [dinerReviewedItems, setDinerReviewedItems] = useState(currDinerItems);
 
   const handleAssignedItemsReview = () => {
     setShowReviewModal(true);
   };
 
+
   console.log("FOOD ITEM DROP AREA:", dinersUpdated);
 
   return (
     <>
-      {setShowReviewModal && (
+      {showReviewModal && (
         <Modal
           visible={showReviewModal}
           animationType="slide"
@@ -29,10 +32,14 @@ const FoodItemDropArea = () => {
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review Items</Text>
                 {/* need to get the current dinners items array and map over it */}
-                {dinersUpdated[0].items.map((item) => (
+                {dinerReviewedItems.map((item) => (
                   <View key={item.id} style={styles.itemContainer}>
                     <TouchableOpacity>
-                      <Text style={styles.delete}>DELETE</Text>
+                      <Text
+                        style={styles.delete}
+                        onPress={() => handleDeleteReviewItem(item.id)}>
+                        DELETE
+                      </Text>
                     </TouchableOpacity>
                     <Text style={styles.foodInfo}>{item.name}</Text>
                     <Text style={styles.foodInfo}>
@@ -40,12 +47,7 @@ const FoodItemDropArea = () => {
                     </Text>
                   </View>
                 ))}
-
-                <View style={styles.buttonContainer}>
-                  <PrimaryButton width={100}>OK</PrimaryButton>
-                  <PrimaryButton width={100}>DELETE</PrimaryButton>
-                </View>
-                <PrimaryButton onPress={() => setShowReviewModal(false)}>
+                <PrimaryButton>
                   Close
                 </PrimaryButton>
               </View>
@@ -170,12 +172,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
   },
-  confirmedItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    fontFamily: "red-hat-bold",
-  },
-  buttonContainer: { flexDirection: "row" },
 });
 
 export default FoodItemDropArea;

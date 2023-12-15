@@ -68,6 +68,9 @@ const diningEventSlice = createSlice({
     updateAllReceiptItemsCopy: (state, action) => {
       state.allReceiptItemsCopy = action.payload;
     },
+    updateDinersItems: (state, action) => {
+      state.diners.items = action.payload;
+    },
     // editReceiptItemInformation: (state, action) => {
     //   const { itemId, updateName, updatePrice } = action.payload;
     //   state.allReceiptItemsCopy = state.allReceiptItemsCopy.map((item) =>
@@ -131,6 +134,7 @@ export const {
   setAllReceiptItems,
   setDiners,
   assignAndRemoveFoodItem,
+  updateDinersItems,
   // editReceiptItemInformation,
   addDiner,
   removeDiner,
