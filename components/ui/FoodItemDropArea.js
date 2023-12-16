@@ -12,6 +12,7 @@ const FoodItemDropArea = () => {
   const currDinerItems = dinersUpdated[0].items;
 
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
 
   const dispatch = useDispatch();
@@ -44,10 +45,20 @@ const FoodItemDropArea = () => {
 
   const closeReviewModalNextDiner = () => {
     setShowReviewModal(false);
+    setShowConfirmationModal(true);
   };
 
-  console.log("FOOD ITEM DROP AREA:", dinersUpdated);
-  console.log("FOOD ITEM DROP AREA REVIEW ITEMS:", dinerReviewedItems);
+  const handleNextDiner = () => {
+    //set currentDiners property of assignemtn being complete to true
+    //update the UI to the next diner in the diners array
+    //dispatch the final items for the previous diner
+  }
+
+  console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
+  console.log(
+    "FOOD ITEM DROP AREA REVIEW ITEMS CURR DINER ARRAY:",
+    dinerReviewedItems
+  );
 
   return (
     <>
@@ -60,6 +71,9 @@ const FoodItemDropArea = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review Items</Text>
+                <Text style={styles.modalSubtitle}>
+                  Press EDIT, CONFIRM, or DELETE to remove
+                </Text>
                 {/* need to get the current dinners items array and map over it */}
                 {dinerReviewedItems.map((item) => (
                   <View key={item.id} style={styles.itemContainer}>
@@ -76,9 +90,42 @@ const FoodItemDropArea = () => {
                     </Text>
                   </View>
                 ))}
-                <PrimaryButton onPress={closeReviewModalNextDiner}>
-                  Close
-                </PrimaryButton>
+                <View style={{ flexDirection: "row" }}>
+                  <PrimaryButton
+                    width={90}
+                    onPress={() => {
+                      setShowReviewModal(false);
+                      setShowConfirmationModal(false);
+                    }}>
+                    Edit
+                  </PrimaryButton>
+                  <PrimaryButton width={90} onPress={closeReviewModalNextDiner}>
+                    Confirm
+                  </PrimaryButton>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {showConfirmationModal && (
+        <Modal
+          visible={showConfirmationModal}
+          animationType="slide"
+          transparent={true}>
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.subtitle}>Are you sure?</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <PrimaryButton width={80} onPress={handleNextDiner}>Yes</PrimaryButton>
+                  <PrimaryButton
+                    onPress={() => setShowReviewModal(true)}
+                    width={80}>
+                    No
+                  </PrimaryButton>
+                </View>
               </View>
             </View>
           </View>
@@ -176,6 +223,12 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 25,
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+  },
+  modalSubtitle: {
+    fontSize: 15,
+    fontFamily: "red-hat-regular",
     marginBottom: 10,
     textAlign: "center",
   },
