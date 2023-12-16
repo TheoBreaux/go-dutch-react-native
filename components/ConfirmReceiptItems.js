@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllReceiptItems, setDiners } from "../store/store";
+import { setAllReceiptItems } from "../store/store";
 import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
 import ConfirmableDinnerItem from "./ui/ConfirmableDinnerItem";
@@ -46,15 +46,6 @@ const ConfirmReceiptItems = () => {
   const [showAddItemsModal, setShowAddItemsModal] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   const [newItemPrice, setNewItemPrice] = useState("");
-
-  // const DUMMY_DATA = [
-  //   { count: 1, name: "Mango Margarita", price: 11.95 },
-  //   { count: 2, name: "Modelo", price: 29.9 },
-  //   { count: 1, name: "Quesa-Birria Tacos (3)", price: 14.95 },
-  //   { count: 1, name: "Breakfast Torta", price: 12.95 },
-  //   { count: 1, name: "Mangoneada Margarita", price: 15.95 },
-  //   { count: 1, name: "Pork Belly Bites", price: 16.95 },
-  // ];
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -185,12 +176,12 @@ const ConfirmReceiptItems = () => {
         <View style={styles.buttonContainer}>
           <PrimaryButton
             width={90}
-            onPress={() =>
+            onPress={() => {
               navigation.navigate("AssignItems", {
                 updatedDiners: updatedDiners,
-                separatedDinnerItems: separatedDinnerItems,
-              })
-            }>
+              });
+              dispatch(setAllReceiptItems(separatedDinnerItems));
+            }}>
             <Ionicons name="checkmark-sharp" size={30} color="white" />
           </PrimaryButton>
           <PrimaryButton width={90} onPress={() => setShowAddItemsModal(true)}>

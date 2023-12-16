@@ -99,8 +99,6 @@ const DinnerItem = ({ item, updatedDiners }) => {
     outputRange: ["0deg", "360deg"],
   });
 
-
-
   return (
     <>
       {showDinnerItem && (

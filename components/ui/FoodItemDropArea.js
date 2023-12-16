@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 import ProfileImageMedallion from "./ProfileImageMedallion";
+import { returnRemovedDinerItem, updateDinerItems } from "../../store/store";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
@@ -11,14 +12,42 @@ const FoodItemDropArea = () => {
   const currDinerItems = dinersUpdated[0].items;
 
   const [showReviewModal, setShowReviewModal] = useState(false);
-  const [dinerReviewedItems, setDinerReviewedItems] = useState(currDinerItems);
+  const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleAssignedItemsReview = () => {
+    setDinerReviewedItems(currDinerItems);
     setShowReviewModal(true);
   };
 
+  const handleRemoveItem = (itemId) => {
+    // Find the item to be removed
+    const removedItem = dinerReviewedItems.find((item) => item.id === itemId);
+    const removedItemIndex = dinerReviewedItems.findIndex(
+      (item) => item.id === itemId
+    );
+
+    if (removedItemIndex !== -1) {
+      const updatedReviewedItems = [...dinerReviewedItems];
+      updatedReviewedItems.splice(removedItemIndex, 1);
+
+      dispatch(updateDinerItems(updatedReviewedItems));
+      setDinerReviewedItems(updatedReviewedItems);
+
+      // Dispatch a function that will return the items assigned incorrectly to a diner back to the original array
+      dispatch(returnRemovedDinerItem(removedItem));
+    } else {
+      console.error("Item not found in dinerReviewedItems array");
+    }
+  };
+
+  const closeReviewModalNextDiner = () => {
+    setShowReviewModal(false);
+  };
 
   console.log("FOOD ITEM DROP AREA:", dinersUpdated);
+  console.log("FOOD ITEM DROP AREA REVIEW ITEMS:", dinerReviewedItems);
 
   return (
     <>
@@ -37,7 +66,7 @@ const FoodItemDropArea = () => {
                     <TouchableOpacity>
                       <Text
                         style={styles.delete}
-                        onPress={() => handleDeleteReviewItem(item.id)}>
+                        onPress={() => handleRemoveItem(item.id)}>
                         DELETE
                       </Text>
                     </TouchableOpacity>
@@ -47,7 +76,7 @@ const FoodItemDropArea = () => {
                     </Text>
                   </View>
                 ))}
-                <PrimaryButton>
+                <PrimaryButton onPress={closeReviewModalNextDiner}>
                   Close
                 </PrimaryButton>
               </View>
@@ -101,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 200,
-    marginTop: 80,
+    marginTop: 60,
   },
   iconContainer: { marginTop: 20 },
   title: {

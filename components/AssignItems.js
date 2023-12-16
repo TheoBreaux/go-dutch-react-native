@@ -3,13 +3,16 @@ import Logo from "./Logo";
 import FoodItemDropArea from "../components/ui/FoodItemDropArea";
 import { useRoute } from "@react-navigation/native";
 import DinnerItem from "./ui/DinnerItem";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setDiners } from "../store/store";
 
 const AssignItems = () => {
   const route = useRoute();
-  const { updatedDiners, separatedDinnerItems } = route.params;
+
+  const { updatedDiners } = route.params;
+
+  const separatedDinnerItems = useSelector((state) => state.diningEvent.allReceiptItemsCopy)
 
   const dispatch = useDispatch();
 
