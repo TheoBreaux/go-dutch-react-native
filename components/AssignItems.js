@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import Logo from "./Logo";
 import FoodItemDropArea from "../components/ui/FoodItemDropArea";
 import { useRoute } from "@react-navigation/native";
@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     height: 200,
   },
   foodItemsListContainer: {
+    flex: 2,
     padding: 10,
+    // marginTop: 25,
     marginBottom: 5,
   },
 });

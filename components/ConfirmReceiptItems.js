@@ -20,23 +20,41 @@ import { nanoid } from "@reduxjs/toolkit";
 const configureReceiptData = (receiptAmounts) => {
   const configuredData = [];
 
+  const excludedKeyWords = [
+    "tax",
+    "tip",
+    "subtotal",
+    "total",
+    "gratuity",
+    "service",
+    "entertainment",
+  ];
+
   for (let i = 0; i < receiptAmounts.length; i++) {
     let lineItem = receiptAmounts[i].text;
     let match = lineItem.match(
-      /^(\d+)\s*([^\d]+(?:\(\d+\))?[a-zA-Z\s-]+)\s*(\d*\.?\d+)$/
+      /^(\d*)\s*([^\d]*[a-zA-Z\s-]+)\s*\$?(\d*\.?\d+)?$/
     );
 
     if (match) {
-      let count = parseInt(match[1], 10);
-      let name = match[2];
-      let price = parseFloat(match[3]); // Convert the price to a floating-point number
+      let count = match[1] !== "" ? parseInt(match[1], 10) : 1;
+      let name = match[2].trim();
+      let price = parseFloat(match[3] || 0);
 
       if (count > 1) {
         price /= count;
       }
-      configuredData.push({ count, name, price });
+
+      const containsExcludedKeyword = excludedKeyWords.some((keyword) => {
+        return lineItem.toLowerCase().includes(keyword);
+      });
+
+      if (!containsExcludedKeyword) {
+        configuredData.push({ count, name, price });
+      }
     }
   }
+
   return configuredData;
 };
 
@@ -46,6 +64,7 @@ const ConfirmReceiptItems = () => {
   const [showAddItemsModal, setShowAddItemsModal] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   const [newItemPrice, setNewItemPrice] = useState("");
+  const [subtotal, setSubtotal] = useState(0);
 
   //grab values from redux store for use here, useSelector
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -56,20 +75,27 @@ const ConfirmReceiptItems = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
+  console.log("RECEIPT AMOUNTS:", receiptAmounts);
+
   useEffect(() => {
     const configuredData = configureReceiptData(receiptAmounts);
 
     // Initialize array for separate quantities of more than 1 into individual dinner items
     const items = [];
+
+    let subtotalValue = 0;
+
     configuredData.forEach((item) => {
       for (let i = 0; i < item.count; i++) {
         items.push({
           ...item,
           id: nanoid(8),
         });
+        subtotalValue += item.price; // Add this line
       }
     });
     setSeparatedDinnerItems(items);
+    setSubtotal(subtotalValue); // Add this line
     dispatch(setAllReceiptItems(items));
   }, [receiptAmounts]);
 
@@ -78,7 +104,7 @@ const ConfirmReceiptItems = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://e546-2603-8000-c0f0-a570-a890-42c9-3fd9-d31c.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://143f-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);
@@ -108,7 +134,17 @@ const ConfirmReceiptItems = () => {
     };
 
     // Add the new item to the existing array
+    const updatedItems = [...separatedDinnerItems, newItem];
+
+    // Recalculate the subtotal after adding the new item
+    const newSubtotal = updatedItems.reduce(
+      (total, item) => total + item.price,
+      0
+    );
+
+    // Add the new item to the existing array
     setSeparatedDinnerItems((prevItems) => [...prevItems, newItem]);
+    setSubtotal(newSubtotal);
 
     // Optionally, you can reset the input fields
     setNewItemName("");
@@ -122,7 +158,15 @@ const ConfirmReceiptItems = () => {
     const updatedItems = separatedDinnerItems.filter(
       (item) => item.id !== itemId
     );
+
+    // Recalculate the subtotal after removing the item
+    const newSubtotal = updatedItems.reduce(
+      (total, item) => total + item.price,
+      0
+    );
+
     setSeparatedDinnerItems(updatedItems);
+    setSubtotal(newSubtotal);
   };
 
   return (
@@ -152,6 +196,7 @@ const ConfirmReceiptItems = () => {
                     style={styles.textInput}
                     value={newItemPrice}
                     onChangeText={(text) => setNewItemPrice(text)}
+                    keyboardType="numeric"
                   />
 
                   <View style={{ flexDirection: "row" }}>
@@ -200,6 +245,7 @@ const ConfirmReceiptItems = () => {
             />
           );
         })}
+        <Text style={styles.subtotal}>Subtotal: ${subtotal.toFixed(2)}</Text>
       </ScrollView>
     </View>
   );
@@ -270,8 +316,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   foodItemsListContainer: {
-    padding: 10,
-    marginBottom: 5,
+    paddingHorizontal: 10,
+    marginBottom: 30,
+  },
+  subtotal: {
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+    fontSize: 25,
+    marginTop: 5,
   },
 });
 
