@@ -12,7 +12,9 @@ const AssignItems = () => {
 
   const { updatedDiners } = route.params;
 
-  const separatedDinnerItems = useSelector((state) => state.diningEvent.allReceiptItemsCopy)
+  const separatedDinnerItems = useSelector(
+    (state) => state.diningEvent.allReceiptItemsCopy
+  );
 
   const dispatch = useDispatch();
 
@@ -23,38 +25,42 @@ const AssignItems = () => {
 
   return (
     <>
-      <View style={styles.container}>
-        <Logo />
-        <FoodItemDropArea />
-        <View style={styles.spacer} />
+      <Logo />
+      <ScrollView style={styles.scrollViewContainer}>
+        <View style={styles.container}>
+          <FoodItemDropArea />
+          <View style={styles.spacer} />
 
-        <View style={styles.foodItemsListContainer}>
-          {separatedDinnerItems.map((item) => {
-            return (
-              <View key={item.id}>
-                <DinnerItem item={item} updatedDiners={updatedDiners} />
-              </View>
-            );
-          })}
+          <View style={styles.foodItemsListContainer}>
+            {separatedDinnerItems.map((item) => {
+              return (
+                <View key={item.id}>
+                  <DinnerItem item={item} updatedDiners={updatedDiners} />
+                </View>
+              );
+            })}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: "space-between",
     alignItems: "stretch",
   },
   spacer: {
-    height: 200,
+    height: 50,
   },
   foodItemsListContainer: {
-    flex: 2,
+    flex: 1,
     padding: 10,
-    // marginTop: 25,
     marginBottom: 5,
   },
 });

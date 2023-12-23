@@ -52,7 +52,7 @@ const FoodItemDropArea = () => {
     //set currentDiners property of assignemtn being complete to true
     //update the UI to the next diner in the diners array
     //dispatch the final items for the previous diner
-  }
+  };
 
   console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
   console.log(
@@ -119,7 +119,9 @@ const FoodItemDropArea = () => {
               <View style={styles.modalContent}>
                 <Text style={styles.subtitle}>Are you sure?</Text>
                 <View style={{ flexDirection: "row" }}>
-                  <PrimaryButton width={80} onPress={handleNextDiner}>Yes</PrimaryButton>
+                  <PrimaryButton width={80} onPress={handleNextDiner}>
+                    Yes
+                  </PrimaryButton>
                   <PrimaryButton
                     onPress={() => setShowReviewModal(true)}
                     width={80}>
@@ -147,12 +149,14 @@ const FoodItemDropArea = () => {
             borderRadius={100}
           />
 
-          <Text style={styles.dinerInfo}>
-            @{dinersUpdated[0].additional_diner_username}
-          </Text>
-          <PrimaryButton width={100} onPress={handleAssignedItemsReview}>
-            Review
-          </PrimaryButton>
+          <View style={{ zIndex: 100 }}>
+            <Text style={styles.dinerInfo}>
+              @{dinersUpdated[0].additional_diner_username}
+            </Text>
+            <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
+              Review
+            </PrimaryButton>
+          </View>
         </View>
       </View>
     </>
@@ -212,7 +216,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
-
   modalContent: {
     backgroundColor: "white",
     padding: 20,
@@ -253,6 +256,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-regular",
     fontSize: 20,
     color: "white",
+    maxWidth: 200,
   },
 });
 

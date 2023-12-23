@@ -33,8 +33,9 @@ const styles = StyleSheet.create({
   },
   foodInfo: {
     fontFamily: "red-hat-bold",
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
+    maxWidth: "auto",
   },
 });
 
