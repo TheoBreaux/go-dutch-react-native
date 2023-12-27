@@ -39,7 +39,7 @@ const DiningEventDetails = () => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://143f-2603-8000-c0f0-a570-6cee-6c44-f20e-afc7.ngrok-free.app/additionaldiners/${eventId}`
+        `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDiners(data);

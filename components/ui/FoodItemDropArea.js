@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 import ProfileImageMedallion from "./ProfileImageMedallion";
-import { returnRemovedDinerItem, updateDinerItems } from "../../store/store";
+import {
+  returnRemovedDinerItem,
+  setDinerBillComplete,
+  updateDinerItems,
+} from "../../store/store";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
@@ -49,16 +53,32 @@ const FoodItemDropArea = () => {
   };
 
   const handleNextDiner = () => {
-    //set currentDiners property of assignemtn being complete to true
-    //update the UI to the next diner in the diners array
+
+    const currentDinerIndex = dinersUpdated.findIndex(
+      (diner) =>
+        diner.additional_diner_username ===
+        dinersUpdated[0].additional_diner_username
+    );
+
+    console.log("HANDLE NEXT DINER:", currentDinerIndex);
+    //set currentDiners property of assignemtn being complete to true(YOU HAVE TO DISPATCH AN ACTION TO UPDATE THE VALUE)
+    dispatch(setDinerBillComplete(true));
+
+    //update the UI to the next diner in the diners array, increment currentDinerIndex
+
+
+
+    console.log("DINERS UPDATED:", dinersUpdated[currentDinerIndex].additional_diner_username );
+
+    
     //dispatch the final items for the previous diner
   };
 
-  console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
-  console.log(
-    "FOOD ITEM DROP AREA REVIEW ITEMS CURR DINER ARRAY:",
-    dinerReviewedItems
-  );
+
+  console.log(dinersUpdated[0])
+
+  // console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
+  // console.log("FOOD ITEM DROP AREA REVIEW ITEMS CURR DINER ARRAY:", dinerReviewedItems);
 
   return (
     <>
@@ -72,7 +92,8 @@ const FoodItemDropArea = () => {
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review Items</Text>
                 <Text style={styles.modalSubtitle}>
-                  Press EDIT, CONFIRM, or DELETE to remove
+                  Press EDIT to return, CONFIRM to move to the next diner, or
+                  DELETE to remove an item from this diner's bill.
                 </Text>
                 {/* need to get the current dinners items array and map over it */}
                 {dinerReviewedItems.map((item) => (
@@ -231,6 +252,7 @@ const styles = StyleSheet.create({
   },
   modalSubtitle: {
     fontSize: 15,
+    width: 350,
     fontFamily: "red-hat-regular",
     marginBottom: 10,
     textAlign: "center",
