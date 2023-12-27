@@ -7,6 +7,7 @@ import ProfileImageMedallion from "./ProfileImageMedallion";
 import {
   returnRemovedDinerItem,
   setDinerBillComplete,
+  setNextDiner,
   updateDinerItems,
 } from "../../store/store";
 
@@ -18,6 +19,7 @@ const FoodItemDropArea = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
+  const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -40,7 +42,7 @@ const FoodItemDropArea = () => {
       dispatch(updateDinerItems(updatedReviewedItems));
       setDinerReviewedItems(updatedReviewedItems);
 
-      // Dispatch a function that will return the items assigned incorrectly to a diner back to the original array
+      // Dispatch a function to return items assigned incorrectly to diner back to original array
       dispatch(returnRemovedDinerItem(removedItem));
     } else {
       console.error("Item not found in dinerReviewedItems array");
@@ -53,31 +55,38 @@ const FoodItemDropArea = () => {
   };
 
   const handleNextDiner = () => {
+    // currentDinerIndex = dinersUpdated.findIndex(
+    //   (diner) =>
+    //     diner.additional_diner_username ===
+    //     dinersUpdated[0].additional_diner_username
+    // );
 
-    const currentDinerIndex = dinersUpdated.findIndex(
-      (diner) =>
-        diner.additional_diner_username ===
-        dinersUpdated[0].additional_diner_username
-    );
+    const currentDiner = dinersUpdated[currentDinerIndex];
 
-    console.log("HANDLE NEXT DINER:", currentDinerIndex);
-    //set currentDiners property of assignemtn being complete to true(YOU HAVE TO DISPATCH AN ACTION TO UPDATE THE VALUE)
+    console.log(currentDiner);
+
+    //setting currentDiner assigned items to be complete
     dispatch(setDinerBillComplete(true));
 
     //update the UI to the next diner in the diners array, increment currentDinerIndex
+    //if assignedItems of currentDiner is true, then move on to the next diner in the array
+    if (currentDiner.assignedItemsComplete) {
+      //update the UI to the next diner in the array
+      setCurrentDinerIndex((prevIndex) => prevIndex + 1);
+      setShowConfirmationModal(false);
+      // dispatch(setNextDiner(dinersUpdated[currentDinerIndex]));
+    }
 
+    console.log("HANDLE NEXT DINER:", currentDinerIndex);
+    console.log(
+      "DINERS UPDATED:",
+      dinersUpdated[currentDinerIndex].additional_diner_username
+    );
 
-
-    console.log("DINERS UPDATED:", dinersUpdated[currentDinerIndex].additional_diner_username );
-
-    
     //dispatch the final items for the previous diner
   };
 
-
-  console.log(dinersUpdated[0])
-
-  // console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
+  console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
   // console.log("FOOD ITEM DROP AREA REVIEW ITEMS CURR DINER ARRAY:", dinerReviewedItems);
 
   return (
@@ -164,7 +173,9 @@ const FoodItemDropArea = () => {
           </Text>
 
           <ProfileImageMedallion
-            profileImagePath={dinersUpdated[0].profile_pic_image_path}
+            profileImagePath={
+              dinersUpdated[currentDinerIndex].profile_pic_image_path
+            }
             width={200}
             height={200}
             borderRadius={100}
@@ -172,7 +183,7 @@ const FoodItemDropArea = () => {
 
           <View style={{ zIndex: 100 }}>
             <Text style={styles.dinerInfo}>
-              @{dinersUpdated[0].additional_diner_username}
+              @{dinersUpdated[currentDinerIndex].additional_diner_username}
             </Text>
             <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
               Review
@@ -221,6 +232,7 @@ const styles = StyleSheet.create({
   dinerInfo: {
     fontFamily: "red-hat-bold",
     letterSpacing: 2,
+    textAlign: "center",
     fontSize: 25,
     color: Colors.goDutchBlue,
     marginTop: 5,
