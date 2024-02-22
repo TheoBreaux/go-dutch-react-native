@@ -102,7 +102,7 @@ const ConfirmReceiptItems = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);
@@ -175,7 +175,8 @@ const ConfirmReceiptItems = () => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={showAddItemsModal}>
+          visible={showAddItemsModal}
+        >
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
@@ -200,7 +201,8 @@ const ConfirmReceiptItems = () => {
                   <View style={{ flexDirection: "row" }}>
                     <PrimaryButton
                       width={100}
-                      onPress={() => setShowAddItemsModal(false)}>
+                      onPress={() => setShowAddItemsModal(false)}
+                    >
                       Close
                     </PrimaryButton>
                     <PrimaryButton width={100} onPress={addNewItem}>
@@ -224,7 +226,8 @@ const ConfirmReceiptItems = () => {
                 updatedDiners: updatedDiners,
               });
               dispatch(setAllReceiptItems(separatedDinnerItems));
-            }}>
+            }}
+          >
             <Ionicons name="checkmark-sharp" size={30} color="white" />
           </PrimaryButton>
           <PrimaryButton width={90} onPress={() => setShowAddItemsModal(true)}>
@@ -299,6 +302,7 @@ const styles = StyleSheet.create({
   confirmContainer: {
     backgroundColor: "white",
     marginHorizontal: 15,
+    marginBottom: 5,
     borderRadius: 10,
     height: 125,
     elevation: 5,

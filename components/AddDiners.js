@@ -24,7 +24,7 @@ const AddDiners = () => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [showDiners, setShowDiners] = useState(false);
+  const [showDiners, setShowDiners] = useState(true);
   const [allDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
   const [showSelectBirthday, setShowSelectBirthday] = useState(false);
@@ -45,7 +45,7 @@ const AddDiners = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/users/${username}`
+        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -60,7 +60,7 @@ const AddDiners = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -155,7 +155,7 @@ const AddDiners = () => {
     };
     try {
       const response = await fetch(
-        `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/additionaldiners/`,
+        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -176,7 +176,8 @@ const AddDiners = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={showBirthdayModal}>
+        visible={showBirthdayModal}
+      >
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -228,7 +229,8 @@ const AddDiners = () => {
                       style={[
                         styles.buttonContainer,
                         styles.birthdayButtonContainer,
-                      ]}>
+                      ]}
+                    >
                       {/* SEND ALL INFO TO DATABASE */}
                       <PrimaryButton onPress={postData}>Continue</PrimaryButton>
                     </View>
@@ -263,6 +265,8 @@ const AddDiners = () => {
         </PrimaryButton>
       </View>
 
+      {/* <Text style={styles.title}>Diners List</Text> */}
+
       {showDiners && (
         <View>
           <FlatList
@@ -282,7 +286,8 @@ const AddDiners = () => {
                 style={[
                   styles.modalText,
                   { textAlign: "center", marginTop: 5 },
-                ]}>
+                ]}
+              >
                 All diners added?
               </Text>
             </View>
@@ -291,7 +296,8 @@ const AddDiners = () => {
                 alignItems: "center",
                 flexDirection: "row",
                 justifyContent: "center",
-              }}>
+              }}
+            >
               <PrimaryButton width={100} onPress={allDinersAddedHandler}>
                 Confirm
               </PrimaryButton>
@@ -366,6 +372,7 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     width: "60%",
   },
+
   showSuggestionsContainer: { padding: 5 },
   modalContainer: {
     flex: 1,

@@ -1,31 +1,43 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrimaryButton from "./PrimaryButton";
 import ProfileImageMedallion from "./ProfileImageMedallion";
+import { useNavigation } from "@react-navigation/native";
 import {
   returnRemovedDinerItem,
   setDinerBillComplete,
-  setNextDiner,
   updateDinerItems,
+  setCurrentDinerId,
 } from "../../store/store";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
-
-  const currDinerItems = dinersUpdated[0].items;
+  const separatedDinnerItems = useSelector(
+    (state) => state.diningEvent.allReceiptItemsCopy
+  );
 
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
 
+  // const currDinerItems = dinersUpdated[currentDinerIndex].items;
+  const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
+
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    dispatch(setCurrentDinerId(dinersUpdated[0].id));
+  }, []);
 
   const handleAssignedItemsReview = () => {
     setDinerReviewedItems(currDinerItems);
     setShowReviewModal(true);
+    setShowConfirmTaxAndTipModal(true);
   };
 
   const handleRemoveItem = (itemId) => {
@@ -39,7 +51,7 @@ const FoodItemDropArea = () => {
       const updatedReviewedItems = [...dinerReviewedItems];
       updatedReviewedItems.splice(removedItemIndex, 1);
 
-      dispatch(updateDinerItems(updatedReviewedItems));
+      dispatch(updateDinerItems({ currentDinerIndex, updatedReviewedItems }));
       setDinerReviewedItems(updatedReviewedItems);
 
       // Dispatch a function to return items assigned incorrectly to diner back to original array
@@ -49,45 +61,32 @@ const FoodItemDropArea = () => {
     }
   };
 
-  const closeReviewModalNextDiner = () => {
-    setShowReviewModal(false);
-    setShowConfirmationModal(true);
+  const confirmCurrentDiner = () => {
+    if (separatedDinnerItems.length === 0) {
+      //we will navigate to the tax screens and tip screens here
+      navigation.navigate("ConfirmTotals");
+    } else {
+      //setting currentDiner assigned items to be complete
+      dispatch(
+        setDinerBillComplete({ currentDinerIndex, dinerBillComplete: true })
+      );
+      setShowReviewModal(false);
+      setShowConfirmationModal(true);
+      //update the UI to the next diner in the diners array by increment currentDinerIndex
+      setCurrentDinerIndex((prevIndex) => prevIndex + 1);
+
+      //reset dinerReviewedItems for next diner to use
+      setDinerReviewedItems([]);
+    }
   };
 
   const handleNextDiner = () => {
-    // currentDinerIndex = dinersUpdated.findIndex(
-    //   (diner) =>
-    //     diner.additional_diner_username ===
-    //     dinersUpdated[0].additional_diner_username
-    // );
-
     const currentDiner = dinersUpdated[currentDinerIndex];
-
-    console.log(currentDiner);
-
-    //setting currentDiner assigned items to be complete
-    dispatch(setDinerBillComplete(true));
-
-    //update the UI to the next diner in the diners array, increment currentDinerIndex
-    //if assignedItems of currentDiner is true, then move on to the next diner in the array
-    if (currentDiner.assignedItemsComplete) {
-      //update the UI to the next diner in the array
-      setCurrentDinerIndex((prevIndex) => prevIndex + 1);
-      setShowConfirmationModal(false);
-      // dispatch(setNextDiner(dinersUpdated[currentDinerIndex]));
-    }
-
-    console.log("HANDLE NEXT DINER:", currentDinerIndex);
-    console.log(
-      "DINERS UPDATED:",
-      dinersUpdated[currentDinerIndex].additional_diner_username
-    );
-
-    //dispatch the final items for the previous diner
+    const currentDinerId = currentDiner.id;
+    //update currentDinerId
+    dispatch(setCurrentDinerId(currentDinerId));
+    setShowConfirmationModal(false);
   };
-
-  console.log("FOOD ITEM DROP AREA DINERS UPDATED:", dinersUpdated);
-  // console.log("FOOD ITEM DROP AREA REVIEW ITEMS CURR DINER ARRAY:", dinerReviewedItems);
 
   return (
     <>
@@ -95,7 +94,8 @@ const FoodItemDropArea = () => {
         <Modal
           visible={showReviewModal}
           animationType="slide"
-          transparent={true}>
+          transparent={true}
+        >
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
@@ -110,7 +110,8 @@ const FoodItemDropArea = () => {
                     <TouchableOpacity>
                       <Text
                         style={styles.delete}
-                        onPress={() => handleRemoveItem(item.id)}>
+                        onPress={() => handleRemoveItem(item.id)}
+                      >
                         DELETE
                       </Text>
                     </TouchableOpacity>
@@ -126,10 +127,11 @@ const FoodItemDropArea = () => {
                     onPress={() => {
                       setShowReviewModal(false);
                       setShowConfirmationModal(false);
-                    }}>
+                    }}
+                  >
                     Edit
                   </PrimaryButton>
-                  <PrimaryButton width={90} onPress={closeReviewModalNextDiner}>
+                  <PrimaryButton width={90} onPress={confirmCurrentDiner}>
                     Confirm
                   </PrimaryButton>
                 </View>
@@ -143,7 +145,8 @@ const FoodItemDropArea = () => {
         <Modal
           visible={showConfirmationModal}
           animationType="slide"
-          transparent={true}>
+          transparent={true}
+        >
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
@@ -154,7 +157,8 @@ const FoodItemDropArea = () => {
                   </PrimaryButton>
                   <PrimaryButton
                     onPress={() => setShowReviewModal(true)}
-                    width={80}>
+                    width={80}
+                  >
                     No
                   </PrimaryButton>
                 </View>
@@ -163,6 +167,45 @@ const FoodItemDropArea = () => {
           </View>
         </Modal>
       )}
+
+      
+
+      
+      {showConfirmTaxAndTipModal && (
+        <Modal
+          visible={showConfirmTaxAndTipModal}
+          animationType="slide"
+          transparent={true}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.subtitle}>Are you sure?</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <PrimaryButton width={80} onPress={handleNextDiner}>
+                    Yes
+                  </PrimaryButton>
+                  <PrimaryButton
+                    onPress={() => setShowReviewModal(true)}
+                    width={80}
+                  >
+                    No
+                  </PrimaryButton>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+
+
+
+
+
+
+
+
+
 
       <View style={styles.mainContainer}>
         <View style={styles.assignmentContainer}>
@@ -176,18 +219,20 @@ const FoodItemDropArea = () => {
             profileImagePath={
               dinersUpdated[currentDinerIndex].profile_pic_image_path
             }
-            width={200}
-            height={200}
-            borderRadius={100}
+            width={150}
+            height={150}
+            borderRadius={75}
           />
 
           <View style={{ zIndex: 100 }}>
             <Text style={styles.dinerInfo}>
               @{dinersUpdated[currentDinerIndex].additional_diner_username}
             </Text>
-            <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
-              Review
-            </PrimaryButton>
+            {
+              <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
+                Review
+              </PrimaryButton>
+            }
           </View>
         </View>
       </View>
@@ -199,7 +244,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginBottom: 20,
-    padding: 15,
+    // padding: 15,
   },
   profilePic: {
     width: 200,
@@ -227,7 +272,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     letterSpacing: 2,
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 15,
   },
   dinerInfo: {
     fontFamily: "red-hat-bold",

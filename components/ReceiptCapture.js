@@ -72,7 +72,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/diningevents",
+        "https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {
@@ -154,12 +154,14 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                   style={styles.camera}
                   type={type}
                   flashMode={flash}
-                  ref={cameraRef}>
+                  ref={cameraRef}
+                >
                   <View style={styles.cameraButtons}>
                     <PrimaryButton
                       padding={5}
                       width={40}
-                      onPress={cancelCaptureReceipt}>
+                      onPress={cancelCaptureReceipt}
+                    >
                       <Feather name="x-circle" size={24} color="white" />
                       <Text style={styles.cameraText}></Text>
                     </PrimaryButton>
@@ -172,7 +174,8 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                             ? Camera.Constants.FlashMode.on
                             : Camera.Constants.FlashMode.off
                         );
-                      }}>
+                      }}
+                    >
                       <Entypo
                         name="flash"
                         size={24}
@@ -202,7 +205,8 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                   </PrimaryButton>
                   <PrimaryButton
                     padding={3}
-                    onPress={saveAndSubmitReceiptImage}>
+                    onPress={saveAndSubmitReceiptImage}
+                  >
                     <View style={styles.iconButton}>
                       <Entypo name="check" size={24} color="white" />
                       <Text style={styles.cameraText}>Save</Text>

@@ -37,6 +37,7 @@ const diningEventSlice = createSlice({
       tip: "",
       totalMealCost: "",
     },
+    currentDinerId: "",
     receiptValues: {},
     allReceiptItems: [],
     allReceiptItemsCopy: [],
@@ -65,24 +66,22 @@ const diningEventSlice = createSlice({
     setDiners: (state, action) => {
       state.diners = action.payload;
     },
+    setCurrentDinerId: (state, action) => {
+      state.currentDinerId = action.payload;
+    },
     returnRemovedDinerItem: (state, action) => {
       state.allReceiptItemsCopy.push(action.payload);
     },
     updateDinerItems: (state, action) => {
-      state.diners[0].items = action.payload;
+      const { currentDinerIndex, updatedReviewedItems } = action.payload;
+
+      state.diners[currentDinerIndex].items = updatedReviewedItems;
     },
     setDinerBillComplete: (state, action) => {
-      state.diners[0].assignedItemsComplete = action.payload;
+      const { currentDinerIndex, dinerBillComplete } = action.payload;
+
+      state.diners[currentDinerIndex].assignedItemsComplete = dinerBillComplete;
     },
-    setNextDiner: (state, action) => {},
-    // editReceiptItemInformation: (state, action) => {
-    //   const { itemId, updateName, updatePrice } = action.payload;
-    //   state.allReceiptItemsCopy = state.allReceiptItemsCopy.map((item) =>
-    //     item.id === itemId
-    //       ? { ...item, name: updateName, price: updatePrice }
-    //       : item
-    //   );
-    // },
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 
@@ -137,12 +136,11 @@ export const {
   setReceiptValues,
   setAllReceiptItems,
   setDiners,
+  setCurrentDinerId,
   returnRemovedDinerItem,
   updateDinerItems,
   setDinerBillComplete,
-  setNextDiner,
   assignAndRemoveFoodItem,
-  // editReceiptItemInformation,
   addDiner,
   removeDiner,
   updateBirthdayStatus,

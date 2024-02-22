@@ -17,7 +17,7 @@ const DiningEventHistory = () => {
   const getData = async () => {
     try {
       const response = await fetch(
-        `https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/diningevents/${username}`
+        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
       setDiningEvents(data);
@@ -61,7 +61,8 @@ const DiningEventHistory = () => {
                 textAlign: "center",
                 fontFamily: "red-hat-bold",
                 fontSize: 15,
-              }}>
+              }}
+            >
               Check out our featured restaurants near you!
             </Text>
             <PrimaryButton width={150} onPress={handleNavigation}>

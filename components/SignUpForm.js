@@ -116,7 +116,7 @@ const SignUpForm = () => {
 
     try {
       const response = await fetch(
-        "https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/signup",
+        "https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -148,7 +148,8 @@ const SignUpForm = () => {
           <Formik
             initialValues={initialValues}
             validate={validateForm}
-            onSubmit={handleFormSubmit}>
+            onSubmit={handleFormSubmit}
+          >
             {({ handleChange, handleSubmit, handleBlur, values }) => (
               <>
                 <View style={styles.nameInputsContainer}>
@@ -226,7 +227,8 @@ const SignUpForm = () => {
                   />
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}
-                    style={styles.passwordToggle}>
+                    style={styles.passwordToggle}
+                  >
                     <Text style={styles.passwordToggleText}>
                       {showPassword ? "Hide" : "Show"}
                     </Text>
@@ -251,7 +253,8 @@ const SignUpForm = () => {
                     onPress={() =>
                       setShowConfirmedPassword(!showConfirmedPassword)
                     }
-                    style={styles.passwordToggle}>
+                    style={styles.passwordToggle}
+                  >
                     <Text style={styles.passwordToggleText}>
                       {confirmedPassword ? "Hide" : "Show"}
                     </Text>

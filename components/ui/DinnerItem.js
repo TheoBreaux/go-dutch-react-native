@@ -11,11 +11,8 @@ const DinnerItem = ({ item, updatedDiners }) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const rotation = useRef(new Animated.Value(0)).current;
 
-  const allReceiptItemsCopy = useSelector(
-    (state) => state.diningEvent.allReceiptItemsCopy
-  );
+  const dinerId = useSelector((state) => state.diningEvent.currentDinerId);
 
-  const dinerId = updatedDiners[0].id;
   const dispatch = useDispatch();
 
   let val = { x: 0, y: 0 };

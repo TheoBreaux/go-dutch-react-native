@@ -77,7 +77,7 @@ const PaymentSources = () => {
     };
     try {
       const response = await fetch(
-        "https://6c4b-2603-8000-c0f0-a570-745e-f0ad-c2ad-71b3.ngrok-free.app/users",
+        "https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/users",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -108,7 +108,8 @@ const PaymentSources = () => {
         <Formik
           initialValues={initialValues}
           validate={validateForm}
-          onSubmit={handleFormSubmit}>
+          onSubmit={handleFormSubmit}
+        >
           {({ handleChange, handleSubmit, handleBlur, values }) => (
             <ScrollView>
               <View style={styles.inputContainer}>
@@ -126,7 +127,8 @@ const PaymentSources = () => {
                       handleChange("selectedPrimaryPayment")(value);
                       handlePrimaryPaymentChange(value);
                     }}
-                    onBlur={handleBlur("selectedPrimaryPayment")}>
+                    onBlur={handleBlur("selectedPrimaryPayment")}
+                  >
                     {availablePrimaryPaymentOptions.map((item, index) => (
                       <Picker.Item
                         key={index}
@@ -171,7 +173,8 @@ const PaymentSources = () => {
                     style={styles.input}
                     selectedValue={values.selectedSecondaryPayment}
                     onValueChange={handleChange("selectedSecondaryPayment")}
-                    onBlur={handleBlur("selectedSecondaryPayment")}>
+                    onBlur={handleBlur("selectedSecondaryPayment")}
+                  >
                     {availableSecondaryPaymentOptions.map((item, index) => (
                       <Picker.Item
                         key={index}
