@@ -42,6 +42,7 @@ const diningEventSlice = createSlice({
     allReceiptItems: [],
     allReceiptItemsCopy: [],
     diners: [],
+    birthdayDiners: [],
   },
   reducers: {
     setInitialPrimaryDiner: (state, action) => {
@@ -65,6 +66,9 @@ const diningEventSlice = createSlice({
     },
     setDiners: (state, action) => {
       state.diners = action.payload;
+    },
+    setBirthdayDiners: (state, action) => {
+      state.birthdayDiners.push(action.payload);
     },
     setCurrentDinerId: (state, action) => {
       state.currentDinerId = action.payload;
@@ -136,6 +140,7 @@ export const {
   setReceiptValues,
   setAllReceiptItems,
   setDiners,
+  setBirthdayDiners,
   setCurrentDinerId,
   returnRemovedDinerItem,
   updateDinerItems,

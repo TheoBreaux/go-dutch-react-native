@@ -8,6 +8,8 @@ import { useState } from "react";
 
 const ConfirmTotals = () => {
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
+    useState(true);
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -44,11 +46,39 @@ const ConfirmTotals = () => {
   console.log("SERVICE", parseFloat(service));
   console.log("ENTERTAINMENT", parseFloat(entertainment));
 
+  console.log("BIRTHDAY DINERS - IN CONFIRMTOTALS COMPONENT", useSelector((state) => state.diningEvent.birthdayDiners));
+
   return (
     <>
       <Logo />
 
-      
+      {/* {showConfirmTaxAndTipModal && (
+        <Modal
+          visible={showConfirmTaxAndTipModal}
+          animationType="slide"
+          transparent={true}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.subtitle}>Are you sure?</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <PrimaryButton width={80} onPress={handleNextDiner}>
+                    Yes
+                  </PrimaryButton>
+                  <PrimaryButton
+                    onPress={() => setShowReviewModal(true)}
+                    width={80}
+                  >
+                    No
+                  </PrimaryButton>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )} */}
+
       <View style={styles.cardContainer}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>
@@ -79,6 +109,26 @@ const styles = StyleSheet.create({
   },
   restaurantAddress: {
     fontSize: 15,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    width: "80%",
+    alignItems: "center",
   },
   // contentContainer: {
   //   alignItems: "center",

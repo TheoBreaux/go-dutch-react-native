@@ -10,6 +10,7 @@ import {
   setDinerBillComplete,
   updateDinerItems,
   setCurrentDinerId,
+  setBirthdayDiners,
 } from "../../store/store";
 
 const FoodItemDropArea = () => {
@@ -19,7 +20,6 @@ const FoodItemDropArea = () => {
   );
 
   const [showReviewModal, setShowReviewModal] = useState(false);
-  const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
@@ -37,7 +37,6 @@ const FoodItemDropArea = () => {
   const handleAssignedItemsReview = () => {
     setDinerReviewedItems(currDinerItems);
     setShowReviewModal(true);
-    setShowConfirmTaxAndTipModal(true);
   };
 
   const handleRemoveItem = (itemId) => {
@@ -63,6 +62,13 @@ const FoodItemDropArea = () => {
 
   const confirmCurrentDiner = () => {
     if (separatedDinnerItems.length === 0) {
+      //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
+      dinersUpdated.map((diner) => {
+        if (diner.birthday) {
+          // assign birthday diners to array
+          dispatch(setBirthdayDiners(diner));
+        }
+      });
       //we will navigate to the tax screens and tip screens here
       navigation.navigate("ConfirmTotals");
     } else {
@@ -87,6 +93,8 @@ const FoodItemDropArea = () => {
     dispatch(setCurrentDinerId(currentDinerId));
     setShowConfirmationModal(false);
   };
+
+  console.log("IN FOODITEMDROPAREA - DINERSUPDATED", dinersUpdated);
 
   return (
     <>
@@ -167,45 +175,6 @@ const FoodItemDropArea = () => {
           </View>
         </Modal>
       )}
-
-      
-
-      
-      {showConfirmTaxAndTipModal && (
-        <Modal
-          visible={showConfirmTaxAndTipModal}
-          animationType="slide"
-          transparent={true}
-        >
-          <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.subtitle}>Are you sure?</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <PrimaryButton width={80} onPress={handleNextDiner}>
-                    Yes
-                  </PrimaryButton>
-                  <PrimaryButton
-                    onPress={() => setShowReviewModal(true)}
-                    width={80}
-                  >
-                    No
-                  </PrimaryButton>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      )}
-
-
-
-
-
-
-
-
-
 
       <View style={styles.mainContainer}>
         <View style={styles.assignmentContainer}>

@@ -207,13 +207,13 @@ app.get("/users/:username", async (req, res) => {
 
 // ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
 app.post("/additionaldiners", async (req, res) => {
-  const { event_id, additionalDiners } = req.body;
+  const { event_id, additionalDiners, dinerMealCost, birthday } = req.body;
 
   try {
     for (const diner of additionalDiners) {
       await pool.query(
-        `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost) VALUES($1, $2, $3)`,
-        [event_id, diner.additional_diner_username, diner.diner_meal_cost]
+        `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost, birthday) VALUES($1, $2, $3, $4)`,
+        [event_id, diner.additional_diner_username, diner.diner_meal_cost, diner.birthday]
       );
     }
   } catch (error) {

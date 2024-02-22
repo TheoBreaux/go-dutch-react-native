@@ -34,7 +34,7 @@ const AssignItems = () => {
     dispatch(setDiners(updatedDiners));
   }, [updatedDiners]);
 
-  console.log(useSelector((state) => state.diningEvent));
+  console.log("IN ASSIGNITEMS COMPONENT - DININGEVENT", useSelector((state) => state.diningEvent));
 
   return (
     <>

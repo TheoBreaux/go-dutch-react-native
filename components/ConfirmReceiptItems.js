@@ -301,8 +301,8 @@ const styles = StyleSheet.create({
   },
   confirmContainer: {
     backgroundColor: "white",
-    marginHorizontal: 15,
-    marginBottom: 5,
+    marginHorizontal: 10,
+    marginBottom: 10,
     borderRadius: 10,
     height: 125,
     elevation: 5,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     fontSize: 20,
   },
   buttonContainer: {

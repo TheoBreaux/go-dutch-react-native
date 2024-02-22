@@ -152,14 +152,19 @@ const AddDiners = () => {
       event_id: eventId,
       additionalDiners: diners,
       diner_meal_cost: null,
+      birthday: null,
     };
+
+    // Extract birthday value
+    const birthdayValue = diners.some((diner) => diner.birthday); // Check if any diner has birthday true
+
     try {
       const response = await fetch(
         `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify({ ...data, birthday: birthdayValue }),
         }
       );
       const result = await response.json();
@@ -167,6 +172,8 @@ const AddDiners = () => {
       console.error("Network error:", error);
     }
   };
+
+  console.log("IN ADDDINERS COMPONENT - DINERS", diners);
 
   return (
     <View style={styles.container}>
