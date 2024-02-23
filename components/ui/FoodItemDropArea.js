@@ -63,7 +63,7 @@ const FoodItemDropArea = () => {
   const confirmCurrentDiner = () => {
     if (separatedDinnerItems.length === 0) {
       //we will navigate to the tax screens and tip screens here
-      navigation.navigate("ConfirmTotals");
+      navigation.navigate("ConfirmFeeTotals");
     } else {
       //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
       dinersUpdated.map((diner) => {

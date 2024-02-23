@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
-const ConfirmTotals = () => {
+const ConfirmFeeTotals = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
     useState(true);
@@ -235,4 +235,4 @@ const styles = StyleSheet.create({
 //         </Modal>
 //       )}
 
-export default ConfirmTotals;
+export default ConfirmFeeTotals;

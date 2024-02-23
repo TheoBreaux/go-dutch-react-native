@@ -22,7 +22,7 @@ import AssignItems from "./components/AssignItems";
 import DiningEventDetails from "./components/DiningEventDetails";
 import FeaturedRestaurants from "./components/FeaturedRestaurants";
 import ReceiptCapture from "./components/ReceiptCapture";
-import ConfirmTotals from "./components/ConfirmTotals";
+import ConfirmFeeTotals from "./components/ConfirmFeeTotals";
 import ConfirmReceiptItems from "./components/ConfirmReceiptItems";
 
 const Stack = createStackNavigator();
@@ -126,7 +126,7 @@ const App = () => {
             name="DiningEventDetails"
             component={DiningEventDetails}
           />
-          <Stack.Screen name="ConfirmTotals" component={ConfirmTotals} />
+          <Stack.Screen name="ConfirmFeeTotals" component={ConfirmFeeTotals} />
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}
