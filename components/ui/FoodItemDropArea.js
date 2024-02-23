@@ -65,6 +65,11 @@ const FoodItemDropArea = () => {
       //we will navigate to the tax screens and tip screens here
       navigation.navigate("ConfirmFeeTotals");
     } else {
+      //setting currentDiner assigned items to be complete
+      // dispatch(
+      //   setDinerBillComplete({ currentDinerIndex, assignedItemsComplete: true })
+      // );
+
       //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
       dinersUpdated.map((diner) => {
         if (diner.birthday) {
@@ -81,10 +86,6 @@ const FoodItemDropArea = () => {
       //reset dinerReviewedItems for next diner to use
       setDinerReviewedItems([]);
     }
-    //setting currentDiner assigned items to be complete
-    dispatch(
-      setDinerBillComplete({ currentDinerIndex, dinerBillComplete: true })
-    );
   };
 
   const handleNextDiner = () => {

@@ -110,7 +110,7 @@ const AddDiners = () => {
           additional_diner_username: inputValue,
           primary_diner: false,
           diner_meal_cost: null,
-          assignedItemsComplete: false,
+          // assignedItemsComplete: false,
           items: [],
           birthday: false,
           profile_pic_image_path: null,

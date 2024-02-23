@@ -81,11 +81,11 @@ const diningEventSlice = createSlice({
 
       state.diners[currentDinerIndex].items = updatedReviewedItems;
     },
-    setDinerBillComplete: (state, action) => {
-      const { currentDinerIndex, dinerBillComplete } = action.payload;
+    // setDinerBillComplete: (state, action) => {
+    //   const { currentDinerIndex, assignedItemsComplete } = action.payload;
 
-      state.diners[currentDinerIndex].assignedItemsComplete = dinerBillComplete;
-    },
+    //   state.diners[currentDinerIndex].assignedItemsComplete = assignedItemsComplete;
+    // },
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 

@@ -5,12 +5,17 @@ import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ConfirmFeeTotals = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
     useState(true);
+  const [taxConfirmed, setConfirmedTax] = useState(0);
+  const [tipConfirmed, setTipConfirmed] = useState(0);
+  const [gratuityConfirmed, setGratuityConfirmed] = useState(0);
+  const [serviceConfirmed, setServiceConfirmed] = useState(0);
+  const [entertainmentConfirmed, setEntertainmentConfirmed] = useState(0);
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -48,7 +53,7 @@ const ConfirmFeeTotals = () => {
   console.log("ENTERTAINMENT", parseFloat(entertainment));
 
   console.log(
-    "BIRTHDAY DINERS - IN CONFIRMTOTALS COMPONENT",
+    "BIRTHDAY DINERS - IN CONFIRMFEETOTALS COMPONENT",
     useSelector((state) => state.diningEvent.birthdayDiners)
   );
 
@@ -68,9 +73,7 @@ const ConfirmFeeTotals = () => {
               keyboardType="numeric"
               placeholder="$0.00"
               placeholderTextColor="gray"
-              render={({ value }) => (
-                <Text style={styles.textInput}>${value}</Text>
-              )}
+              value={"$" + tax.toString()}
             />
             <PrimaryButton width={50}>
               <Ionicons name="checkmark-sharp" size={20} color="white" />
@@ -86,6 +89,7 @@ const ConfirmFeeTotals = () => {
               style={styles.textInput}
               keyboardType="numeric"
               placeholder="$0.00"
+              value={tip.toString()}
               placeholderTextColor="gray"
               render={({ value }) => (
                 <Text style={styles.textInput}>${value}</Text>
@@ -203,8 +207,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlign: "center",
     color: "black",
-    fontFamily: "red-hat-regular",
-    fontSize: 20,
+    fontFamily: "red-hat-bold",
+    fontSize: 30,
   },
 });
 

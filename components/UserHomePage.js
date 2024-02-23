@@ -47,7 +47,7 @@ const UserHomePage = () => {
         additional_diner_username: goDutchUsername,
         primary_diner: true,
         diner_meal_cost: null,
-        assignedItemsComplete: false,
+        // assignedItemsComplete: false,
         items: [],
         birthday: false,
         profile_pic_image_path: null,
