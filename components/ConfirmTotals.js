@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TextInput, Modal } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
 import Logo from "./Logo";
 import PrimaryButton from "./ui/PrimaryButton";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
@@ -46,52 +47,123 @@ const ConfirmTotals = () => {
   console.log("SERVICE", parseFloat(service));
   console.log("ENTERTAINMENT", parseFloat(entertainment));
 
-  console.log("BIRTHDAY DINERS - IN CONFIRMTOTALS COMPONENT", useSelector((state) => state.diningEvent.birthdayDiners));
+  console.log(
+    "BIRTHDAY DINERS - IN CONFIRMTOTALS COMPONENT",
+    useSelector((state) => state.diningEvent.birthdayDiners)
+  );
 
   return (
     <>
       <Logo />
 
-      {/* {showConfirmTaxAndTipModal && (
-        <Modal
-          visible={showConfirmTaxAndTipModal}
-          animationType="slide"
-          transparent={true}
-        >
-          <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.subtitle}>Are you sure?</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <PrimaryButton width={80} onPress={handleNextDiner}>
-                    Yes
-                  </PrimaryButton>
-                  <PrimaryButton
-                    onPress={() => setShowReviewModal(true)}
-                    width={80}
-                  >
-                    No
-                  </PrimaryButton>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      )} */}
-
-      <View style={styles.cardContainer}>
+      <ScrollView contentContainerStyle={styles.cardContainer}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>
           <Text style={styles.restaurantAddress}>{restaurantAddress}</Text>
+
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Tax</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              render={({ value }) => (
+                <Text style={styles.textInput}>${value}</Text>
+              )}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+            <PrimaryButton width={50}>
+              <Ionicons name="ios-add-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
+
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Tip</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              render={({ value }) => (
+                <Text style={styles.textInput}>${value}</Text>
+              )}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+            <PrimaryButton width={50}>
+              <Ionicons name="ios-add-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
+
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Service</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              render={({ value }) => (
+                <Text style={styles.textInput}>${value}</Text>
+              )}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+            <PrimaryButton width={50}>
+              <Ionicons name="ios-add-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
+
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Gratuity</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              render={({ value }) => (
+                <Text style={styles.textInput}>${value}</Text>
+              )}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+            <PrimaryButton width={50}>
+              <Ionicons name="ios-add-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
+
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Entertainment</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              render={({ value }) => (
+                <Text style={styles.textInput}>${value}</Text>
+              )}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+            <PrimaryButton width={50}>
+              <Ionicons name="ios-add-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flex: 1,
+    // flex: 1,
     padding: 16,
     marginTop: -5,
     margin: 8,
@@ -101,106 +173,66 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
-    alignItems: "center",
-    //   justifyContent: "center",
+    // alignItems: "center",
   },
   restaurantName: {
-    fontSize: 50,
+    fontSize: 40,
+    color: Colors.goDutchRed,
   },
   restaurantAddress: {
     fontSize: 15,
+    textAlign: "center",
+    marginBottom: 10,
   },
-  overlay: {
-    flex: 1,
+  text: {
+    marginRight: 5,
+    fontSize: 20,
+    fontFamily: "red-hat-regular",
+  },
+  feeContainer: {
+    flexDirection: "row",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
-  modalContainer: {
+  textInput: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
+    height: 55,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    textAlign: "center",
+    color: "black",
+    fontFamily: "red-hat-regular",
+    fontSize: 20,
   },
-  modalContent: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-    width: "80%",
-    alignItems: "center",
-  },
-  // contentContainer: {
-  //   alignItems: "center",
-  //   textAlign: "center",
-  // },
-  // button: {
-  //   backgroundColor: Colors.goDutchRed,
-  //   borderRadius: 5,
-  //   padding: 0,
-  //   margin: 0,
-  //   marginRight: "2%",
-  //   width: "10%",
-  //   borderColor: "black",
-  //   borderWidth: 5,
-  //   borderStyle: "solid",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-  // image: {
-  //   width: 300,
-  //   height: 400,
-  //   resizeMode: "cover",
-  // },
-  // additionalDinerText: {
-  //   fontSize: 20,
-  //   fontFamily: "red-hat-bold",
-  //   letterSpacing: 3,
-  //   textAlign: "center",
-  //   color: Colors.goDutchRed,
-  //   borderWidth: 1,
-  //   padding: 5,
-  //   borderRadius: 10,
-  //   marginVertical: 5,
-  // },
-  // title: {
-  //   fontSize: 30,
-  //   fontFamily: "red-hat-bold",
-  //   letterSpacing: 3,
-  //   textAlign: "center",
-  //   color: Colors.goDutchRed,
-  //   marginBottom: -5,
-  // },
-  // text: {
-  //   fontSize: 20,
-  //   textAlign: "center",
-  //   letterSpacing: 3,
-  //   fontFamily: "red-hat-regular",
-  // },
-  // button: {
-  //   backgroundColor: Colors.goDutchRed,
-  //   width: 30,
-  // },
-  // primaryDiner: {
-  //   fontFamily: "red-hat-bold",
-  // },
-  // flatListContainer: {
-  //   flexGrow: 1,
-  //   // justifyContent: 'space-between',
-  // },
-  // row: {
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   width: 360, // Make sure each item takes up 100% of the width
-  //   padding: 10, // Add padding for spacing
-  //   marginBottom: 2,
-  //   backgroundColor: "#fff", // Set a background color if needed
-  //   shadowColor: "#000",
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.5,
-  //   shadowRadius: 3,
-  //   elevation: 5,
-  // },
 });
+
+// // {showConfirmationModal && (
+//         <Modal
+//           visible={showConfirmationModal}
+//           animationType="slide"
+//           transparent={true}
+//         >
+//           <View style={styles.overlay}>
+//             <View style={styles.modalContainer}>
+//               <View style={styles.modalContent}>
+//                 <Text style={styles.subtitle}>Are you sure?</Text>
+//                 <View style={{ flexDirection: "row" }}>
+//                   <PrimaryButton width={80} onPress={handleNextDiner}>
+//                     Yes
+//                   </PrimaryButton>
+//                   <PrimaryButton
+//                     onPress={() => setShowReviewModal(true)}
+//                     width={80}
+//                   >
+//                     No
+//                   </PrimaryButton>
+//                 </View>
+//               </View>
+//             </View>
+//           </View>
+//         </Modal>
+//       )}
 
 export default ConfirmTotals;

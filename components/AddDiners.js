@@ -279,6 +279,8 @@ const AddDiners = () => {
           <FlatList
             data={diners}
             renderItem={({ item }) => (
+
+
               <Diner
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}

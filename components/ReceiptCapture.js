@@ -88,6 +88,9 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     }
   };
 
+
+
+  
   const saveAndSubmitReceiptImage = async () => {
     setLoading(true);
     // if (image) {
@@ -129,6 +132,11 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     //should navigate to another page, possibly history
     navigation.navigate("AddDiners");
   };
+
+
+
+
+
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
