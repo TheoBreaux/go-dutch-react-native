@@ -39,6 +39,19 @@ export const featuredRestaurants = [
     rating: "4.3/5.0",
     imgUrl: "https://resizer.otstatic.com/v2/photos/xlarge/3/48269713.webp",
   },
+
+  {
+    name: "Girl & the Goat",
+    address: "555-3 Mateo St",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90013",
+    website: "https://www.girlandthegoat.com",
+    rating: "4.7/5.0",
+    imgUrl:
+      "https://lh3.googleusercontent.com/p/AF1QipOspZf2hnzNO2Ed5sSsVZPuT6oZFTT7S7cepIWC=s680-w680-h510",
+  },
+
   {
     name: "Laurel Hardware",
     address: "7984 Santa Monica Blvd",
@@ -60,5 +73,29 @@ export const featuredRestaurants = [
     rating: "4.7/5.0",
     imgUrl:
       "https://media.cntraveler.com/photos/5a60ee5f2f090155d7b0b1d9/16:9/w_1600,c_limit/Republique_Octopus_Kristen-Teig2018.jpg",
+  },
+
+  {
+    name: "Rao's",
+    address: "1006 Seward St",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90038",
+    website: "https://www.raoshollywood.com/",
+    rating: "4.6/5.0",
+    imgUrl:
+      "https://lh3.googleusercontent.com/p/AF1QipP3_9B-0X2sw3VHao4YjLGUdDqpg1SCf_5ZlRHG=s680-w680-h510",
+  },
+
+  {
+    name: "Bestia",
+    address: "2121 E 7th Pl",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90021",
+    website: "https://bestiala.com",
+    rating: "4.6/5.0",
+    imgUrl:
+      "https://lh3.googleusercontent.com/p/AF1QipP0W1JTr2VAHVBx_JQJ-opNwKXkYREWoatPwB8a=s680-w680-h510",
   },
 ];

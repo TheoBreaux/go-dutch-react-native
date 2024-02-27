@@ -188,22 +188,13 @@ app.get("/users/:username", async (req, res) => {
       `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1)`,
       [username]
     );
-    console.log(userExists)
+    console.log(userExists);
     res.json(userExists.rows[0].exists);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
-
-
-
-
-
-
-
-
-
 
 // ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
 app.post("/additionaldiners", async (req, res) => {
@@ -213,7 +204,12 @@ app.post("/additionaldiners", async (req, res) => {
     for (const diner of additionalDiners) {
       await pool.query(
         `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost, birthday) VALUES($1, $2, $3, $4)`,
-        [event_id, diner.additional_diner_username, diner.diner_meal_cost, diner.birthday]
+        [
+          event_id,
+          diner.additional_diner_username,
+          diner.diner_meal_cost,
+          diner.birthday,
+        ]
       );
     }
   } catch (error) {

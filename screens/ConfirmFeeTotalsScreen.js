@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
-import Logo from "./Logo";
-import PrimaryButton from "./ui/PrimaryButton";
+import Logo from "../components/Logo";
+import PrimaryButton from "../components/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 
-const ConfirmFeeTotals = () => {
+const ConfirmFeeTotalsScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
     useState(true);
@@ -60,7 +60,6 @@ const ConfirmFeeTotals = () => {
   return (
     <>
       <Logo />
-
       <ScrollView contentContainerStyle={styles.cardContainer}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>
@@ -239,4 +238,4 @@ const styles = StyleSheet.create({
 //         </Modal>
 //       )}
 
-export default ConfirmFeeTotals;
+export default ConfirmFeeTotalsScreen;

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, PanResponder, Animated } from "react-native";
-import Colors from "../../constants/colors";
+import Colors from "../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { assignAndRemoveFoodItem } from "../../store/store";
+import { assignAndRemoveFoodItem } from "../store/store";
 import { Easing } from "react-native-reanimated";
 
 const DinnerItem = ({ item, updatedDiners }) => {
@@ -112,7 +112,8 @@ const DinnerItem = ({ item, updatedDiners }) => {
               ],
             },
           ]}
-          {...panResponder.panHandlers}>
+          {...panResponder.panHandlers}
+        >
           <Text style={styles.foodInfo}>{item.name}</Text>
           <Text style={styles.foodInfo}>${item.price.toFixed(2)}</Text>
         </Animated.View>

@@ -7,18 +7,18 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/colors";
-import SecondaryButton from "./ui/SecondaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentDate } from "../utils";
-import ReceiptCapture from "./ReceiptCapture";
+import ReceiptCapture from "../ui/ReceiptCapture";
 import { setDiningEvent } from "../store/store";
 
-const NewSplitForm = () => {
+const CreateNewSplitScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isCapturingReceipt, setIsCapturingReceipt] = useState(false);
 
@@ -77,14 +77,15 @@ const NewSplitForm = () => {
             <ScrollView>
               <Image
                 style={styles.friendsImage}
-                source={require("../images/friends.png")}
+                source={require("../assets/friends.png")}
               />
               <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
               <View style={styles.container}>
                 <Formik
                   initialValues={initialValues}
                   validate={validateForm}
-                  onSubmit={handleDiningEventSubmit}>
+                  onSubmit={handleDiningEventSubmit}
+                >
                   {({ handleChange, handleSubmit, handleBlur, values }) => (
                     <View style={styles.inputContainer}>
                       <Text style={styles.label}>Date:</Text>
@@ -107,7 +108,8 @@ const NewSplitForm = () => {
                             selectedValue={values.selectedRestaurant}
                             onValueChange={(itemValue, itemIndex) =>
                               handleChange("selectedRestaurant")(itemValue)
-                            }>
+                            }
+                          >
                             <Picker.Item
                               label="Select a restaurant..."
                               value=""
@@ -280,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewSplitForm;
+export default CreateNewSplitScreen;

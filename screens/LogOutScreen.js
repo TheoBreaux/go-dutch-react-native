@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import PrimaryButton from "./ui/PrimaryButton";
-import Logo from "./Logo";
+import PrimaryButton from "../components/PrimaryButton";
+import Logo from "../components/Logo";
 import { logOut } from "../store/store";
 import { useDispatch } from "react-redux";
 

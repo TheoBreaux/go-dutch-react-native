@@ -7,18 +7,18 @@ import {
   Linking,
   Modal,
 } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { featuredRestaurants } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
-import PrimaryButton from "./ui/PrimaryButton";
+import PrimaryButton from "../components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 
-const UserHomePage = () => {
+const HomePageScreen = () => {
   const defaultProfilePicPath =
     "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/83381774-a8b5-47e5-8b55-21836fd4e707.jpeg";
 
@@ -46,7 +46,7 @@ const UserHomePage = () => {
         id: Date.now(),
         additional_diner_username: goDutchUsername,
         primary_diner: true,
-        diner_meal_cost: null,
+        diner_meal_cost: 0,
         // assignedItemsComplete: false,
         items: [],
         birthday: false,
@@ -103,13 +103,14 @@ const UserHomePage = () => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={showUpdateProfilePhotoModal}>
+          visible={showUpdateProfilePhotoModal}
+        >
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Image
                   style={styles.modalImage}
-                  source={require("../images/profile-icon.jpg")}
+                  source={require("../assets/profile-icon.jpg")}
                 />
 
                 <Text style={styles.modalText}>
@@ -123,13 +124,15 @@ const UserHomePage = () => {
                     onPress={() => {
                       navigation.navigate("UpdateProfileImage");
                       setShowUpdateProfilePhotoModal(false);
-                    }}>
+                    }}
+                  >
                     Yes
                   </PrimaryButton>
 
                   <PrimaryButton
                     width={100}
-                    onPress={() => setShowUpdateProfilePhotoModal(false)}>
+                    onPress={() => setShowUpdateProfilePhotoModal(false)}
+                  >
                     No
                   </PrimaryButton>
                 </View>
@@ -229,13 +232,14 @@ const styles = StyleSheet.create({
     marginBottom: 200,
   },
   carouselImageContainer: {
-    width: "100%",
-    height: "55%",
+    width: "90%",
+    marginHorizontal: "5%",
+    height: "75%",
   },
   carouselImage: {
     height: "100%",
     width: "100%",
-    resizeMode: "center",
+    resizeMode: "cover",
   },
   restaurantInfoContainer: {
     alignItems: "center",
@@ -261,4 +265,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserHomePage;
+export default HomePageScreen;

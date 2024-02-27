@@ -1,14 +1,14 @@
 import { View, StyleSheet, FlatList, Text } from "react-native";
-import DiningEventHistoryCard from "./DiningEventHistoryCard";
-import Logo from "./Logo";
+import DiningEventHistoryCard from "../components/DiningEventHistoryCard";
+import Logo from "../components/Logo";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
-import PrimaryButton from "./ui/PrimaryButton";
+import PrimaryButton from "../components/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const DiningEventHistory = () => {
+const DiningEventHistoryScreen = () => {
   const [diningEvents, setDiningEvents] = useState([]);
   const navigation = useNavigation();
   const username = useSelector((state) => state.userInfo.user.username);
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DiningEventHistory;
+export default DiningEventHistoryScreen;

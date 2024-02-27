@@ -1,14 +1,14 @@
 import { StyleSheet, View, ScrollView, Text } from "react-native";
-import Logo from "./Logo";
-import FoodItemDropArea from "../components/ui/FoodItemDropArea";
+import Logo from "../components/Logo";
+import FoodItemDropArea from "./FoodItemDropArea";
 import { useRoute } from "@react-navigation/native";
-import DinnerItem from "./ui/DinnerItem";
+import DinnerItem from "../components/DinnerItem";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setDiners } from "../store/store";
 import Colors from "../constants/colors";
 
-const AssignItems = () => {
+const AssignItemsArea = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
   const route = useRoute();
 
@@ -34,7 +34,10 @@ const AssignItems = () => {
     dispatch(setDiners(updatedDiners));
   }, [updatedDiners]);
 
-  console.log("IN ASSIGNITEMS COMPONENT - DININGEVENT", useSelector((state) => state.diningEvent));
+  console.log(
+    "IN ASSIGNITEMS COMPONENT - DININGEVENT",
+    useSelector((state) => state.diningEvent)
+  );
 
   return (
     <>
@@ -102,4 +105,4 @@ const styles = StyleSheet.create({
   text: { fontFamily: "red-hat-bold", fontSize: 18, marginTop: 10 },
 });
 
-export default AssignItems;
+export default AssignItemsArea;

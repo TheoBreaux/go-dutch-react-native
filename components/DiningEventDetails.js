@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Image, FlatList, Button } from "react-native";
 import Logo from "./Logo";
-import PrimaryButton from "./ui/PrimaryButton";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";

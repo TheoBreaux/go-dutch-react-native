@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllReceiptItems } from "../store/store";
-import Logo from "./Logo";
-import PrimaryButton from "./ui/PrimaryButton";
-import ConfirmableDinnerItem from "./ui/ConfirmableDinnerItem";
+import Logo from "../components/Logo";
+import PrimaryButton from "../components/PrimaryButton";
+import ConfirmableDinnerItem from "../components/ConfirmableDinnerItem";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { nanoid } from "@reduxjs/toolkit";
@@ -58,7 +58,7 @@ const configureReceiptData = (receiptAmounts) => {
   return configuredData;
 };
 
-const ConfirmReceiptItems = () => {
+const ConfirmReceiptItemsScreen = () => {
   const [separatedDinnerItems, setSeparatedDinnerItems] = useState([]);
   const [profilePicPaths, setProfilePicPaths] = useState([]);
   const [showAddItemsModal, setShowAddItemsModal] = useState(false);
@@ -222,7 +222,7 @@ const ConfirmReceiptItems = () => {
           <PrimaryButton
             width={90}
             onPress={() => {
-              navigation.navigate("AssignItems", {
+              navigation.navigate("AssignItemsArea", {
                 updatedDiners: updatedDiners,
               });
               dispatch(setAllReceiptItems(separatedDinnerItems));
@@ -329,4 +329,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ConfirmReceiptItems;
+export default ConfirmReceiptItemsScreen;

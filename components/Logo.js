@@ -5,7 +5,7 @@ const Logo = () => {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../images/go-dutch-logo.png")}
+        source={require("../assets/go-dutch-logo.png")}
       />
     </View>
   );

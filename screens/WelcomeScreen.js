@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import Logo from "./Logo";
-import PrimaryButton from "./ui/PrimaryButton";
+import Logo from "../components/Logo";
+import PrimaryButton from "../components/PrimaryButton";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -10,7 +10,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text style={styles.title}>Would you like to Go Dutch?</Text>
         <Image
           style={styles.iconImage}
-          source={require("../images/go-dutch-split-button.png")}
+          source={require("../assets/go-dutch-split-button.png")}
         />
         <View style={styles.buttonContainer}>
           <PrimaryButton onPress={() => navigation.navigate("SignUp")}>
@@ -22,7 +22,7 @@ const WelcomeScreen = ({ navigation }) => {
         </View>
         <Image
           style={styles.patternImage}
-          source={require("../images/go-dutch-pattern.png")}
+          source={require("../assets/go-dutch-pattern.png")}
         />
       </View>
     </>
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "red-hat-bold",
-    fontSize: 25,
+    fontFamily: "red-hat-regular",
+    fontSize: 30,
+    marginTop: 15,
   },
   iconImage: {
     marginTop: 30,

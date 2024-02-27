@@ -1,9 +1,8 @@
-import SignUpForm from "./components/SignUpForm";
-import PaymentSources from "./components/PaymentSources";
-import LogInForm from "./components/LogInForm";
-import UserHomePage from "./components/UserHomePage";
-import NewSplitForm from "./components/NewSplitForm";
-import DiningEventHistory from "./components/DiningEventHistory";
+import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
+import LogInScreen from "./screens/LogInScreen";
+import HomePageScreen from "./screens/HomePageScreen";
+import CreateNewSplitScreen from "./screens/CreateNewSplitScreen";
+import DiningEventHistory from "./screens/DiningEventHistoryScreen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,17 +12,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import CustomIcon from "./components/CustomIcon";
-import WelcomeScreen from "./components/WelcomeScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
-import LogOutScreen from "./components/LogOutScreen";
-import AddDiners from "./components/AddDiners";
-import AssignItems from "./components/AssignItems";
+import LogOutScreen from "./screens/LogOutScreen";
+import AddDinersScreen from "./screens/AddDinersScreen";
+import AssignItemsArea from "./ui/AssignItemsArea";
 import DiningEventDetails from "./components/DiningEventDetails";
-import FeaturedRestaurants from "./components/FeaturedRestaurants";
-import ReceiptCapture from "./components/ReceiptCapture";
-import ConfirmFeeTotals from "./components/ConfirmFeeTotals";
-import ConfirmReceiptItems from "./components/ConfirmReceiptItems";
+import FeaturedRestaurants from "./screens/FeaturedRestaurantsScreen";
+import ReceiptCapture from "./ui/ReceiptCapture";
+import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
+import WelcomeScreen from "./screens/WelcomeScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -43,10 +43,11 @@ const MainTabNavigator = () => {
           fontSize: 13,
         },
         tabBarActiveBackgroundColor: Colors.goDutchRed,
-      }}>
+      }}
+    >
       <BottomTab.Screen
         name="Home"
-        component={UserHomePage}
+        component={HomePageScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color="white" size={35} />
@@ -55,7 +56,7 @@ const MainTabNavigator = () => {
       />
       <BottomTab.Screen
         name="New Split"
-        component={NewSplitForm}
+        component={CreateNewSplitScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <CustomIcon color="white" size={35} />
@@ -110,23 +111,30 @@ const App = () => {
           initialRouteName="Welcome" //change this back to "Welcome" after developing
           screenOptions={{
             headerShown: false,
-          }}>
+          }}
+        >
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="SignUp" component={SignUpForm} />
-          <Stack.Screen name="LogIn" component={LogInForm} />
-          <Stack.Screen name="PaymentSources" component={PaymentSources} />
-          <Stack.Screen name="AddDiners" component={AddDiners} />
-          <Stack.Screen name="AssignItems" component={AssignItems} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="LogIn" component={LogInScreen} />
           <Stack.Screen
-            name="ConfirmReceiptItems"
-            component={ConfirmReceiptItems}
+            name="PaymentSourcesInputScreen"
+            component={PaymentSourcesInputScreen}
+          />
+          <Stack.Screen name="AddDinersScreen" component={AddDinersScreen} />
+          <Stack.Screen name="AssignItemsArea" component={AssignItemsArea} />
+          <Stack.Screen
+            name="ConfirmReceiptItemsScreen"
+            component={ConfirmReceiptItemsScreen}
           />
           <Stack.Screen name="History" component={DiningEventHistory} />
           <Stack.Screen
             name="DiningEventDetails"
             component={DiningEventDetails}
           />
-          <Stack.Screen name="ConfirmFeeTotals" component={ConfirmFeeTotals} />
+          <Stack.Screen
+            name="ConfirmFeeTotalsScreen"
+            component={ConfirmFeeTotalsScreen}
+          />
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}

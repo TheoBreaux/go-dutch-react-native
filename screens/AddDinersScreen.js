@@ -10,17 +10,17 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
-import Logo from "./Logo";
-import PrimaryDiner from "./PrimaryDiner";
-import PrimaryButton from "./ui/PrimaryButton";
+import Logo from "../components/Logo";
+import PrimaryDiner from "../components/PrimaryDiner";
+import PrimaryButton from "../components/PrimaryButton";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import Diner from "./Diner";
+import Diner from "../components/Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
-import ProfileIcon from "../components/ui/ProfileIcon";
-import BirthdayDiner from "./BirthdayDiner";
+import ProfileIcon from "../components/ProfileIcon";
+import BirthdayDiner from "../components/BirthdayDiner";
 
-const AddDiners = () => {
+const AddDinersScreen = () => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -109,7 +109,7 @@ const AddDiners = () => {
           id: Date.now(),
           additional_diner_username: inputValue,
           primary_diner: false,
-          diner_meal_cost: null,
+          diner_meal_cost: 0,
           // assignedItemsComplete: false,
           items: [],
           birthday: false,
@@ -146,12 +146,12 @@ const AddDiners = () => {
     setShowSelectBirthday(false);
     setShowBirthdayModal(false);
     //navigate to draggable screen
-    navigation.navigate("ConfirmReceiptItems");
+    navigation.navigate("ConfirmReceiptItemsScreen");
     // create data object to send to db
     const data = {
       event_id: eventId,
       additionalDiners: diners,
-      diner_meal_cost: null,
+      diner_meal_cost: 0,
       birthday: null,
     };
 
@@ -173,8 +173,6 @@ const AddDiners = () => {
     }
   };
 
-  console.log("IN ADDDINERS COMPONENT - DINERS", diners);
-
   return (
     <View style={styles.container}>
       <Logo />
@@ -192,7 +190,7 @@ const AddDiners = () => {
                 <>
                   <Image
                     style={styles.modalImage}
-                    source={require("../images/birthday-cake.png")}
+                    source={require("../assets/birthday-cake.png")}
                   />
                   <Text style={styles.modalText}>
                     Is it someone's birthday?
@@ -213,7 +211,7 @@ const AddDiners = () => {
                 <>
                   <Image
                     style={[styles.modalImage, styles.birthdayCake]}
-                    source={require("../images/birthday-cake.png")}
+                    source={require("../assets/birthday-cake.png")}
                   />
                   <View style={styles.birthdaySelects}>
                     <Text style={styles.modalText}>
@@ -257,7 +255,7 @@ const AddDiners = () => {
       <View style={styles.addDinersContainer}>
         <Image
           style={styles.iconImage}
-          source={require("../images/go-dutch-split-button.png")}
+          source={require("../assets/go-dutch-split-button.png")}
         />
 
         <TextInput
@@ -279,8 +277,6 @@ const AddDiners = () => {
           <FlatList
             data={diners}
             renderItem={({ item }) => (
-
-
               <Diner
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}
@@ -441,4 +437,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddDiners;
+export default AddDinersScreen;

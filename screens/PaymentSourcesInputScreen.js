@@ -1,15 +1,15 @@
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { Picker } from "@react-native-picker/picker";
 import { paymentOptions } from "../data/data";
 import { useState } from "react";
 import Colors from "../constants/colors";
 import { ErrorMessage, Formik } from "formik";
-import SecondaryButton from "./ui/SecondaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-const PaymentSources = () => {
+const PaymentSourcesInputScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [availablePrimaryPaymentOptions, setAvailablePrimaryPaymentOptions] =
     useState(paymentOptions);
@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentSources;
+export default PaymentSourcesInputScreen;

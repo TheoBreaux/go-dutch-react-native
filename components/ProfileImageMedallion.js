@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "../../constants/colors";
+import Colors from "../constants/colors";
 import { useState } from "react";
 
 const ProfileImageMedallion = ({

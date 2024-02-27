@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import Colors from "../../constants/colors";
+import Colors from "../constants/colors";
 
 const ConfirmableDinnerItem = ({ item, onDelete }) => {
   return (

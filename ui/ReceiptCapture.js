@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
-import PrimaryButton from "./ui/PrimaryButton";
+import PrimaryButton from "../components/PrimaryButton";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setEventId, setReceiptValues } from "../store/store";
 import axios from "axios";
-import Spinner from "../components/ui/Spinner";
+import Spinner from "../components/Spinner";
 import { getCurrentDate } from "../utils";
 
 const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
@@ -88,9 +88,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     }
   };
 
-
-
-  
   const saveAndSubmitReceiptImage = async () => {
     setLoading(true);
     // if (image) {
@@ -130,13 +127,8 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     alert("Receipt submitted and saved! 💸🎉");
     //should navigate to another page, possibly history
-    navigation.navigate("AddDiners");
+    navigation.navigate("AddDinersScreen");
   };
-
-
-
-
-
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;

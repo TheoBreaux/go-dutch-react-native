@@ -6,9 +6,9 @@ import {
   Keyboard,
   TouchableOpacity,
 } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import Colors from "../constants/colors";
-import SecondaryButton from "./ui/SecondaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
@@ -16,9 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
-import LocateRestaurants from "./LocateRestaurants";
+import LocateRestaurants from "../ui/LocateRestaurants";
 
-const LogInForm = () => {
+const LogInScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -198,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogInForm;
+export default LogInScreen;

@@ -6,20 +6,20 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { useState } from "react";
 import Colors from "../constants/colors";
-import SecondaryButton from "./ui/SecondaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
-import UploadProfileImage from "./UploadProfileImage";
+import UploadProfileImage from "../ui/UploadProfileImage";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
-import LocateRestaurants from "./LocateRestaurants";
+import LocateRestaurants from "../ui/LocateRestaurants";
 
-const SignUpForm = () => {
+const SignUpScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
@@ -131,7 +131,7 @@ const SignUpForm = () => {
       } else {
         dispatch(setUser(data));
         handleLocationSearch();
-        navigation.navigate("PaymentSources");
+        navigation.navigate("PaymentSourcesInputScreen");
       }
     } catch (error) {
       console.error(error);
@@ -340,4 +340,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpForm;
+export default SignUpScreen;

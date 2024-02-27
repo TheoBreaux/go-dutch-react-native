@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
-import Colors from "../../constants/colors";
+import Colors from "../constants/colors";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PrimaryButton from "./PrimaryButton";
-import ProfileImageMedallion from "./ProfileImageMedallion";
+import PrimaryButton from "../components/PrimaryButton";
+import ProfileImageMedallion from "../components/ProfileImageMedallion";
 import { useNavigation } from "@react-navigation/native";
 import {
   returnRemovedDinerItem,
-  setDinerBillComplete,
+  // setDinerBillComplete,
   updateDinerItems,
   setCurrentDinerId,
   setBirthdayDiners,
-} from "../../store/store";
+} from "../store/store";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
@@ -23,6 +23,7 @@ const FoodItemDropArea = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
+  let totalDinerMealCost = 0;
 
   // const currDinerItems = dinersUpdated[currentDinerIndex].items;
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
@@ -62,21 +63,22 @@ const FoodItemDropArea = () => {
 
   const confirmCurrentDiner = () => {
     if (separatedDinnerItems.length === 0) {
+      //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
+      dinersUpdated.map((diner) => {
+        if (diner.birthday === true) {
+          // assign birthday diners to array
+          dispatch(setBirthdayDiners(diner));
+        }
+      });
+      //send values of total meal cost to redux store
+
       //we will navigate to the tax screens and tip screens here
-      navigation.navigate("ConfirmFeeTotals");
+      navigation.navigate("ConfirmFeeTotalsScreen");
     } else {
       //setting currentDiner assigned items to be complete
       // dispatch(
       //   setDinerBillComplete({ currentDinerIndex, assignedItemsComplete: true })
       // );
-
-      //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
-      dinersUpdated.map((diner) => {
-        if (diner.birthday) {
-          // assign birthday diners to array
-          dispatch(setBirthdayDiners(diner));
-        }
-      });
 
       setShowReviewModal(false);
       setShowConfirmationModal(true);
@@ -86,17 +88,24 @@ const FoodItemDropArea = () => {
       //reset dinerReviewedItems for next diner to use
       setDinerReviewedItems([]);
     }
+    //calculate the total bill for the diner
+    currDinerItems.forEach((item) => {
+      totalDinerMealCost += item.price;
+    });
+
+    console.log("CURRENT DINER ITEMS", currDinerItems);
+    console.log("TOTAL DINER MEAL COST", totalDinerMealCost);
   };
 
   const handleNextDiner = () => {
     const currentDiner = dinersUpdated[currentDinerIndex];
     const currentDinerId = currentDiner.id;
+    //setting currentDiner total meal cost
+    currentDiner.diner_meal_cost = totalDinerMealCost;
     //update currentDinerId
     dispatch(setCurrentDinerId(currentDinerId));
     setShowConfirmationModal(false);
   };
-
-  console.log("IN FOODITEMDROPAREA - DINERSUPDATED", dinersUpdated);
 
   return (
     <>
@@ -195,7 +204,7 @@ const FoodItemDropArea = () => {
             borderRadius={75}
           />
 
-          <View style={{ zIndex: 100 }}>
+          <View style={{ zIndex: 100, alignItems: "center" }}>
             <Text style={styles.dinerInfo}>
               @{dinersUpdated[currentDinerIndex].additional_diner_username}
             </Text>

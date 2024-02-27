@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import PrimaryButton from "./ui/PrimaryButton";
+import PrimaryButton from "./PrimaryButton";
 import Colors from "../constants/colors";
 import { useDispatch } from "react-redux";
 import { removeDiner } from "../store/store";

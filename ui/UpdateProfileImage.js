@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";

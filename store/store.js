@@ -144,7 +144,7 @@ export const {
   setCurrentDinerId,
   returnRemovedDinerItem,
   updateDinerItems,
-  setDinerBillComplete,
+  // setDinerBillComplete,
   assignAndRemoveFoodItem,
   addDiner,
   removeDiner,

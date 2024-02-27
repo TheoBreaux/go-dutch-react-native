@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const FeaturedRestaurants = () => {
+const FeaturedRestaurantsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>FeaturedRestaurants</Text>
+      <Text>FeaturedRestaurantsScreen</Text>
     </View>
   );
 };
@@ -16,6 +16,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeaturedRestaurants;
+export default FeaturedRestaurantsScreen;
 
 // POSSIBLY CARDS WITH INFO FOR ALL PAYING ADVERTISERS WITH LINKS IN A FLATLIST
