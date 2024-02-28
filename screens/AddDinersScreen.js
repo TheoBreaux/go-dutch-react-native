@@ -57,6 +57,8 @@ const AddDinersScreen = () => {
     }
   };
 
+
+
   useEffect(() => {
     const autoCompleteDiner = async () => {
       try {
@@ -64,15 +66,25 @@ const AddDinersScreen = () => {
           `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
+        console.log("SUGGESTIONS DATA", data);
+        const suggestionsWithData = data.map(suggestion => ({
+          ...suggestion,
+          profilePicPath: suggestion.profilePicPath
+        }));
         setSuggestions(
-          data.sort((a, b) => a.username.localeCompare(b.username))
+          suggestionsWithData.sort((a, b) => a.username.localeCompare(b.username))
         );
+        console.log("SUGGESTTIONS WITH DATA", suggestionsWithData)
+        const profilePicPath = suggestionsWithData[0].profilePicPath;
       } catch (error) {
         throw error;
       }
     };
     autoCompleteDiner();
   }, [inputValue]);
+
+
+
 
   const addDinerClickHandler = async () => {
     //disable add diner button if no value is entered
@@ -104,6 +116,7 @@ const AddDinersScreen = () => {
         ]
       );
     } else {
+      const profilePic = suggestions.find((suggestion) => suggestion.username === inputValue)?.profilePicPath;
       dispatch(
         addDiner({
           event_id: eventId,
@@ -114,7 +127,7 @@ const AddDinersScreen = () => {
           // assignedItemsComplete: false,
           items: [],
           birthday: false,
-          profile_pic_image_path: null,
+          profile_pic_image_path: profilePic || null,
         })
       );
       setInputValue("");
@@ -122,6 +135,11 @@ const AddDinersScreen = () => {
       setShowAllDinersAddedModal(true);
     }
   };
+
+
+
+
+
 
   const handleInputChange = (text) => {
     setInputValue(text);
@@ -183,7 +201,8 @@ const AddDinersScreen = () => {
     }
   };
 
-  console.log("Selected USER", selectedUser);
+
+  console.log("DINERS INFO", diners);
 
   return (
     <View style={styles.container}>
@@ -292,7 +311,7 @@ const AddDinersScreen = () => {
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}
                 diner={item}
-                selectedUser={selectedUser}
+                profilePicPath={item.profile_pic_image_path}
               />
             )}
           />
@@ -324,6 +343,9 @@ const AddDinersScreen = () => {
         </View>
       )}
 
+
+
+
       {showSuggestions && (
         <FlatList
           style={styles.showSuggestionsContainer}
@@ -340,6 +362,9 @@ const AddDinersScreen = () => {
           )}
         />
       )}
+
+
+
     </View>
   );
 };

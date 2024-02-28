@@ -1,32 +1,34 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
+import React from "react";
 import PrimaryButton from "./PrimaryButton";
 import Colors from "../constants/colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeDiner } from "../store/store";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
+const Diner = ({ additionalDinerUsername, diner, profilePicPath }) => {
+  //check to see if users current profile pic path is null
+  const usingDefaultProfilePhoto = diner.profile_pic_image_path === null;
 
-const Diner = ({ additionalDinerUsername, diner, selectedUser }) => {
-
-  const [profilePicPath, setProfilePicPath] = useState("");
-
-  useEffect(() => {
-  setProfilePicPath(selectedUser.profilePicPath)
-})
- 
+  console.log("IN DINER COMPONENT", diner);
   const dispatch = useDispatch();
-
-  console.log(selectedUser)
 
   return (
     <View style={styles.container}>
-      <ProfileImageMedallion
-        profileImagePath={profilePicPath}
-        width={50}
-        height={50}
-        borderRadius={25}
-      />
+      {usingDefaultProfilePhoto ? (
+        <Image
+          source={require("../assets/default-profile-icon.jpg")}
+          style={styles.profilePic}
+        />
+      ) : (
+        <ProfileImageMedallion
+          profileImagePath={profilePicPath}
+          width={50}
+          height={50}
+          borderRadius={25}
+        />
+      )}
+
       <Text style={styles.text}>{additionalDinerUsername}</Text>
       <PrimaryButton width={40} onPress={() => dispatch(removeDiner(diner))}>
         X
@@ -46,6 +48,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     height: 75,
     paddingLeft: 10,
+  },
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "black",
+    resizeMode: "cover",
   },
   text: {
     color: Colors.goDutchBlue,

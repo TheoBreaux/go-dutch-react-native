@@ -19,13 +19,20 @@ import { useEffect } from "react";
 
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
-  const usingDefaultProfilePhoto = useSelector((state) => state.userInfo.user.profilePicPath) === null;
+  const usingDefaultProfilePhoto =
+    useSelector((state) => state.userInfo.user.profilePicPath) === null;
 
-  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] = useState(usingDefaultProfilePhoto);
+  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
+    useState(usingDefaultProfilePhoto);
 
   const username = useSelector((state) => state.userInfo.user.firstName);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
-  const currentCityResponse = useSelector((state) => state.userInfo.currentCity);
+  const currentCityResponse = useSelector(
+    (state) => state.userInfo.currentCity
+  );
+  const profilePicImagePath = useSelector(
+    (state) => state.userInfo.user.profilePicPath
+  );
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -41,7 +48,7 @@ const HomePageScreen = () => {
         // assignedItemsComplete: false,
         items: [],
         birthday: false,
-        profile_pic_image_path: null,
+        profile_pic_image_path: profilePicImagePath,
       })
     );
   }, [goDutchUsername]);

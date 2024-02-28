@@ -157,9 +157,12 @@ const CreateNewSplitScreen = () => {
                             editable={false}
                           />
                         </View>
-                        <Text style={styles.notListedText}>
-                          Not listed? Input below
-                        </Text>
+
+                        {!isFormValid && (
+                          <Text style={styles.notListedText}>
+                            Not listed? Input below
+                          </Text>
+                        )}
                       </View>
 
                       <View style={styles.inputContainer}>
