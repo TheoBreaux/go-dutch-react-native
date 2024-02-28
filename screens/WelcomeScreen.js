@@ -13,7 +13,10 @@ const WelcomeScreen = ({ navigation }) => {
           source={require("../assets/go-dutch-split-button.png")}
         />
         <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={() => navigation.navigate("SignUp")}>
+          <PrimaryButton
+            // width={20}
+            onPress={() => navigation.navigate("SignUp")}
+          >
             Sign Up
           </PrimaryButton>
           <PrimaryButton onPress={() => navigation.navigate("LogIn")}>

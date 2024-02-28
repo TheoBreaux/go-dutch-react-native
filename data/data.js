@@ -39,6 +39,29 @@ export const featuredRestaurants = [
     rating: "4.3/5.0",
     imgUrl: "https://resizer.otstatic.com/v2/photos/xlarge/3/48269713.webp",
   },
+  {
+    name: "Bestia",
+    address: "2121 E 7th Pl",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90021",
+    website: "https://bestiala.com",
+    rating: "4.6/5.0",
+    imgUrl:
+      "https://lh3.googleusercontent.com/p/AF1QipP0W1JTr2VAHVBx_JQJ-opNwKXkYREWoatPwB8a=s680-w680-h510",
+  },
+
+  {
+    name: "Laurel Hardware",
+    address: "7984 Santa Monica Blvd",
+    city: "West Hollywood",
+    state: "CA",
+    zip: "90046",
+    website: "https://www.laurelhardware.com",
+    rating: "4.5/5.0",
+    imgUrl:
+      "https://images.squarespace-cdn.com/content/v1/5d4061e927a556000148c1e2/1570129091108-211GW6A1C2A2END7U528/Website+5.jpg?format=1000w",
+  },
 
   {
     name: "Girl & the Goat",
@@ -53,26 +76,15 @@ export const featuredRestaurants = [
   },
 
   {
-    name: "Laurel Hardware",
-    address: "7984 Santa Monica Blvd",
-    city: "West Hollywood",
-    state: "CA",
-    zip: "90046",
-    website: "https://www.laurelhardware.com",
-    rating: "4.5/5.0",
-    imgUrl:
-      "https://images.squarespace-cdn.com/content/v1/5d4061e927a556000148c1e2/1570129091108-211GW6A1C2A2END7U528/Website+5.jpg?format=1000w",
-  },
-  {
-    name: "Republique Restaurant",
+    name: "République Restaurant",
     address: "624 S La Brea Ave",
     city: "Los Angeles",
     state: "CA",
     zip: "90036",
     website: "https://republiquela.com/",
-    rating: "4.7/5.0",
+    rating: "4.8/5.0",
     imgUrl:
-      "https://media.cntraveler.com/photos/5a60ee5f2f090155d7b0b1d9/16:9/w_1600,c_limit/Republique_Octopus_Kristen-Teig2018.jpg",
+      "https://lh3.googleusercontent.com/p/AF1QipPEjdeiG5Zgxuw-JdNOB_CMysTUimA3zrUy1zqE=s680-w680-h510",
   },
 
   {
@@ -85,17 +97,5 @@ export const featuredRestaurants = [
     rating: "4.6/5.0",
     imgUrl:
       "https://lh3.googleusercontent.com/p/AF1QipP3_9B-0X2sw3VHao4YjLGUdDqpg1SCf_5ZlRHG=s680-w680-h510",
-  },
-
-  {
-    name: "Bestia",
-    address: "2121 E 7th Pl",
-    city: "Los Angeles",
-    state: "CA",
-    zip: "90021",
-    website: "https://bestiala.com",
-    rating: "4.6/5.0",
-    imgUrl:
-      "https://lh3.googleusercontent.com/p/AF1QipP0W1JTr2VAHVBx_JQJ-opNwKXkYREWoatPwB8a=s680-w680-h510",
   },
 ];

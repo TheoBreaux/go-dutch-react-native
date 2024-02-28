@@ -1,15 +1,32 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 import Colors from "../constants/colors";
 import { useDispatch } from "react-redux";
 import { removeDiner } from "../store/store";
+import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const Diner = ({ additionalDinerUsername, diner }) => {
+
+const Diner = ({ additionalDinerUsername, diner, selectedUser }) => {
+
+  const [profilePicPath, setProfilePicPath] = useState("");
+
+  useEffect(() => {
+  setProfilePicPath(selectedUser.profilePicPath)
+})
+ 
   const dispatch = useDispatch();
+
+  console.log(selectedUser)
 
   return (
     <View style={styles.container}>
+      <ProfileImageMedallion
+        profileImagePath={profilePicPath}
+        width={50}
+        height={50}
+        borderRadius={25}
+      />
       <Text style={styles.text}>{additionalDinerUsername}</Text>
       <PrimaryButton width={40} onPress={() => dispatch(removeDiner(diner))}>
         X
@@ -28,6 +45,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 5,
     height: 75,
+    paddingLeft: 10,
   },
   text: {
     color: Colors.goDutchBlue,

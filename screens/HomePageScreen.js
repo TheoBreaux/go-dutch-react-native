@@ -13,28 +13,19 @@ import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "../components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 
 const HomePageScreen = () => {
-  const defaultProfilePicPath =
-    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/83381774-a8b5-47e5-8b55-21836fd4e707.jpeg";
+  //check to see if users current profile pic path is null
+  const usingDefaultProfilePhoto = useSelector((state) => state.userInfo.user.profilePicPath) === null;
 
-  //check to see if users current profile pic path is the default pic
-  const usingDefaultProfilePhoto =
-    defaultProfilePicPath ===
-    useSelector((state) => state.userInfo.user.profilePicPath);
-
-  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
-    useState(usingDefaultProfilePhoto);
+  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] = useState(usingDefaultProfilePhoto);
 
   const username = useSelector((state) => state.userInfo.user.firstName);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
-  const currentCityResponse = useSelector(
-    (state) => state.userInfo.currentCity
-  );
+  const currentCityResponse = useSelector((state) => state.userInfo.currentCity);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -87,7 +78,6 @@ const HomePageScreen = () => {
           </View>
           <View style={styles.buttonContainer}>
             <PrimaryButton onPress={handleExternalLink}>Reserve</PrimaryButton>
-            {/* <Ionicons name="star" color="red" size={30} /> */}
           </View>
         </View>
       </View>
@@ -110,7 +100,7 @@ const HomePageScreen = () => {
               <View style={styles.modalContent}>
                 <Image
                   style={styles.modalImage}
-                  source={require("../assets/profile-icon.jpg")}
+                  source={require("../assets/default-profile-icon.jpg")}
                 />
 
                 <Text style={styles.modalText}>
@@ -252,8 +242,8 @@ const styles = StyleSheet.create({
   },
   restaurantName: {
     fontFamily: "red-hat-bold",
-    fontSize: 40,
-    paddingTop: 10,
+    fontSize: 35,
+    paddingTop: 15,
   },
   restaurantText: {
     fontFamily: "red-hat-regular",

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
 const ProfileIcon = ({
@@ -9,12 +9,17 @@ const ProfileIcon = ({
   item,
 }) => {
   return (
-    <TouchableOpacity
-      style={styles.profileInfoContainer}
-      onPress={() => onPress(item.username)}
-    >
+    <TouchableOpacity onPress={() => onPress(item.username)}>
       <View style={styles.suggestionContainer}>
-        <ProfileImageMedallion profileImagePath={profileImagePath} />
+        {profileImagePath ? (
+          <ProfileImageMedallion profileImagePath={profileImagePath} />
+        ) : (
+          <Image
+            source={require("../assets/default-profile-icon.jpg")}
+            style={styles.profilePic}
+          />
+        )}
+
         <View style={styles.textContainer}>
           <Text style={styles.profileInfoText}>{userFullName}</Text>
           <Text style={styles.profileInfoText}>@{username}</Text>
@@ -25,9 +30,6 @@ const ProfileIcon = ({
 };
 
 const styles = StyleSheet.create({
-  profileInfoContainer: {
-    // marginBottom: 5,
-  },
   suggestionContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -39,6 +41,14 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: "white",
     marginBottom: 5,
+  },
+  profilePic: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "black",
+    resizeMode: "cover",
   },
   textContainer: {
     marginLeft: 5,

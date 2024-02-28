@@ -25,9 +25,10 @@ const AddDinersScreen = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showDiners, setShowDiners] = useState(true);
-  const [allDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
+  const [showAllDinersAddedModal, setShowAllDinersAddedModal] = useState(false);
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
   const [showSelectBirthday, setShowSelectBirthday] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
   const diners = useSelector((state) => state.diningEvent.diners);
@@ -131,6 +132,15 @@ const AddDinersScreen = () => {
   const handleSelectUsername = (selectedUsername) => {
     setInputValue(selectedUsername);
     setShowSuggestions(false);
+
+    const selectedUser = suggestions.find(
+      (user) => user.username === selectedUsername
+    );
+
+    // Update the profile image path if the user is found
+    if (selectedUser) {
+      setSelectedUser(selectedUser);
+    }
   };
 
   const allDinersAddedHandler = () => {
@@ -160,7 +170,7 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/`,
+        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -172,6 +182,8 @@ const AddDinersScreen = () => {
       console.error("Network error:", error);
     }
   };
+
+  console.log("Selected USER", selectedUser);
 
   return (
     <View style={styles.container}>
@@ -270,10 +282,9 @@ const AddDinersScreen = () => {
         </PrimaryButton>
       </View>
 
-      {/* <Text style={styles.title}>Diners List</Text> */}
-
       {showDiners && (
         <View>
+          {/* rendering all diners to the screen */}
           <FlatList
             data={diners}
             renderItem={({ item }) => (
@@ -281,10 +292,12 @@ const AddDinersScreen = () => {
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}
                 diner={item}
+                selectedUser={selectedUser}
               />
             )}
           />
 
+          {/* modal to confirm all diners added */}
           <View style={styles.miniModalContent}>
             <View>
               <Text

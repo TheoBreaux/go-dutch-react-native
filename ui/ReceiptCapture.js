@@ -90,13 +90,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
   const saveAndSubmitReceiptImage = async () => {
     setLoading(true);
-    // if (image) {
-    //   try {
-    //     await MediaLibrary.createAssetAsync(image);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
 
     //SENDING RECEIPT TO GET PARSED
     const url = "https://api.taggun.io/api/receipt/v1/verbose/file";

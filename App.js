@@ -19,7 +19,6 @@ import AddDinersScreen from "./screens/AddDinersScreen";
 import AssignItemsArea from "./ui/AssignItemsArea";
 import DiningEventDetails from "./components/DiningEventDetails";
 import FeaturedRestaurants from "./screens/FeaturedRestaurantsScreen";
-import ReceiptCapture from "./ui/ReceiptCapture";
 import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -34,7 +33,7 @@ const MainTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "black",
+          backgroundColor: Colors.goDutchBlue,
           height: 60,
         },
         tabBarLabelStyle: {

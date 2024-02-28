@@ -75,11 +75,14 @@ const CreateNewSplitScreen = () => {
         <>
           {!isCapturingReceipt && (
             <ScrollView>
-              <Image
-                style={styles.friendsImage}
-                source={require("../assets/friends.png")}
-              />
-              <Text style={styles.title}>SELECT A DINING EXPERIENCE</Text>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.friendsImage}
+                  source={require("../assets/friends2.jpg")}
+                />
+                <View style={styles.overlay} />
+              </View>
+
               <View style={styles.container}>
                 <Formik
                   initialValues={initialValues}
@@ -217,20 +220,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
+  imageContainer: {
+    paddingHorizontal: 15,
+  },
   friendsImage: {
-    marginTop: -15,
-    width: 400,
-    height: 250,
-    resizeMode: "contain",
+    width: "100%",
+    height: 205,
+    resizeMode: "cover",
   },
-  title: {
-    fontFamily: "red-hat-bold",
-    textAlign: "center",
-    color: Colors.goDutchBlue,
-    fontSize: 25,
-    marginTop: -15,
-    marginBottom: -20,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
+
   notListedText: {
     color: "red",
     fontSize: 12,

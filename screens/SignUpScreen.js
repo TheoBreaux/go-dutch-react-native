@@ -31,9 +31,6 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const defaultImagePath =
-    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fgodutch-89861ff9-de0d-4bef-b89e-94d3138aed5e/ImagePicker/83381774-a8b5-47e5-8b55-21836fd4e707.jpeg";
-
   const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
 
   const initialValues = {
@@ -111,7 +108,7 @@ const SignUpScreen = () => {
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
-      profilePicPath: imagePath || defaultImagePath,
+      profilePicPath: imagePath || null,
     };
 
     try {
