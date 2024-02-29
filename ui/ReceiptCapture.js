@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 25,
     fontFamily: "red-hat-regular",
-    letterSpacing: 2,
   },
   contentContainer: {
     flex: 1,

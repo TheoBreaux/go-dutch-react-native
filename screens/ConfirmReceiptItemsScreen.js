@@ -167,6 +167,11 @@ const ConfirmReceiptItemsScreen = () => {
     setSubtotal(newSubtotal);
   };
 
+  console.log(
+    "IN CONFIRMRECEIPTITEMSSCREEN COMPONENT - DINERS",
+    useSelector((state) => state.diningEvent.diners)
+  );
+
   return (
     <View style={styles.container}>
       <Logo />
@@ -222,9 +227,7 @@ const ConfirmReceiptItemsScreen = () => {
           <PrimaryButton
             width={90}
             onPress={() => {
-              navigation.navigate("AssignItemsArea", {
-                updatedDiners: updatedDiners,
-              });
+              navigation.navigate("AssignItemsArea");
               dispatch(setAllReceiptItems(separatedDinnerItems));
             }}
           >

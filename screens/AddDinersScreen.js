@@ -116,7 +116,7 @@ const AddDinersScreen = () => {
       console.log("FOUND SUGGESTION PROFILE PIC PATH", foundSuggestion.profilePicPath);
       
 
-      const profilePic = foundSuggestion.profilePicPath === null ? null : foundSuggestion.profilePicPath;
+      const profilePic = foundSuggestion.profilePicPath;
       console.log("PROFILE PIC", profilePic);
 
       dispatch(
@@ -197,6 +197,12 @@ const AddDinersScreen = () => {
       console.error("Network error:", error);
     }
   };
+
+  console.log(
+    "IN ADD DINERS COMPONENT - DINERS",
+    useSelector((state) => state.diningEvent.diners)
+  );
+
 
   return (
     <View style={styles.container}>

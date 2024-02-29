@@ -1,7 +1,6 @@
 import { StyleSheet, View, ScrollView, Text } from "react-native";
 import Logo from "../components/Logo";
 import FoodItemDropArea from "./FoodItemDropArea";
-import { useRoute } from "@react-navigation/native";
 import DinnerItem from "../components/DinnerItem";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -10,9 +9,8 @@ import Colors from "../constants/colors";
 
 const AssignItemsArea = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
-  const route = useRoute();
 
-  const { updatedDiners } = route.params;
+  const updatedDiners = useSelector((state) => state.diningEvent.diners);
 
   const separatedDinnerItems = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
@@ -29,22 +27,16 @@ const AssignItemsArea = () => {
 
   const dispatch = useDispatch();
 
-  //dispatch updating the dinersarray with updatedDiners
+  //dispatch updating the diners array with updatedDiners
   useEffect(() => {
     dispatch(setDiners(updatedDiners));
   }, [updatedDiners]);
 
-
-
-
   console.log(
-    "IN ASSIGNITEMS COMPONENT - DININGEVENT",
-    useSelector((state) => state.diningEvent)
+    "IN ASSIGNITEMS COMPONENT - DINERS",
+    useSelector((state) => state.diningEvent.diners)
   );
 
-
-
-  
   return (
     <>
       <Logo />

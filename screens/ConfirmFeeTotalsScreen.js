@@ -83,7 +83,7 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setTipConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
+              <Ionicons name="close" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -98,7 +98,7 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setTaxConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
+              <Ionicons name="close" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -113,7 +113,7 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setServiceConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
+              <Ionicons name="close" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -128,7 +128,7 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setGratuityConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
+              <Ionicons name="close" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -143,7 +143,7 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setEntertainmentConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
+              <Ionicons name="close" size={20} color="white" />
             </PrimaryButton>
           </View>
         </View>
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   restaurantAddress: {
     fontSize: 15,
     textAlign: "center",
+    marginBottom: 5,
   },
   text: {
     marginRight: 5,

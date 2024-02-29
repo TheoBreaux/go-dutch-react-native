@@ -218,9 +218,7 @@ const FoodItemDropArea = () => {
             />
           ) : (
             <ProfileImageMedallion
-              profileImagePath={
-                dinersUpdated[currentDinerIndex].profile_pic_image_path
-              }
+              profileImagePath={dinersUpdated[currentDinerIndex].profile_pic_image_path}
               width={150}
               height={150}
               borderRadius={75}
