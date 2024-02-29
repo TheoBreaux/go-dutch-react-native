@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
 import Colors from "../constants/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { removeDiner } from "../store/store";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
@@ -10,7 +10,6 @@ const Diner = ({ additionalDinerUsername, diner, profilePicPath }) => {
   //check to see if users current profile pic path is null
   const usingDefaultProfilePhoto = diner.profile_pic_image_path === null;
 
-  console.log("IN DINER COMPONENT", diner);
   const dispatch = useDispatch();
 
   return (

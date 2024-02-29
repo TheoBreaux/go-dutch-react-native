@@ -11,11 +11,11 @@ const ConfirmFeeTotalsScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
     useState(true);
-  const [taxConfirmed, setConfirmedTax] = useState(0);
-  const [tipConfirmed, setTipConfirmed] = useState(0);
-  const [gratuityConfirmed, setGratuityConfirmed] = useState(0);
-  const [serviceConfirmed, setServiceConfirmed] = useState(0);
-  const [entertainmentConfirmed, setEntertainmentConfirmed] = useState(0);
+  const [taxConfirmed, setTaxConfirmed] = useState("");
+  const [tipConfirmed, setTipConfirmed] = useState("");
+  const [gratuityConfirmed, setGratuityConfirmed] = useState("");
+  const [serviceConfirmed, setServiceConfirmed] = useState("");
+  const [entertainmentConfirmed, setEntertainmentConfirmed] = useState("");
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -38,19 +38,26 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-  const tax = findAdditionalCharge(lineItemAmounts, "tax");
-  const tip = findAdditionalCharge(lineItemAmounts, "tip");
-  const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
-  const service = findAdditionalCharge(lineItemAmounts, "service");
-  const entertainment = findAdditionalCharge(lineItemAmounts, "entertainment");
+  //set initial values from receipt
+  useEffect(() => {
+    const tax = findAdditionalCharge(lineItemAmounts, "tax");
+    const tip = findAdditionalCharge(lineItemAmounts, "tip");
+    const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
+    const service = findAdditionalCharge(lineItemAmounts, "service");
+    const entertainment = findAdditionalCharge(
+      lineItemAmounts,
+      "entertainment"
+    );
+
+    setTaxConfirmed(tax.toString());
+    setTipConfirmed(tip.toString());
+    setServiceConfirmed(service.toString());
+    setGratuityConfirmed(gratuity.toString());
+    setEntertainmentConfirmed(entertainment.toString());
+  }, []);
 
   console.log("RECEIPT VALUES", receiptValues);
   console.log("DINERS UPDATED", dinersUpdated);
-  console.log("TAX", parseFloat(tax));
-  console.log("TIP", parseFloat(tip));
-  console.log("GRATUITY", parseFloat(gratuity));
-  console.log("SERVICE", parseFloat(service));
-  console.log("ENTERTAINMENT", parseFloat(entertainment));
 
   console.log(
     "BIRTHDAY DINERS - IN CONFIRMFEETOTALS COMPONENT",
@@ -66,39 +73,32 @@ const ConfirmFeeTotalsScreen = () => {
           <Text style={styles.restaurantAddress}>{restaurantAddress}</Text>
 
           <View style={styles.feeContainer}>
+            <Text style={styles.text}>Tip</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              value={tipConfirmed}
+              onChangeText={(text) => setTipConfirmed(text)}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons name="checkmark-sharp" size={20} color="white" />
+            </PrimaryButton>
+          </View>
+
+          <View style={styles.feeContainer}>
             <Text style={styles.text}>Tax</Text>
             <TextInput
               style={styles.textInput}
               keyboardType="numeric"
               placeholder="$0.00"
               placeholderTextColor="gray"
-              value={"$" + tax.toString()}
+              value={taxConfirmed}
+              onChangeText={(text) => setTaxConfirmed(text)}
             />
             <PrimaryButton width={50}>
               <Ionicons name="checkmark-sharp" size={20} color="white" />
-            </PrimaryButton>
-            <PrimaryButton width={50}>
-              <Ionicons name="ios-add-sharp" size={20} color="white" />
-            </PrimaryButton>
-          </View>
-
-          <View style={styles.feeContainer}>
-            <Text style={styles.text}>Tip</Text>
-            <TextInput
-              style={styles.textInput}
-              keyboardType="numeric"
-              placeholder="$0.00"
-              value={tip.toString()}
-              placeholderTextColor="gray"
-              render={({ value }) => (
-                <Text style={styles.textInput}>${value}</Text>
-              )}
-            />
-            <PrimaryButton width={50}>
-              <Ionicons name="checkmark-sharp" size={20} color="white" />
-            </PrimaryButton>
-            <PrimaryButton width={50}>
-              <Ionicons name="ios-add-sharp" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -109,15 +109,11 @@ const ConfirmFeeTotalsScreen = () => {
               keyboardType="numeric"
               placeholder="$0.00"
               placeholderTextColor="gray"
-              render={({ value }) => (
-                <Text style={styles.textInput}>${value}</Text>
-              )}
+              value={serviceConfirmed}
+              onChangeText={(text) => setServiceConfirmed(text)}
             />
             <PrimaryButton width={50}>
               <Ionicons name="checkmark-sharp" size={20} color="white" />
-            </PrimaryButton>
-            <PrimaryButton width={50}>
-              <Ionicons name="ios-add-sharp" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -128,15 +124,11 @@ const ConfirmFeeTotalsScreen = () => {
               keyboardType="numeric"
               placeholder="$0.00"
               placeholderTextColor="gray"
-              render={({ value }) => (
-                <Text style={styles.textInput}>${value}</Text>
-              )}
+              value={gratuityConfirmed}
+              onChangeText={(text) => setGratuityConfirmed(text)}
             />
             <PrimaryButton width={50}>
               <Ionicons name="checkmark-sharp" size={20} color="white" />
-            </PrimaryButton>
-            <PrimaryButton width={50}>
-              <Ionicons name="ios-add-sharp" size={20} color="white" />
             </PrimaryButton>
           </View>
 
@@ -147,15 +139,11 @@ const ConfirmFeeTotalsScreen = () => {
               keyboardType="numeric"
               placeholder="$0.00"
               placeholderTextColor="gray"
-              render={({ value }) => (
-                <Text style={styles.textInput}>${value}</Text>
-              )}
+              value={entertainmentConfirmed}
+              onChangeText={(text) => setEntertainmentConfirmed(text)}
             />
             <PrimaryButton width={50}>
               <Ionicons name="checkmark-sharp" size={20} color="white" />
-            </PrimaryButton>
-            <PrimaryButton width={50}>
-              <Ionicons name="ios-add-sharp" size={20} color="white" />
             </PrimaryButton>
           </View>
         </View>
@@ -185,13 +173,13 @@ const styles = StyleSheet.create({
   restaurantAddress: {
     fontSize: 15,
     textAlign: "center",
-    marginBottom: 10,
   },
   text: {
     marginRight: 5,
     fontSize: 20,
     fontFamily: "red-hat-regular",
   },
+
   feeContainer: {
     flexDirection: "row",
     width: "100%",

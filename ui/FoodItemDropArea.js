@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import Colors from "../constants/colors";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +43,12 @@ const FoodItemDropArea = () => {
   }, []);
 
   const handleAssignedItemsReview = () => {
+    const currentDiner = dinersUpdated[currentDinerIndex];
+    // Ensure currentDiner is valid
+    if (currentDiner) {
+      const profilePic = currentDiner.profile_pic_image_path || null;
+      // Set profilePic in state or use it directly where needed
+    }
     setDinerReviewedItems(currDinerItems);
     setShowReviewModal(true);
   };
@@ -96,6 +109,9 @@ const FoodItemDropArea = () => {
     console.log("CURRENT DINER ITEMS", currDinerItems);
     console.log("TOTAL DINER MEAL COST", totalDinerMealCost);
   };
+
+
+
 
   const handleNextDiner = () => {
     const currentDiner = dinersUpdated[currentDinerIndex];
@@ -195,14 +211,32 @@ const FoodItemDropArea = () => {
             Drag user items to profile pic & review!
           </Text>
 
-          <ProfileImageMedallion
+          {dinersUpdated[currentDinerIndex].profile_pic_image_path === null ? (
+            <Image
+              source={require("../assets/default-profile-icon.jpg")}
+              style={styles.profilePic}
+            />
+          ) : (
+            <ProfileImageMedallion
+              profileImagePath={
+                dinersUpdated[currentDinerIndex].profile_pic_image_path
+              }
+              width={150}
+              height={150}
+              borderRadius={75}
+            />
+          )}
+
+          
+
+          {/* <ProfileImageMedallion
             profileImagePath={
               dinersUpdated[currentDinerIndex].profile_pic_image_path
             }
             width={150}
             height={150}
             borderRadius={75}
-          />
+          /> */}
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
             <Text style={styles.dinerInfo}>
@@ -224,13 +258,12 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginBottom: 20,
-    // padding: 15,
   },
   profilePic: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    borderColor: Colors.goDutchRed,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderColor: "black",
     borderWidth: 2,
     resizeMode: "cover",
   },

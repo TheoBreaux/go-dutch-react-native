@@ -34,11 +34,17 @@ const AssignItemsArea = () => {
     dispatch(setDiners(updatedDiners));
   }, [updatedDiners]);
 
+
+
+
   console.log(
     "IN ASSIGNITEMS COMPONENT - DININGEVENT",
     useSelector((state) => state.diningEvent)
   );
 
+
+
+  
   return (
     <>
       <Logo />
