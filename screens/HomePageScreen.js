@@ -45,7 +45,6 @@ const HomePageScreen = () => {
         additional_diner_username: goDutchUsername,
         primary_diner: true,
         diner_meal_cost: 0,
-        // assignedItemsComplete: false,
         items: [],
         birthday: false,
         profile_pic_image_path: profilePicImagePath,

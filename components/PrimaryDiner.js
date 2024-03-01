@@ -29,10 +29,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     margin: 2,
-    borderColor: Colors.goDutchRed,
+    borderColor: "black",
     borderWidth: 3,
     borderStyle: "solid",
-    backgroundColor: "#fc8181",
+    backgroundColor: Colors.goDutchRed,
     elevation: 5,
   },
   text: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   primaryName: {
     fontSize: 25,
-    color: Colors.goDutchBlue,
+    color: "white",
   },
   userInfo: {
     alignItems: "center",

@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
 import Logo from "../components/Logo";
@@ -19,6 +26,7 @@ const ConfirmFeeTotalsScreen = () => {
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
+  const mealSubtotal = useSelector((state) => state.diningEvent.event.subtotal);
 
   const lineItemAmounts = receiptValues.amounts;
   const restaurantName = receiptValues.merchantName.data;
@@ -37,6 +45,8 @@ const ConfirmFeeTotalsScreen = () => {
       return 0;
     }
   };
+
+  const calculateSuggestedTip = () => {};
 
   //set initial values from receipt
   useEffect(() => {
@@ -58,11 +68,7 @@ const ConfirmFeeTotalsScreen = () => {
 
   console.log("RECEIPT VALUES", receiptValues);
   console.log("DINERS UPDATED", dinersUpdated);
-
-  console.log(
-    "BIRTHDAY DINERS - IN CONFIRMFEETOTALS COMPONENT",
-    useSelector((state) => state.diningEvent.birthdayDiners)
-  );
+  console.log("SUBTOTAL IN CONFIRMFEETOTALS COMPONENT", mealSubtotal);
 
   return (
     <>
@@ -82,9 +88,61 @@ const ConfirmFeeTotalsScreen = () => {
               value={tipConfirmed}
               onChangeText={(text) => setTipConfirmed(text)}
             />
+
             <PrimaryButton width={50}>
-              <Ionicons name="close" size={20} color="white" />
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setTipConfirmed("")}
+              />
             </PrimaryButton>
+          </View>
+
+          <View style={styles.tipSuggestionsContainer}>
+            
+
+            <TouchableOpacity
+              onPress={() =>
+                setTipConfirmed(
+                  (0.18 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                )
+              }
+            >
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.suggestedTipText}>Good</Text>
+                <Text style={styles.emoji}>🙂</Text>
+                <Text style={styles.suggestedTipPercentage}>18%</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                setTipConfirmed(
+                  (0.2 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                )
+              }
+            >
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.suggestedTipText}>Great</Text>
+                <Text style={styles.emoji}>	😃</Text>
+                <Text style={styles.suggestedTipPercentage}>20%</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                setTipConfirmed(
+                  (0.25 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                )
+              }
+            >
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.suggestedTipText}>Wow!</Text>
+                <Text style={styles.emoji}>😄</Text>
+                <Text style={styles.suggestedTipPercentage}>25%</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.feeContainer}>
@@ -98,7 +156,12 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setTaxConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="close" size={20} color="white" />
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setTaxConfirmed("")}
+              />
             </PrimaryButton>
           </View>
 
@@ -113,7 +176,12 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setServiceConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="close" size={20} color="white" />
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setServiceConfirmed("")}
+              />
             </PrimaryButton>
           </View>
 
@@ -128,7 +196,12 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setGratuityConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="close" size={20} color="white" />
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setGratuityConfirmed("")}
+              />
             </PrimaryButton>
           </View>
 
@@ -143,7 +216,12 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setEntertainmentConfirmed(text)}
             />
             <PrimaryButton width={50}>
-              <Ionicons name="close" size={20} color="white" />
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setEntertainmentConfirmed("")}
+              />
             </PrimaryButton>
           </View>
         </View>
@@ -164,7 +242,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
-    // alignItems: "center",
   },
   restaurantName: {
     fontSize: 40,
@@ -180,7 +257,26 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "red-hat-regular",
   },
-
+  buttonTextContainer: {
+    alignItems: "center",
+    justifyContent: "center", // Center content horizontally
+  },
+  suggestedTipText: {
+    fontFamily: "red-hat-regular",
+    fontSize: 14,
+    color: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emoji: {
+    fontSize: 50, // Adjust the font size as needed
+    paddingHorizontal: 5
+  },
+  suggestedTipPercentage: {
+    fontFamily: "red-hat-bold",
+    fontSize: 16,
+    color: "black",
+  },
   feeContainer: {
     flexDirection: "row",
     width: "100%",
@@ -197,6 +293,12 @@ const styles = StyleSheet.create({
     color: "black",
     fontFamily: "red-hat-bold",
     fontSize: 30,
+  },
+  tipSuggestionsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // marginBottom: 10,
   },
 });
 

@@ -1,4 +1,11 @@
-import { StyleSheet, Text, PanResponder, Animated } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  PanResponder,
+  Animated,
+  Image,
+  View,
+} from "react-native";
 import Colors from "../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +14,7 @@ import { Easing } from "react-native-reanimated";
 
 const DinnerItem = ({ item, updatedDiners }) => {
   const [showDinnerItem, setShowDinnerItem] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
   const pan = useRef(new Animated.ValueXY()).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const rotation = useRef(new Animated.Value(0)).current;
@@ -26,6 +34,7 @@ const DinnerItem = ({ item, updatedDiners }) => {
         y: val.y,
       });
       pan.setValue({ x: 0, y: 0 });
+      setIsDragging(true); // Set dragging state to true when dragging starts
     },
     onPanResponderMove: Animated.event(
       [
@@ -40,6 +49,8 @@ const DinnerItem = ({ item, updatedDiners }) => {
       }
     ),
     onPanResponderRelease: (e, gesture) => {
+      setIsDragging(false); // Set dragging state to false when dragging ends
+
       if (isDropArea(gesture)) {
         Animated.sequence([
           // 360-degree spin animation
@@ -96,6 +107,9 @@ const DinnerItem = ({ item, updatedDiners }) => {
     outputRange: ["0deg", "360deg"],
   });
 
+  const itemBackgroundColor = isDragging ? "white" : Colors.goDutchRed;
+  const itemTextColor = isDragging ? Colors.goDutchRed : "white";
+
   return (
     <>
       {showDinnerItem && (
@@ -110,12 +124,23 @@ const DinnerItem = ({ item, updatedDiners }) => {
                 { scale: scaleValue },
                 { rotate: interpolatedRotation },
               ],
+              backgroundColor: itemBackgroundColor,
             },
           ]}
           {...panResponder.panHandlers}
         >
-          <Text style={styles.foodInfo}>{item.name}</Text>
-          <Text style={styles.foodInfo}>${item.price.toFixed(2)}</Text>
+          <Text style={[styles.foodInfo, { color: itemTextColor }]}>{item.name}</Text>
+          <Text style={[styles.foodInfo, { color: itemTextColor }]}>${item.price.toFixed(2)}</Text>
+
+          {/* Hand image overlay */}
+          {isDragging && (
+            <View style={styles.handImageContainer}>
+              <Image
+                source={require("../assets/draggable-hand-overlay.png")}
+                style={styles.handImage}
+              />
+            </View>
+          )}
         </Animated.View>
       )}
     </>
@@ -134,10 +159,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.goDutchRed,
     margin: 1,
   },
+  handImageContainer: {
+    position: "absolute",
+    top: 40,
+    left: "40%",
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  handImage: {
+    width: 50, 
+    height: 100, 
+    resizeMode: "cover", 
+    transform: [{ rotate: "45deg" }], 
+  },
   foodInfo: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
-    color: "white",
   },
 });
 

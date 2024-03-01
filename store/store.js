@@ -35,6 +35,7 @@ const diningEventSlice = createSlice({
       primaryDinerUsername: "",
       tax: "",
       tip: "",
+      subtotal: "",
       totalMealCost: "",
     },
     currentDinerId: "",
@@ -73,6 +74,9 @@ const diningEventSlice = createSlice({
     setCurrentDinerId: (state, action) => {
       state.currentDinerId = action.payload;
     },
+    updateSubtotal: (state, action) => {
+      state.event.subtotal = action.payload;
+    },
     returnRemovedDinerItem: (state, action) => {
       state.allReceiptItemsCopy.push(action.payload);
     },
@@ -81,11 +85,6 @@ const diningEventSlice = createSlice({
 
       state.diners[currentDinerIndex].items = updatedReviewedItems;
     },
-    // setDinerBillComplete: (state, action) => {
-    //   const { currentDinerIndex, assignedItemsComplete } = action.payload;
-
-    //   state.diners[currentDinerIndex].assignedItemsComplete = assignedItemsComplete;
-    // },
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 
@@ -144,11 +143,11 @@ export const {
   setCurrentDinerId,
   returnRemovedDinerItem,
   updateDinerItems,
-  // setDinerBillComplete,
   assignAndRemoveFoodItem,
   addDiner,
   removeDiner,
   updateBirthdayStatus,
+  updateSubtotal,
 } = diningEventSlice.actions;
 
 const store = configureStore({

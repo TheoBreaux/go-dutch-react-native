@@ -14,10 +14,10 @@ import ProfileImageMedallion from "../components/ProfileImageMedallion";
 import { useNavigation } from "@react-navigation/native";
 import {
   returnRemovedDinerItem,
-  // setDinerBillComplete,
   updateDinerItems,
   setCurrentDinerId,
   setBirthdayDiners,
+  updateSubtotal,
 } from "../store/store";
 
 const FoodItemDropArea = () => {
@@ -30,10 +30,9 @@ const FoodItemDropArea = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
-  let totalDinerMealCost = 0;
 
-  // const currDinerItems = dinersUpdated[currentDinerIndex].items;
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
+  let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -43,12 +42,6 @@ const FoodItemDropArea = () => {
   }, []);
 
   const handleAssignedItemsReview = () => {
-    const currentDiner = dinersUpdated[currentDinerIndex];
-    // Ensure currentDiner is valid
-    if (currentDiner) {
-      const profilePic = currentDiner.profile_pic_image_path || null;
-      // Set profilePic in state or use it directly where needed
-    }
     setDinerReviewedItems(currDinerItems);
     setShowReviewModal(true);
   };
@@ -75,6 +68,13 @@ const FoodItemDropArea = () => {
   };
 
   const confirmCurrentDiner = () => {
+    const subtotal = dinersUpdated.reduce((total, currentDiner) => {
+      currentDiner.items.forEach((item) => {
+        total += item.price;
+      });
+      return total;
+    }, 0);
+
     if (separatedDinnerItems.length === 0) {
       //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
       dinersUpdated.map((diner) => {
@@ -83,16 +83,13 @@ const FoodItemDropArea = () => {
           dispatch(setBirthdayDiners(diner));
         }
       });
-      //send values of total meal cost to redux store
+
+      //update subtotal in redux store
+      dispatch(updateSubtotal(subtotal));
 
       //we will navigate to the tax screens and tip screens here
       navigation.navigate("ConfirmFeeTotalsScreen");
     } else {
-      //setting currentDiner assigned items to be complete
-      // dispatch(
-      //   setDinerBillComplete({ currentDinerIndex, assignedItemsComplete: true })
-      // );
-
       setShowReviewModal(false);
       setShowConfirmationModal(true);
       //update the UI to the next diner in the diners array by increment currentDinerIndex
@@ -101,23 +98,16 @@ const FoodItemDropArea = () => {
       //reset dinerReviewedItems for next diner to use
       setDinerReviewedItems([]);
     }
+
     //calculate the total bill for the diner
     currDinerItems.forEach((item) => {
       totalDinerMealCost += item.price;
     });
-
-    console.log("CURRENT DINER ITEMS", currDinerItems);
-    console.log("TOTAL DINER MEAL COST", totalDinerMealCost);
   };
-
-
-
 
   const handleNextDiner = () => {
     const currentDiner = dinersUpdated[currentDinerIndex];
     const currentDinerId = currentDiner.id;
-    //setting currentDiner total meal cost
-    currentDiner.diner_meal_cost = totalDinerMealCost;
     //update currentDinerId
     dispatch(setCurrentDinerId(currentDinerId));
     setShowConfirmationModal(false);
@@ -218,23 +208,14 @@ const FoodItemDropArea = () => {
             />
           ) : (
             <ProfileImageMedallion
-              profileImagePath={dinersUpdated[currentDinerIndex].profile_pic_image_path}
+              profileImagePath={
+                dinersUpdated[currentDinerIndex].profile_pic_image_path
+              }
               width={150}
               height={150}
               borderRadius={75}
             />
           )}
-
-          
-
-          {/* <ProfileImageMedallion
-            profileImagePath={
-              dinersUpdated[currentDinerIndex].profile_pic_image_path
-            }
-            width={150}
-            height={150}
-            borderRadius={75}
-          /> */}
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
             <Text style={styles.dinerInfo}>

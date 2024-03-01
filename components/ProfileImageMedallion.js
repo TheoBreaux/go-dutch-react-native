@@ -1,7 +1,4 @@
 import { StyleSheet, View, Image } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "../constants/colors";
-import { useState } from "react";
 
 const ProfileImageMedallion = ({
   profileImagePath,
@@ -10,12 +7,6 @@ const ProfileImageMedallion = ({
   height,
   borderRadius,
 }) => {
-  const [imageError, setImageError] = useState(false);
-
-  const handleImageError = () => {
-    setImageError(true);
-  };
-
   return (
     <View>
       <Image
@@ -28,8 +19,6 @@ const ProfileImageMedallion = ({
             borderRadius: borderRadius || 20,
           },
         ]}
-
-        // onError={handleImageError}
       />
     </View>
   );

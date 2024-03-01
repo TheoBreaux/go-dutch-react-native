@@ -102,7 +102,7 @@ const ConfirmReceiptItemsScreen = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);
@@ -166,11 +166,6 @@ const ConfirmReceiptItemsScreen = () => {
     setSeparatedDinnerItems(updatedItems);
     setSubtotal(newSubtotal);
   };
-
-  console.log(
-    "IN CONFIRMRECEIPTITEMSSCREEN COMPONENT - DINERS",
-    useSelector((state) => state.diningEvent.diners)
-  );
 
   return (
     <View style={styles.container}>

@@ -32,11 +32,6 @@ const AssignItemsArea = () => {
     dispatch(setDiners(updatedDiners));
   }, [updatedDiners]);
 
-  console.log(
-    "IN ASSIGNITEMS COMPONENT - DINERS",
-    useSelector((state) => state.diningEvent.diners)
-  );
-
   return (
     <>
       <Logo />
@@ -82,13 +77,15 @@ const styles = StyleSheet.create({
     height: 50,
   },
   foodItemsListContainer: {
-    flex: 1,
     padding: 10,
     marginBottom: 5,
   },
-  textContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  textContainer: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
   completeText: {
-    marginTop: 90,
+    marginTop: 50,
     letterSpacing: 5,
     fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,

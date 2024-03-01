@@ -46,7 +46,7 @@ const AddDinersScreen = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/users/${username}`
+        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -61,7 +61,7 @@ const AddDinersScreen = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -103,21 +103,11 @@ const AddDinersScreen = () => {
           },
         ]
       );
-
-
-
-
     } else {
-      const foundSuggestion = suggestions.find(suggestion => suggestion.username === inputValue);
-      console.log("FOUND SUGGESTION", foundSuggestion);
-
-
-      // Ensure foundSuggestion is referring to the expected diner
-      console.log("FOUND SUGGESTION PROFILE PIC PATH", foundSuggestion.profilePicPath);
-      
-
+      const foundSuggestion = suggestions.find(
+        (suggestion) => suggestion.username === inputValue
+      );
       const profilePic = foundSuggestion.profilePicPath;
-      console.log("PROFILE PIC", profilePic);
 
       dispatch(
         addDiner({
@@ -126,7 +116,6 @@ const AddDinersScreen = () => {
           additional_diner_username: inputValue,
           primary_diner: false,
           diner_meal_cost: 0,
-          // assignedItemsComplete: false,
           items: [],
           birthday: false,
           profile_pic_image_path: profilePic,
@@ -185,7 +174,7 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://75cf-2603-8000-c0f0-a570-6dc7-d7ce-1fbb-44ee.ngrok-free.app/additionaldiners`,
+        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -197,12 +186,6 @@ const AddDinersScreen = () => {
       console.error("Network error:", error);
     }
   };
-
-  console.log(
-    "IN ADD DINERS COMPONENT - DINERS",
-    useSelector((state) => state.diningEvent.diners)
-  );
-
 
   return (
     <View style={styles.container}>
@@ -282,7 +265,7 @@ const AddDinersScreen = () => {
         <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
       </View>
       <PrimaryDiner />
-      <Text style={styles.title}>↓ Add diners ↓</Text>
+      {/* <Text style={styles.title}>↓ Add diners ↓</Text> */}
       <View style={styles.addDinersContainer}>
         <Image
           style={styles.iconImage}
@@ -297,7 +280,7 @@ const AddDinersScreen = () => {
         />
 
         <PrimaryButton width={130} onPress={addDinerClickHandler}>
-          Add diner
+          Add Diner
         </PrimaryButton>
       </View>
 
@@ -376,9 +359,10 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-regular",
     color: Colors.goDutchRed,
     fontSize: 30,
+    marginTop: -10,
   },
   title: {
     textAlign: "center",
@@ -409,7 +393,6 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     width: "60%",
   },
-
   showSuggestionsContainer: { padding: 5 },
   modalContainer: {
     flex: 1,
