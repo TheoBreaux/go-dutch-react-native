@@ -170,7 +170,6 @@ const ConfirmReceiptItemsScreen = () => {
   return (
     <View style={styles.container}>
       <Logo />
-
       {showAddItemsModal && (
         <Modal
           animationType="slide"

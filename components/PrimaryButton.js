@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../constants/colors";
 
-const PrimaryButton = ({ children, onPress, padding, width }) => {
+const PrimaryButton = ({ children, onPress, padding, width, height }) => {
   const buttonContainerStyle = {
     padding: padding !== undefined ? padding : 10,
     width: width !== undefined ? width : 150,
+    height: height !== undefined ? height : 50,
   };
   return (
     <View style={styles.buttonOuterContainer}>
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     color: "whitesmoke",

@@ -5,6 +5,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -13,16 +14,22 @@ import PrimaryButton from "../components/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import FeeTextInput from "../components/FeeTextInput";
 
 const ConfirmFeeTotalsScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [showConfirmTaxAndTipModal, setShowConfirmTaxAndTipModal] =
-    useState(true);
+  const [showAddFeesModal, setShowAddFeesModal] = useState(false);
+  const [newFeeName, setNewFeeName] = useState("");
+  const [newFeePrice, setNewFeePrice] = useState("");
   const [taxConfirmed, setTaxConfirmed] = useState("");
   const [tipConfirmed, setTipConfirmed] = useState("");
   const [gratuityConfirmed, setGratuityConfirmed] = useState("");
   const [serviceConfirmed, setServiceConfirmed] = useState("");
   const [entertainmentConfirmed, setEntertainmentConfirmed] = useState("");
+  const [missingFeesAdded, setMissingFeesAdded] = useState(false);
+  const [additionalCustomFeesAdded, setAdditionalCustomFeesAdded] = useState(
+    []
+  );
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -46,12 +53,13 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-  const calculateSuggestedTip = () => {};
-
   //set initial values from receipt
   useEffect(() => {
     const tax = findAdditionalCharge(lineItemAmounts, "tax");
-    const tip = findAdditionalCharge(lineItemAmounts, "tip");
+    const tip = parseFloat(mealSubtotal * 0.2)
+      .toFixed(2)
+      .toString();
+    // findAdditionalCharge(lineItemAmounts, "tip");
     const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
     const service = findAdditionalCharge(lineItemAmounts, "service");
     const entertainment = findAdditionalCharge(
@@ -68,7 +76,6 @@ const ConfirmFeeTotalsScreen = () => {
 
   console.log("RECEIPT VALUES", receiptValues);
   console.log("DINERS UPDATED", dinersUpdated);
-  console.log("SUBTOTAL IN CONFIRMFEETOTALS COMPONENT", mealSubtotal);
 
   return (
     <>
@@ -143,85 +150,89 @@ const ConfirmFeeTotalsScreen = () => {
             </PrimaryButton>
           </View>
 
-          <View style={styles.feeContainer}>
-            <Text style={styles.text}>Tax</Text>
-            <TextInput
-              style={styles.textInput}
-              keyboardType="numeric"
-              placeholder="$0.00"
-              placeholderTextColor="gray"
-              value={taxConfirmed}
-              onChangeText={(text) => setTaxConfirmed(text)}
-            />
-            <PrimaryButton width={50}>
-              <Ionicons
-                name="close"
-                size={20}
-                color="white"
-                onPress={() => setTaxConfirmed("")}
-              />
+          <FeeTextInput
+            onChangeText={(text) => setTaxConfirmed(text)}
+            onPress={() => setTaxConfirmed("")}
+            value={taxConfirmed}
+          />
+
+          <Text style={styles.missingFeesText}>Missing Fees?</Text>
+
+          <View style={{ marginBottom: 10 }}>
+            <PrimaryButton
+              onPress={() => setShowAddFeesModal(!showAddFeesModal)}
+            >
+              Add Fees
             </PrimaryButton>
           </View>
 
-          {serviceConfirmed != "0" && <View style={styles.feeContainer}>
-            <Text style={styles.text}>Service</Text>
-            <TextInput
-              style={styles.textInput}
-              keyboardType="numeric"
-              placeholder="$0.00"
-              placeholderTextColor="gray"
-              value={serviceConfirmed}
+          {/* allow user to add custom fees that may go missing  */}
+          {showAddFeesModal && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={showAddFeesModal}
+            >
+              <View style={styles.overlay}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>
+                      Please enter missing fees
+                    </Text>
+                    <View style={styles.inputsContainer}>
+                      <Text style={styles.inputLabels}>Name:</Text>
+                      <TextInput
+                        style={styles.modalTextInput}
+                        value={newFeeName}
+                        onChangeText={(text) => setNewFeeName(text)}
+                      />
+                      <Text style={styles.inputLabels}>Price:</Text>
+                      <TextInput
+                        style={styles.modalTextInput}
+                        value={newFeePrice}
+                        onChangeText={(text) => setNewFeePrice(text)}
+                        keyboardType="numeric"
+                      />
+
+                      <View style={{ flexDirection: "row" }}>
+                        <PrimaryButton
+                          width={100}
+                          onPress={() => setShowAddFeesModal(false)}
+                        >
+                          Close
+                        </PrimaryButton>
+                        <PrimaryButton width={100}>Submit</PrimaryButton>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          )}
+
+          {serviceConfirmed != "0" && (
+            <FeeTextInput
               onChangeText={(text) => setServiceConfirmed(text)}
+              onPress={() => setServiceConfirmed("")}
+              value={serviceConfirmed}
             />
-            <PrimaryButton width={50}>
-              <Ionicons
-                name="close"
-                size={20}
-                color="white"
-                onPress={() => setServiceConfirmed("")}
-              />
-            </PrimaryButton>
-          </View>}
+          )}
 
-          {gratuityConfirmed != "0" && <View style={styles.feeContainer}>
-            <Text style={styles.text}>Gratuity</Text>
-            <TextInput
-              style={styles.textInput}
-              keyboardType="numeric"
-              placeholder="$0.00"
-              placeholderTextColor="gray"
-              value={gratuityConfirmed}
+          {gratuityConfirmed != "0" && (
+            <FeeTextInput
               onChangeText={(text) => setGratuityConfirmed(text)}
+              onPress={() => setGratuityConfirmed("")}
+              value={gratuityConfirmed}
             />
-            <PrimaryButton width={50}>
-              <Ionicons
-                name="close"
-                size={20}
-                color="white"
-                onPress={() => setGratuityConfirmed("")}
-              />
-            </PrimaryButton>
-          </View>}
+          )}
 
-          {entertainmentConfirmed != "0" &&<View style={styles.feeContainer}>
-            <Text style={styles.text}>Entertainment</Text>
-            <TextInput
-              style={styles.textInput}
-              keyboardType="numeric"
-              placeholder="$0.00"
-              placeholderTextColor="gray"
-              value={entertainmentConfirmed}
+          {entertainmentConfirmed != "0" && (
+            <FeeTextInput
               onChangeText={(text) => setEntertainmentConfirmed(text)}
+              onPress={() => setEntertainmentConfirmed("")}
+              value={entertainmentConfirmed}
             />
-            <PrimaryButton width={50}>
-              <Ionicons
-                name="close"
-                size={20}
-                color="white"
-                onPress={() => setEntertainmentConfirmed("")}
-              />
-            </PrimaryButton>
-          </View>}
+          )}
         </View>
       </ScrollView>
     </>
@@ -250,13 +261,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 5,
   },
+  feeContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   text: {
     marginRight: 5,
     fontSize: 20,
     fontFamily: "red-hat-regular",
   },
+  textInput: {
+    flex: 1,
+    height: 60,
+    borderColor: "black",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    textAlign: "center",
+    color: "black",
+    fontFamily: "red-hat-bold",
+    fontSize: 25,
+  },
   buttonTextContainer: {
-    height: 65,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
     borderColor: "black",
@@ -283,54 +311,55 @@ const styles = StyleSheet.create({
     marginTop: -5,
     color: "black",
   },
-  feeContainer: {
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textInput: {
-    flex: 1,
-    height: 65,
-    borderColor: "black",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    textAlign: "center",
-    color: "black",
+  missingFeesText: {
     fontFamily: "red-hat-bold",
-    fontSize: 30,
+    fontSize: 25,
+    letterSpacing: 1,
   },
   tipSuggestionsContainer: {
-    // marginTop: -20,
     flexDirection: "row",
   },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
+  modalContent: {
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "red-hat-bold",
+    marginBottom: 20,
+  },
+  inputsContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  inputLabels: {
+    fontSize: 18,
+    marginBottom: 5,
+    fontFamily: "red-hat-bold",
+  },
+  modalTextInput: {
+    width: "80%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingLeft: 10,
+    textAlign: "center",
+    color: "black",
+    fontFamily: "red-hat-regular",
+    fontSize: 25,
+  },
 });
-
-// // {showConfirmationModal && (
-//         <Modal
-//           visible={showConfirmationModal}
-//           animationType="slide"
-//           transparent={true}
-//         >
-//           <View style={styles.overlay}>
-//             <View style={styles.modalContainer}>
-//               <View style={styles.modalContent}>
-//                 <Text style={styles.subtitle}>Are you sure?</Text>
-//                 <View style={{ flexDirection: "row" }}>
-//                   <PrimaryButton width={80} onPress={handleNextDiner}>
-//                     Yes
-//                   </PrimaryButton>
-//                   <PrimaryButton
-//                     onPress={() => setShowReviewModal(true)}
-//                     width={80}
-//                   >
-//                     No
-//                   </PrimaryButton>
-//                 </View>
-//               </View>
-//             </View>
-//           </View>
-//         </Modal>
-//       )}
 
 export default ConfirmFeeTotalsScreen;
