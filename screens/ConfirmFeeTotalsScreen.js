@@ -89,6 +89,50 @@ const ConfirmFeeTotalsScreen = () => {
               onChangeText={(text) => setTipConfirmed(text)}
             />
 
+            <View style={styles.tipSuggestionsContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  setTipConfirmed(
+                    (0.18 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                  )
+                }
+              >
+                <View style={styles.buttonTextContainer}>
+                  <Text style={styles.emoji}>🙂</Text>
+                  <Text style={styles.suggestedTipText}>Good</Text>
+                  <Text style={styles.suggestedTipPercentage}>18%</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  setTipConfirmed(
+                    (0.2 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                  )
+                }
+              >
+                <View style={styles.buttonTextContainer}>
+                  <Text style={styles.emoji}>😃</Text>
+                  <Text style={styles.suggestedTipText}>Great</Text>
+                  <Text style={styles.suggestedTipPercentage}>20%</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  setTipConfirmed(
+                    (0.25 * parseFloat(mealSubtotal)).toFixed(2).toString()
+                  )
+                }
+              >
+                <View style={styles.buttonTextContainer}>
+                  <Text style={styles.emoji}>😄</Text>
+                  <Text style={styles.suggestedTipText}>Wow!</Text>
+                  <Text style={styles.suggestedTipPercentage}>25%</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
             <PrimaryButton width={50}>
               <Ionicons
                 name="close"
@@ -97,52 +141,6 @@ const ConfirmFeeTotalsScreen = () => {
                 onPress={() => setTipConfirmed("")}
               />
             </PrimaryButton>
-          </View>
-
-          <View style={styles.tipSuggestionsContainer}>
-            
-
-            <TouchableOpacity
-              onPress={() =>
-                setTipConfirmed(
-                  (0.18 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                )
-              }
-            >
-              <View style={styles.buttonTextContainer}>
-                <Text style={styles.suggestedTipText}>Good</Text>
-                <Text style={styles.emoji}>🙂</Text>
-                <Text style={styles.suggestedTipPercentage}>18%</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                setTipConfirmed(
-                  (0.2 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                )
-              }
-            >
-              <View style={styles.buttonTextContainer}>
-                <Text style={styles.suggestedTipText}>Great</Text>
-                <Text style={styles.emoji}>	😃</Text>
-                <Text style={styles.suggestedTipPercentage}>20%</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                setTipConfirmed(
-                  (0.25 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                )
-              }
-            >
-              <View style={styles.buttonTextContainer}>
-                <Text style={styles.suggestedTipText}>Wow!</Text>
-                <Text style={styles.emoji}>😄</Text>
-                <Text style={styles.suggestedTipPercentage}>25%</Text>
-              </View>
-            </TouchableOpacity>
           </View>
 
           <View style={styles.feeContainer}>
@@ -165,7 +163,7 @@ const ConfirmFeeTotalsScreen = () => {
             </PrimaryButton>
           </View>
 
-          <View style={styles.feeContainer}>
+          {serviceConfirmed != "0" && <View style={styles.feeContainer}>
             <Text style={styles.text}>Service</Text>
             <TextInput
               style={styles.textInput}
@@ -183,9 +181,9 @@ const ConfirmFeeTotalsScreen = () => {
                 onPress={() => setServiceConfirmed("")}
               />
             </PrimaryButton>
-          </View>
+          </View>}
 
-          <View style={styles.feeContainer}>
+          {gratuityConfirmed != "0" && <View style={styles.feeContainer}>
             <Text style={styles.text}>Gratuity</Text>
             <TextInput
               style={styles.textInput}
@@ -203,9 +201,9 @@ const ConfirmFeeTotalsScreen = () => {
                 onPress={() => setGratuityConfirmed("")}
               />
             </PrimaryButton>
-          </View>
+          </View>}
 
-          <View style={styles.feeContainer}>
+          {entertainmentConfirmed != "0" &&<View style={styles.feeContainer}>
             <Text style={styles.text}>Entertainment</Text>
             <TextInput
               style={styles.textInput}
@@ -223,7 +221,7 @@ const ConfirmFeeTotalsScreen = () => {
                 onPress={() => setEntertainmentConfirmed("")}
               />
             </PrimaryButton>
-          </View>
+          </View>}
         </View>
       </ScrollView>
     </>
@@ -258,23 +256,31 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-regular",
   },
   buttonTextContainer: {
+    height: 65,
     alignItems: "center",
-    justifyContent: "center", // Center content horizontally
+    justifyContent: "center",
+    borderColor: "black",
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   suggestedTipText: {
     fontFamily: "red-hat-regular",
     fontSize: 14,
-    color: "white",
+    color: "black",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: -5,
   },
   emoji: {
-    fontSize: 50, // Adjust the font size as needed
-    paddingHorizontal: 5
+    fontSize: 25,
+    marginHorizontal: 5,
   },
   suggestedTipPercentage: {
     fontFamily: "red-hat-bold",
     fontSize: 16,
+    marginTop: -5,
     color: "black",
   },
   feeContainer: {
@@ -285,8 +291,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    height: 55,
-    borderColor: "gray",
+    height: 65,
+    borderColor: "black",
     borderWidth: 1,
     paddingHorizontal: 10,
     textAlign: "center",
@@ -295,10 +301,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   tipSuggestionsContainer: {
+    // marginTop: -20,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    // marginBottom: 10,
   },
 });
 
