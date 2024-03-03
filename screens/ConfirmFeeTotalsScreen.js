@@ -53,6 +53,18 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
+  const addAdditionalCustomFees = () => {
+    setAdditionalCustomFeesAdded([
+      ...additionalCustomFeesAdded,
+      {
+        feeName: newFeeName,
+        feePrice: parseFloat(newFeePrice),
+      },
+    ]);
+    setNewFeeName("");
+    setNewFeePrice("");
+  };
+
   //set initial values from receipt
   useEffect(() => {
     const tax = findAdditionalCharge(lineItemAmounts, "tax");
@@ -76,6 +88,7 @@ const ConfirmFeeTotalsScreen = () => {
 
   console.log("RECEIPT VALUES", receiptValues);
   console.log("DINERS UPDATED", dinersUpdated);
+  console.log(additionalCustomFeesAdded);
 
   return (
     <>
@@ -156,6 +169,16 @@ const ConfirmFeeTotalsScreen = () => {
             value={taxConfirmed}
           />
 
+          {/* render additional custom fees */} 
+          {!showAddFeesModal &&
+            additionalCustomFeesAdded.map((fee, index) => (
+              <FeeTextInput
+                key={index}
+                feeName={fee.feeName}
+                value={fee.feePrice}
+              />
+            ))}
+
           <Text style={styles.missingFeesText}>Missing Fees?</Text>
 
           <View style={{ marginBottom: 10 }}>
@@ -201,7 +224,12 @@ const ConfirmFeeTotalsScreen = () => {
                         >
                           Close
                         </PrimaryButton>
-                        <PrimaryButton width={100}>Submit</PrimaryButton>
+                        <PrimaryButton
+                          width={100}
+                          onPress={addAdditionalCustomFees}
+                        >
+                          Submit
+                        </PrimaryButton>
                       </View>
                     </View>
                   </View>
