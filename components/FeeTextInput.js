@@ -3,10 +3,10 @@ import React from "react";
 import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 
-const FeeTextInput = ({ onChangeText, onPress, value }) => {
+const FeeTextInput = ({ onChangeText, onPress, value, feeName }) => {
   return (
     <View style={styles.feeContainer}>
-      <Text style={styles.text}>Tax</Text>
+      <Text style={styles.text}>{feeName}</Text>
       <TextInput
         style={styles.textInput}
         keyboardType="numeric"

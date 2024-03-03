@@ -164,6 +164,7 @@ const ConfirmFeeTotalsScreen = () => {
           </View>
 
           <FeeTextInput
+            feeName="Tax"
             onChangeText={(text) => setTaxConfirmed(text)}
             onPress={() => setTaxConfirmed("")}
             value={taxConfirmed}
@@ -175,7 +176,7 @@ const ConfirmFeeTotalsScreen = () => {
               <FeeTextInput
                 key={index}
                 feeName={fee.feeName}
-                value={fee.feePrice}
+                value={fee.feePrice.toFixed(2).toString()}
               />
             ))}
 
