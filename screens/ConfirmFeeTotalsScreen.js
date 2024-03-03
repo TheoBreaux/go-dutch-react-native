@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import FeeTextInput from "../components/FeeTextInput";
+import AddPropertyToListModal from "../components/AddPropertyToListModal";
 
 const ConfirmFeeTotalsScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -170,7 +171,7 @@ const ConfirmFeeTotalsScreen = () => {
             value={taxConfirmed}
           />
 
-          {/* render additional custom fees */} 
+          {/* render additional custom fees */}
           {!showAddFeesModal &&
             additionalCustomFeesAdded.map((fee, index) => (
               <FeeTextInput
@@ -192,6 +193,17 @@ const ConfirmFeeTotalsScreen = () => {
 
           {/* allow user to add custom fees that may go missing  */}
           {showAddFeesModal && (
+            <AddPropertyToListModal
+              visible={showAddFeesModal}
+              onClose={() => setShowAddFeesModal(false)}
+              onSubmit={addAdditionalCustomFees}
+              newItemName={newFeeName}
+              setNewItemName={setNewFeeName}
+              newItemPrice={newFeePrice}
+              setNewItemPrice={setNewFeePrice}
+            />
+          )}
+          {/* {showAddFeesModal && (
             <Modal
               animationType="slide"
               transparent={true}
@@ -237,7 +249,7 @@ const ConfirmFeeTotalsScreen = () => {
                 </View>
               </View>
             </Modal>
-          )}
+          )} */}
 
           {serviceConfirmed != "0" && (
             <FeeTextInput

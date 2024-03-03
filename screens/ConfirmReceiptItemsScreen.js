@@ -15,6 +15,7 @@ import ConfirmableDinnerItem from "../components/ConfirmableDinnerItem";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { nanoid } from "@reduxjs/toolkit";
+import AddPropertyToListModal from "../components/AddPropertyToListModal";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -113,11 +114,11 @@ const ConfirmReceiptItemsScreen = () => {
     fetchProfilePicPaths();
   }, [eventId]);
 
-  const updatedDiners = profilePicPaths.map((diner, i) => ({
-    ...diners[i],
-    profile_pic_image_path:
-      diner.profile_pic_image_path || diners[i]?.profile_pic_image_path,
-  }));
+  // const updatedDiners = profilePicPaths.map((diner, i) => ({
+  //   ...diners[i],
+  //   profile_pic_image_path:
+  //     diner.profile_pic_image_path || diners[i]?.profile_pic_image_path,
+  // }));
 
   const addNewItem = () => {
     if (newItemName === "" || newItemPrice === "") {
@@ -170,49 +171,17 @@ const ConfirmReceiptItemsScreen = () => {
   return (
     <View style={styles.container}>
       <Logo />
-      {showAddItemsModal && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showAddItemsModal}
-        >
-          <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>
-                  Please enter missing item info
-                </Text>
-                <View style={styles.inputsContainer}>
-                  <Text style={styles.inputLabels}>Name:</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={newItemName}
-                    onChangeText={(text) => setNewItemName(text)}
-                  />
-                  <Text style={styles.inputLabels}>Price:</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={newItemPrice}
-                    onChangeText={(text) => setNewItemPrice(text)}
-                    keyboardType="numeric"
-                  />
 
-                  <View style={{ flexDirection: "row" }}>
-                    <PrimaryButton
-                      width={100}
-                      onPress={() => setShowAddItemsModal(false)}
-                    >
-                      Close
-                    </PrimaryButton>
-                    <PrimaryButton width={100} onPress={addNewItem}>
-                      Submit
-                    </PrimaryButton>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
+      {showAddItemsModal && (
+        <AddPropertyToListModal
+          visible={showAddItemsModal}
+          onClose={() => setShowAddItemsModal(false)}
+          onSubmit={addNewItem}
+          newItemName={newItemName}
+          setNewItemName={setNewItemName}
+          newItemPrice={newItemPrice}
+          setNewItemPrice={setNewItemPrice}
+        />
       )}
 
       <View style={styles.confirmContainer}>
