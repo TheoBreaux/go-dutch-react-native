@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Image,
 } from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -18,7 +19,6 @@ import FeeTextInput from "../components/FeeTextInput";
 import AddPropertyToListModal from "../components/AddPropertyToListModal";
 
 const ConfirmFeeTotalsScreen = () => {
-  const [isFormValid, setIsFormValid] = useState(false);
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
   const [newFeeName, setNewFeeName] = useState("");
   const [newFeePrice, setNewFeePrice] = useState("");
@@ -27,14 +27,22 @@ const ConfirmFeeTotalsScreen = () => {
   const [gratuityConfirmed, setGratuityConfirmed] = useState("");
   const [serviceConfirmed, setServiceConfirmed] = useState("");
   const [entertainmentConfirmed, setEntertainmentConfirmed] = useState("");
-  const [missingFeesAdded, setMissingFeesAdded] = useState(false);
+  const [showTreatBirthdayDinersModal, setShowTreatBirthdayDinersModal] =
+    useState(false);
   const [additionalCustomFeesAdded, setAdditionalCustomFeesAdded] = useState(
     []
   );
+  const [feeValue, setFeeValue] = useState("");
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
-  const mealSubtotal = useSelector((state) => state.diningEvent.event.subtotal);
+  const mealSubtotal = useSelector(
+    (state) => state.diningEvent.event.subtotal
+  ).toFixed(2);
+
+  const birthdayDiners = useSelector(
+    (state) => state.diningEvent.birthdayDiners
+  );
 
   const lineItemAmounts = receiptValues.amounts;
   const restaurantName = receiptValues.merchantName.data;
@@ -55,6 +63,10 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const addAdditionalCustomFees = () => {
+    if (newFeeName === "" || newFeePrice === "") {
+      return setShowAddFeesModal(false);
+    }
+
     setAdditionalCustomFeesAdded([
       ...additionalCustomFeesAdded,
       {
@@ -64,15 +76,20 @@ const ConfirmFeeTotalsScreen = () => {
     ]);
     setNewFeeName("");
     setNewFeePrice("");
+    setShowAddFeesModal(false);
+  };
+
+  const handleFeeChange = (text) => {
+    setFeeValue(text);
   };
 
   //set initial values from receipt
   useEffect(() => {
     const tax = findAdditionalCharge(lineItemAmounts, "tax");
+
     const tip = parseFloat(mealSubtotal * 0.2)
       .toFixed(2)
       .toString();
-    // findAdditionalCharge(lineItemAmounts, "tip");
     const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
     const service = findAdditionalCharge(lineItemAmounts, "service");
     const entertainment = findAdditionalCharge(
@@ -87,9 +104,68 @@ const ConfirmFeeTotalsScreen = () => {
     setEntertainmentConfirmed(entertainment.toString());
   }, []);
 
+  const postData = async () => {
+    const data = {
+      tax: taxConfirmed,
+      tip: diners,
+      //loop through diners
+      diner_meal_cost: 0,
+      total_meal_cost: 0,
+    };
+
+    try {
+      const response = await fetch(
+        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app//diningevent/values`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(),
+        }
+      );
+      // const result = await response.json();
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
+
+  const calculateWithBirthdayDiners = () => {
+    const sharedExpenses =
+      (parseFloat(taxConfirmed) +
+        parseFloat(tipConfirmed) +
+        parseFloat(sumAdditionalFees())) /
+      dinersUpdated.length;
+
+    navigation.navigate("CheckCloseOutDetails");
+  };
+
+  const calculateWithoutBirthdayDiners = () => {
+    const sharedExpenses =
+      (parseFloat(taxConfirmed) +
+        parseFloat(tipConfirmed) +
+        parseFloat(sumAdditionalFees())) /
+      (dinersUpdated.length - setBirthdayDiners.length);
+    navigation.navigate("CheckCloseOutDetails");
+  };
+
+  const sumAdditionalFees = () => {
+    let totalAdditionalFees = 0;
+
+    additionalCustomFeesAdded.forEach((fee) => {
+      totalAdditionalFees += fee.feePrice;
+    });
+    return totalAdditionalFees.toFixed(2);
+  };
+
   console.log("RECEIPT VALUES", receiptValues);
   console.log("DINERS UPDATED", dinersUpdated);
-  console.log(additionalCustomFeesAdded);
+  console.log(
+    "ADDITIONAL CUSTOMER FEES ADDED ARRAY",
+    additionalCustomFeesAdded
+  );
+  console.log("TAX", taxConfirmed);
+  console.log("TIP", tipConfirmed);
+  console.log("SUBTOTAL", mealSubtotal);
+  console.log("ADDITIONAL CUSTOM FEES ADDED", sumAdditionalFees());
 
   return (
     <>
@@ -164,12 +240,32 @@ const ConfirmFeeTotalsScreen = () => {
             </PrimaryButton>
           </View>
 
-          <FeeTextInput
+          <View style={styles.feeContainer}>
+            <Text style={styles.text}>Tax</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              placeholder="$0.00"
+              placeholderTextColor="gray"
+              value={taxConfirmed}
+              onChangeText={(text) => setTaxConfirmed(text)}
+            />
+            <PrimaryButton width={50}>
+              <Ionicons
+                name="close"
+                size={20}
+                color="white"
+                onPress={() => setTaxConfirmed("")}
+              />
+            </PrimaryButton>
+          </View>
+
+          {/* <FeeTextInput
             feeName="Tax"
-            onChangeText={(text) => setTaxConfirmed(text)}
-            onPress={() => setTaxConfirmed("")}
+            onChangeText={handleFeeChange}
             value={taxConfirmed}
-          />
+            onClearPress={() => setTaxConfirmed("")}
+          /> */}
 
           {/* render additional custom fees */}
           {!showAddFeesModal &&
@@ -178,16 +274,25 @@ const ConfirmFeeTotalsScreen = () => {
                 key={index}
                 feeName={fee.feeName}
                 value={fee.feePrice.toFixed(2).toString()}
+                onChangeText={handleFeeChange}
+                onClearPress={() => setFeeValue("")}
               />
             ))}
 
           <Text style={styles.missingFeesText}>Missing Fees?</Text>
 
-          <View style={{ marginBottom: 10 }}>
+          <View style={{ marginBottom: 10, flexDirection: "row" }}>
             <PrimaryButton
               onPress={() => setShowAddFeesModal(!showAddFeesModal)}
             >
-              Add Fees
+              Yes, add them!
+            </PrimaryButton>
+
+            {/* will navigate to breakdown page to close out check, send all info to DB, then back to Home */}
+            <PrimaryButton
+              onPress={() => setShowTreatBirthdayDinersModal(true)}
+            >
+              No, continue!
             </PrimaryButton>
           </View>
 
@@ -201,55 +306,45 @@ const ConfirmFeeTotalsScreen = () => {
               setNewItemName={setNewFeeName}
               newItemPrice={newFeePrice}
               setNewItemPrice={setNewFeePrice}
+              type="Fee Name"
             />
           )}
-          {/* {showAddFeesModal && (
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={showAddFeesModal}
-            >
-              <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>
-                      Please enter missing fees
-                    </Text>
-                    <View style={styles.inputsContainer}>
-                      <Text style={styles.inputLabels}>Name:</Text>
-                      <TextInput
-                        style={styles.modalTextInput}
-                        value={newFeeName}
-                        onChangeText={(text) => setNewFeeName(text)}
-                      />
-                      <Text style={styles.inputLabels}>Price:</Text>
-                      <TextInput
-                        style={styles.modalTextInput}
-                        value={newFeePrice}
-                        onChangeText={(text) => setNewFeePrice(text)}
-                        keyboardType="numeric"
-                      />
 
-                      <View style={{ flexDirection: "row" }}>
-                        <PrimaryButton
-                          width={100}
-                          onPress={() => setShowAddFeesModal(false)}
-                        >
-                          Close
-                        </PrimaryButton>
-                        <PrimaryButton
-                          width={100}
-                          onPress={addAdditionalCustomFees}
-                        >
-                          Submit
-                        </PrimaryButton>
-                      </View>
+          {/* ask if diners will take care of birthdat diner's meals */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showTreatBirthdayDinersModal}
+          >
+            <View style={styles.overlay}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <>
+                    <Text style={styles.birthdayEmoji}>🥳</Text>
+
+                    <Text style={styles.modalText}>
+                      Taking care of birthday diner(s)?
+                    </Text>
+                    <View style={styles.buttonsContainer}>
+                      <PrimaryButton
+                        width={100}
+                        onPress={calculateWithBirthdayDiners}
+                      >
+                        Yes
+                      </PrimaryButton>
+
+                      <PrimaryButton
+                        width={100}
+                        onPress={calculateWithoutBirthdayDiners}
+                      >
+                        No
+                      </PrimaryButton>
                     </View>
-                  </View>
+                  </>
                 </View>
               </View>
-            </Modal>
-          )} */}
+            </View>
+          </Modal>
 
           {serviceConfirmed != "0" && (
             <FeeTextInput
@@ -367,7 +462,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContainer: {
-    width: "80%",
+    width: "90%",
     backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
@@ -379,6 +474,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "red-hat-bold",
     marginBottom: 20,
+  },
+  modalImage: {
+    width: 300,
+    height: 300,
+  },
+  modalText: {
+    fontFamily: "red-hat-regular",
+    fontSize: 25,
+  },
+  birthdayEmoji: {
+    fontSize: 150,
   },
   inputsContainer: {
     width: "100%",
@@ -400,6 +506,9 @@ const styles = StyleSheet.create({
     color: "black",
     fontFamily: "red-hat-regular",
     fontSize: 25,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
   },
 });
 

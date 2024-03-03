@@ -23,6 +23,7 @@ import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
+import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -133,6 +134,10 @@ const App = () => {
           <Stack.Screen
             name="ConfirmFeeTotalsScreen"
             component={ConfirmFeeTotalsScreen}
+          />
+          <Stack.Screen
+            name="CheckCloseOutDetails"
+            component={CheckCloseOutDetails}
           />
           <Stack.Screen
             name="Main"

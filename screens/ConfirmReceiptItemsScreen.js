@@ -181,6 +181,7 @@ const ConfirmReceiptItemsScreen = () => {
           setNewItemName={setNewItemName}
           newItemPrice={newItemPrice}
           setNewItemPrice={setNewItemPrice}
+          type="Item"
         />
       )}
 

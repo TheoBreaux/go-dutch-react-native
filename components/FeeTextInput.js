@@ -1,9 +1,23 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 
-const FeeTextInput = ({ onChangeText, onPress, value, feeName }) => {
+const FeeTextInput = ({ onChangeText, value, feeName, onClearPress }) => {
+
+  const [inputValue, setInputValue] = useState(value);
+
+
+  const handleChangeText = (text) => {
+    setInputValue(text);
+    onChangeText(text); // Propagating the change to parent component if needed
+  };
+
+  const handleClearPress = () => {
+    setInputValue(""); // Resetting input value to empty string
+    onClearPress(); // Clearing fee value in parent component if needed
+  };
+
   return (
     <View style={styles.feeContainer}>
       <Text style={styles.text}>{feeName}</Text>
@@ -12,11 +26,11 @@ const FeeTextInput = ({ onChangeText, onPress, value, feeName }) => {
         keyboardType="numeric"
         placeholder="$0.00"
         placeholderTextColor="gray"
-        value={value}
-        onChangeText={onChangeText}
+        value={inputValue}
+        onChangeText={handleChangeText}
       />
       <PrimaryButton width={50}>
-        <Ionicons name="close" size={20} color="white" onPress={onPress} />
+        <Ionicons name="close" size={20} color="white" onPress={handleClearPress} />
       </PrimaryButton>
     </View>
   );

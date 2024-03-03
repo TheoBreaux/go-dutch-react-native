@@ -32,6 +32,8 @@ const FoodItemDropArea = () => {
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
 
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
+  const currentDiner =
+    dinersUpdated[currentDinerIndex].additional_diner_username;
   let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();
@@ -124,7 +126,24 @@ const FoodItemDropArea = () => {
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Review Items</Text>
+                <Text style={styles.modalTitle}>Review items for</Text>
+                {dinersUpdated[currentDinerIndex].profile_pic_image_path ===
+                null ? (
+                  <Image
+                    source={require("../assets/default-profile-icon.jpg")}
+                    style={styles.profilePic}
+                  />
+                ) : (
+                  <ProfileImageMedallion
+                    profileImagePath={
+                      dinersUpdated[currentDinerIndex].profile_pic_image_path
+                    }
+                    width={100}
+                    height={100}
+                    borderRadius={50}
+                  />
+                )}
+                <Text style={styles.currentDinerText}>@{currentDiner}</Text>
                 <Text style={styles.modalSubtitle}>
                   Press EDIT to return, CONFIRM to move to the next diner, or
                   DELETE to remove an item from this diner's bill.
@@ -218,9 +237,7 @@ const FoodItemDropArea = () => {
           )}
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
-            <Text style={styles.dinerInfo}>
-              @{dinersUpdated[currentDinerIndex].additional_diner_username}
-            </Text>
+            <Text style={styles.dinerInfo}>@{currentDiner}</Text>
             {
               <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
                 Review
@@ -232,6 +249,8 @@ const FoodItemDropArea = () => {
     </>
   );
 };
+
+// console.log(dinersUpdated);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -299,11 +318,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "red-hat-bold",
   },
+  currentDinerText: {
+    fontFamily: "red-hat-bold",
+    fontSize: 20,
+  },
+
   modalSubtitle: {
     fontSize: 15,
     width: 350,
     fontFamily: "red-hat-regular",
     marginBottom: 10,
+    marginTop: 10,
     textAlign: "center",
   },
   itemContainer: {

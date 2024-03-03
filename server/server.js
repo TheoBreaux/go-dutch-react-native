@@ -300,3 +300,28 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+// UPDATE FINAL VALUES FOR DINING EVENT AND ADDITIONAL DINERS
+app.post("/diningevent/values", async (req, res) => {
+  const { profilePicPath, username } = req.body;
+
+  console.log(profilePicPath, username);
+
+  try {
+    const newUserData = await pool.query(
+      `UPDATE users 
+      SET profile_pic_image_path = $1
+      WHERE username = $2`,
+      [profilePicPath, username]
+    );
+
+    // On success, send a 200 OK response
+    res.status(200).json({ success: true });
+    console.log("From server:", newUserData);
+  } catch (error) {
+    console.error(error);
+    // On error, send a 500 Internal Server Error response with an error message
+    res.status(500).json({ detail: error.detail });
+  }
+});

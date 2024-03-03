@@ -10,15 +10,16 @@ const AddPropertyToListModal = ({
   setNewItemName,
   newItemPrice,
   setNewItemPrice,
+  type,
 }) => {
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Please enter missing info</Text>
+            <Text style={styles.modalTitle}>Please Enter Missing {type}</Text>
             <View style={styles.inputsContainer}>
-              <Text style={styles.inputLabels}>Name:</Text>
+              <Text style={styles.inputLabels}>{type}:</Text>
               <TextInput
                 style={styles.textInput}
                 value={newItemName}
