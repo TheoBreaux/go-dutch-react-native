@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 40,
     borderWidth: 2,
+    borderColor: Colors.goDutchRed,
     padding: 5,
     borderRadius: 10,
     backgroundColor: Colors.goDutchRed,

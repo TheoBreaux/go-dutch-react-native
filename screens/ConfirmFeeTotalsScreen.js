@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
-  Image,
 } from "react-native";
 import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -43,6 +42,8 @@ const ConfirmFeeTotalsScreen = () => {
   const birthdayDiners = useSelector(
     (state) => state.diningEvent.birthdayDiners
   );
+
+  const eventId = useSelector((state) => state.diningEvent.event.eventId);
 
   const lineItemAmounts = receiptValues.amounts;
   const restaurantName = receiptValues.merchantName.data;
@@ -104,22 +105,49 @@ const ConfirmFeeTotalsScreen = () => {
     setEntertainmentConfirmed(entertainment.toString());
   }, []);
 
-  const postData = async () => {
+  const postDataFinalDiningEventValues = async () => {
+    const totalMealCost =
+      parseFloat(mealSubtotal) +
+      parseFloat(taxConfirmed) +
+      parseFloat(tipConfirmed) +
+      parseFloat(sumAdditionalFees());
+
     const data = {
+      eventId: eventId,
       tax: taxConfirmed,
-      tip: diners,
-      //loop through diners
-      diner_meal_cost: 0,
-      total_meal_cost: 0,
+      tip: tipConfirmed,
+      totalMealCost: parseFloat(totalMealCost),
     };
 
     try {
       const response = await fetch(
-        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app//diningevent/values`,
+        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(),
+          body: JSON.stringify(data),
+        }
+      );
+      // const result = await response.json();
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
+
+  const postDataFinalAdditionalDinerValues = async (sharedExpenses) => {
+    const data = {
+      eventId: eventId,
+      sharedExpenses: sharedExpenses,
+      dinersUpdated: dinersUpdated,
+    };
+
+    try {
+      const response = await fetch(
+        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners/values`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
         }
       );
       // const result = await response.json();
@@ -129,21 +157,28 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithBirthdayDiners = () => {
+    //calculate fees taking care of birthday diners
+    const sharedExpenses =
+      (parseFloat(taxConfirmed) +
+        parseFloat(tipConfirmed) +
+        parseFloat(sumAdditionalFees())) /
+      (dinersUpdated.length - birthdayDiners.length);
+
+    navigation.navigate("CheckCloseOutDetails");
+  };
+
+  const calculateWithoutBirthdayDiners = () => {
+    //calculate fees not taking care of or no birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
         parseFloat(tipConfirmed) +
         parseFloat(sumAdditionalFees())) /
       dinersUpdated.length;
 
-    navigation.navigate("CheckCloseOutDetails");
-  };
-
-  const calculateWithoutBirthdayDiners = () => {
-    const sharedExpenses =
-      (parseFloat(taxConfirmed) +
-        parseFloat(tipConfirmed) +
-        parseFloat(sumAdditionalFees())) /
-      (dinersUpdated.length - setBirthdayDiners.length);
+    //post final dining event values data to database
+    postDataFinalDiningEventValues();
+    //post final additional diner values data to database
+    postDataFinalAdditionalDinerValues(sharedExpenses);
     navigation.navigate("CheckCloseOutDetails");
   };
 
@@ -259,13 +294,6 @@ const ConfirmFeeTotalsScreen = () => {
               />
             </PrimaryButton>
           </View>
-
-          {/* <FeeTextInput
-            feeName="Tax"
-            onChangeText={handleFeeChange}
-            value={taxConfirmed}
-            onClearPress={() => setTaxConfirmed("")}
-          /> */}
 
           {/* render additional custom fees */}
           {!showAddFeesModal &&

@@ -19,16 +19,17 @@ const SecondaryButton = ({ children, onPress }) => {
 const styles = StyleSheet.create({
   buttonOuterContainer: {
     borderRadius: 5,
-    borderWidth: 3,
+    borderWidth: 2,
     marginTop: 10,
     overflow: "hidden",
+    borderColor: Colors.goDutchBlue,
   },
   buttonContainer: {
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     margin: 2,
     width: 370,
-    borderColor: "black",
+    borderColor: Colors.goDutchBlue,
     borderWidth: 3,
     borderStyle: "solid",
     padding: 10,

@@ -24,15 +24,16 @@ const PrimaryButton = ({ children, onPress, padding, width, height }) => {
 const styles = StyleSheet.create({
   buttonOuterContainer: {
     borderRadius: 5,
-    borderWidth: 3,
+    borderWidth: 2,
     margin: 10,
     overflow: "hidden",
+    borderColor: Colors.goDutchBlue,
   },
   buttonContainer: {
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
     margin: 2,
-    borderColor: "black",
+    borderColor: Colors.goDutchBlue,
     borderWidth: 1,
     borderStyle: "solid",
     alignItems: "center",

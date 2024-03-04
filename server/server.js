@@ -301,27 +301,58 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
   }
 });
 
-
-// UPDATE FINAL VALUES FOR DINING EVENT AND ADDITIONAL DINERS
+// UPDATE FINAL VALUES FOR DINING EVENT
 app.post("/diningevent/values", async (req, res) => {
-  const { profilePicPath, username } = req.body;
-
-  console.log(profilePicPath, username);
+  const { tax, tip, totalMealCost, eventId } = req.body;
 
   try {
-    const newUserData = await pool.query(
-      `UPDATE users 
-      SET profile_pic_image_path = $1
-      WHERE username = $2`,
-      [profilePicPath, username]
+    const diningEventData = await pool.query(
+      `UPDATE dining_events 
+      SET tax = $1,
+      tip = $2,
+      total_meal_cost = $3
+      WHERE event_id = $4`,
+      [tax, tip, totalMealCost, eventId]
     );
-
     // On success, send a 200 OK response
     res.status(200).json({ success: true });
-    console.log("From server:", newUserData);
+    console.log("From server:", diningEventData);
   } catch (error) {
     console.error(error);
     // On error, send a 500 Internal Server Error response with an error message
     res.status(500).json({ detail: error.detail });
+  }
+});
+
+// UPDATE FINAL VALUES FOR ADDITIONAL DINERS
+app.post("/additionaldiners/values", async (req, res) => {
+  const { sharedExpenses, dinersUpdated, eventId } = req.body;
+
+  console.log("SHARED EXPENSES", sharedExpenses);
+  console.log("DINERS UPDATED", dinersUpdated);
+  console.log("EVENT ID", eventId);
+
+  try {
+    for (const diner of dinersUpdated) {
+      //loop through diners items to get total
+      let dinerMealCost = 0;
+
+      diner.items.forEach((item) => {
+        dinerMealCost += parseFloat(item.price);
+      });
+
+      dinerMealCost += sharedExpenses;
+
+      await pool.query(
+        `UPDATE additional_diners
+          SET diner_meal_cost = $1
+          WHERE event_id = $2 AND additional_diner_username = $3`,
+        [dinerMealCost.toFixed(2), eventId, diner.additional_diner_username]
+      );
+    }
+    res.status(200).send("Diner meal costs updated successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating diner meal costs");
   }
 });
