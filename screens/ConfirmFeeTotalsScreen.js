@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
@@ -32,7 +32,6 @@ const ConfirmFeeTotalsScreen = () => {
     []
   );
   const [feeValue, setFeeValue] = useState("");
-  const [payingForBirthdayDiners, setPayingForBirthdayDiners] = useState(false);
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -161,7 +160,6 @@ const ConfirmFeeTotalsScreen = () => {
       eventId: eventId,
       sharedExpenses: sharedExpenses,
       dinersUpdated: dinersUpdated,
-      payingForBirthdayDiners: payingForBirthdayDiners,
     };
 
     try {
@@ -180,8 +178,6 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithBirthdayDiners = () => {
-    //indicate that group is paying for birthday diner meals
-    setPayingForBirthdayDiners(true);
     //calculate fees taking care of birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -198,8 +194,6 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithoutBirthdayDiners = () => {
-    //indicate that group is paying for birthday diner meals
-    setPayingForBirthdayDiners(false);
     //calculate fees not taking care of or no birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -234,6 +228,7 @@ const ConfirmFeeTotalsScreen = () => {
   console.log("TIP", tipConfirmed);
   console.log("SUBTOTAL", mealSubtotal);
   console.log("ADDITIONAL CUSTOM FEES ADDED", sumAdditionalFees());
+  console.log("DINERS UPDATED", dinersUpdated);
 
   return (
     <>

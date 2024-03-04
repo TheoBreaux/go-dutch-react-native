@@ -326,24 +326,26 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, eventId, payingForBirthdayDiners } =
-    req.body;
+  const { sharedExpenses, dinersUpdated, eventId } = req.body;
 
   console.log("SHARED EXPENSES", sharedExpenses);
   console.log("DINERS UPDATED", dinersUpdated);
   console.log("EVENT ID", eventId);
-  console.log("PAYING FOR BIRTHDAY DINERS", payingForBirthdayDiners);
 
   try {
     for (const diner of dinersUpdated) {
       //loop through diners items to get total
       let dinerMealCost = 0;
 
-      diner.items.forEach((item) => {
-        dinerMealCost += parseFloat(item.price);
-      });
+      if (diner.birthday) {
+        dinerMealCost += 0;
+      } else {
+        diner.items.forEach((item) => {
+          dinerMealCost += parseFloat(item.price);
+        });
 
-      dinerMealCost += sharedExpenses;
+        dinerMealCost += sharedExpenses;
+      }
 
       await pool.query(
         `UPDATE additional_diners

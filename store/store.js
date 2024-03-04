@@ -85,6 +85,7 @@ const diningEventSlice = createSlice({
 
       state.diners[currentDinerIndex].items = updatedReviewedItems;
     },
+
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
 
@@ -148,6 +149,7 @@ export const {
   removeDiner,
   updateBirthdayStatus,
   updateSubtotal,
+  updateBirthdayDinerBill,
 } = diningEventSlice.actions;
 
 const store = configureStore({
