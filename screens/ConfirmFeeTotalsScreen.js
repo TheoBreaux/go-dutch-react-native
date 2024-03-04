@@ -160,6 +160,7 @@ const ConfirmFeeTotalsScreen = () => {
       eventId: eventId,
       sharedExpenses: sharedExpenses,
       dinersUpdated: dinersUpdated,
+      birthdayDiners: birthdayDiners,
     };
 
     try {

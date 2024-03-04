@@ -326,25 +326,40 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, eventId } = req.body;
-
-  console.log("SHARED EXPENSES", sharedExpenses);
-  console.log("DINERS UPDATED", dinersUpdated);
-  console.log("EVENT ID", eventId);
+  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
 
   try {
+    //sum birthday diner(s) meal costs
+    let birthdayDinerMealCost = 0;
+
+    //calculate birthday diners meal costs
+    for (const diner of birthdayDiners) {
+      diner.items.forEach((item) => {
+        birthdayDinerMealCost += parseFloat(item.price);
+      });
+    }
+
     for (const diner of dinersUpdated) {
       //loop through diners items to get total
       let dinerMealCost = 0;
+      //calculate shared birthday diner(s) meal costs
+      const sharedBirthdayDinerMealCosts =
+        birthdayDinerMealCost / (dinersUpdated.length - birthdayDiners.length);
 
+      //if the diner has a birthday
       if (diner.birthday) {
+        //set the birthday diners meal cost to 0
         dinerMealCost += 0;
       } else {
+        //sum items
         diner.items.forEach((item) => {
           dinerMealCost += parseFloat(item.price);
         });
 
         dinerMealCost += sharedExpenses;
+
+        //if there are birthday diners add their shared expense to other diners total meal cost
+        dinerMealCost += sharedBirthdayDinerMealCosts;
       }
 
       await pool.query(

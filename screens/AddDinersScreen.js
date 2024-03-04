@@ -13,12 +13,13 @@ import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryDiner from "../components/PrimaryDiner";
 import PrimaryButton from "../components/PrimaryButton";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "../components/Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
 import ProfileIcon from "../components/ProfileIcon";
 import BirthdayDiner from "../components/BirthdayDiner";
+
 
 const AddDinersScreen = () => {
   const [inputValue, setInputValue] = useState("");
@@ -285,7 +286,7 @@ const AddDinersScreen = () => {
       </View>
 
       {showDiners && (
-        <View>
+        <React.Fragment>
           {/* rendering all diners to the screen */}
           <FlatList
             data={diners}
@@ -323,7 +324,7 @@ const AddDinersScreen = () => {
               </PrimaryButton>
             </View>
           </View>
-        </View>
+        </React.Fragment>
       )}
 
       {showSuggestions && (
