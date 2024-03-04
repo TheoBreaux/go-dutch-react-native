@@ -326,11 +326,13 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, eventId } = req.body;
+  const { sharedExpenses, dinersUpdated, eventId, payingForBirthdayDiners } =
+    req.body;
 
   console.log("SHARED EXPENSES", sharedExpenses);
   console.log("DINERS UPDATED", dinersUpdated);
   console.log("EVENT ID", eventId);
+  console.log("PAYING FOR BIRTHDAY DINERS", payingForBirthdayDiners);
 
   try {
     for (const diner of dinersUpdated) {

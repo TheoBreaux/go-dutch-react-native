@@ -32,6 +32,7 @@ const ConfirmFeeTotalsScreen = () => {
     []
   );
   const [feeValue, setFeeValue] = useState("");
+  const [payingForBirthdayDiners, setPayingForBirthdayDiners] = useState(false);
 
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
@@ -42,6 +43,8 @@ const ConfirmFeeTotalsScreen = () => {
   const birthdayDiners = useSelector(
     (state) => state.diningEvent.birthdayDiners
   );
+
+  const birthdayDinersPresent = birthdayDiners.length > 0;
 
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
 
@@ -82,6 +85,25 @@ const ConfirmFeeTotalsScreen = () => {
 
   const handleFeeChange = (text) => {
     setFeeValue(text);
+  };
+
+  const handleNoBirthdaysPresent = () => {
+    //calculate fees not taking care of or no birthday diners
+    const sharedExpenses =
+      (parseFloat(taxConfirmed) +
+        parseFloat(tipConfirmed) +
+        parseFloat(sumAdditionalFees())) /
+      dinersUpdated.length;
+    if (birthdayDinersPresent) {
+      setShowTreatBirthdayDinersModal(true);
+    } else {
+      //post final dining event values data to database
+      postDataFinalDiningEventValues();
+      //post final additional diner values data to database
+      postDataFinalAdditionalDinerValues(sharedExpenses);
+      //navigate to close out check
+      navigation.navigate("CheckCloseOutDetails");
+    }
   };
 
   //set initial values from receipt
@@ -139,6 +161,7 @@ const ConfirmFeeTotalsScreen = () => {
       eventId: eventId,
       sharedExpenses: sharedExpenses,
       dinersUpdated: dinersUpdated,
+      payingForBirthdayDiners: payingForBirthdayDiners,
     };
 
     try {
@@ -157,6 +180,8 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithBirthdayDiners = () => {
+    //indicate that group is paying for birthday diner meals
+    setPayingForBirthdayDiners(true);
     //calculate fees taking care of birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -164,10 +189,17 @@ const ConfirmFeeTotalsScreen = () => {
         parseFloat(sumAdditionalFees())) /
       (dinersUpdated.length - birthdayDiners.length);
 
+    //post final dining event values data to database
+    postDataFinalDiningEventValues();
+    //post final additional diner values data to database
+    postDataFinalAdditionalDinerValues(sharedExpenses);
+    //navigate to close out check
     navigation.navigate("CheckCloseOutDetails");
   };
 
   const calculateWithoutBirthdayDiners = () => {
+    //indicate that group is paying for birthday diner meals
+    setPayingForBirthdayDiners(false);
     //calculate fees not taking care of or no birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -179,6 +211,7 @@ const ConfirmFeeTotalsScreen = () => {
     postDataFinalDiningEventValues();
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses);
+    //navigate to close out check
     navigation.navigate("CheckCloseOutDetails");
   };
 
@@ -317,9 +350,7 @@ const ConfirmFeeTotalsScreen = () => {
             </PrimaryButton>
 
             {/* will navigate to breakdown page to close out check, send all info to DB, then back to Home */}
-            <PrimaryButton
-              onPress={() => setShowTreatBirthdayDinersModal(true)}
-            >
+            <PrimaryButton onPress={handleNoBirthdaysPresent}>
               No, continue!
             </PrimaryButton>
           </View>
@@ -339,40 +370,42 @@ const ConfirmFeeTotalsScreen = () => {
           )}
 
           {/* ask if diners will take care of birthdat diner's meals */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={showTreatBirthdayDinersModal}
-          >
-            <View style={styles.overlay}>
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <>
-                    <Text style={styles.birthdayEmoji}>🥳</Text>
+          {birthdayDinersPresent && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={showTreatBirthdayDinersModal}
+            >
+              <View style={styles.overlay}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <>
+                      <Text style={styles.birthdayEmoji}>🥳</Text>
 
-                    <Text style={styles.modalText}>
-                      Taking care of birthday diner(s)?
-                    </Text>
-                    <View style={styles.buttonsContainer}>
-                      <PrimaryButton
-                        width={100}
-                        onPress={calculateWithBirthdayDiners}
-                      >
-                        Yes
-                      </PrimaryButton>
+                      <Text style={styles.modalText}>
+                        Taking care of birthday diner(s)?
+                      </Text>
+                      <View style={styles.buttonsContainer}>
+                        <PrimaryButton
+                          width={100}
+                          onPress={calculateWithBirthdayDiners}
+                        >
+                          Yes
+                        </PrimaryButton>
 
-                      <PrimaryButton
-                        width={100}
-                        onPress={calculateWithoutBirthdayDiners}
-                      >
-                        No
-                      </PrimaryButton>
-                    </View>
-                  </>
+                        <PrimaryButton
+                          width={100}
+                          onPress={calculateWithoutBirthdayDiners}
+                        >
+                          No
+                        </PrimaryButton>
+                      </View>
+                    </>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Modal>
+            </Modal>
+          )}
 
           {serviceConfirmed != "0" && (
             <FeeTextInput
