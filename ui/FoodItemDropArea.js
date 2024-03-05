@@ -30,6 +30,7 @@ const FoodItemDropArea = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [dinerReviewedItems, setDinerReviewedItems] = useState([]);
   const [currentDinerIndex, setCurrentDinerIndex] = useState(0);
+  const [notSure, setNotSure] = useState(false);
 
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
   const currentDiner =
@@ -94,6 +95,7 @@ const FoodItemDropArea = () => {
     } else {
       setShowReviewModal(false);
       setShowConfirmationModal(true);
+
       //update the UI to the next diner in the diners array by increment currentDinerIndex
       setCurrentDinerIndex((prevIndex) => prevIndex + 1);
 
@@ -108,11 +110,19 @@ const FoodItemDropArea = () => {
   };
 
   const handleNextDiner = () => {
+    setNotSure(false)
     const currentDiner = dinersUpdated[currentDinerIndex];
     const currentDinerId = currentDiner.id;
     //update currentDinerId
     dispatch(setCurrentDinerId(currentDinerId));
     setShowConfirmationModal(false);
+  };
+
+  const handleNoConfirmation = () => {
+    setNotSure(true);
+    setShowConfirmationModal(false);
+    setCurrentDinerIndex((prevIndex) => prevIndex - 1); // Move back to the previous diner
+    setDinerReviewedItems([]); // Reset reviewed items
   };
 
   return (
@@ -145,8 +155,9 @@ const FoodItemDropArea = () => {
                 )}
                 <Text style={styles.currentDinerText}>@{currentDiner}</Text>
                 <Text style={styles.modalSubtitle}>
-                  Press EDIT to return, CONFIRM to move to the next diner, or
-                  DELETE to remove an item from this diner's bill.
+                  Press RETURN to return to items, DELETE to remove an item from
+                  current diner's bill or CONFIRM to confirm items below and
+                  move to next diner.
                 </Text>
                 {/* need to get the current dinners items array and map over it */}
                 {dinerReviewedItems.map((item) => (
@@ -173,7 +184,7 @@ const FoodItemDropArea = () => {
                       setShowConfirmationModal(false);
                     }}
                   >
-                    Edit
+                    Return
                   </PrimaryButton>
                   <PrimaryButton width={90} onPress={confirmCurrentDiner}>
                     Confirm
@@ -196,13 +207,10 @@ const FoodItemDropArea = () => {
               <View style={styles.modalContent}>
                 <Text style={styles.subtitle}>Are you sure?</Text>
                 <View style={{ flexDirection: "row" }}>
-                  <PrimaryButton width={80} onPress={handleNextDiner}>
+                  <PrimaryButton width={75} onPress={handleNextDiner}>
                     Yes
                   </PrimaryButton>
-                  <PrimaryButton
-                    onPress={() => setShowReviewModal(true)}
-                    width={80}
-                  >
+                  <PrimaryButton onPress={handleNoConfirmation} width={75}>
                     No
                   </PrimaryButton>
                 </View>
@@ -238,6 +246,15 @@ const FoodItemDropArea = () => {
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
             <Text style={styles.dinerInfo}>@{currentDiner}</Text>
+
+            {notSure && (
+              <View style={{ flexDirection: "row"}}>
+                <Image source={require("../assets/down-arrow.png") } />
+                <Image source={require("../assets/down-arrow.png")} />
+                <Image source={require("../assets/down-arrow.png")} />
+              </View>
+            )}
+
             {
               <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
                 Review
@@ -249,8 +266,6 @@ const FoodItemDropArea = () => {
     </>
   );
 };
-
-// console.log(dinersUpdated);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -269,7 +284,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 200,
-    marginTop: 60,
+    marginTop: 65,
+    marginBottom: 5,
   },
   iconContainer: { marginTop: 20 },
   title: {

@@ -20,7 +20,6 @@ import { addDiner, setEventIdForPrimary } from "../store/store";
 import ProfileIcon from "../components/ProfileIcon";
 import BirthdayDiner from "../components/BirthdayDiner";
 
-
 const AddDinersScreen = () => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -38,6 +37,7 @@ const AddDinersScreen = () => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const showMiniModal = diners.length > 1;
 
   useEffect(() => {
     dispatch(setEventIdForPrimary(eventId));
@@ -301,29 +301,31 @@ const AddDinersScreen = () => {
           />
 
           {/* modal to confirm all diners added */}
-          <View style={styles.miniModalContent}>
-            <View>
-              <Text
-                style={[
-                  styles.modalText,
-                  { textAlign: "center", marginTop: 5 },
-                ]}
+          {showMiniModal && (
+            <View style={styles.miniModalContent}>
+              <View>
+                <Text
+                  style={[
+                    styles.modalText,
+                    { textAlign: "center", marginTop: 5 },
+                  ]}
+                >
+                  All diners added?
+                </Text>
+              </View>
+              <View
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
               >
-                All diners added?
-              </Text>
+                <PrimaryButton width={100} onPress={allDinersAddedHandler}>
+                  Confirm
+                </PrimaryButton>
+              </View>
             </View>
-            <View
-              style={{
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "center",
-              }}
-            >
-              <PrimaryButton width={100} onPress={allDinersAddedHandler}>
-                Confirm
-              </PrimaryButton>
-            </View>
-          </View>
+          )}
         </React.Fragment>
       )}
 
