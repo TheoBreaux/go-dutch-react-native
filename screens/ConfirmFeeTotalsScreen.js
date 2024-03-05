@@ -86,6 +86,12 @@ const ConfirmFeeTotalsScreen = () => {
     setFeeValue(text);
   };
 
+  const handleFeeRemove = (index) => {
+    const updatedFees = [...additionalCustomFeesAdded];
+    updatedFees.splice(index, 1);
+    setAdditionalCustomFeesAdded(updatedFees);
+  };
+
   const handleNoBirthdaysPresent = () => {
     //calculate fees not taking care of or no birthday diners
     const sharedExpenses =
@@ -229,7 +235,6 @@ const ConfirmFeeTotalsScreen = () => {
   console.log("TIP", tipConfirmed);
   console.log("SUBTOTAL", mealSubtotal);
   console.log("ADDITIONAL CUSTOM FEES ADDED", sumAdditionalFees());
-  console.log("DINERS UPDATED", dinersUpdated);
 
   return (
     <>
@@ -332,7 +337,7 @@ const ConfirmFeeTotalsScreen = () => {
                 feeName={fee.feeName}
                 value={fee.feePrice.toFixed(2).toString()}
                 onChangeText={handleFeeChange}
-                onClearPress={() => setFeeValue("")}
+                onClearPress={() => handleFeeRemove(index)}
               />
             ))}
 
