@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import Logo from "../components/Logo";
 
 const CheckCloseOutDetails = () => {
+
+
+
   const diningEvent = useSelector((state) => state.diningEvent);
   const eventDate = diningEvent.event.eventDate;
   const eventTitle = diningEvent.event.eventTitle;

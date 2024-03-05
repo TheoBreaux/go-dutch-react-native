@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";

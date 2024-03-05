@@ -4,18 +4,16 @@ import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 
 const FeeTextInput = ({ onChangeText, value, feeName, onClearPress }) => {
-
   const [inputValue, setInputValue] = useState(value);
-
 
   const handleChangeText = (text) => {
     setInputValue(text);
-    onChangeText(text); // Propagating the change to parent component if needed
+    onChangeText(text);
   };
 
   const handleClearPress = () => {
-    setInputValue(""); // Resetting input value to empty string
-    onClearPress(); // Clearing fee value in parent component if needed
+    setInputValue("");
+    onClearPress();
   };
 
   return (
@@ -30,7 +28,12 @@ const FeeTextInput = ({ onChangeText, value, feeName, onClearPress }) => {
         onChangeText={handleChangeText}
       />
       <PrimaryButton width={50}>
-        <Ionicons name="close" size={20} color="white" onPress={handleClearPress} />
+        <Ionicons
+          name="close"
+          size={20}
+          color="white"
+          onPress={handleClearPress}
+        />
       </PrimaryButton>
     </View>
   );
