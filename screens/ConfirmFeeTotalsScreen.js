@@ -133,22 +133,17 @@ const ConfirmFeeTotalsScreen = () => {
   }, []);
 
   const postDataFinalDiningEventValues = async () => {
-    const totalMealCost =
-      parseFloat(mealSubtotal) +
-      parseFloat(taxConfirmed) +
-      parseFloat(tipConfirmed) +
-      parseFloat(sumAdditionalFees());
-
     const data = {
       eventId: eventId,
       tax: taxConfirmed,
       tip: tipConfirmed,
       totalMealCost: parseFloat(totalMealCost),
+      subtotal: parseFloat(mealSubtotal),
     };
 
     try {
       const response = await fetch(
-        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/diningevent/values`,
+        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -167,11 +162,15 @@ const ConfirmFeeTotalsScreen = () => {
       sharedExpenses: sharedExpenses,
       dinersUpdated: dinersUpdated,
       birthdayDiners: birthdayDiners,
+      tax: taxConfirmed,
+      tip: tipConfirmed,
+      subtotal: parseFloat(mealSubtotal),
+      totalMealCost: parseFloat(totalMealCost),
     };
 
     try {
       const response = await fetch(
-        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners/values`,
+        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -225,16 +224,11 @@ const ConfirmFeeTotalsScreen = () => {
     return totalAdditionalFees.toFixed(2);
   };
 
-  console.log("RECEIPT VALUES", receiptValues);
-  console.log("DINERS UPDATED", dinersUpdated);
-  console.log(
-    "ADDITIONAL CUSTOMER FEES ADDED ARRAY",
-    additionalCustomFeesAdded
-  );
-  console.log("TAX", taxConfirmed);
-  console.log("TIP", tipConfirmed);
-  console.log("SUBTOTAL", mealSubtotal);
-  console.log("ADDITIONAL CUSTOM FEES ADDED", sumAdditionalFees());
+  const totalMealCost =
+    parseFloat(mealSubtotal) +
+    parseFloat(taxConfirmed) +
+    parseFloat(tipConfirmed) +
+    parseFloat(sumAdditionalFees());
 
   return (
     <>

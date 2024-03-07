@@ -8,8 +8,8 @@ const Pool = require("pg").Pool;
 require("dotenv").config();
 
 const pool = new Pool({
-  user: "theobreaux",
-  password: "cabrini33",
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
   host: "localhost",
   port: 5432,
   database: "godutchapp",
@@ -303,16 +303,17 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR DINING EVENT
 app.post("/diningevent/values", async (req, res) => {
-  const { tax, tip, totalMealCost, eventId } = req.body;
+  const { tax, tip, totalMealCost, subtotal, eventId } = req.body;
 
   try {
     const diningEventData = await pool.query(
       `UPDATE dining_events 
       SET tax = $1,
       tip = $2,
-      total_meal_cost = $3
-      WHERE event_id = $4`,
-      [tax, tip, totalMealCost, eventId]
+      total_meal_cost = $3,
+      subtotal = $4
+      WHERE event_id = $5`,
+      [tax, tip, totalMealCost, subtotal, eventId]
     );
     // On success, send a 200 OK response
     res.status(200).json({ success: true });
@@ -326,12 +327,32 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
+  const {
+    sharedExpenses,
+    dinersUpdated,
+    birthdayDiners,
+    eventId,
+    // tip,
+    // tax,
+    // subtotal,
+    // totalMealCost,
+  } = req.body;
+
+  // console.log("Sharable Expenses: ", typeof sharedExpenses, sharedExpenses);
+  // console.log("Birthday Diners: ", typeof birthdayDiners, birthdayDiners);
+  // console.log("Tip", typeof tip, tip);
+  // console.log("Tax", typeof tax, tax);
+  // console.log("Subtotal", typeof subtotal, subtotal);
+  // console.log("Total Meal Cost", typeof totalMealCost, totalMealCost);
+
+  // let difference = totalMealCost - (parseFloat(tip) + parseFloat(tax) + subtotal);
+  // difference = parseFloat(difference.toFixed(2));
+
+  // console.log("Difference: ", typeof(difference), difference);
 
   try {
     //sum birthday diner(s) meal costs
     let birthdayDinerMealCost = 0;
-
     //calculate birthday diners meal costs
     for (const diner of birthdayDiners) {
       diner.items.forEach((item) => {
@@ -339,11 +360,26 @@ app.post("/additionaldiners/values", async (req, res) => {
       });
     }
 
-    for (const diner of dinersUpdated) {
+    // let differenceAdded = false; // to track if difference is added
+
+    for (let i = 0; i < dinersUpdated.length; i++) {
+      const diner = dinersUpdated[i];
+      //find the lowest paying diner to apply additional change
+      // const lowestPayingDiner = dinersUpdated.reduce(
+      //   (prev, current) => {
+      //     return prev.diner_meal_cost < current.diner_meal_cost
+      //       ? prev
+      //       : current;
+      //   },
+      //   { diner_meal_cost: Infinity }
+      // );
+
+      // console.log("Lowest Paying Diner", lowestPayingDiner);
       //loop through diners items to get total
       let dinerMealCost = 0;
+
       //calculate shared birthday diner(s) meal costs
-      const sharedBirthdayDinerMealCosts =
+      const sharedBirthdayDinerExpenses =
         birthdayDinerMealCost / (dinersUpdated.length - birthdayDiners.length);
 
       //if the diner has a birthday
@@ -356,12 +392,11 @@ app.post("/additionaldiners/values", async (req, res) => {
           dinerMealCost += parseFloat(item.price);
         });
 
-        dinerMealCost += sharedExpenses;
+        dinerMealCost += parseFloat(sharedExpenses.toFixed(2));
 
         //if there are birthday diners add their shared expense to other diners total meal cost
-        dinerMealCost += sharedBirthdayDinerMealCosts;
+        dinerMealCost += parseFloat(sharedBirthdayDinerExpenses.toFixed(2));
       }
-
       await pool.query(
         `UPDATE additional_diners
           SET diner_meal_cost = $1
@@ -369,6 +404,7 @@ app.post("/additionaldiners/values", async (req, res) => {
         [dinerMealCost.toFixed(2), eventId, diner.additional_diner_username]
       );
     }
+
     res.status(200).send("Diner meal costs updated successfully");
   } catch (error) {
     console.error(error);

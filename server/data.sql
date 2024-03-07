@@ -21,6 +21,7 @@ CREATE TABLE dining_events (
     restaurant_bar VARCHAR(255),
     title VARCHAR(255),
     primary_diner_username VARCHAR(255) REFERENCES users(username),
+    subtotal DECIMAL(10, 2),
     tax DECIMAL(10, 2),
     tip DECIMAL(10, 2),
     total_meal_cost DECIMAL(10, 2),
@@ -31,5 +32,6 @@ CREATE TABLE additional_diners (
     diner_id SERIAL PRIMARY KEY,
     event_id INT REFERENCES dining_events(event_id) ON DELETE CASCADE,
     additional_diner_username VARCHAR(255) REFERENCES users(username),
+    birthday BOOLEAN,
     diner_meal_cost DECIMAL(10, 2)
 );

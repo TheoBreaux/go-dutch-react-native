@@ -110,7 +110,7 @@ const FoodItemDropArea = () => {
   };
 
   const handleNextDiner = () => {
-    setNotSure(false)
+    setNotSure(false);
     const currentDiner = dinersUpdated[currentDinerIndex];
     const currentDinerId = currentDiner.id;
     //update currentDinerId
@@ -248,8 +248,8 @@ const FoodItemDropArea = () => {
             <Text style={styles.dinerInfo}>@{currentDiner}</Text>
 
             {notSure && (
-              <View style={{ flexDirection: "row"}}>
-                <Image source={require("../assets/down-arrow.png") } />
+              <View style={{ flexDirection: "row" }}>
+                <Image source={require("../assets/down-arrow.png")} />
                 <Image source={require("../assets/down-arrow.png")} />
                 <Image source={require("../assets/down-arrow.png")} />
               </View>

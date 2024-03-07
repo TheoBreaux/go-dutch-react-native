@@ -47,7 +47,7 @@ const AddDinersScreen = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/users/${username}`
+        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -62,7 +62,7 @@ const AddDinersScreen = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -175,7 +175,7 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/additionaldiners`,
+        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

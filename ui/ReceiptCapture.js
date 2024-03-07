@@ -68,11 +68,12 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       tip: null,
       total_meal_cost: null,
       receipt_image_path: image,
+      subtotal: null,
     };
 
     try {
       const response = await fetch(
-        "https://68a9-2603-8000-c0f0-a570-6935-af29-f20-ded2.ngrok-free.app/diningevents",
+        "https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {

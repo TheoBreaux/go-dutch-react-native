@@ -1,22 +1,27 @@
-import { StyleSheet, Text, View, Image, FlatList, Button } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
 import Logo from "../components/Logo";
+import { months } from "../data/data";
 
 const CheckCloseOutDetails = () => {
-
-
-
   const diningEvent = useSelector((state) => state.diningEvent);
-  const eventDate = diningEvent.event.eventDate;
   const eventTitle = diningEvent.event.eventTitle;
-  const eventLocation =
-    diningEvent.event.selectedRestaurant ||
-    diningEvent.event.enteredSelectedRestaurant;
+  const eventLocation = diningEvent.event.selectedRestaurant || diningEvent.event.enteredSelectedRestaurant;
   const primaryDiner = diningEvent.diners[0].additional_diner_username;
+
+
+  const eventDate = diningEvent.event.eventDate;
+  //convert string date to month, day, year format
+  const parts = eventDate.split('-');
+  const month = parseInt(parts[0], 10);
+  const day = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+  
+  const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
+
+
+
   //   const diners = useSelector((state) => state.diningEvent.diners);
   //   const totalMealCost = useSelector((state) => state.diningEvent.diners);
 
@@ -28,6 +33,7 @@ const CheckCloseOutDetails = () => {
   //   );
 
   console.log("CLOSE OUT", diningEvent);
+
   return (
     <>
       <Logo />
@@ -59,7 +65,7 @@ const CheckCloseOutDetails = () => {
           /> */}
 
           <View>
-            <Text style={styles.text}>{eventDate}</Text>
+            <Text style={styles.text}>{formattedEventDate}</Text>
             <Text style={styles.text}>{eventLocation}</Text>
             <Text style={styles.text}>
               <Text style={styles.primaryDiner}>Primary Diner: </Text>@
