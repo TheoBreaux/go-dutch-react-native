@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, Image, FlatList } from "react-native";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
 import Logo from "../components/Logo";
@@ -7,32 +7,31 @@ import { months } from "../data/data";
 const CheckCloseOutDetails = () => {
   const diningEvent = useSelector((state) => state.diningEvent);
   const eventTitle = diningEvent.event.eventTitle;
-  const eventLocation = diningEvent.event.selectedRestaurant || diningEvent.event.enteredSelectedRestaurant;
+  const diners = diningEvent.diners;
+  const eventLocation =
+    diningEvent.event.selectedRestaurant ||
+    diningEvent.event.enteredSelectedRestaurant;
   const primaryDiner = diningEvent.diners[0].additional_diner_username;
-
-
+  const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
+  const receiptImagePath = diningEvent.event.receipt_image_path;
   //convert string date to month, day, year format
-  const parts = eventDate.split('-');
+  const parts = eventDate.split("-");
   const month = parseInt(parts[0], 10);
   const day = parseInt(parts[1], 10);
   const year = parseInt(parts[2], 10);
-  
+
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
 
-
-
-  //   const diners = useSelector((state) => state.diningEvent.diners);
-  //   const totalMealCost = useSelector((state) => state.diningEvent.diners);
-
-  //   const renderItem = ({ item }) => (
-  //     <View style={styles.row}>
-  //       <Text>@{item.additional_diner_username}</Text>
-  //       <Text>$30.00</Text>
-  //     </View>
-  //   );
+  const renderItem = ({ item }) => (
+    <View style={styles.row}>
+      <Text>@{item.additional_diner_username}</Text>
+      <Text>{item.diner_meal_cost}</Text>
+    </View>
+  );
 
   console.log("CLOSE OUT", diningEvent);
+  console.log(diners);
 
   return (
     <>
@@ -59,10 +58,7 @@ const CheckCloseOutDetails = () => {
             </View>
           </View>
 
-          {/* <Image
-            source={{ uri: item.receipt_image_path }}
-            style={styles.image}
-          /> */}
+          <Image source={{ uri: receiptImagePath }} style={styles.image} />
 
           <View>
             <Text style={styles.text}>{formattedEventDate}</Text>
@@ -72,14 +68,13 @@ const CheckCloseOutDetails = () => {
               {primaryDiner}
             </Text>
           </View>
-          <Text style={styles.additionalDinerText}>Additional Diners</Text>
-          {/* <FlatList
+          <Text style={styles.additionalDinerText}>Diners</Text>
+          <FlatList
             data={diners}
             renderItem={renderItem}
             contentContainerStyle={styles.flatListContainer}
-          /> */}
-          {/* totalmealcost */}
-          <Text>Total Meal Cost: $</Text>
+          />
+          <Text>Total Meal Cost: ${totalMealCost}</Text>
         </View>
       </View>
     </>
@@ -97,16 +92,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 2,
     alignItems: "center",
-    justifyContent: "center",
   },
   contentContainer: {
     alignItems: "center",
   },
   image: {
     width: 300,
-    height: 400,
+    height: 300,
     resizeMode: "cover",
   },
   additionalDinerText: {

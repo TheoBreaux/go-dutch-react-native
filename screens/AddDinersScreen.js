@@ -264,6 +264,10 @@ const AddDinersScreen = () => {
 
       <View>
         <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
+        <Text style={styles.eventLocation}>
+          {diningEvent.selectedRestaurant ||
+            diningEvent.enteredSelectedRestaurant}
+        </Text>
       </View>
       <PrimaryDiner />
       {/* <Text style={styles.title}>↓ Add diners ↓</Text> */}
@@ -365,6 +369,13 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-regular",
     color: Colors.goDutchRed,
     fontSize: 30,
+    marginTop: -10,
+    marginBottom: 5,
+  },
+  eventLocation: {
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+    fontSize: 25,
     marginTop: -10,
   },
   title: {

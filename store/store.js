@@ -37,6 +37,7 @@ const diningEventSlice = createSlice({
       tip: "",
       subtotal: "",
       totalMealCost: "",
+      receiptImagePath: "",
     },
     currentDinerId: "",
     receiptValues: {},
@@ -74,6 +75,9 @@ const diningEventSlice = createSlice({
     setCurrentDinerId: (state, action) => {
       state.currentDinerId = action.payload;
     },
+    setReceiptImagePath: (state, action) => { 
+      state.event.receipt_image_path = action.payload;
+    },
     updateSubtotal: (state, action) => {
       state.event.subtotal = action.payload;
     },
@@ -84,6 +88,13 @@ const diningEventSlice = createSlice({
       const { currentDinerIndex, updatedReviewedItems } = action.payload;
 
       state.diners[currentDinerIndex].items = updatedReviewedItems;
+    },
+    updateFinalDiningEventValues: (state, action) => {
+      const { tax, tip, totalMealCost } = action.payload;
+
+      state.event.tax = tax;
+      state.event.tip = tip;
+      state.event.totalMealCost = totalMealCost.toFixed(2).toString();
     },
 
     assignAndRemoveFoodItem: (state, action) => {
@@ -138,6 +149,7 @@ export const {
   setEventId,
   setEventIdForPrimary,
   setReceiptValues,
+  setReceiptImagePath,
   setAllReceiptItems,
   setDiners,
   setBirthdayDiners,
@@ -150,6 +162,7 @@ export const {
   updateBirthdayStatus,
   updateSubtotal,
   updateBirthdayDinerBill,
+  updateFinalDiningEventValues,
 } = diningEventSlice.actions;
 
 const store = configureStore({

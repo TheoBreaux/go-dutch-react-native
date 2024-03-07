@@ -7,7 +7,11 @@ import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { setEventId, setReceiptValues } from "../store/store";
+import {
+  setEventId,
+  setReceiptImagePath,
+  setReceiptValues,
+} from "../store/store";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import { getCurrentDate } from "../utils";
@@ -58,6 +62,9 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   };
 
   const postData = async () => {
+    //send receipt image path to store
+    dispatch(setReceiptImagePath(image));
+
     const diningEventInfo = {
       event_id: diningEvent.eventId,
       dining_date: getCurrentDate(),
