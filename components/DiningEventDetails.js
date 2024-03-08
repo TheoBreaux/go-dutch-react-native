@@ -4,6 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
+import { useSelector } from "react-redux";
 
 const DiningEventDetails = () => {
   const [diners, setDiners] = useState([]);
@@ -13,6 +14,9 @@ const DiningEventDetails = () => {
 
   const dateObj = new Date(item.dining_date);
   const eventId = item.event_id;
+  const totalMealCost = useSelector(
+    (state) => state.diningEvent.event.totalMealCost
+  );
 
   // Extract the year, month, and day from the Date object
   const year = dateObj.getFullYear();
@@ -26,7 +30,7 @@ const DiningEventDetails = () => {
   const renderItem = ({ item }) => (
     <View style={styles.row}>
       <Text>@{item.additional_diner_username}</Text>
-      <Text>$30.00</Text>
+      <Text>${item.diner_meal_cost}</Text>
     </View>
   );
 
@@ -46,6 +50,8 @@ const DiningEventDetails = () => {
       throw error;
     }
   };
+
+  console.log(diners);
 
   return (
     <>
@@ -84,13 +90,13 @@ const DiningEventDetails = () => {
               {item.primary_diner_username}
             </Text>
           </View>
-          <Text style={styles.additionalDinerText}>Additional Diners</Text>
+          <Text style={styles.additionalDinerText}> Diners</Text>
           <FlatList
             data={diners}
             renderItem={renderItem}
             contentContainerStyle={styles.flatListContainer}
           />
-          <Text>Total Meal Cost: $60.00</Text>
+          <Text>Total Meal Cost: ${totalMealCost}</Text>
         </View>
       </View>
     </>

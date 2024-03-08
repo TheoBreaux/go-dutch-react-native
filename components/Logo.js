@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View, Text } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 const Logo = () => {
   return (
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 4 / 1,
     backgroundColor: "transparent",
-    marginTop: 40,
+    marginTop: 30,
   },
   logo: {
     flex: 1,

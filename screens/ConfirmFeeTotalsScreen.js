@@ -16,8 +16,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import FeeTextInput from "../components/FeeTextInput";
 import AddPropertyToListModal from "../components/AddPropertyToListModal";
-import { updateFinalDiningEventValues } from "../store/store";
-
+import {
+  updateDinerFinalMealCost,
+  updateFinalDiningEventValues,
+} from "../store/store";
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
@@ -135,7 +137,6 @@ const ConfirmFeeTotalsScreen = () => {
     setEntertainmentConfirmed(entertainment.toString());
   }, []);
 
-
   const postDataFinalDiningEventValues = async () => {
     const data = {
       eventId: eventId,
@@ -144,7 +145,7 @@ const ConfirmFeeTotalsScreen = () => {
       totalMealCost: parseFloat(totalMealCost),
       subtotal: parseFloat(mealSubtotal),
     };
-    
+
     //update state
     dispatch(updateFinalDiningEventValues(data));
 
@@ -163,9 +164,6 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-
-//i need to set values for all diners total meal costs here
-
   const postDataFinalAdditionalDinerValues = async (sharedExpenses) => {
     const data = {
       eventId: eventId,
@@ -178,8 +176,8 @@ const ConfirmFeeTotalsScreen = () => {
       totalMealCost: parseFloat(totalMealCost),
     };
 
-    //update state
-    dispatch(updateFinalDiningEventValues(data));
+    dispatch(updateDinerFinalMealCost(sharedExpenses));
+
     try {
       const response = await fetch(
         `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/additionaldiners/values`,
@@ -194,12 +192,6 @@ const ConfirmFeeTotalsScreen = () => {
       console.error("Network error:", error);
     }
   };
-
-
-
-
-
-
 
   const calculateWithBirthdayDiners = () => {
     //calculate fees taking care of birthday diners

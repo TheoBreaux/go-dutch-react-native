@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     fontSize: 30,
     marginTop: 15,
   },

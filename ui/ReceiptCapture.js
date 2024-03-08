@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: "center",
     fontSize: 25,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
   },
   contentContainer: {
     flex: 1,

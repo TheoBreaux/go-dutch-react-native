@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: { marginTop: 20 },
   title: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     letterSpacing: 2,
     fontSize: 25,
     color: Colors.goDutchBlue,
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: "red-hat-bold",
     letterSpacing: 2,
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 15,
   },
   dinerInfo: {

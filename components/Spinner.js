@@ -5,7 +5,7 @@ const Spinner = () => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size={200} color={Colors.goDutchRed} />
-      <Text style={styles.loadingText}>Submitting🧾</Text>
+      <Text style={styles.loadingText}>Submitting...🧾</Text>
     </View>
   );
 };
@@ -13,7 +13,7 @@ const Spinner = () => {
 const styles = StyleSheet.create({
   loadingText: {
     fontSize: 30,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchBlue,
     textAlign: "center",
   },
