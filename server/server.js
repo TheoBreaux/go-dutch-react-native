@@ -7,6 +7,11 @@ const jwt = require("jsonwebtoken");
 const Pool = require("pg").Pool;
 require("dotenv").config();
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+const { uploadFile } = require("./s3");
+
 const pool = new Pool({
   user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
@@ -411,3 +416,15 @@ app.post("/additionaldiners/values", async (req, res) => {
     res.status(500).send("Error updating diner meal costs");
   }
 });
+
+
+
+// AWS SET UP
+// //POST IMAGES TO AWS
+// app.post("/images", upload.single("image"), async (req, res) => {
+//   const file = req.file;
+//   console.log(file);
+//   const result = await uploadFile(file);
+//   console.log(result);
+//   res.send("A-OKAY, THEO B!");
+// });

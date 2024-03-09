@@ -17,7 +17,7 @@ const DiningEventHistoryScreen = () => {
   const getData = async () => {
     try {
       const response = await fetch(
-        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/diningevents/${username}`
+        `https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
       setDiningEvents(data);
@@ -31,9 +31,7 @@ const DiningEventHistoryScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <View>
-      <DiningEventHistoryCard key={item.event_id} item={item} />
-    </View>
+    <DiningEventHistoryCard key={item.event_id} item={item} />
   );
 
   const handleNavigation = () => {
@@ -49,7 +47,7 @@ const DiningEventHistoryScreen = () => {
     <>
       <Logo />
       <View style={styles.container}>
-        {!diningEvents.length < 0 && (
+        {diningEvents.length > 0 && (
           <Text style={styles.title}>Tap tile to see details...</Text>
         )}
 
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "red-hat-bold",
     textAlign: "center",
-    letterSpacing: 5,
     fontSize: 20,
     marginBottom: 5,
   },

@@ -31,7 +31,7 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const apiKey = "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
+  const apiKey = process.env.PG_API_KEY;
 
   const initialValues = {
     firstName: "",
@@ -113,7 +113,7 @@ const SignUpScreen = () => {
 
     try {
       const response = await fetch(
-        "https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/signup",
+        "https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

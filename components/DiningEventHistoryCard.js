@@ -22,9 +22,9 @@ const DiningEventHistoryCard = ({ item }) => {
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
-        <Text style={styles.text}>{item.restaurant_bar}</Text>
+        <Text style={[styles.text, styles.bold]}>{item.restaurant_bar}</Text>
         <Text style={styles.text}>
-          <Text style={styles.primaryDiner}>Primary Diner: </Text>@
+          <Text style={styles.bold}>Primary Diner: </Text>@
           {item.primary_diner_username}
         </Text>
       </View>
@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.goDutchRed,
     borderWidth: 1,
     padding: 10,
-    margin: 5,
+    marginBottom: 5,
     borderRadius: 10,
     elevation: 5,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
   },
   title: {
     fontSize: 20,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontFamily: "red-hat-regular",
   },
-  primaryDiner: {
+  bold: {
     fontFamily: "red-hat-bold",
   },
 });

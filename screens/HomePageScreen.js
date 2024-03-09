@@ -118,7 +118,7 @@ const HomePageScreen = () => {
                   <PrimaryButton
                     width={100}
                     onPress={() => {
-                      navigation.navigate("UpdateProfileImage");
+                      navigation.navigate("UpdateProfileImageScreen");
                       setShowUpdateProfilePhotoModal(false);
                     }}
                   >

@@ -85,6 +85,8 @@ const CheckCloseOutDetails = () => {
               <Text style={styles.bold}>Primary Diner: </Text>@{primaryDiner}
             </Text>
           </View>
+
+          
           <View style={styles.additionalDinerContainer}>
             <Text style={styles.additionalDinerText}>Diners</Text>
           </View>

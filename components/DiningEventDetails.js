@@ -1,10 +1,17 @@
-import { StyleSheet, Text, View, Image, FlatList, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import Logo from "./Logo";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
-import { useSelector } from "react-redux";
 
 const DiningEventDetails = () => {
   const [diners, setDiners] = useState([]);
@@ -14,9 +21,6 @@ const DiningEventDetails = () => {
 
   const dateObj = new Date(item.dining_date);
   const eventId = item.event_id;
-  const totalMealCost = useSelector(
-    (state) => state.diningEvent.event.totalMealCost
-  );
 
   // Extract the year, month, and day from the Date object
   const year = dateObj.getFullYear();
@@ -28,10 +32,10 @@ const DiningEventDetails = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <View style={styles.row}>
+    <TouchableOpacity style={styles.row}>
       <Text>@{item.additional_diner_username}</Text>
       <Text>${item.diner_meal_cost}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   const handleReturnToHistory = () => {
@@ -42,7 +46,7 @@ const DiningEventDetails = () => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://a294-2603-8000-c0f0-a570-5caf-c431-e0b4-dcd8.ngrok-free.app/additionaldiners/${eventId}`
+        `https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDiners(data);
@@ -50,8 +54,6 @@ const DiningEventDetails = () => {
       throw error;
     }
   };
-
-  console.log(diners);
 
   return (
     <>
@@ -67,7 +69,7 @@ const DiningEventDetails = () => {
                 marginBottom: 10,
               }}
             >
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.eventTitle}>{item.title}</Text>
               <View style={styles.button}>
                 <Button
                   title="X"
@@ -78,25 +80,42 @@ const DiningEventDetails = () => {
             </View>
           </View>
 
-          <Image
-            source={{ uri: item.receipt_image_path }}
-            style={styles.image}
-          />
+          <View
+            style={{
+              borderWidth: 5,
+              borderColor: Colors.goDutchBlue,
+              padding: 5,
+            }}
+          >
+            <Image
+              source={{ uri: item.receipt_image_path }}
+              style={styles.image}
+            />
+          </View>
+
           <View>
             <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
-            <Text style={styles.text}>{item.restaurant_bar}</Text>
+            <Text style={[styles.text, styles.bold]}>
+              {item.restaurant_bar}
+            </Text>
             <Text style={styles.text}>
-              <Text style={styles.primaryDiner}>Primary Diner: </Text>@
+              <Text style={styles.bold}>Primary Diner: </Text>@
               {item.primary_diner_username}
             </Text>
           </View>
-          <Text style={styles.additionalDinerText}> Diners</Text>
+
+          <View style={styles.additionalDinerContainer}>
+            <Text style={styles.additionalDinerText}>Diners</Text>
+          </View>
+
           <FlatList
             data={diners}
             renderItem={renderItem}
             contentContainerStyle={styles.flatListContainer}
           />
-          <Text>Total Meal Cost: ${totalMealCost}</Text>
+          <Text style={styles.totalMealCostText}>
+            Total Meal Cost: ${item.total_meal_cost}
+          </Text>
         </View>
       </View>
     </>
@@ -108,68 +127,70 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: -5,
-    margin: 8,
+    margin: 5,
     borderRadius: 8,
-    shadowColor: "#000",
+    shadowColor: Colors.goDutchBlue,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 2,
     alignItems: "center",
-    justifyContent: "center",
   },
   contentContainer: {
     alignItems: "center",
   },
-  image: {
-    width: 300,
-    height: 400,
-    resizeMode: "cover",
-  },
-  additionalDinerText: {
-    fontSize: 20,
-    fontFamily: "red-hat-bold",
-    letterSpacing: 3,
+  eventTitle: {
     textAlign: "center",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 10,
-    marginVertical: 5,
-  },
-  title: {
     fontSize: 30,
-    fontFamily: "red-hat-bold",
-    letterSpacing: 3,
-    textAlign: "center",
-    color: Colors.goDutchRed,
-    marginBottom: -5,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: "center",
-    letterSpacing: 3,
-    fontFamily: "red-hat-regular",
   },
   button: {
     backgroundColor: Colors.goDutchRed,
     width: 30,
   },
-  primaryDiner: {
+  image: {
+    width: 300,
+    height: 300,
+    resizeMode: "cover",
+  },
+  text: {
+    fontSize: 20,
+    textAlign: "center",
+    fontFamily: "red-hat-regular",
+  },
+  bold: {
     fontFamily: "red-hat-bold",
+  },
+  additionalDinerContainer: {
+    width: 360,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5,
+    marginBottom: 5,
+  },
+  additionalDinerText: {
+    fontSize: 20,
+    fontFamily: "red-hat-bold",
+    textAlign: "center",
+    color: Colors.goDutchRed,
   },
   flatListContainer: {
     flexGrow: 1,
     // justifyContent: 'space-between',
   },
+  totalMealCostText: {
+    fontFamily: "red-hat-bold",
+    fontSize: 20,
+  },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 360, // Make sure each item takes up 100% of the width
-    padding: 10, // Add padding for spacing
-    marginBottom: 2,
-    backgroundColor: "#fff", // Set a background color if needed
-    shadowColor: "#000",
+    width: 360,
+    padding: 8,
+    marginBottom: 3,
+    backgroundColor: "#fff",
+    shadowColor: Colors.goDutchBlue,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,

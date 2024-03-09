@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
-    "backgroundColor": "white",
+    "backgroundColor": "#000000",
     "ios": {
       "supportsTablet": true
     },
