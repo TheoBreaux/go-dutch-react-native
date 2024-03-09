@@ -7,6 +7,9 @@
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "backgroundColor": "#000000",
+    "extra": {
+      "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig"
+    },
     "ios": {
       "supportsTablet": true
     },

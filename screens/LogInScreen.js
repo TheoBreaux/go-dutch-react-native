@@ -17,6 +17,7 @@ import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
+import { useRoute } from "@react-navigation/native";
 
 const LogInScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -27,8 +28,9 @@ const LogInScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const route = useRoute();
 
-  const apiKey = process.env.PG_API_KEY;
+  const { apiKey } = route.params;
 
   const initialValues = {
     username: "",

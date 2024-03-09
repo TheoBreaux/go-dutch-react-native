@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
 import LogInScreen from "./screens/LogInScreen";
 import HomePageScreen from "./screens/HomePageScreen";
@@ -28,6 +29,7 @@ import UpdateProfileImageScreen from "./screens/UpdateProfileImageScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
+const apiKey = Constants.expoConfig.extra.PG_API_KEY;
 
 const MainTabNavigator = () => {
   return (
@@ -115,8 +117,17 @@ const App = () => {
           }}
         >
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="LogIn" component={LogInScreen} />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            initialParams={{ apiKey: apiKey }}
+          />
+          <Stack.Screen
+            name="LogIn"
+            component={LogInScreen}
+            initialParams={{ apiKey: apiKey }}
+          />
+
           <Stack.Screen
             name="PaymentSourcesInputScreen"
             component={PaymentSourcesInputScreen}

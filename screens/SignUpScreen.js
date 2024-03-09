@@ -18,6 +18,7 @@ import UploadProfileImage from "../ui/UploadProfileImage";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
+import { useRoute } from "@react-navigation/native";
 
 const SignUpScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -30,8 +31,9 @@ const SignUpScreen = () => {
   const [longitude, setLongitude] = useState(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const route = useRoute();
 
-  const apiKey = process.env.PG_API_KEY;
+  const { apiKey } = route.params;
 
   const initialValues = {
     firstName: "",
