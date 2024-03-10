@@ -18,6 +18,7 @@ const DiningEventDetails = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { item } = route.params;
+  const { imageUri } = route.params;
 
   const dateObj = new Date(item.dining_date);
   const eventId = item.event_id;
@@ -88,7 +89,7 @@ const DiningEventDetails = () => {
             }}
           >
             <Image
-              source={{ uri: item.receipt_image_key }}
+              source={{ uri: imageUri }}
               style={styles.image}
             />
           </View>

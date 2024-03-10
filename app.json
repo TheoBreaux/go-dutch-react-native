@@ -12,7 +12,8 @@
       "AWS_BUCKET_NAME": "go-dutch-bucket",
       "AWS_BUCKET_REGION": "us-west-1",
       "AWS_ACCESS_KEY": "AKIA4MTWNGWUF6AE3KTH",
-      "AWS_SECRET_KEY": "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"
+      "AWS_SECRET_KEY": "gOBJXVPJo8e0mrkkCW5JFjINXQ8QEYi0Vhdj7fad",
+      "TAGGUN_API": "b7dfb6e071e711eea8f313266e4aecd5"
     },
     "ios": {
       "supportsTablet": true

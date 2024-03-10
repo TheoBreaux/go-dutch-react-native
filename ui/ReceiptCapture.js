@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -62,8 +63,35 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   };
 
   const postData = async () => {
+    let imageKey;
+    //send to receipt image to AWS S3 bucket
+    if (image) {
+      try {
+        const formData = new FormData();
+
+        formData.append("image", {
+          uri: image,
+          type: "image/png",
+          name: "receipt-image",
+        });
+
+        const response = await fetch(
+          "https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/diningevents/receiptimages",
+          {
+            method: "POST",
+            headers: { "Content-Type": "multipart/form-data" },
+            body: formData,
+          }
+        );
+        const responseData = await response.json();
+        imageKey = responseData.imageKey;
+      } catch (error) {
+        console.error("Error uploading image to AWS S3:", error);
+      }
+    }
+
     //send receipt image path to store
-    dispatch(setReceiptImagePath(image));
+    dispatch(setReceiptImagePath(imageKey));
 
     const diningEventInfo = {
       event_id: diningEvent.eventId,
@@ -74,7 +102,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       tax: null,
       tip: null,
       total_meal_cost: null,
-      receipt_image_key: image,
+      receipt_image_key: imageKey,
       subtotal: null,
     };
 
@@ -113,7 +141,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       const response = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          apikey: "b7dfb6e071e711eea8f313266e4aecd5",
+          apikey: Constants.expoConfig.extra.TAGGUN_API,
         },
       });
       const responseData = response.data;

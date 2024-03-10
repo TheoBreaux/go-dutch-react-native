@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import {
   StyleSheet,
   Text,
@@ -12,8 +13,11 @@ import { useSelector } from "react-redux";
 import Logo from "../components/Logo";
 import { months } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
+import AWS from "aws-sdk";
+import React, { useEffect, useState } from "react";
 
 const CheckCloseOutDetails = () => {
+  const [imageUri, setImageUri] = useState(null);
   const diningEvent = useSelector((state) => state.diningEvent);
   const eventTitle = diningEvent.event.eventTitle;
   const diners = diningEvent.diners;
@@ -23,7 +27,7 @@ const CheckCloseOutDetails = () => {
   const primaryDiner = diningEvent.diners[0].additional_diner_username;
   const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
-  const receiptImagePath = diningEvent.event.receipt_image_key;
+  const receiptImageKey = diningEvent.event.receipt_image_key;
   //convert string date to month, day, year format
   const parts = eventDate.split("-");
   const month = parseInt(parts[0], 10);
@@ -33,6 +37,30 @@ const CheckCloseOutDetails = () => {
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const s3 = new AWS.S3({
+      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+    });
+
+    const getImageFromS3 = async () => {
+      const params = {
+        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+        Key: receiptImageKey,
+      };
+
+      try {
+        const data = await s3.getObject(params).promise();
+        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+      } catch (error) {
+        console.error("Error retrieving image from S3:", error);
+      }
+    };
+
+    getImageFromS3();
+  }, [receiptImageKey]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.row}>
@@ -75,7 +103,7 @@ const CheckCloseOutDetails = () => {
               padding: 5,
             }}
           >
-            <Image source={{ uri: receiptImagePath }} style={styles.image} />
+            <Image source={{ uri: imageUri }} style={styles.image} />
           </View>
 
           <View>

@@ -16,7 +16,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PrimaryButton from "../components/PrimaryButton";
 
 const UpdateProfileImageScreen = () => {
-  const [image, setImage] = useState();
+  //for uploading image to backend
+  const FormData = global.FormData;
+
+  const [profileImageKey, setProfileImageKey] = useState();
   const [imageUploadModal, setImageUploadModal] = useState(false);
 
   const username = useSelector((state) => state.userInfo.user.username);
@@ -73,11 +76,9 @@ const UpdateProfileImageScreen = () => {
     }
   };
 
-  const saveImage = async (image) => {
+  const saveImage = async (profileImageKey) => {
     //update display image
-    setImage(image);
-    //save make API call to save
-    // sendToBackEnd();
+    setProfileImageKey(profileImageKey);
     setImageUploadModal(false);
   };
 
@@ -87,8 +88,36 @@ const UpdateProfileImageScreen = () => {
   };
 
   const postData = async () => {
+    let imageKey;
+
+    //send to AWS S3 bucket
+    if (profileImageKey) {
+      try {
+        const formData = new FormData();
+
+        formData.append("image", {
+          uri: profileImageKey,
+          type: "image/png",
+          name: "profile-image",
+        });
+
+        const response = await fetch(
+          "https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/users/profileimages",
+          {
+            method: "POST",
+            headers: { "Content-Type": "multipart/form-data" },
+            body: formData,
+          }
+        );
+        const responseData = await response.json();
+        imageKey = responseData.imageKey;
+      } catch (error) {
+        console.error("Error uploading image to AWS S3:", error);
+      }
+    }
+
     const userData = {
-      profilePicPath: image,
+      profileImageKey: imageKey,
       username: username,
     };
 
@@ -101,7 +130,6 @@ const UpdateProfileImageScreen = () => {
           body: JSON.stringify(userData),
         }
       );
-
       const data = await response.json();
     } catch (error) {
       console.error(error);
@@ -181,9 +209,9 @@ const UpdateProfileImageScreen = () => {
         </View>
 
         <View style={styles.imageIconcontainer}>
-          {image ? (
+          {profileImageKey ? (
             <Image
-              source={{ uri: image }}
+              source={{ uri: profileImageKey }}
               style={{ width: 200, height: 200 }}
             />
           ) : (
@@ -195,10 +223,12 @@ const UpdateProfileImageScreen = () => {
             </View>
           )}
         </View>
-        {image && (
+        {profileImageKey && (
           <PrimaryButton onPress={updateProfileImage}>Update</PrimaryButton>
         )}
-        {!image && <Text style={styles.text}>Please update profile image</Text>}
+        {!profileImageKey && (
+          <Text style={styles.text}>Please update profile image</Text>
+        )}
       </View>
     </>
   );

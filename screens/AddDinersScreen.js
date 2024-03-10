@@ -252,7 +252,16 @@ const AddDinersScreen = () => {
                       ]}
                     >
                       {/* SEND ALL INFO TO DATABASE */}
-                      <PrimaryButton onPress={postData}>Continue</PrimaryButton>
+                      <View style={{ flexDirection: "row" }}>
+                        <PrimaryButton
+                          onPress={() => setShowSelectBirthday(false)}
+                        >
+                          Return
+                        </PrimaryButton>
+                        <PrimaryButton onPress={postData}>
+                          Continue
+                        </PrimaryButton>
+                      </View>
                     </View>
                   </View>
                 </>

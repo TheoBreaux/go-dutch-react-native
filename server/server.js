@@ -228,16 +228,16 @@ app.post("/additionaldiners", async (req, res) => {
 
 //UPDATE DEFAULT PHOTO TO REAL PHOTO
 app.post("/profilephoto", async (req, res) => {
-  const { profilePicPath, username } = req.body;
+  const { profileImageKey, username } = req.body;
 
-  console.log(profilePicPath, username);
+  console.log(profileImageKey, username);
 
   try {
     const newUserData = await pool.query(
       `UPDATE users 
       SET profile_image_key = $1
       WHERE username = $2`,
-      [profilePicPath, username]
+      [profileImageKey, username]
     );
 
     // On success, send a 200 OK response
@@ -421,7 +421,7 @@ app.post("/additionaldiners/values", async (req, res) => {
   }
 });
 
-// AWS - POST IMAGES
+// AWS - POST PROFILE IMAGES
 app.post("/users/profileimages", upload.single("image"), async (req, res) => {
   console.log(req.body);
   const file = req.file;
@@ -432,10 +432,23 @@ app.post("/users/profileimages", upload.single("image"), async (req, res) => {
   res.send({ imageKey: result.Key });
 });
 
-//AWS - GET IMAGES
-app.get("/users/profileimages/:key", (req, res) => {
-  const key = req.params.key;
-  const readStream = getFileStream(key);
-
-  readStream.pipe(res);
+//AWS - POST RECEIPT IMAGES
+app.post("/diningevents/receiptimages", upload.single("image"), async (req, res) => {
+  console.log(req.body);
+  const file = req.file;
+  console.log(file);
+  const result = await uploadFile(file);
+  await unlinkFile(file.path);
+  console.log(result);
+  res.send({ imageKey: result.Key });
 });
+
+
+
+//AWS - GET PROFILE IMAGES
+// app.get("/users/profileimages/:key", (req, res) => {
+//   const key = req.params.key;
+//   const readStream = getFileStream(key);
+
+//   readStream.pipe(res);
+// });
