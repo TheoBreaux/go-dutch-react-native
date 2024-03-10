@@ -47,7 +47,7 @@ const HomePageScreen = () => {
         diner_meal_cost: 0,
         items: [],
         birthday: false,
-        profile_pic_image_path: profilePicImagePath,
+        profile_image_key: profilePicImagePath,
       })
     );
   }, [goDutchUsername]);

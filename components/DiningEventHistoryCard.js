@@ -17,7 +17,7 @@ const DiningEventHistoryCard = ({ item }) => {
 
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={showEventDetails}>
-      <Image source={{ uri: item.receipt_image_path }} style={styles.image} />
+      <Image source={{ uri: item.receipt_image_key }} style={styles.image} />
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>

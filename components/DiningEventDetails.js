@@ -88,7 +88,7 @@ const DiningEventDetails = () => {
             }}
           >
             <Image
-              source={{ uri: item.receipt_image_path }}
+              source={{ uri: item.receipt_image_key }}
               style={styles.image}
             />
           </View>

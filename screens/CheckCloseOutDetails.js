@@ -23,7 +23,7 @@ const CheckCloseOutDetails = () => {
   const primaryDiner = diningEvent.diners[0].additional_diner_username;
   const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
-  const receiptImagePath = diningEvent.event.receipt_image_path;
+  const receiptImagePath = diningEvent.event.receipt_image_key;
   //convert string date to month, day, year format
   const parts = eventDate.split("-");
   const month = parseInt(parts[0], 10);
@@ -86,7 +86,6 @@ const CheckCloseOutDetails = () => {
             </Text>
           </View>
 
-          
           <View style={styles.additionalDinerContainer}>
             <Text style={styles.additionalDinerText}>Diners</Text>
           </View>

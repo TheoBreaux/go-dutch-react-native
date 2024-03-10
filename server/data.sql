@@ -5,13 +5,13 @@ CREATE TABLE users (
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(255),
+    username VARCHAR(255) UNIQUE, -- Add UNIQUE constraint here
     hashed_password VARCHAR(255),
     primary_payment_source VARCHAR(255),
     primary_payment_source_username VARCHAR(255),
     secondary_payment_source VARCHAR(255),
     secondary_payment_source_username VARCHAR(255),
-    profile_pic_image_path VARCHAR(300),
+    profile_image_key VARCHAR(300),
     date_joined DATE DEFAULT CURRENT_DATE
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE dining_events (
     tax DECIMAL(10, 2),
     tip DECIMAL(10, 2),
     total_meal_cost DECIMAL(10, 2),
-    receipt_image_path VARCHAR(300)
+    receipt_image_key VARCHAR(300)
 );
 
 CREATE TABLE additional_diners (

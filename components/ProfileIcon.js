@@ -5,14 +5,14 @@ const ProfileIcon = ({
   username,
   userFullName,
   onPress,
-  profileImagePath,
+  profileImageKey,
   item,
 }) => {
   return (
     <TouchableOpacity onPress={() => onPress(item.username)}>
       <View style={styles.suggestionContainer}>
-        {profileImagePath ? (
-          <ProfileImageMedallion profileImagePath={profileImagePath} />
+        {profileImageKey ? (
+          <ProfileImageMedallion profileImageKey={profileImageKey} />
         ) : (
           <Image
             source={require("../assets/default-profile-icon.jpg")}

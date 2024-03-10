@@ -137,16 +137,15 @@ const FoodItemDropArea = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review items for</Text>
-                {dinersUpdated[currentDinerIndex].profile_pic_image_path ===
-                null ? (
+                {dinersUpdated[currentDinerIndex].profile_image_key === null ? (
                   <Image
                     source={require("../assets/default-profile-icon.jpg")}
                     style={styles.profilePic}
                   />
                 ) : (
                   <ProfileImageMedallion
-                    profileImagePath={
-                      dinersUpdated[currentDinerIndex].profile_pic_image_path
+                    profileImageKey={
+                      dinersUpdated[currentDinerIndex].profile_image_key
                     }
                     width={100}
                     height={100}
@@ -228,15 +227,15 @@ const FoodItemDropArea = () => {
             Drag user items to profile pic & review!
           </Text>
 
-          {dinersUpdated[currentDinerIndex].profile_pic_image_path === null ? (
+          {dinersUpdated[currentDinerIndex].profile_image_key === null ? (
             <Image
               source={require("../assets/default-profile-icon.jpg")}
               style={styles.profilePic}
             />
           ) : (
             <ProfileImageMedallion
-              profileImagePath={
-                dinersUpdated[currentDinerIndex].profile_pic_image_path
+              profileImageKey={
+                dinersUpdated[currentDinerIndex].profile_image_key
               }
               width={150}
               height={150}

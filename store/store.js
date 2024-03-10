@@ -76,7 +76,7 @@ const diningEventSlice = createSlice({
       state.currentDinerId = action.payload;
     },
     setReceiptImagePath: (state, action) => {
-      state.event.receipt_image_path = action.payload;
+      state.event.receipt_image_key = action.payload;
     },
     updateSubtotal: (state, action) => {
       state.event.subtotal = action.payload;

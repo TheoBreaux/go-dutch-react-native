@@ -7,10 +7,14 @@ const jwt = require("jsonwebtoken");
 const Pool = require("pg").Pool;
 require("dotenv").config();
 
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
+
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const { uploadFile } = require("./s3");
+const { uploadFile, getFileStream } = require("./s3");
 
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -39,7 +43,7 @@ app.post("/signup", async (req, res) => {
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_pic_image_path) VALUES($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key) VALUES($1, $2, $3, $4, $5, $6)`,
       [firstName, lastName, email, username, hashedPassword, profilePicPath]
     );
 
@@ -116,7 +120,7 @@ app.post("/login", async (req, res) => {
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
-        profilePicPath: users.rows[0].profile_pic_image_path,
+        profilePicPath: users.rows[0].profile_image_key,
         token,
       });
     } else {
@@ -137,12 +141,12 @@ app.post("/diningevents", async (req, res) => {
     tax,
     tip,
     total_meal_cost,
-    receipt_image_path,
+    receipt_image_key,
   } = req.body;
 
   try {
     const newDiningEvent = await pool.query(
-      `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost, receipt_image_path) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING event_id`,
+      `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost, receipt_image_key) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING event_id`,
       [
         dining_date,
         restaurant_bar,
@@ -151,7 +155,7 @@ app.post("/diningevents", async (req, res) => {
         tax,
         tip,
         total_meal_cost,
-        receipt_image_path,
+        receipt_image_key,
       ]
     );
     const eventId = newDiningEvent.rows[0].event_id;
@@ -167,14 +171,14 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 
   try {
     const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name, profile_pic_image_path FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      `SELECT username, first_name, last_name, profile_image_key FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
       [`%${userInput}%`]
     );
     const suggestions = autoCompleteDiner.rows.map((row) => ({
       username: row.username,
       firstName: row.first_name,
       lastName: row.last_name,
-      profilePicPath: row.profile_pic_image_path,
+      profilePicPath: row.profile_image_key,
     }));
     res.json(suggestions);
   } catch (error) {
@@ -231,7 +235,7 @@ app.post("/profilephoto", async (req, res) => {
   try {
     const newUserData = await pool.query(
       `UPDATE users 
-      SET profile_pic_image_path = $1
+      SET profile_image_key = $1
       WHERE username = $2`,
       [profilePicPath, username]
     );
@@ -291,7 +295,7 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
 
   try {
     const profilePicPaths = await pool.query(
-      `SELECT additional_diners.event_id, username, profile_pic_image_path
+      `SELECT additional_diners.event_id, username, profile_image_key
       FROM users 
       JOIN additional_diners on users.username = additional_diners.additional_diner_username
       WHERE additional_diners.event_id = $1`,
@@ -417,14 +421,21 @@ app.post("/additionaldiners/values", async (req, res) => {
   }
 });
 
+// AWS - POST IMAGES
+app.post("/users/profileimages", upload.single("image"), async (req, res) => {
+  console.log(req.body);
+  const file = req.file;
+  console.log(file);
+  const result = await uploadFile(file);
+  await unlinkFile(file.path);
+  console.log(result);
+  res.send({ imageKey: result.Key });
+});
 
+//AWS - GET IMAGES
+app.get("/users/profileimages/:key", (req, res) => {
+  const key = req.params.key;
+  const readStream = getFileStream(key);
 
-// AWS SET UP
-// //POST IMAGES TO AWS
-// app.post("/images", upload.single("image"), async (req, res) => {
-//   const file = req.file;
-//   console.log(file);
-//   const result = await uploadFile(file);
-//   console.log(result);
-//   res.send("A-OKAY, THEO B!");
-// });
+  readStream.pipe(res);
+});

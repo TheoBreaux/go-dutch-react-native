@@ -8,7 +8,11 @@
     "assetBundlePatterns": ["**/*"],
     "backgroundColor": "#000000",
     "extra": {
-      "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig"
+      "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
+      "AWS_BUCKET_NAME": "go-dutch-bucket",
+      "AWS_BUCKET_REGION": "us-west-1",
+      "AWS_ACCESS_KEY": "AKIA4MTWNGWUF6AE3KTH",
+      "AWS_SECRET_KEY": "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"
     },
     "ios": {
       "supportsTablet": true

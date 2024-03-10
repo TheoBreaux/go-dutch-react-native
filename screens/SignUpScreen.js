@@ -19,6 +19,7 @@ import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
 import { useRoute } from "@react-navigation/native";
+import Spinner from "../components/Spinner";
 
 const SignUpScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -27,6 +28,7 @@ const SignUpScreen = () => {
   const [confirmedPassword, setConfirmedPassword] = useState(false);
   const [imagePath, setImagePath] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const navigation = useNavigation();
@@ -34,6 +36,9 @@ const SignUpScreen = () => {
   const route = useRoute();
 
   const { apiKey } = route.params;
+
+  //for uploading image to backend
+  const FormData = global.FormData;
 
   const initialValues = {
     firstName: "",
@@ -104,13 +109,42 @@ const SignUpScreen = () => {
 
   const handleFormSubmit = async (values, actions) => {
     actions.resetForm();
+    setLoading(true);
+    let imageKey;
+
+    //send to AWS S3 bucket
+    if (imagePath) {
+      try {
+        const formData = new FormData();
+
+        formData.append("image", {
+          uri: imagePath,
+          type: "image/png",
+          name: "profile-image",
+        });
+
+        const response = await fetch(
+          "https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/users/profileimages",
+          {
+            method: "POST",
+            headers: { "Content-Type": "multipart/form-data" },
+            body: formData,
+          }
+        );
+        const responseData = await response.json();
+        imageKey = responseData.imageKey;
+      } catch (error) {
+        console.error("Error uploading image to AWS S3:", error);
+      }
+    }
+
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
-      profilePicPath: imagePath || null,
+      profilePicPath: imageKey || null,
     };
 
     try {
@@ -141,140 +175,147 @@ const SignUpScreen = () => {
     <>
       <LocateRestaurants onLocationUpdate={handleLocationUpdate} />
       <Logo />
-      <UploadProfileImage handleImageChange={handleImageChange} />
-      <ScrollView>
-        <View style={styles.inputContainer}>
-          <Formik
-            initialValues={initialValues}
-            validate={validateForm}
-            onSubmit={handleFormSubmit}
-          >
-            {({ handleChange, handleSubmit, handleBlur, values }) => (
-              <>
-                <View style={styles.nameInputsContainer}>
-                  <View style={styles.nameInputs}>
-                    <Text style={styles.inputLabels}>First Name</Text>
-                    <TextInput
-                      style={styles.firstNameInput}
-                      onChangeText={handleChange("firstName")}
-                      onBlur={handleBlur("firstName")}
-                      value={values.firstName}
-                    />
-                    <ErrorMessage
-                      name="firstName"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
-
-                  <View style={styles.nameInputs}>
-                    <Text style={styles.inputLabels}>Last Name</Text>
-                    <TextInput
-                      style={styles.lastNameInput}
-                      onChangeText={handleChange("lastName")}
-                      onBlur={handleBlur("lastName")}
-                      value={values.lastName}
-                    />
-                    <ErrorMessage
-                      name="lastName"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>Email</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                    autoCapitalize="none"
-                    autoComplete="email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>Create Username</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("createUsername")}
-                    onBlur={handleBlur("createUsername")}
-                    value={values.createUsername}
-                    autoCapitalize="none"
-                  />
-                  <ErrorMessage
-                    name="createUsername"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
-
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>Password</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    secureTextEntry={!showPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.passwordToggle}
-                  >
-                    <Text style={styles.passwordToggleText}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Text>
-                  </TouchableOpacity>
-                  <ErrorMessage
-                    name="password"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
-
-                <View style={styles.logInInputs}>
-                  <Text style={styles.inputLabels}>Confirm Password</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("confirmedPassword")}
-                    onBlur={handleBlur("confirmedPassword")}
-                    value={values.confirmedPassword}
-                    secureTextEntry={!showConfirmedPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      setShowConfirmedPassword(!showConfirmedPassword)
-                    }
-                    style={styles.passwordToggle}
-                  >
-                    <Text style={styles.passwordToggleText}>
-                      {confirmedPassword ? "Hide" : "Show"}
-                    </Text>
-                  </TouchableOpacity>
-                  <ErrorMessage
-                    name="confirmedPassword"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
-
-                <View style={styles.buttonContainer}>
-                  <SecondaryButton onPress={handleSubmit}>
-                    Submit
-                  </SecondaryButton>
-                </View>
-              </>
-            )}
-          </Formik>
+      {loading && (
+        <View style={styles.spinnerContainer}>
+          <Spinner children="Creating account..." />
         </View>
-      </ScrollView>
+      )}
+      {!loading && <UploadProfileImage handleImageChange={handleImageChange} />}
+      {!loading && (
+        <ScrollView>
+          <View style={styles.inputContainer}>
+            <Formik
+              initialValues={initialValues}
+              validate={validateForm}
+              onSubmit={handleFormSubmit}
+            >
+              {({ handleChange, handleSubmit, handleBlur, values }) => (
+                <>
+                  <View style={styles.nameInputsContainer}>
+                    <View style={styles.nameInputs}>
+                      <Text style={styles.inputLabels}>First Name</Text>
+                      <TextInput
+                        style={styles.firstNameInput}
+                        onChangeText={handleChange("firstName")}
+                        onBlur={handleBlur("firstName")}
+                        value={values.firstName}
+                      />
+                      <ErrorMessage
+                        name="firstName"
+                        component={Text}
+                        style={styles.errorText}
+                      />
+                    </View>
+
+                    <View style={styles.nameInputs}>
+                      <Text style={styles.inputLabels}>Last Name</Text>
+                      <TextInput
+                        style={styles.lastNameInput}
+                        onChangeText={handleChange("lastName")}
+                        onBlur={handleBlur("lastName")}
+                        value={values.lastName}
+                      />
+                      <ErrorMessage
+                        name="lastName"
+                        component={Text}
+                        style={styles.errorText}
+                      />
+                    </View>
+                  </View>
+
+                  <View style={styles.logInInputs}>
+                    <Text style={styles.inputLabels}>Email</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                      autoCapitalize="none"
+                      autoComplete="email"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
+                  <View style={styles.logInInputs}>
+                    <Text style={styles.inputLabels}>Create Username</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("createUsername")}
+                      onBlur={handleBlur("createUsername")}
+                      value={values.createUsername}
+                      autoCapitalize="none"
+                    />
+                    <ErrorMessage
+                      name="createUsername"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
+
+                  <View style={styles.logInInputs}>
+                    <Text style={styles.inputLabels}>Password</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      value={values.password}
+                      secureTextEntry={!showPassword}
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                      style={styles.passwordToggle}
+                    >
+                      <Text style={styles.passwordToggleText}>
+                        {showPassword ? "Hide" : "Show"}
+                      </Text>
+                    </TouchableOpacity>
+                    <ErrorMessage
+                      name="password"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
+
+                  <View style={styles.logInInputs}>
+                    <Text style={styles.inputLabels}>Confirm Password</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("confirmedPassword")}
+                      onBlur={handleBlur("confirmedPassword")}
+                      value={values.confirmedPassword}
+                      secureTextEntry={!showConfirmedPassword}
+                    />
+                    <TouchableOpacity
+                      onPress={() =>
+                        setShowConfirmedPassword(!showConfirmedPassword)
+                      }
+                      style={styles.passwordToggle}
+                    >
+                      <Text style={styles.passwordToggleText}>
+                        {confirmedPassword ? "Hide" : "Show"}
+                      </Text>
+                    </TouchableOpacity>
+                    <ErrorMessage
+                      name="confirmedPassword"
+                      component={Text}
+                      style={styles.errorText}
+                    />
+                  </View>
+
+                  <View style={styles.buttonContainer}>
+                    <SecondaryButton onPress={handleSubmit}>
+                      Submit
+                    </SecondaryButton>
+                  </View>
+                </>
+              )}
+            </Formik>
+          </View>
+        </ScrollView>
+      )}
     </>
   );
 };
@@ -336,6 +377,15 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 30,
+  },
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: -50,
+    width: "100%",
+    height: "100%",
   },
 });
 

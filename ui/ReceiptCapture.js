@@ -74,7 +74,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       tax: null,
       tip: null,
       total_meal_cost: null,
-      receipt_image_path: image,
+      receipt_image_key: image,
       subtotal: null,
     };
 
@@ -140,7 +140,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       <View style={styles.container}>
         {loading && (
           <View style={styles.spinnerContainer}>
-            <Spinner />
+            <Spinner children="Analyzing receipt...🧾" />
           </View>
         )}
 

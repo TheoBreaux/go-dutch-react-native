@@ -119,7 +119,7 @@ const AddDinersScreen = () => {
           diner_meal_cost: 0,
           items: [],
           birthday: false,
-          profile_pic_image_path: profilePic,
+          profile_image_key: profilePic,
         })
       );
       setInputValue("");
@@ -299,7 +299,7 @@ const AddDinersScreen = () => {
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}
                 diner={item}
-                profilePicPath={item.profile_pic_image_path}
+                profilePicPath={item.profile_image_key}
               />
             )}
           />
@@ -343,7 +343,7 @@ const AddDinersScreen = () => {
               userFullName={item.firstName + " " + item.lastName}
               username={item.username}
               onPress={handleSelectUsername}
-              profileImagePath={item.profilePicPath}
+              profileImageKey={item.profilePicPath}
               item={item}
             />
           )}

@@ -116,8 +116,8 @@ const ConfirmReceiptItemsScreen = () => {
 
   // const updatedDiners = profilePicPaths.map((diner, i) => ({
   //   ...diners[i],
-  //   profile_pic_image_path:
-  //     diner.profile_pic_image_path || diners[i]?.profile_pic_image_path,
+  //   profile_image_key:
+  //     diner.profile_image_key || diners[i]?.profile_image_key,
   // }));
 
   const addNewItem = () => {
@@ -198,7 +198,7 @@ const ConfirmReceiptItemsScreen = () => {
             <Ionicons name="checkmark-sharp" size={30} color="white" />
           </PrimaryButton>
           <PrimaryButton width={90} onPress={() => setShowAddItemsModal(true)}>
-            <Ionicons name="ios-add-sharp" size={30} color="white" />
+            <Ionicons name="add" size={30} color="white" />
           </PrimaryButton>
         </View>
       </View>

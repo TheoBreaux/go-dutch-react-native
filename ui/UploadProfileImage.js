@@ -11,9 +11,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
 
-//for uploading image to backend
-const FormData = global.FormData;
-
 const UploadProfileImage = ({ handleImageChange }) => {
   const [image, setImage] = useState();
   const [imageUploadModal, setImageUploadModal] = useState(false);
@@ -72,40 +69,14 @@ const UploadProfileImage = ({ handleImageChange }) => {
   const saveImage = async (image) => {
     //update display image
     setImage(image);
-    //save make API call to save
-    // sendToBackEnd();
     setImageUploadModal(false);
   };
-
-  // const sendToBackEnd = async () => {
-  //   try {
-  //     const formData = new FormData();
-
-  //     formData.append("image", {
-  //       uri: image,
-  //       type: "image/png",
-  //       name: "profile-image",
-  //     });
-
-  //     const config = {
-  //       headers: {
-  //         "Content-Type": "mulipart/form-data",
-  //       },
-  //       transformRequest: () => {
-  //         return formData;
-  //       },
-  //     };
-  //   } catch (error) {}
-  // };
 
   const removeImage = () => {
     saveImage(null);
     setImageUploadModal(false);
   };
 
-  console.log("IMAGE", image);
-
-  
   return (
     <View style={styles.container}>
       {imageUploadModal && (
