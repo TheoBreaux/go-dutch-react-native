@@ -15,6 +15,7 @@ import { months } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
 import React, { useEffect, useState } from "react";
+import CompletedStamp from "../components/CompletedStamp";
 
 const CheckCloseOutDetails = () => {
   const [imageUri, setImageUri] = useState(null);

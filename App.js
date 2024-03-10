@@ -26,6 +26,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
 import UpdateProfileImageScreen from "./screens/UpdateProfileImageScreen";
+import CompletedStamp from "./components/CompletedStamp";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -101,6 +102,7 @@ const App = () => {
   const [fontsLoaded] = useFonts({
     "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
     "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
+    stamper: require("./fonts/Stamper.ttf"),
   });
 
   if (!fontsLoaded) {
