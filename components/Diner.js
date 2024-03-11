@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { removeDiner } from "../store/store";
 import ProfileImageMedallion from "./ProfileImageMedallion";
 
-const Diner = ({ additionalDinerUsername, diner, profilePicPath }) => {
+const Diner = ({ additionalDinerUsername, diner, profileImageKey }) => {
   //check to see if users current profile pic path is null
   const usingDefaultProfilePhoto = diner.profile_image_key === null;
 
@@ -21,7 +21,7 @@ const Diner = ({ additionalDinerUsername, diner, profilePicPath }) => {
         />
       ) : (
         <ProfileImageMedallion
-          profileImageKey={profilePicPath}
+          profileImageKey={profileImageKey}
           width={50}
           height={50}
           borderRadius={25}

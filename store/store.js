@@ -96,6 +96,10 @@ const diningEventSlice = createSlice({
       state.event.tip = tip;
       state.event.totalMealCost = totalMealCost.toFixed(2).toString();
     },
+    updateDinerProfileImageKey: (state, action) => {
+      const profileImageKey = action.payload;
+      state.diners[0].profile_image_key = profileImageKey;
+    },
     updateDinerFinalMealCost: (state, action) => {
       const sharedExpenses = action.payload;
       const updatedDiners = state.diners.map((diner) => {
@@ -111,7 +115,6 @@ const diningEventSlice = createSlice({
     },
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
-
       // find the index of the item that has been dragged and dropped
       const index = state.allReceiptItems.findIndex((foodItem) => {
         return foodItem.id === item.id;
@@ -176,6 +179,7 @@ export const {
   updateBirthdayDinerBill,
   updateFinalDiningEventValues,
   updateDinerFinalMealCost,
+  updateDinerProfileImageKey,
 } = diningEventSlice.actions;
 
 const store = configureStore({

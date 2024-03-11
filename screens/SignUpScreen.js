@@ -47,7 +47,7 @@ const SignUpScreen = () => {
     createUsername: "",
     password: "",
     confirmedPassword: "",
-    profilePicPath: "",
+    profileImageKey: "",
   };
 
   const handleImageChange = (path) => {
@@ -144,7 +144,7 @@ const SignUpScreen = () => {
       email: values.email,
       username: values.createUsername.toLowerCase(),
       password: values.password,
-      profilePicPath: imageKey || null,
+      profileImageKey: imageKey || null,
     };
 
     try {

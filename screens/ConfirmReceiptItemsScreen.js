@@ -61,7 +61,7 @@ const configureReceiptData = (receiptAmounts) => {
 
 const ConfirmReceiptItemsScreen = () => {
   const [separatedDinnerItems, setSeparatedDinnerItems] = useState([]);
-  const [profilePicPaths, setProfilePicPaths] = useState([]);
+  const [profileImageKeys, setProfilePicPaths] = useState([]);
   const [showAddItemsModal, setShowAddItemsModal] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   const [newItemPrice, setNewItemPrice] = useState("");
@@ -114,7 +114,7 @@ const ConfirmReceiptItemsScreen = () => {
     fetchProfilePicPaths();
   }, [eventId]);
 
-  // const updatedDiners = profilePicPaths.map((diner, i) => ({
+  // const updatedDiners = profileImageKeys.map((diner, i) => ({
   //   ...diners[i],
   //   profile_image_key:
   //     diner.profile_image_key || diners[i]?.profile_image_key,

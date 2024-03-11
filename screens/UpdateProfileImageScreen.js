@@ -11,9 +11,11 @@ import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PrimaryButton from "../components/PrimaryButton";
+import { updateDinerProfileImageKey } from "../store/store";
+
 
 const UpdateProfileImageScreen = () => {
   //for uploading image to backend
@@ -25,6 +27,7 @@ const UpdateProfileImageScreen = () => {
   const username = useSelector((state) => state.userInfo.user.username);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const checkForCameraRollPermission = async () => {
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -111,6 +114,9 @@ const UpdateProfileImageScreen = () => {
         );
         const responseData = await response.json();
         imageKey = responseData.imageKey;
+        dispatch(updateDinerProfileImageKey(imageKey));
+        setProfileImageKey(imageKey);
+        console.log(imageKey);
       } catch (error) {
         console.error("Error uploading image to AWS S3:", error);
       }

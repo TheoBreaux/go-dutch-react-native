@@ -108,7 +108,7 @@ const AddDinersScreen = () => {
       const foundSuggestion = suggestions.find(
         (suggestion) => suggestion.username === inputValue
       );
-      const profilePic = foundSuggestion.profilePicPath;
+      const profileImageKey = foundSuggestion.profileImageKey;
 
       dispatch(
         addDiner({
@@ -119,7 +119,7 @@ const AddDinersScreen = () => {
           diner_meal_cost: 0,
           items: [],
           birthday: false,
-          profile_image_key: profilePic,
+          profile_image_key: profileImageKey,
         })
       );
       setInputValue("");
@@ -308,7 +308,7 @@ const AddDinersScreen = () => {
                 key={item.id}
                 additionalDinerUsername={item.additional_diner_username}
                 diner={item}
-                profilePicPath={item.profile_image_key}
+                profileImageKey={item.profile_image_key}
               />
             )}
           />
@@ -352,7 +352,7 @@ const AddDinersScreen = () => {
               userFullName={item.firstName + " " + item.lastName}
               username={item.username}
               onPress={handleSelectUsername}
-              profileImageKey={item.profilePicPath}
+              profileImageKey={item.profileImageKey}
               item={item}
             />
           )}

@@ -20,7 +20,7 @@ import { useEffect } from "react";
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
   const usingDefaultProfilePhoto =
-    useSelector((state) => state.userInfo.user.profilePicPath) === null;
+    useSelector((state) => state.userInfo.user.profileImageKey) === null;
 
   const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
     useState(usingDefaultProfilePhoto);
@@ -30,8 +30,8 @@ const HomePageScreen = () => {
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
   );
-  const profilePicImagePath = useSelector(
-    (state) => state.userInfo.user.profilePicPath
+  const profileImageKey = useSelector(
+    (state) => state.userInfo.user.profileImageKey
   );
 
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const HomePageScreen = () => {
         diner_meal_cost: 0,
         items: [],
         birthday: false,
-        profile_image_key: profilePicImagePath,
+        profile_image_key: profileImageKey,
       })
     );
   }, [goDutchUsername]);

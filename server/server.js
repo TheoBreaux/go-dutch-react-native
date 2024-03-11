@@ -36,7 +36,7 @@ pool.query("SELECT NOW()", (err, result) => {
 
 //SIGN UP TO GO DUTCH - INITIAL USER INFO
 app.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, username, password, profilePicPath } =
+  const { firstName, lastName, email, username, password, profileImageKey } =
     req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
@@ -44,13 +44,13 @@ app.post("/signup", async (req, res) => {
   try {
     const newUser = await pool.query(
       `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key) VALUES($1, $2, $3, $4, $5, $6)`,
-      [firstName, lastName, email, username, hashedPassword, profilePicPath]
+      [firstName, lastName, email, username, hashedPassword, profileImageKey]
     );
 
     const token = jwt.sign({ email, username, firstName, lastName }, "secret", {
       expiresIn: "1hr",
     });
-    res.json({ email, username, firstName, lastName, token, profilePicPath });
+    res.json({ email, username, firstName, lastName, token, profileImageKey });
   } catch (error) {
     console.error(error);
     if (error) {
@@ -120,7 +120,7 @@ app.post("/login", async (req, res) => {
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
-        profilePicPath: users.rows[0].profile_image_key,
+        profileImageKey: users.rows[0].profile_image_key,
         token,
       });
     } else {
@@ -178,7 +178,7 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
       username: row.username,
       firstName: row.first_name,
       lastName: row.last_name,
-      profilePicPath: row.profile_image_key,
+      profileImageKey: row.profile_image_key,
     }));
     res.json(suggestions);
   } catch (error) {
@@ -294,7 +294,7 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
   const { eventId } = req.params;
 
   try {
-    const profilePicPaths = await pool.query(
+    const profileImageKeys = await pool.query(
       `SELECT additional_diners.event_id, username, profile_image_key
       FROM users 
       JOIN additional_diners on users.username = additional_diners.additional_diner_username
@@ -302,8 +302,8 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
       [eventId]
     );
 
-    console.log(profilePicPaths);
-    res.json(profilePicPaths.rows);
+    console.log(profileImageKeys);
+    res.json(profileImageKeys.rows);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -433,17 +433,19 @@ app.post("/users/profileimages", upload.single("image"), async (req, res) => {
 });
 
 //AWS - POST RECEIPT IMAGES
-app.post("/diningevents/receiptimages", upload.single("image"), async (req, res) => {
-  console.log(req.body);
-  const file = req.file;
-  console.log(file);
-  const result = await uploadFile(file);
-  await unlinkFile(file.path);
-  console.log(result);
-  res.send({ imageKey: result.Key });
-});
-
-
+app.post(
+  "/diningevents/receiptimages",
+  upload.single("image"),
+  async (req, res) => {
+    console.log(req.body);
+    const file = req.file;
+    console.log(file);
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+    console.log(result);
+    res.send({ imageKey: result.Key });
+  }
+);
 
 //AWS - GET PROFILE IMAGES
 // app.get("/users/profileimages/:key", (req, res) => {

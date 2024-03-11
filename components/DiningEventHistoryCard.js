@@ -4,9 +4,11 @@ import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
 import React, { useEffect, useState } from "react";
+import Spinner from "../components/Spinner";
 
 const DiningEventHistoryCard = ({ item }) => {
   const [imageUri, setImageUri] = useState(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const navigation = useNavigation();
   const dateObj = new Date(item.dining_date);
   const receiptImageKey = item.receipt_image_key;
@@ -24,6 +26,7 @@ const DiningEventHistoryCard = ({ item }) => {
     });
 
     const getImageFromS3 = async () => {
+      setIsLoadingImage(true);
       const params = {
         Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
         Key: receiptImageKey,
@@ -34,6 +37,8 @@ const DiningEventHistoryCard = ({ item }) => {
         setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
       } catch (error) {
         console.error("Error retrieving image from S3:", error);
+      } finally {
+        setIsLoadingImage(false);
       }
     };
 
@@ -46,7 +51,8 @@ const DiningEventHistoryCard = ({ item }) => {
 
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={showEventDetails}>
-      <Image source={{ uri: imageUri }} style={styles.image} />
+      {isLoadingImage && <Spinner children={"Loading..."} indicatorSize={50}/>}
+      {!isLoadingImage && <Image source={{ uri: imageUri }} style={styles.image} />}
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
