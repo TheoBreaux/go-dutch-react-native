@@ -7,6 +7,8 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Animated,
+  Dimensions,
 } from "react-native";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
@@ -14,10 +16,14 @@ import Logo from "../components/Logo";
 import { months } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
-import React, { useEffect, useState } from "react";
-import CompletedStamp from "../components/CompletedStamp";
+import React, { useEffect, useRef, useState } from "react";
+import Spinner from "../components/Spinner";
 
 const CheckCloseOutDetails = () => {
+  const stampScale = useRef(new Animated.Value(1)).current;
+  const stampOpacity = useRef(new Animated.Value(1)).current;
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const diningEvent = useSelector((state) => state.diningEvent);
   const eventTitle = diningEvent.event.eventTitle;
@@ -47,6 +53,7 @@ const CheckCloseOutDetails = () => {
     });
 
     const getImageFromS3 = async () => {
+      setIsLoadingImage(true);
       const params = {
         Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
         Key: receiptImageKey,
@@ -57,11 +64,17 @@ const CheckCloseOutDetails = () => {
         setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
       } catch (error) {
         console.error("Error retrieving image from S3:", error);
+      } finally {
+        setIsLoadingImage(false);
       }
     };
 
     getImageFromS3();
   }, [receiptImageKey]);
+
+  useEffect(() => {
+    animateStamp();
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.row}>
@@ -70,10 +83,72 @@ const CheckCloseOutDetails = () => {
     </TouchableOpacity>
   );
 
+  const animateStamp = () => {
+    Animated.sequence([
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(stampScale, {
+            toValue: 1.5,
+            duration: 400,
+            useNativeDriver: true,
+          }),
+          Animated.timing(stampScale, {
+            toValue: 1,
+            duration: 400,
+            useNativeDriver: true,
+          }),
+        ]),
+        { iterations: -1 }
+      ),
+      Animated.timing(stampOpacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setIsAnimationDone(true);
+    });
+
+    // Stop the animation after 3 seconds
+    setTimeout(() => {
+      setIsAnimationDone(true);
+    }, 6000);
+  };
+
+  // Get the screen height
+  const screenHeight = Dimensions.get("window").height;
+  // Calculate the position of the stamp
+  const stampPosition = screenHeight / 2 - 300;
+
+  // Dynamic styles
+  const stampStyles = StyleSheet.create({
+    stamp: {
+      position: "absolute",
+      top: stampPosition,
+      width: 300,
+      height: 300,
+      resizeMode: "contain",
+      zIndex: 5,
+    },
+  });
+
   return (
     <>
       <Logo />
       <View style={styles.cardContainer}>
+        {!isAnimationDone && (
+          <Animated.Image
+            source={require("../assets/completed-stamp.png")}
+            style={[
+              stampStyles.stamp,
+              {
+                transform: [{ scale: stampScale }],
+                opacity: stampOpacity,
+              },
+            ]}
+          />
+        )}
+
         <View style={styles.contentContainer}>
           <View>
             <View
@@ -104,7 +179,10 @@ const CheckCloseOutDetails = () => {
               padding: 5,
             }}
           >
-            <Image source={{ uri: imageUri }} style={styles.image} />
+            {isLoadingImage && <Spinner children={"Loading..."} />}
+            {!isLoadingImage && (
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            )}
           </View>
 
           <View>
@@ -136,11 +214,11 @@ const CheckCloseOutDetails = () => {
 const styles = StyleSheet.create({
   cardContainer: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     marginTop: -5,
     margin: 5,
     borderRadius: 8,
-    shadowColor: Colors.goDutchBlue,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
@@ -201,11 +279,22 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 3,
     backgroundColor: "#fff",
-    shadowColor: Colors.goDutchBlue,
+    shadowColor: Colors.goDutchRed,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
+  },
+
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  document: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });
 

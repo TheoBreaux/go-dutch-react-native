@@ -244,10 +244,10 @@ const FoodItemDropArea = () => {
           )}
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
-            <Text style={styles.dinerInfo}>@{currentDiner}</Text>
+            <Text style={styles.dinerUsername}>@{currentDiner}</Text>
 
             {notSure && (
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row", marginBottom: 10 }}>
                 <Image source={require("../assets/down-arrow.png")} />
                 <Image source={require("../assets/down-arrow.png")} />
                 <Image source={require("../assets/down-arrow.png")} />
@@ -269,6 +269,7 @@ const FoodItemDropArea = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    marginTop: 25,
     marginBottom: 20,
   },
   profilePic: {
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 200,
     marginTop: 65,
-    marginBottom: 5,
+    marginBottom: 50,
   },
   iconContainer: { marginTop: 20 },
   title: {
@@ -300,13 +301,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 15,
   },
-  dinerInfo: {
+  dinerUsername: {
     fontFamily: "red-hat-bold",
     letterSpacing: 2,
     textAlign: "center",
     fontSize: 25,
     color: Colors.goDutchBlue,
     marginTop: 5,
+    marginBottom: 15,
   },
   overlay: {
     flex: 1,

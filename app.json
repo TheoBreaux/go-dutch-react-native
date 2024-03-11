@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
-    "backgroundColor": "#000000",
     "extra": {
       "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
       "AWS_BUCKET_NAME": "go-dutch-bucket",

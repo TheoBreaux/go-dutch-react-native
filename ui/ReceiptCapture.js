@@ -52,6 +52,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
       try {
         const data = await cameraRef.current.takePictureAsync();
         setImage(data.uri);
+        //should do some error handling here for the UI, maybe an Image
       } catch (error) {
         console.error(error);
       }

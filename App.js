@@ -26,7 +26,6 @@ import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
 import UpdateProfileImageScreen from "./screens/UpdateProfileImageScreen";
-import CompletedStamp from "./components/CompletedStamp";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -119,6 +118,7 @@ const App = () => {
           }}
         >
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
+
           <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
