@@ -113,7 +113,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Welcome" //change this back to "Welcome" after developing
+          initialRouteName="UserProfileScreen" //change this back to "Welcome" after developing
           screenOptions={{
             headerShown: false,
           }}

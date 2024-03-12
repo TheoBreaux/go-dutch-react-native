@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity, StyleSheet } from "react-native";
 import AWS from "aws-sdk";
 import Constants from "expo-constants";
 import React, { useState, useEffect } from "react";
@@ -38,10 +38,17 @@ const CustomProfileIcon = ({ width, height, onPress, borderRadius }) => {
     <TouchableOpacity onPress={onPress}>
       <Image
         source={{ uri: imageUri }}
-        style={{ width, height, borderRadius, resizeMode: "cover" }}
+        style={[styles.border, { width, height, borderRadius }]}
       />
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  border: {
+    borderWidth: 1,
+    borderColor: "black",
+  },
+});
 
 export default CustomProfileIcon;
