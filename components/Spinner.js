@@ -1,24 +1,21 @@
 import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
 import Colors from "../constants/colors";
 
-const Spinner = ({ children, indicatorSize }) => {
+const Spinner = ({ children, indicatorSize, fontSize }) => {
   const size = indicatorSize || 200;
+  const textSize = fontSize || 30;
   return (
     <View style={styles.container}>
       <ActivityIndicator size={size} color={Colors.goDutchRed} />
-      <Text style={styles.loadingText}>{children}</Text>
+      <Text style={[styles.loadingText, { fontSize: textSize }]}>
+        {children}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   loadingText: {
-    fontSize: 30,
     fontFamily: "red-hat-bold",
     color: Colors.goDutchBlue,
     textAlign: "center",

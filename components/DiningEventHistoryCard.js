@@ -51,8 +51,12 @@ const DiningEventHistoryCard = ({ item }) => {
 
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={showEventDetails}>
-      {isLoadingImage && <Spinner children={"Loading..."} indicatorSize={50}/>}
-      {!isLoadingImage && <Image source={{ uri: imageUri }} style={styles.image} />}
+      {isLoadingImage && (
+        <Spinner children={"Loading..."} indicatorSize={55} fontSize={20} />
+      )}
+      {!isLoadingImage && (
+        <Image source={{ uri: imageUri }} style={styles.image} />
+      )}
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 100,
-    height: 100,
+    height: 80,
     resizeMode: "cover",
   },
   textContainer: {

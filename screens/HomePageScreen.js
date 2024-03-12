@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
+import CustomProfileIcon from "../components/CustomProfileIcon";
 
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
@@ -140,7 +141,15 @@ const HomePageScreen = () => {
 
       <View style={styles.container}>
         <View style={styles.titlesContainer}>
-          <Text style={styles.title}>Welcome, {username}!</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={styles.title}>Welcome, {username}!</Text>
+            <CustomProfileIcon
+              onPress={() => navigation.navigate("UserProfileScreen")}
+              height={60}
+              width={60}
+              borderRadius={30}
+            />
+          </View>
 
           {error ? (
             <Text style={styles.subtitle}>{error}!</Text>
@@ -207,15 +216,12 @@ const styles = StyleSheet.create({
   titlesContainer: {
     marginBottom: 10,
   },
-  imageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   title: {
     fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 32,
+    marginRight: 5,
   },
   subtitle: {
     fontFamily: "red-hat-regular",
