@@ -7,7 +7,6 @@ import { updateBirthdayStatus } from "../store/store";
 const BirthdayDiner = ({ additionalDinerUsername }) => {
   const [isChecked, setChecked] = useState(false);
 
-  const diners = useSelector((state) => state.diningEvent.diners);
   const dispatch = useDispatch();
 
   const toggleSwitch = () => {

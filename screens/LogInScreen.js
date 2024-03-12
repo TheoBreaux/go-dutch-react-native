@@ -30,8 +30,6 @@ const LogInScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
 
-
-
   const { apiKey } = route.params;
 
   const initialValues = {
@@ -72,7 +70,7 @@ const LogInScreen = () => {
     };
     try {
       const response = await fetch(
-        "https://6f5f-2603-8000-c0f0-a570-e5b7-47a9-2b5c-7a47.ngrok-free.app/login",
+        "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/login",
         {
           method: "POST",
           headers: {

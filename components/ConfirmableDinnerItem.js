@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 18,
     color: "white",
-    maxWidth: "auto",
   },
 });
 
