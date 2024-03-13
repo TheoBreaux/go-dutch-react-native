@@ -18,7 +18,6 @@ const userInfoSlice = createSlice({
       state.restaurantList = action.payload;
     },
     updateUserProfileImageKey: (state, action) => {
-      console.log("STORE", action);
       const profileImageKey = action.payload;
       state.user.profileImageKey = profileImageKey;
     },

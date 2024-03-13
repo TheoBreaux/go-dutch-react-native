@@ -13,7 +13,10 @@ import Colors from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { updateDinerProfileImageKey } from "../store/store";
+import {
+  updateDinerProfileImageKey,
+  updateUserProfileImageKey,
+} from "../store/store";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
 import AWS from "aws-sdk";
@@ -32,7 +35,12 @@ const ProfileScreen = () => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-  const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
+    const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
+    
+
+
+    
+    const diningEvent = useSelector((state) => state.diningEvent);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -55,34 +63,32 @@ const ProfileScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (profileImageKey && profileImageKey !== DEFAULT_IMAGE_KEY) {
-      const s3 = new AWS.S3({
-        accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
-        secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
-        region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
-      });
+    // if (profileImageKey && profileImageKey !== DEFAULT_IMAGE_KEY) {
+    const s3 = new AWS.S3({
+      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+    });
 
-      const getImageFromS3 = async () => {
-        setIsLoadingImage(true);
-        const params = {
-          Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
-          Key: profileImageKey,
-        };
-
-        try {
-          const data = await s3.getObject(params).promise();
-          setImageUri(
-            `data:image/jpeg;base64,${data.Body.toString("base64")}`
-          );
-        } catch (error) {
-          console.error("Error retrieving image from S3:", error);
-        } finally {
-          setIsLoadingImage(false);
-        }
+    const getImageFromS3 = async () => {
+      setIsLoadingImage(true);
+      const params = {
+        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+        Key: profileImageKey,
       };
 
-      getImageFromS3();
-    }
+      try {
+        const data = await s3.getObject(params).promise();
+        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+      } catch (error) {
+        console.error("Error retrieving image from S3:", error);
+      } finally {
+        setIsLoadingImage(false);
+      }
+    };
+
+    getImageFromS3();
+    // }
   }, []);
 
   const onButtonPress = () => {
@@ -157,9 +163,9 @@ const ProfileScreen = () => {
         );
         const responseData = await response.json();
         imageKey = responseData.imageKey;
+        dispatch(updateUserProfileImageKey(imageKey));
         dispatch(updateDinerProfileImageKey(imageKey));
         setProfileImageKey(imageKey);
-        console.log(imageKey);
       } catch (error) {
         console.error("Error uploading image to AWS S3:", error);
       }
@@ -191,10 +197,8 @@ const ProfileScreen = () => {
     postData();
     //navigate back to user home page
     navigation.navigate("Main", { screen: "Home" });
-  };
-
-  console.log(profileImageKey);
-
+    };
+    
   return (
     <>
       <Logo />
