@@ -144,9 +144,7 @@ const HomePageScreen = () => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={styles.title}>Welcome, {username}!</Text>
             <CustomProfileIcon
-              onPress={() =>
-                navigation.navigate("ProfileScreen", { profileImageKey })
-              }
+              onPress={() => navigation.navigate("ProfileScreen")}
               height={60}
               width={60}
               borderRadius={30}

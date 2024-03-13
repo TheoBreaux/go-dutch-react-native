@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -15,6 +16,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { updateDinerProfileImageKey } from "../store/store";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
+import AWS from "aws-sdk";
+import Spinner from "../components/Spinner";
 
 const ProfileScreen = () => {
   //for uploading image to backend
@@ -23,11 +26,13 @@ const ProfileScreen = () => {
   const user = useSelector((state) => state.userInfo.user);
   const username = useSelector((state) => state.userInfo.user.username);
 
-  const [profileImageKey, setProfileImageKey] = useState(
-    user.profileImageKey || null
-  );
+  const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+
+  const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -47,6 +52,37 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     checkForCameraRollPermission();
+  }, []);
+
+  useEffect(() => {
+    if (profileImageKey && profileImageKey !== DEFAULT_IMAGE_KEY) {
+      const s3 = new AWS.S3({
+        accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+        secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+        region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+      });
+
+      const getImageFromS3 = async () => {
+        setIsLoadingImage(true);
+        const params = {
+          Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+          Key: profileImageKey,
+        };
+
+        try {
+          const data = await s3.getObject(params).promise();
+          setImageUri(
+            `data:image/jpeg;base64,${data.Body.toString("base64")}`
+          );
+        } catch (error) {
+          console.error("Error retrieving image from S3:", error);
+        } finally {
+          setIsLoadingImage(false);
+        }
+      };
+
+      getImageFromS3();
+    }
   }, []);
 
   const onButtonPress = () => {
@@ -78,6 +114,7 @@ const ProfileScreen = () => {
       if (!result.canceled) {
         //save image
         await saveImage(result.assets[0].uri);
+        setImageUri(result.assets[0].uri);
       }
     } catch (error) {
       alert("Error uploading image: 😥", error.message);
@@ -156,6 +193,8 @@ const ProfileScreen = () => {
     navigation.navigate("Main", { screen: "Home" });
   };
 
+  console.log(profileImageKey);
+
   return (
     <>
       <Logo />
@@ -221,9 +260,10 @@ const ProfileScreen = () => {
           />
         </View>
         <View style={styles.imageIconcontainer}>
-          {profileImageKey ? (
+          {isLoadingImage && <Spinner indicatorSize={200} />}
+          {!isLoadingImage && profileImageKey ? (
             <Image
-              source={{ uri: profileImageKey }}
+              source={{ uri: imageUri }}
               style={{ width: 200, height: 200 }}
             />
           ) : (
@@ -283,10 +323,11 @@ const styles = StyleSheet.create({
   },
   imageIconcontainer: {
     zIndex: 0,
-    elevation: 10,
+    // elevation: 10,
     height: 200,
     width: 200,
     position: "relative",
+    borderWidth: 1,
     borderRadius: 100,
     overflow: "hidden",
     shadowColor: Colors.goDutchRed,
