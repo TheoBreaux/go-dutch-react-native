@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,26 +9,29 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { updateDinerProfileImageKey } from "../store/store";
-import React, { useState, useEffect } from "react";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
 
-const UserProfileScreen = () => {
+const ProfileScreen = () => {
   //for uploading image to backend
   const FormData = global.FormData;
 
   const user = useSelector((state) => state.userInfo.user);
   const username = useSelector((state) => state.userInfo.user.username);
 
-  const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
+  const [profileImageKey, setProfileImageKey] = useState(
+    user.profileImageKey || null
+  );
   const [imageUploadModal, setImageUploadModal] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const route = useRoute();
 
   //getting camera permissions
   const checkForCameraRollPermission = async () => {
@@ -107,7 +111,7 @@ const UserProfileScreen = () => {
         });
 
         const response = await fetch(
-          "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/users/profileimages/update",
+          "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -151,8 +155,6 @@ const UserProfileScreen = () => {
     //navigate back to user home page
     navigation.navigate("Main", { screen: "Home" });
   };
-
-  console.log(user);
 
   return (
     <>
@@ -209,7 +211,7 @@ const UserProfileScreen = () => {
             </View>
           </Modal>
         )}
-        <Text style={styles.editText}>Edit Profile</Text>
+        <Text style={styles.text}>Edit Profile</Text>
         <View style={styles.cameraIconContainer}>
           <MaterialCommunityIcons
             name="camera"
@@ -218,7 +220,6 @@ const UserProfileScreen = () => {
             onPress={onButtonPress}
           />
         </View>
-
         <View style={styles.imageIconcontainer}>
           {profileImageKey ? (
             <Image
@@ -234,11 +235,18 @@ const UserProfileScreen = () => {
             </View>
           )}
         </View>
-        {profileImageKey && (
-          <PrimaryButton onPress={updateProfileImage}>Update</PrimaryButton>
-        )}
-        {!profileImageKey && (
-          <Text style={styles.text}>Please update profile image</Text>
+
+        {isEditingProfile ? (
+          isEditingProfile && (
+            <>
+              <Text>FORM</Text>
+              <PrimaryButton onPress={updateProfileImage}>Submit</PrimaryButton>
+            </>
+          )
+        ) : (
+          <PrimaryButton onPress={() => setIsEditingProfile(true)}>
+            Edit Profile
+          </PrimaryButton>
         )}
       </View>
     </>
@@ -249,16 +257,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: -20,
     justifyContent: "center",
-    // padding: 16,
+    padding: 16,
     alignItems: "center",
   },
-  editText: {
-    fontFamily: "red-hat-bold",
-    fontSize: 20,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-
   cameraIconContainer: {
     backgroundColor: "lightgrey",
     zIndex: 1,
@@ -269,18 +270,26 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     position: "absolute",
     borderWidth: 2,
+    top: 160,
     borderColor: Colors.goDutchBlue,
-    top: 140,
-    left: 275,
+    left: 270,
+  },
+  text: {
+    marginTop: -10,
+    fontFamily: "red-hat-bold",
+    fontSize: 25,
+    color: "black",
+    margin: 5,
   },
   imageIconcontainer: {
-    // elevation: 10,
+    zIndex: 0,
+    elevation: 10,
     height: 200,
     width: 200,
     position: "relative",
     borderRadius: 100,
     overflow: "hidden",
-    // marginBottom: 10,
+    shadowColor: Colors.goDutchRed,
   },
   overlay: {
     flex: 1,
@@ -326,4 +335,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfileScreen;
+export default ProfileScreen;

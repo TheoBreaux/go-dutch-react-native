@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Image } from "react-native";
 import { useSelector } from "react-redux";
 import SendToAwsS3Image from "./SendToAwsS3Image";
 
@@ -8,12 +8,25 @@ const CustomProfileIcon = ({ width, height, onPress, borderRadius }) => {
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <SendToAwsS3Image
-        imageKey={profileImageKey}
-        width={width}
-        height={height}
-        borderRadius={borderRadius}
-      />
+      {profileImageKey ? (
+        <SendToAwsS3Image
+          imageKey={profileImageKey}
+          width={width}
+          height={height}
+          borderRadius={borderRadius}
+        />
+      ) : (
+        <Image
+          source={require("../assets/default-profile-icon.jpg")}
+          style={{
+            width: width,
+            height: height,
+            borderRadius: borderRadius,
+            borderWidth: 2,
+            borderColor: "#ddd",
+          }}
+        />
+      )}
     </TouchableOpacity>
   );
 };

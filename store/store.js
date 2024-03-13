@@ -17,6 +17,11 @@ const userInfoSlice = createSlice({
     setRestaurantList: (state, action) => {
       state.restaurantList = action.payload;
     },
+    updateUserProfileImageKey: (state, action) => {
+      console.log("STORE", action);
+      const profileImageKey = action.payload;
+      state.user.profileImageKey = profileImageKey;
+    },
     logOut: (state) => {
       state.user = {};
     },
@@ -155,8 +160,13 @@ const diningEventSlice = createSlice({
   },
 });
 
-export const { setUser, setCurrentCity, setRestaurantList, logOut } =
-  userInfoSlice.actions;
+export const {
+  setUser,
+  setCurrentCity,
+  setRestaurantList,
+  updateUserProfileImageKey,
+  logOut,
+} = userInfoSlice.actions;
 
 export const {
   setDiningEvent,

@@ -341,24 +341,7 @@ app.post("/additionaldiners/values", async (req, res) => {
     dinersUpdated,
     birthdayDiners,
     eventId,
-    // tip,
-    // tax,
-    // subtotal,
-    // totalMealCost,
   } = req.body;
-
-  // console.log("Sharable Expenses: ", typeof sharedExpenses, sharedExpenses);
-  // console.log("Birthday Diners: ", typeof birthdayDiners, birthdayDiners);
-  // console.log("Tip", typeof tip, tip);
-  // console.log("Tax", typeof tax, tax);
-  // console.log("Subtotal", typeof subtotal, subtotal);
-  // console.log("Total Meal Cost", typeof totalMealCost, totalMealCost);
-
-  // let difference = totalMealCost - (parseFloat(tip) + parseFloat(tax) + subtotal);
-  // difference = parseFloat(difference.toFixed(2));
-
-  // console.log("Difference: ", typeof(difference), difference);
-
   try {
     //sum birthday diner(s) meal costs
     let birthdayDinerMealCost = 0;
@@ -368,23 +351,8 @@ app.post("/additionaldiners/values", async (req, res) => {
         birthdayDinerMealCost += parseFloat(item.price);
       });
     }
-
-    // let differenceAdded = false; // to track if difference is added
-
     for (let i = 0; i < dinersUpdated.length; i++) {
       const diner = dinersUpdated[i];
-      //find the lowest paying diner to apply additional change
-      // const lowestPayingDiner = dinersUpdated.reduce(
-      //   (prev, current) => {
-      //     return prev.diner_meal_cost < current.diner_meal_cost
-      //       ? prev
-      //       : current;
-      //   },
-      //   { diner_meal_cost: Infinity }
-      // );
-
-      // console.log("Lowest Paying Diner", lowestPayingDiner);
-      //loop through diners items to get total
       let dinerMealCost = 0;
 
       //calculate shared birthday diner(s) meal costs
@@ -413,13 +381,25 @@ app.post("/additionaldiners/values", async (req, res) => {
         [dinerMealCost.toFixed(2), eventId, diner.additional_diner_username]
       );
     }
-
     res.status(200).send("Diner meal costs updated successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating diner meal costs");
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // AWS - POST PROFILE IMAGES
 app.post("/users/profileimages", upload.single("image"), async (req, res) => {
@@ -431,6 +411,40 @@ app.post("/users/profileimages", upload.single("image"), async (req, res) => {
   console.log(result);
   res.send({ imageKey: result.Key });
 });
+
+//AWS - UPDATE PROFILE IMAGES
+app.post(
+  "/users/profileimages/update",
+  upload.single("image"),
+  async (req, res) => {
+    console.log(req.body);
+    const file = req.file;
+    console.log(file);
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+
+    try {
+      const updatedProfileImage = await pool.query(
+        "UPDATE users SET profile_image_key = $1 WHERE username = $2",
+        [profileImageKey, username]
+      );
+      console.log(updatedProfileImage); // Log the result of the database query
+      res.send({ imageKey: result.Key });
+    } catch (error) {
+      console.error(error); // Log the error
+      res.status(500).send("Error updating profile image");
+    }
+  }
+);
+
+
+
+
+
+
+
+
+
 
 //AWS - POST RECEIPT IMAGES
 app.post(

@@ -27,6 +27,7 @@ import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
 import UpdateProfileImageScreen from "./screens/UpdateProfileImageScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -157,6 +158,10 @@ const App = () => {
           <Stack.Screen
             name="UpdateProfileImageScreen"
             component={UpdateProfileImageScreen}
+          />
+           <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
           />
           <Stack.Screen
             name="UserProfileScreen"

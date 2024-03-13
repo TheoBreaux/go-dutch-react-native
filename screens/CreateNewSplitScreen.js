@@ -201,7 +201,7 @@ const CreateNewSplitScreen = () => {
                         />
                       </View>
                       <View>
-                        <SecondaryButton onPress={handleSubmit}>
+                        <SecondaryButton width={370} onPress={handleSubmit}>
                           Continue
                         </SecondaryButton>
                       </View>

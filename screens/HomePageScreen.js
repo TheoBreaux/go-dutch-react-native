@@ -119,7 +119,7 @@ const HomePageScreen = () => {
                   <PrimaryButton
                     width={100}
                     onPress={() => {
-                      navigation.navigate("UpdateProfileImageScreen");
+                      navigation.navigate("ProfileScreen", { isEditing: true });
                       setShowUpdateProfilePhotoModal(false);
                     }}
                   >
@@ -144,7 +144,9 @@ const HomePageScreen = () => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={styles.title}>Welcome, {username}!</Text>
             <CustomProfileIcon
-              onPress={() => navigation.navigate("UserProfileScreen")}
+              onPress={() =>
+                navigation.navigate("ProfileScreen", { profileImageKey })
+              }
               height={60}
               width={60}
               borderRadius={30}

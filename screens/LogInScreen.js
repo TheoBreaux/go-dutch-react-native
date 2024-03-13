@@ -12,7 +12,7 @@ import SecondaryButton from "../components/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
@@ -146,7 +146,9 @@ const LogInScreen = () => {
               </View>
 
               <View>
-                <SecondaryButton onPress={handleSubmit}>Submit</SecondaryButton>
+                <SecondaryButton onPress={handleSubmit} width={370}>
+                  Submit
+                </SecondaryButton>
               </View>
               <View>
                 <Text style={[styles.errorText, styles.noUserExists]}>

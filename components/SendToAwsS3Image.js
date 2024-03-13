@@ -56,8 +56,8 @@ const SendToAwsS3Image = ({
 
 const styles = StyleSheet.create({
   profilePic: {
-    borderWidth: 1,
-    borderColor: "black",
+    borderWidth: 2,
+    borderColor: "#ddd",
     resizeMode: "cover",
   },
 });

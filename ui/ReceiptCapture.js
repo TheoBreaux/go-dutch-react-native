@@ -41,9 +41,13 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
   useEffect(() => {
     (async () => {
-      MediaLibrary.requestPermissionsAsync();
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === "granted");
+      try {
+        await MediaLibrary.requestPermissionsAsync();
+        const cameraStatus = await Camera.requestCameraPermissionsAsync();
+        setHasCameraPermission(cameraStatus.status === "granted");
+      } catch (error) {
+        console.error("Error requesting camera permissions: ", error);
+      }
     })();
   }, []);
 
