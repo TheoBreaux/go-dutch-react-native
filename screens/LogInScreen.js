@@ -18,6 +18,7 @@ import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
 import { useRoute } from "@react-navigation/native";
+import { createActionCreatorInvariantMiddleware } from "@reduxjs/toolkit";
 
 const LogInScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);

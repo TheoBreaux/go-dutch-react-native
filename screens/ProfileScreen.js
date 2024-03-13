@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -18,9 +18,9 @@ import {
   updateUserProfileImageKey,
 } from "../store/store";
 import Logo from "../components/Logo";
-import PrimaryButton from "../components/PrimaryButton";
 import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
+import UpdateProfileForm from "../ui/UpdateProfileForm";
 
 const ProfileScreen = () => {
   //for uploading image to backend
@@ -35,16 +35,10 @@ const ProfileScreen = () => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-    const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
-    
-
-
-    
-    const diningEvent = useSelector((state) => state.diningEvent);
+  const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
 
   //getting camera permissions
   const checkForCameraRollPermission = async () => {
@@ -63,32 +57,32 @@ const ProfileScreen = () => {
   }, []);
 
   useEffect(() => {
-    // if (profileImageKey && profileImageKey !== DEFAULT_IMAGE_KEY) {
-    const s3 = new AWS.S3({
-      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
-      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
-      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
-    });
+    if (profileImageKey && profileImageKey !== DEFAULT_IMAGE_KEY) {
+      const s3 = new AWS.S3({
+        accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+        secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+        region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+      });
 
-    const getImageFromS3 = async () => {
-      setIsLoadingImage(true);
-      const params = {
-        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
-        Key: profileImageKey,
+      const getImageFromS3 = async () => {
+        setIsLoadingImage(true);
+        const params = {
+          Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+          Key: profileImageKey,
+        };
+
+        try {
+          const data = await s3.getObject(params).promise();
+          setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+        } catch (error) {
+          console.error("Error retrieving image from S3:", error);
+        } finally {
+          setIsLoadingImage(false);
+        }
       };
 
-      try {
-        const data = await s3.getObject(params).promise();
-        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
-      } catch (error) {
-        console.error("Error retrieving image from S3:", error);
-      } finally {
-        setIsLoadingImage(false);
-      }
-    };
-
-    getImageFromS3();
-    // }
+      getImageFromS3();
+    }
   }, []);
 
   const onButtonPress = () => {
@@ -139,6 +133,7 @@ const ProfileScreen = () => {
   };
 
   const postData = async () => {
+    console.log("POSTING");
     let imageKey;
 
     //send to AWS S3 bucket
@@ -192,13 +187,13 @@ const ProfileScreen = () => {
     }
   };
 
-  const updateProfileImage = () => {
+  const updateProfileForm = () => {
     //make call to backend to update file path
     postData();
     //navigate back to user home page
     navigation.navigate("Main", { screen: "Home" });
-    };
-    
+  };
+
   return (
     <>
       <Logo />
@@ -254,7 +249,7 @@ const ProfileScreen = () => {
             </View>
           </Modal>
         )}
-        <Text style={styles.text}>Edit Profile</Text>
+        {isEditingProfile && <Text style={styles.text}>Edit Profile</Text>}
         <View style={styles.cameraIconContainer}>
           <MaterialCommunityIcons
             name="camera"
@@ -279,20 +274,8 @@ const ProfileScreen = () => {
             </View>
           )}
         </View>
-
-        {isEditingProfile ? (
-          isEditingProfile && (
-            <>
-              <Text>FORM</Text>
-              <PrimaryButton onPress={updateProfileImage}>Submit</PrimaryButton>
-            </>
-          )
-        ) : (
-          <PrimaryButton onPress={() => setIsEditingProfile(true)}>
-            Edit Profile
-          </PrimaryButton>
-        )}
       </View>
+      <UpdateProfileForm />
     </>
   );
 };
@@ -306,7 +289,7 @@ const styles = StyleSheet.create({
   },
   cameraIconContainer: {
     backgroundColor: "lightgrey",
-    zIndex: 1,
+    zIndex: 10,
     justifyContent: "center",
     alignItems: "center",
     height: 50,
@@ -327,11 +310,12 @@ const styles = StyleSheet.create({
   },
   imageIconcontainer: {
     zIndex: 0,
-    // elevation: 10,
     height: 200,
     width: 200,
     position: "relative",
-    borderWidth: 1,
+    elevation: 5,
+    borderWidth: 2,
+    borderColor: "#ddd",
     borderRadius: 100,
     overflow: "hidden",
     shadowColor: Colors.goDutchRed,

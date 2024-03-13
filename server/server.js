@@ -59,6 +59,28 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//UPDATE USER PROFILE VALUES
+app.post("/signup/update", async (req, res) => {
+  const { firstName, lastName, email, username, userId } = req.body;
+
+  try {
+    const newUser = await pool.query(
+      `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4
+       WHERE user_id = $5`,
+
+      [firstName, lastName, email, username, userId]
+    );
+  } catch (error) {
+    console.error(error);
+    if (error) {
+      res.json({ detail: error.detail });
+    }
+  }
+});
+
+
+
+
 //SEND PAYMENT SOURCES INFO - UPDATE USER PROFILE
 app.post("/users", async (req, res) => {
   const {
@@ -120,6 +142,7 @@ app.post("/login", async (req, res) => {
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
+        userId: users.rows[0].user_id,
         profileImageKey: users.rows[0].profile_image_key,
         token,
       });
@@ -336,12 +359,7 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const {
-    sharedExpenses,
-    dinersUpdated,
-    birthdayDiners,
-    eventId,
-  } = req.body;
+  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
   try {
     //sum birthday diner(s) meal costs
     let birthdayDinerMealCost = 0;
@@ -388,19 +406,6 @@ app.post("/additionaldiners/values", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // AWS - POST PROFILE IMAGES
 app.post("/users/profileimages", upload.single("image"), async (req, res) => {
   console.log(req.body);
@@ -436,15 +441,6 @@ app.post(
     }
   }
 );
-
-
-
-
-
-
-
-
-
 
 //AWS - POST RECEIPT IMAGES
 app.post(

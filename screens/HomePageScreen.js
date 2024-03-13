@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Logo from "../components/Logo";
 import { featuredRestaurants } from "../data/data";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation} from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "../components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -119,7 +119,7 @@ const HomePageScreen = () => {
                   <PrimaryButton
                     width={100}
                     onPress={() => {
-                      navigation.navigate("ProfileScreen", { isEditing: true });
+                      navigation.navigate("ProfileScreen");
                       setShowUpdateProfilePhotoModal(false);
                     }}
                   >
