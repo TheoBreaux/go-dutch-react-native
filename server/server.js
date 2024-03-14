@@ -60,7 +60,7 @@ app.post("/signup", async (req, res) => {
 });
 
 //UPDATE USER PROFILE VALUES
-app.post("/signup/update", async (req, res) => {
+app.post("/updateprofile", async (req, res) => {
   const { firstName, lastName, email, username, userId } = req.body;
 
   try {

@@ -4,17 +4,19 @@ import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../store/store";
+import { useDispatch } from "react-redux";
+import { setUser, updateUserFirstName } from "../store/store";
 
-const UpdateProfileForm = () => {
+const UpdateProfileForm = ({
+  user,
+  updateProfileImage,
+  setIsUpdatingProfile,
+}) => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
     setFormValues(initialValues);
@@ -58,7 +60,12 @@ const UpdateProfileForm = () => {
   };
 
   const handleFormSubmit = async (values, actions) => {
+    setIsUpdatingProfile(true);
+    //update profile Image
+    await updateProfileImage();
+    //reset Form
     actions.resetForm();
+
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -67,9 +74,11 @@ const UpdateProfileForm = () => {
       userId: user.userId,
     };
 
+    dispatch(updateUserFirstName(values.firstName));
+
     try {
       const response = await fetch(
-        "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/signup/update",
+        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,14 +92,14 @@ const UpdateProfileForm = () => {
         setError(data.detail);
       } else {
         // Update initialValues with the updated formValues
-        initialValues.firstName = formValues.firstName;
-        initialValues.lastName = formValues.lastName;
-        initialValues.email = formValues.email;
-        initialValues.username = formValues.username;
+        // initialValues.firstName = formValues.firstName;
+        // initialValues.lastName = formValues.lastName;
+        // initialValues.email = formValues.email;
+        // initialValues.username = formValues.username;
+
         dispatch(setUser(data));
-        console.log("WORKING 1");
-        navigation.navigate("Main", { screen: "Home" });
-        console.log("WORKING 2");
+
+        // navigation.navigate("Main", { screen: "Home" });
       }
     } catch (error) {
       console.error(error);
@@ -248,7 +257,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer: {
-    marginTop: 200,
+    marginTop: 100,
   },
 });
 

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Logo from "../components/Logo";
 import { featuredRestaurants } from "../data/data";
-import { useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
 import PrimaryButton from "../components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,8 @@ const HomePageScreen = () => {
   const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
     useState(usingDefaultProfilePhoto);
 
-  const username = useSelector((state) => state.userInfo.user.firstName);
+  const firstName = useSelector((state) => state.userInfo.user.firstName);
+  const user = useSelector((state) => state.userInfo.user);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
@@ -63,11 +64,11 @@ const HomePageScreen = () => {
     error = null;
   }
 
-  const renderItem = ({ item }) => {
-    const handleExternalLink = () => {
-      Linking.openURL(item.website);
-    };
+  const handleExternalLink = (url) => {
+    Linking.openURL(url);
+  };
 
+  const renderItem = ({ item }) => {
     return (
       <View style={styles.carouselContainer}>
         <View style={styles.carouselImageContainer}>
@@ -84,7 +85,9 @@ const HomePageScreen = () => {
             <Text style={styles.restaurantText}>Rating:{item.rating}⭐</Text>
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={handleExternalLink}>Reserve</PrimaryButton>
+            <PrimaryButton onPress={() => handleExternalLink(item.website)}>
+              Reserve
+            </PrimaryButton>
           </View>
         </View>
       </View>
@@ -142,7 +145,7 @@ const HomePageScreen = () => {
       <View style={styles.container}>
         <View style={styles.titlesContainer}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.title}>Welcome, {username}!</Text>
+            <Text style={styles.title}>Welcome, {firstName}!</Text>
             <CustomProfileIcon
               onPress={() => navigation.navigate("ProfileScreen")}
               height={60}

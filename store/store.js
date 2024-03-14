@@ -11,6 +11,9 @@ const userInfoSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    updateUserFirstName: (state, action) => {
+      state.user.firstName = action.payload;
+    },
     setCurrentCity: (state, action) => {
       state.currentCity = action.payload;
     },
@@ -164,6 +167,7 @@ export const {
   setCurrentCity,
   setRestaurantList,
   updateUserProfileImageKey,
+  updateUserFirstName,
   logOut,
 } = userInfoSlice.actions;
 

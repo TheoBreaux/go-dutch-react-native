@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -18,6 +18,7 @@ import {
   updateUserProfileImageKey,
 } from "../store/store";
 import Logo from "../components/Logo";
+import PrimaryButton from "../components/PrimaryButton";
 import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
@@ -34,11 +35,15 @@ const ProfileScreen = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
   const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
+  const diningEvent = useSelector((state) => state.diningEvent);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const route = useRoute();
 
   //getting camera permissions
   const checkForCameraRollPermission = async () => {
@@ -133,7 +138,6 @@ const ProfileScreen = () => {
   };
 
   const postData = async () => {
-    console.log("POSTING");
     let imageKey;
 
     //send to AWS S3 bucket
@@ -149,7 +153,7 @@ const ProfileScreen = () => {
         });
 
         const response = await fetch(
-          "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/users/profileimages",
+          "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -174,7 +178,7 @@ const ProfileScreen = () => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://db5d-2603-8000-c0f0-a570-4019-5e91-620e-3551.ngrok-free.app/profilephoto",
+        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -187,95 +191,121 @@ const ProfileScreen = () => {
     }
   };
 
-  const updateProfileForm = () => {
+  const updateProfileImage = async () => {
     //make call to backend to update file path
-    postData();
+    await postData();
     //navigate back to user home page
     navigation.navigate("Main", { screen: "Home" });
   };
 
   return (
     <>
-      <Logo />
-      <View style={styles.container}>
-        {imageUploadModal && (
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={imageUploadModal}
-          >
-            <View style={styles.overlay}>
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Text style={styles.modalText}>Profile Photo</Text>
+      {isUpdatingProfile && (
+        <View style={styles.spinnerContainer}>
+          <Spinner children={"Updating profile..."} />
+        </View>
+      )}
+      {!isUpdatingProfile && <Logo />}
 
-                  <View style={styles.photoOptionsContainer}>
-                    <TouchableOpacity>
-                      <View style={styles.modalIconContainer}>
-                        <MaterialCommunityIcons
-                          name="camera-outline"
-                          size={40}
-                          color={Colors.goDutchRed}
-                          onPress={() => uploadImage()}
-                        />
-                        <Text style={styles.modalOptionText}>Camera</Text>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <View style={styles.modalIconContainer}>
-                        <MaterialCommunityIcons
-                          name="image-outline"
-                          size={40}
-                          color={Colors.goDutchRed}
-                          onPress={() => uploadImage("gallery")}
-                        />
-                        <Text style={styles.modalOptionText}>Gallery</Text>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <View style={styles.modalIconContainer}>
-                        <MaterialCommunityIcons
-                          name="trash-can-outline"
-                          size={40}
-                          color={Colors.goDutchRed}
-                          onPress={removeImage}
-                        />
-                        <Text style={styles.modalOptionText}>Remove</Text>
-                      </View>
-                    </TouchableOpacity>
+      {!isUpdatingProfile && (
+        <View style={styles.container}>
+          {imageUploadModal && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={imageUploadModal}
+            >
+              <View style={styles.overlay}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.modalText}>Profile Photo</Text>
+
+                    <View style={styles.photoOptionsContainer}>
+                      <TouchableOpacity>
+                        <View style={styles.modalIconContainer}>
+                          <MaterialCommunityIcons
+                            name="camera-outline"
+                            size={40}
+                            color={Colors.goDutchRed}
+                            onPress={() => uploadImage()}
+                          />
+                          <Text style={styles.modalOptionText}>Camera</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                        <View style={styles.modalIconContainer}>
+                          <MaterialCommunityIcons
+                            name="image-outline"
+                            size={40}
+                            color={Colors.goDutchRed}
+                            onPress={() => uploadImage("gallery")}
+                          />
+                          <Text style={styles.modalOptionText}>Gallery</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                        <View style={styles.modalIconContainer}>
+                          <MaterialCommunityIcons
+                            name="trash-can-outline"
+                            size={40}
+                            color={Colors.goDutchRed}
+                            onPress={removeImage}
+                          />
+                          <Text style={styles.modalOptionText}>Remove</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          </Modal>
-        )}
-        {isEditingProfile && <Text style={styles.text}>Edit Profile</Text>}
-        <View style={styles.cameraIconContainer}>
-          <MaterialCommunityIcons
-            name="camera"
-            size={30}
-            color={Colors.goDutchRed}
-            onPress={onButtonPress}
-          />
-        </View>
-        <View style={styles.imageIconcontainer}>
-          {isLoadingImage && <Spinner indicatorSize={200} />}
-          {!isLoadingImage && profileImageKey ? (
-            <Image
-              source={{ uri: imageUri }}
-              style={{ width: 200, height: 200 }}
+            </Modal>
+          )}
+          <View style={styles.cameraIconContainer}>
+            <MaterialCommunityIcons
+              name="camera"
+              size={30}
+              color={Colors.goDutchRed}
+              onPress={onButtonPress}
             />
-          ) : (
-            <View>
+          </View>
+          <View style={styles.imageIconcontainer}>
+            {isLoadingImage && <Spinner indicatorSize={200} />}
+            {!isLoadingImage && profileImageKey ? (
               <Image
-                source={require("../assets/default-profile-icon.jpg")}
+                source={{ uri: imageUri }}
                 style={{ width: 200, height: 200 }}
               />
-            </View>
-          )}
+            ) : (
+              <View>
+                <Image
+                  source={require("../assets/default-profile-icon.jpg")}
+                  style={{ width: 200, height: 200 }}
+                />
+              </View>
+            )}
+          </View>
+
+          {/* {isEditingProfile ? (
+          isEditingProfile && (
+            <>
+              <Text>FORM</Text>
+              <PrimaryButton onPress={updateProfileImage}>Submit</PrimaryButton>
+            </>
+          )
+        ) : (
+          <PrimaryButton onPress={() => setIsEditingProfile(true)}>
+            Edit Profile
+          </PrimaryButton>
+        )} */}
         </View>
-      </View>
-      <UpdateProfileForm />
+      )}
+      {!isUpdatingProfile && (
+        <UpdateProfileForm
+          user={user}
+          updateProfileImage={updateProfileImage}
+          setIsUpdatingProfile={setIsUpdatingProfile}
+        />
+      )}
     </>
   );
 };
@@ -289,7 +319,7 @@ const styles = StyleSheet.create({
   },
   cameraIconContainer: {
     backgroundColor: "lightgrey",
-    zIndex: 10,
+    zIndex: 1,
     justifyContent: "center",
     alignItems: "center",
     height: 50,
@@ -297,25 +327,17 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     position: "absolute",
     borderWidth: 2,
-    top: 160,
+    top: 150,
     borderColor: Colors.goDutchBlue,
-    left: 270,
-  },
-  text: {
-    marginTop: -10,
-    fontFamily: "red-hat-bold",
-    fontSize: 25,
-    color: "black",
-    margin: 5,
+    left: 260,
   },
   imageIconcontainer: {
     zIndex: 0,
+    // elevation: 10,
     height: 200,
     width: 200,
     position: "relative",
-    elevation: 5,
-    borderWidth: 2,
-    borderColor: "#ddd",
+    borderWidth: 1,
     borderRadius: 100,
     overflow: "hidden",
     shadowColor: Colors.goDutchRed,
@@ -361,6 +383,15 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 15,
     textAlign: "center",
+  },
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: -50,
+    width: "100%",
+    height: "100%",
   },
 });
 
