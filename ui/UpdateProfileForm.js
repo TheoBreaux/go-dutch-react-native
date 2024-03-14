@@ -1,4 +1,11 @@
-import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
@@ -6,6 +13,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser, updateUserFirstName } from "../store/store";
+import PrimaryButton from "../components/PrimaryButton";
 
 const UpdateProfileForm = ({
   user,
@@ -107,6 +115,14 @@ const UpdateProfileForm = ({
     }
   };
 
+  const updateProfileComponentHeight = 400;
+  const formInputsHeight = 200;
+  const screenHeight = Dimensions.get("window").height; // Get the screen height
+  const buttonMarginTop = Math.max(
+    screenHeight - 50 - formInputsHeight - updateProfileComponentHeight,
+    0
+  ); // Ensure button is at least 50 pixels from the bottom
+
   return (
     <ScrollView>
       <View style={styles.inputContainer}>
@@ -195,7 +211,9 @@ const UpdateProfileForm = ({
                 />
               </View>
 
-              <View style={styles.buttonContainer}>
+              <View
+                style={[styles.buttonContainer, { marginTop: buttonMarginTop }]}
+              >
                 <SecondaryButton onPress={handleSubmit} width={370}>
                   Save
                 </SecondaryButton>
@@ -257,7 +275,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer: {
-    marginTop: 100,
+    marginTop: 200,
   },
 });
 

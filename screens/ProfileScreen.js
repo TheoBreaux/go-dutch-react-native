@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -18,7 +18,6 @@ import {
   updateUserProfileImageKey,
 } from "../store/store";
 import Logo from "../components/Logo";
-import PrimaryButton from "../components/PrimaryButton";
 import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
@@ -32,18 +31,14 @@ const ProfileScreen = () => {
 
   const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
   const [imageUploadModal, setImageUploadModal] = useState(false);
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
   const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
-  const diningEvent = useSelector((state) => state.diningEvent);
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
 
   //getting camera permissions
   const checkForCameraRollPermission = async () => {
@@ -284,19 +279,6 @@ const ProfileScreen = () => {
               </View>
             )}
           </View>
-
-          {/* {isEditingProfile ? (
-          isEditingProfile && (
-            <>
-              <Text>FORM</Text>
-              <PrimaryButton onPress={updateProfileImage}>Submit</PrimaryButton>
-            </>
-          )
-        ) : (
-          <PrimaryButton onPress={() => setIsEditingProfile(true)}>
-            Edit Profile
-          </PrimaryButton>
-        )} */}
         </View>
       )}
       {!isUpdatingProfile && (
