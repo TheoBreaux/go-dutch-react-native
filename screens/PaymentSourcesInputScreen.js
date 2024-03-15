@@ -208,7 +208,7 @@ const PaymentSourcesInputScreen = () => {
                 </View>
 
                 <View>
-                  <SecondaryButton onPress={handleSubmit}>
+                  <SecondaryButton width={370} onPress={handleSubmit}>
                     Submit
                   </SecondaryButton>
                 </View>
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     color: Colors.goDutchRed,
   },
   label: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   inputContainer: {
     width: "100%",

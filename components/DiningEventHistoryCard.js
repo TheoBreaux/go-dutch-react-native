@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#000000",
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   bold: {
     fontFamily: "red-hat-bold",

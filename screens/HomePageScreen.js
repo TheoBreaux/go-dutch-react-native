@@ -27,7 +27,6 @@ const HomePageScreen = () => {
     useState(usingDefaultProfilePhoto);
 
   const firstName = useSelector((state) => state.userInfo.user.firstName);
-  const user = useSelector((state) => state.userInfo.user);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 150,
   },
   modalText: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 20,
     textAlign: "center",
   },
@@ -227,7 +226,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   subtitle: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     textAlign: "center",
     fontSize: 18,
   },
@@ -261,7 +260,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   restaurantText: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 18,
   },
   buttonContainer: {

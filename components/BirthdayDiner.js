@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.goDutchBlue,
     fontSize: 18,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     padding: 5,
   },
   switch: {

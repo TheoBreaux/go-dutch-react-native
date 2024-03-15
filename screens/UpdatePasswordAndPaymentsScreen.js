@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   inputLabels: {
     marginTop: 10,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   input: {
     backgroundColor: Colors.inputBackground,
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     backgroundColor: Colors.inputBackground,
     borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     marginTop: -5,
   },
   label: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   buttonContainer: {
     marginTop: 150,

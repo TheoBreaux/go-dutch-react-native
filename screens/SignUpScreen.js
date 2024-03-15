@@ -306,7 +306,7 @@ const SignUpScreen = () => {
                   </View>
 
                   <View style={styles.buttonContainer}>
-                    <SecondaryButton onPress={handleSubmit}>
+                    <SecondaryButton width={370} onPress={handleSubmit}>
                       Submit
                     </SecondaryButton>
                   </View>
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   },
   inputLabels: {
     marginTop: 10,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   nameInputs: {
     width: "50%",
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-bold",
     backgroundColor: Colors.inputBackground,
     borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,

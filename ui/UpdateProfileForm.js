@@ -10,10 +10,9 @@ import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser, updateUserFirstName } from "../store/store";
-import PrimaryButton from "../components/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
 
 const UpdateProfileForm = ({
   user,
@@ -23,8 +22,9 @@ const UpdateProfileForm = ({
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
-  const navigation = useNavigation();
+
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     setFormValues(initialValues);
@@ -99,15 +99,7 @@ const UpdateProfileForm = ({
       if (data.detail) {
         setError(data.detail);
       } else {
-        // Update initialValues with the updated formValues
-        // initialValues.firstName = formValues.firstName;
-        // initialValues.lastName = formValues.lastName;
-        // initialValues.email = formValues.email;
-        // initialValues.username = formValues.username;
-
         dispatch(setUser(data));
-
-        // navigation.navigate("Main", { screen: "Home" });
       }
     } catch (error) {
       console.error(error);
@@ -115,7 +107,7 @@ const UpdateProfileForm = ({
     }
   };
 
-  const updateProfileComponentHeight = 400;
+  const updateProfileComponentHeight = 450;
   const formInputsHeight = 200;
   const screenHeight = Dimensions.get("window").height; // Get the screen height
   const buttonMarginTop = Math.max(
@@ -214,6 +206,9 @@ const UpdateProfileForm = ({
               <View
                 style={[styles.buttonContainer, { marginTop: buttonMarginTop }]}
               >
+                 <SecondaryButton onPress={() => navigation.goBack()} width={370}>
+                  Return
+                </SecondaryButton>
                 <SecondaryButton onPress={handleSubmit} width={370}>
                   Save
                 </SecondaryButton>
@@ -241,7 +236,7 @@ const styles = StyleSheet.create({
   },
   inputLabels: {
     marginTop: 10,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   firstNameInput: {
     fontFamily: "red-hat-bold",

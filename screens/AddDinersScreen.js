@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     color: Colors.goDutchRed,
     fontSize: 30,
     marginTop: -10,
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
     marginTop: 250,
   },
   modalText: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 25,
   },
   buttonsContainer: {

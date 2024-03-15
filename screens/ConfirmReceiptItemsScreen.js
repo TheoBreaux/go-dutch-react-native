@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     textAlign: "center",
     color: "black",
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 25,
   },
   confirmContainer: {

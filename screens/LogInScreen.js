@@ -18,7 +18,6 @@ import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
 import { useRoute } from "@react-navigation/native";
-import { createActionCreatorInvariantMiddleware } from "@reduxjs/toolkit";
 
 const LogInScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   label: {
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-normal",
   },
   textInput: {
     backgroundColor: Colors.inputBackground,

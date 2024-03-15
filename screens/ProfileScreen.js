@@ -28,7 +28,6 @@ const ProfileScreen = () => {
 
   const user = useSelector((state) => state.userInfo.user);
   const username = useSelector((state) => state.userInfo.user.username);
-
   const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [imageUri, setImageUri] = useState(null);

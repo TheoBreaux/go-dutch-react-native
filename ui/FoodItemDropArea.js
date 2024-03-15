@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
   modalSubtitle: {
     fontSize: 15,
     width: 350,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     marginBottom: 10,
     marginTop: 10,
     textAlign: "center",
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   foodInfo: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 20,
     color: "white",
     maxWidth: 200,

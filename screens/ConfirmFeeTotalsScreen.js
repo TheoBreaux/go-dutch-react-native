@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   text: {
     marginRight: 5,
     fontSize: 20,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   textInput: {
     flex: 1,
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   suggestedTipText: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 14,
     color: "black",
     alignItems: "center",
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   modalText: {
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 25,
   },
   birthdayEmoji: {
@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     textAlign: "center",
     color: "black",
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
     fontSize: 25,
   },
   buttonsContainer: {

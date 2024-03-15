@@ -25,7 +25,6 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
-import UpdateProfileImageScreen from "./screens/UpdateProfileImageScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 
@@ -44,7 +43,7 @@ const MainTabNavigator = () => {
         },
         tabBarLabelStyle: {
           color: "white",
-          fontFamily: "red-hat-regular",
+          fontFamily: "red-hat-normal",
           fontSize: 13,
         },
         tabBarActiveBackgroundColor: Colors.goDutchRed,
@@ -102,7 +101,7 @@ const MainTabNavigator = () => {
 const App = () => {
   const [fontsLoaded] = useFonts({
     "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
-    "red-hat-regular": require("./fonts/RedHatDisplay-Regular.ttf"),
+    "red-hat-normal": require("./fonts/RedHatDisplay-Regular.ttf"),
     stamper: require("./fonts/Stamper.ttf"),
   });
 
@@ -155,14 +154,7 @@ const App = () => {
             name="CheckCloseOutDetails"
             component={CheckCloseOutDetails}
           />
-          <Stack.Screen
-            name="UpdateProfileImageScreen"
-            component={UpdateProfileImageScreen}
-          />
-           <Stack.Screen
-            name="ProfileScreen"
-            component={ProfileScreen}
-          />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen
             name="UserProfileScreen"
             component={UserProfileScreen}

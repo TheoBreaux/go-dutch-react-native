@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   text: {
     marginRight: 5,
     fontSize: 20,
-    fontFamily: "red-hat-regular",
+    fontFamily: "red-hat-normal",
   },
   textInput: {
     flex: 1,
