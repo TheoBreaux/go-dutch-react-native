@@ -5,7 +5,6 @@ import {
   Image,
   Dimensions,
   Linking,
-  Modal,
 } from "react-native";
 import Logo from "../components/Logo";
 import { featuredRestaurants } from "../data/data";
@@ -17,6 +16,7 @@ import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 import CustomProfileIcon from "../components/CustomProfileIcon";
+import CustomModal from "../components/CustomModal";
 
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
@@ -99,50 +99,25 @@ const HomePageScreen = () => {
     <>
       <Logo />
       {showUpdateProfilePhotoModal && (
-        <Modal
+        <CustomModal
           animationType="slide"
           transparent={true}
           visible={showUpdateProfilePhotoModal}
-        >
-          <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Image
-                  style={styles.modalImage}
-                  source={require("../assets/default-profile-icon.jpg")}
-                />
-
-                <Text style={styles.modalText}>
-                  Would you like to update your profile photo so users can find
-                  you easier?
-                </Text>
-
-                <View style={styles.buttonsContainer}>
-                  <PrimaryButton
-                    width={100}
-                    onPress={() => {
-                      navigation.navigate("ProfileScreen");
-                      setShowUpdateProfilePhotoModal(false);
-                    }}
-                  >
-                    Yes
-                  </PrimaryButton>
-
-                  <PrimaryButton
-                    width={100}
-                    onPress={() => setShowUpdateProfilePhotoModal(false)}
-                  >
-                    No
-                  </PrimaryButton>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
+          source={require("../assets/default-profile-icon.jpg")}
+          modalText="Would you like to update your photo so users can find you easier?"
+          buttonWidth={100}
+          onPress1={() => {
+            navigation.navigate("ProfileScreen");
+            setShowUpdateProfilePhotoModal(false);
+          }}
+          onPress2={() => setShowUpdateProfilePhotoModal(false)}
+          buttonText1="Yes"
+          buttonText2="No"
+        />
       )}
 
       <View style={styles.container}>
-        <View style={styles.titlesContainer}>
+        <View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={styles.title}>Welcome, {firstName}!</Text>
             <CustomProfileIcon
@@ -181,44 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: 40,
-    borderRadius: 10,
-    height: 600,
-    elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalImage: {
-    width: 300,
-    height: 300,
-    resizeMode: "center",
-    borderRadius: 150,
-  },
-  modalText: {
-    fontFamily: "red-hat-normal",
-    fontSize: 20,
-    textAlign: "center",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-  },
-  titlesContainer: {
-    marginBottom: 10,
-  },
-
   title: {
     fontFamily: "red-hat-bold",
     textAlign: "center",
@@ -232,7 +169,7 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     flex: 2,
-    marginTop: 0,
+    marginTop: 10,
     marginBottom: 200,
   },
   carouselImageContainer: {

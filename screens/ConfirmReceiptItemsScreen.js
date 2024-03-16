@@ -4,8 +4,6 @@ import {
   Text,
   View,
   ScrollView,
-  Modal,
-  TextInput,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllReceiptItems } from "../store/store";
@@ -114,12 +112,6 @@ const ConfirmReceiptItemsScreen = () => {
     fetchProfilePicPaths();
   }, [eventId]);
 
-  // const updatedDiners = profileImageKeys.map((diner, i) => ({
-  //   ...diners[i],
-  //   profile_image_key:
-  //     diner.profile_image_key || diners[i]?.profile_image_key,
-  // }));
-
   const addNewItem = () => {
     if (newItemName === "" || newItemPrice === "") {
       return setShowAddItemsModal(false);
@@ -185,8 +177,8 @@ const ConfirmReceiptItemsScreen = () => {
         />
       )}
 
-      <View style={styles.confirmContainer}>
-        <Text style={styles.title}>Confirm or add missing items!</Text>
+      <View style={styles.miniModalContent}>
+        <Text style={styles.miniModalText}>Confirm or add missing items!</Text>
         <View style={styles.buttonContainer}>
           <PrimaryButton
             width={90}
@@ -202,7 +194,6 @@ const ConfirmReceiptItemsScreen = () => {
           </PrimaryButton>
         </View>
       </View>
-
       <ScrollView style={styles.foodItemsListContainer}>
         {separatedDinnerItems.map((item) => {
           return (
@@ -266,20 +257,20 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-normal",
     fontSize: 25,
   },
-  confirmContainer: {
+  miniModalContent: {
     backgroundColor: "white",
     marginHorizontal: 10,
     marginBottom: 10,
     borderRadius: 10,
-    height: 125,
+    height: 150,
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
+  miniModalText: {
     textAlign: "center",
-    fontFamily: "red-hat-bold",
-    fontSize: 20,
+    fontFamily: "red-hat-normal",
+    fontSize: 25,
   },
   buttonContainer: {
     flexDirection: "row",

@@ -319,7 +319,7 @@ const AddDinersScreen = () => {
               <View>
                 <Text
                   style={[
-                    styles.modalText,
+                    styles.miniModalText,
                     { textAlign: "center", marginTop: 5 },
                   ]}
                 >
@@ -373,6 +373,46 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    height: 600,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: 300,
+    height: 300,
+    resizeMode: "center",
+  },
+  modalText: {
+    fontFamily: "red-hat-normal",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  birthdayCake: {
+    marginTop: 250,
+  },
+  birthdaySelects: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonContainer: {
+    marginBottom: 125,
+  },
+  birthdayButtonContainer: {
+    marginBottom: 245,
+  },
   eventTitle: {
     textAlign: "center",
     fontFamily: "red-hat-normal",
@@ -386,12 +426,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 25,
     marginTop: -10,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 30,
-    fontFamily: "red-hat-bold",
-    color: Colors.goDutchBlue,
   },
   addDinersContainer: {
     flexDirection: "row",
@@ -416,63 +450,22 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     width: "60%",
   },
-  showSuggestionsContainer: { padding: 5 },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: 40,
-    borderRadius: 10,
-    height: 600,
-    elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   miniModalContent: {
     backgroundColor: "white",
     borderRadius: 10,
     height: 150,
+    marginBottom: 10,
     elevation: 5,
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
   },
-  dinerModalImage: {
-    width: 250,
-    height: 200,
-    resizeMode: "center",
-  },
-  modalImage: {
-    width: 300,
-    height: 300,
-  },
-  birthdayCake: {
-    marginTop: 250,
-  },
-  modalText: {
+  miniModalText: {
     fontFamily: "red-hat-normal",
     fontSize: 25,
+    textAlign: "center",
   },
-  buttonsContainer: {
-    flexDirection: "row",
-  },
-  buttonContainer: {
-    marginBottom: 125,
-  },
-  birthdayButtonContainer: {
-    marginBottom: 245,
-  },
-  birthdaySelects: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButton: {
-    color: "blue",
-    marginTop: 10,
-  },
+  showSuggestionsContainer: { padding: 5 },
 });
 
 export default AddDinersScreen;

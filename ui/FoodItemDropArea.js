@@ -19,6 +19,7 @@ import {
   setBirthdayDiners,
   updateSubtotal,
 } from "../store/store";
+import CustomModal from "../components/CustomModal";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
@@ -177,7 +178,7 @@ const FoodItemDropArea = () => {
                 ))}
                 <View style={{ flexDirection: "row" }}>
                   <PrimaryButton
-                    width={90}
+                    width={100}
                     onPress={() => {
                       setShowReviewModal(false);
                       setShowConfirmationModal(false);
@@ -185,7 +186,7 @@ const FoodItemDropArea = () => {
                   >
                     Return
                   </PrimaryButton>
-                  <PrimaryButton width={90} onPress={confirmCurrentDiner}>
+                  <PrimaryButton width={100} onPress={confirmCurrentDiner}>
                     Confirm
                   </PrimaryButton>
                 </View>
@@ -196,27 +197,18 @@ const FoodItemDropArea = () => {
       )}
 
       {showConfirmationModal && (
-        <Modal
+        <CustomModal
           visible={showConfirmationModal}
           animationType="slide"
           transparent={true}
-        >
-          <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.subtitle}>Are you sure?</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <PrimaryButton width={75} onPress={handleNextDiner}>
-                    Yes
-                  </PrimaryButton>
-                  <PrimaryButton onPress={handleNoConfirmation} width={75}>
-                    No
-                  </PrimaryButton>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
+          modalText="Are you sure?"
+          buttonText1="Yes"
+          onPress1={handleNextDiner}
+          buttonText2="No"
+          onPress2={handleNoConfirmation}
+          modalHeight={200}
+          buttonWidth={ 100}
+        />
       )}
 
       <View style={styles.mainContainer}>
