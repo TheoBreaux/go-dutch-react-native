@@ -83,16 +83,16 @@ const ViewUserProfile = ({ route }) => {
           <Text style={styles.bioText}>{bio}</Text>
 
           <Text style={styles.bold}>
+            Location: <Text style={styles.userInfo}>{location}</Text>
+          </Text>
+
+          <Text style={styles.bold}>
             Birthday: <Text style={styles.userInfo}>{birthday}</Text>
           </Text>
 
           <Text style={styles.bold}>
             Favorite Cuisine:{" "}
             <Text style={styles.userInfo}>{favoriteCuisine}</Text>
-          </Text>
-
-          <Text style={styles.bold}>
-            Location: <Text style={styles.userInfo}>{location}</Text>
           </Text>
         </View>
 

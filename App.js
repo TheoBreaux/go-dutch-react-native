@@ -1,3 +1,5 @@
+import React from "react";
+import { View } from "react-native";
 import Constants from "expo-constants";
 import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
 import LogInScreen from "./screens/LogInScreen";
@@ -27,6 +29,7 @@ import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
 import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
+import { useDisableBackButton } from "./utils";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -99,6 +102,9 @@ const MainTabNavigator = () => {
 };
 
 const App = () => {
+  //disable back button for android devices
+  useDisableBackButton(); // Use the custom hook at the root level of your app
+
   const [fontsLoaded] = useFonts({
     "red-hat-bold": require("./fonts/RedHatDisplay-Bold.ttf"),
     "red-hat-normal": require("./fonts/RedHatDisplay-Regular.ttf"),

@@ -21,6 +21,7 @@ import Logo from "../components/Logo";
 import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
+import CustomModal from "../components/CustomModal";
 
 const ProfileScreen = ({ route }) => {
   //for uploading image to backend
@@ -34,6 +35,10 @@ const ProfileScreen = ({ route }) => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [
+    showUpdatePasswordAndPaymentModal,
+    setShowUpdatePasswordAndPaymentModal,
+  ] = useState(false);
 
   const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
@@ -196,12 +201,29 @@ const ProfileScreen = ({ route }) => {
   const updateProfileImage = async () => {
     //make call to backend to update file path
     await postData();
-    //navigate back to user home page
-    navigation.navigate("Main", { screen: "Home" });
+    //ask about updating additional profile information modal
+    setShowUpdatePasswordAndPaymentModal(true);
   };
 
   return (
     <>
+      {showUpdatePasswordAndPaymentModal && (
+        <CustomModal
+          visible={showUpdatePasswordAndPaymentModal}
+          animationType="slide"
+          transparent={true}
+          modalText="Need to update password or payment sources?"
+          buttonWidth={100}
+          onPress1={() => {
+            navigation.navigate("UpdatePasswordAndPaymentScreen");
+            setShowUpdatePasswordAndPaymentModal(false);
+          }}
+          //navigate back to user home page
+          onPress2={() => navigation.navigate("Main", { screen: "Home" })}
+          buttonText1="Yes"
+          buttonText2="No"
+        />
+      )}
       {isUpdatingProfile && (
         <View style={styles.spinnerContainer}>
           <Spinner children={"Updating profile..."} />

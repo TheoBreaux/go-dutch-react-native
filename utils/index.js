@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { BackHandler } from "react-native";
+
 export const getCurrentDate = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -37,4 +40,18 @@ export const getCityFromCoordinates = async (latitude, longitude, apiKey) => {
       error: "Currently unable to retrieve city information",
     };
   }
+};
+
+export const useDisableBackButton = () => {
+  useEffect(() => {
+    const handleBackButton = () => {
+      return true; // Returning true prevents default behavior (going back)
+    };
+
+    BackHandler.addEventListener("hardwareBackPress", handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackButton);
+    };
+  }, []);
 };
