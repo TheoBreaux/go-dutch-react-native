@@ -8,15 +8,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Logo from "./Logo";
-import { useRoute } from "@react-navigation/native";
+
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 
-const DiningEventDetails = () => {
+const DiningEventDetails = ({ route }) => {
   const [diners, setDiners] = useState([]);
   const navigation = useNavigation();
-  const route = useRoute();
+
   const { item } = route.params;
   const { imageUri } = route.params;
 
@@ -33,7 +33,13 @@ const DiningEventDetails = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.row}>
+    //onpress needs to naviaget to ViewUserProfile
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() =>
+        navigation.navigate("ViewUserProfileScreen", { selectedUser: item })
+      }
+    >
       <Text>@{item.additional_diner_username}</Text>
       <Text>${item.diner_meal_cost}</Text>
     </TouchableOpacity>
@@ -47,7 +53,7 @@ const DiningEventDetails = () => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/additionaldiners/${eventId}`
+        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDiners(data);

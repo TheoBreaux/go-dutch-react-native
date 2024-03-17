@@ -6,6 +6,10 @@ CREATE TABLE users (
     last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) UNIQUE, -- Add UNIQUE constraint here
+    location VARCHAR(200),
+    birthday VARCHAR(50),
+    bio TEXT,
+    favorite_cuisine VARCHAR(100),
     hashed_password VARCHAR(255),
     primary_payment_source VARCHAR(255),
     primary_payment_source_username VARCHAR(255),

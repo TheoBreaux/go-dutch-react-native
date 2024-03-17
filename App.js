@@ -25,8 +25,8 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
-import UserProfileScreen from "./screens/UserProfileScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -156,8 +156,8 @@ const App = () => {
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen
-            name="UserProfileScreen"
-            component={UserProfileScreen}
+            name="ViewUserProfileScreen"
+            component={ViewUserProfileScreen}
           />
           <Stack.Screen
             name="Main"

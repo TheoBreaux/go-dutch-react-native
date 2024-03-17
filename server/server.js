@@ -36,21 +36,53 @@ pool.query("SELECT NOW()", (err, result) => {
 
 //SIGN UP TO GO DUTCH - INITIAL USER INFO
 app.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, username, password, profileImageKey } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+    profileImageKey,
+    bio,
+    favoriteCuisine,
+    birthday,
+    location,
+  } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key) VALUES($1, $2, $3, $4, $5, $6)`,
-      [firstName, lastName, email, username, hashedPassword, profileImageKey]
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key, bio, favorite_cuisine, birthday, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        firstName,
+        lastName,
+        email,
+        username,
+        hashedPassword,
+        profileImageKey,
+        bio,
+        favoriteCuisine,
+        birthday,
+        location,
+      ]
     );
 
     const token = jwt.sign({ email, username, firstName, lastName }, "secret", {
       expiresIn: "1hr",
     });
-    res.json({ email, username, firstName, lastName, token, profileImageKey });
+    res.json({
+      email,
+      username,
+      firstName,
+      lastName,
+      token,
+      profileImageKey,
+      bio,
+      favoriteCuisine,
+      birthday,
+      location,
+    });
   } catch (error) {
     console.error(error);
     if (error) {
@@ -58,28 +90,6 @@ app.post("/signup", async (req, res) => {
     }
   }
 });
-
-//UPDATE USER PROFILE VALUES
-app.post("/updateprofile", async (req, res) => {
-  const { firstName, lastName, email, username, userId } = req.body;
-
-  try {
-    const newUser = await pool.query(
-      `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4
-       WHERE user_id = $5`,
-
-      [firstName, lastName, email, username, userId]
-    );
-  } catch (error) {
-    console.error(error);
-    if (error) {
-      res.json({ detail: error.detail });
-    }
-  }
-});
-
-
-
 
 //SEND PAYMENT SOURCES INFO - UPDATE USER PROFILE
 app.post("/users", async (req, res) => {
@@ -142,6 +152,10 @@ app.post("/login", async (req, res) => {
         username: users.rows[0].username,
         firstName: users.rows[0].first_name,
         lastName: users.rows[0].last_name,
+        bio: users.rows[0].bio,
+        favoriteCuisine: users.rows[0].favorite_cuisine,
+        birthday: users.rows[0].birthday,
+        location: users.rows[0].location,
         userId: users.rows[0].user_id,
         profileImageKey: users.rows[0].profile_image_key,
         token,
@@ -151,6 +165,45 @@ app.post("/login", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+  }
+});
+
+//UPDATE USER PROFILE VALUES
+app.post("/updateprofile", async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    username,
+    bio,
+    favoriteCuisine,
+    birthday,
+    location,
+    userId,
+  } = req.body;
+
+  try {
+    const newUser = await pool.query(
+      `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4, bio = $5, favorite_cuisine = $6, birthday = $7, location = $8
+       WHERE user_id = $9`,
+
+      [
+        firstName,
+        lastName,
+        email,
+        username,
+        bio,
+        favoriteCuisine,
+        birthday,
+        location,
+        userId,
+      ]
+    );
+  } catch (error) {
+    console.error(error);
+    if (error) {
+      res.json({ detail: error.detail });
+    }
   }
 });
 
@@ -302,7 +355,10 @@ app.get("/additionaldiners/:eventId", async (req, res) => {
 
   try {
     const diningEvents = await pool.query(
-      `SELECT * FROM additional_diners WHERE event_id = $1`,
+      `SELECT additional_diners.*, users.*
+      FROM additional_diners
+      JOIN users ON additional_diners.additional_diner_username = users.username
+      WHERE additional_diners.event_id = $1`,
       [eventId]
     );
     res.json(diningEvents.rows);

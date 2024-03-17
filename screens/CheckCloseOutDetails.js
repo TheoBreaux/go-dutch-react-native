@@ -77,7 +77,12 @@ const CheckCloseOutDetails = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.row}>
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() =>
+        navigation.navigate("ViewUserProfileScreen", { selectedUser: item })
+      }
+    >
       <Text>@{item.additional_diner_username}</Text>
       <Text>${item.diner_meal_cost}</Text>
     </TouchableOpacity>

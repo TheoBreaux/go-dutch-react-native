@@ -11,8 +11,30 @@ const userInfoSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    updateUserFirstName: (state, action) => {
-      state.user.firstName = action.payload;
+    updateUserInfo: (state, action) => {
+      const {
+        firstName,
+        lastName,
+        email,
+        username,
+        bio,
+        favoriteCuisine,
+        birthday,
+        location,
+      } = action.payload;
+
+      const updatedUser = {
+        ...state.user,
+        firstName,
+        lastName,
+        email,
+        username: username.toLowerCase(),
+        bio,
+        favoriteCuisine,
+        birthday,
+        location,
+      };
+      state.user = updatedUser;
     },
     setCurrentCity: (state, action) => {
       state.currentCity = action.payload;
@@ -167,7 +189,7 @@ export const {
   setCurrentCity,
   setRestaurantList,
   updateUserProfileImageKey,
-  updateUserFirstName,
+  updateUserInfo,
   logOut,
 } = userInfoSlice.actions;
 

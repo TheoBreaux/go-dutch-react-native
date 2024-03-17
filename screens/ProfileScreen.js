@@ -22,7 +22,7 @@ import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ route }) => {
   //for uploading image to backend
   const FormData = global.FormData;
 
@@ -30,6 +30,7 @@ const ProfileScreen = () => {
   const username = useSelector((state) => state.userInfo.user.username);
   const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
   const [imageUploadModal, setImageUploadModal] = useState(false);
+  const [isNewProfileImageKey, setIsnewProfileImageKey] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
@@ -123,6 +124,7 @@ const ProfileScreen = () => {
   const saveImage = async (profileImageKey) => {
     //update display image
     setProfileImageKey(profileImageKey);
+    setIsnewProfileImageKey(true);
     setImageUploadModal(false);
   };
 
@@ -134,8 +136,8 @@ const ProfileScreen = () => {
   const postData = async () => {
     let imageKey;
 
-    //send to AWS S3 bucket
-    if (profileImageKey) {
+    //if there is a newProfileImageKey, send it for update to AWS S3 bucket
+    if (isNewProfileImageKey && profileImageKey) {
       //send photo to AWS
       try {
         const formData = new FormData();
@@ -147,7 +149,7 @@ const ProfileScreen = () => {
         });
 
         const response = await fetch(
-          "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/users/profileimages",
+          "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -162,7 +164,13 @@ const ProfileScreen = () => {
       } catch (error) {
         console.error("Error uploading image to AWS S3:", error);
       }
+    } else {
+      // if the is no newProfileImageKey, let it remain the same
+      imageKey = profileImageKey;
     }
+
+    //reset
+    setIsnewProfileImageKey(false);
 
     const userData = {
       profileImageKey: imageKey,
@@ -172,7 +180,7 @@ const ProfileScreen = () => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/profilephoto",
+        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -254,6 +262,7 @@ const ProfileScreen = () => {
               </View>
             </Modal>
           )}
+
           <View style={styles.cameraIconContainer}>
             <MaterialCommunityIcons
               name="camera"
@@ -262,6 +271,7 @@ const ProfileScreen = () => {
               onPress={onButtonPress}
             />
           </View>
+
           <View style={styles.imageIconcontainer}>
             {isLoadingImage && <Spinner indicatorSize={200} />}
             {!isLoadingImage && profileImageKey ? (
@@ -293,9 +303,9 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: -20,
+    marginTop: -15,
+    marginBottom: 5,
     justifyContent: "center",
-    padding: 16,
     alignItems: "center",
   },
   cameraIconContainer: {
@@ -314,14 +324,13 @@ const styles = StyleSheet.create({
   },
   imageIconcontainer: {
     zIndex: 0,
-    // elevation: 10,
+    elevation: 10,
     height: 200,
     width: 200,
     position: "relative",
-    borderWidth: 1,
     borderRadius: 100,
     overflow: "hidden",
-    shadowColor: Colors.goDutchRed,
+    shadowColor: "#000",
   },
   overlay: {
     flex: 1,

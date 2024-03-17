@@ -11,7 +11,7 @@ import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useDispatch } from "react-redux";
-import { setUser, updateUserFirstName } from "../store/store";
+import { setUser, updateUserInfo } from "../store/store";
 import { useNavigation } from "@react-navigation/native";
 
 const UpdateProfileForm = ({
@@ -35,6 +35,10 @@ const UpdateProfileForm = ({
     lastName: user.lastName,
     email: user.email,
     username: user.username,
+    bio: user.bio,
+    favoriteCuisine: user.favoriteCuisine,
+    birthday: user.birthday,
+    location: user.location,
   };
 
   const validateForm = (values) => {
@@ -79,14 +83,18 @@ const UpdateProfileForm = ({
       lastName: values.lastName,
       email: values.email,
       username: values.username.toLowerCase(),
+      bio: values.bio,
+      favoriteCuisine: values.favoriteCuisine,
+      birthday: values.birthday,
+      location: values.location,
       userId: user.userId,
     };
 
-    dispatch(updateUserFirstName(values.firstName));
+    dispatch(updateUserInfo(newUser));
 
     try {
       const response = await fetch(
-        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/updateprofile",
+        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -107,7 +115,7 @@ const UpdateProfileForm = ({
     }
   };
 
-  const updateProfileComponentHeight = 450;
+  const updateProfileComponentHeight = 600;
   const formInputsHeight = 200;
   const screenHeight = Dimensions.get("window").height; // Get the screen height
   const buttonMarginTop = Math.max(
@@ -125,12 +133,46 @@ const UpdateProfileForm = ({
         >
           {({ handleChange, handleSubmit, handleBlur, values }) => (
             <>
-              <View style={styles.nameInputsContainer}>
-                <View style={styles.nameInputs}>
+              <View style={styles.fullScreenWidthInputContainer}>
+                <Text style={styles.inputLabels}>Bio</Text>
+                <TextInput
+                  style={[styles.input, { height: 50 }]}
+                  placeholder="Enter your bio here..."
+                  multiline={true}
+                  numberOfLines={2}
+                  textAlignVertical="top"
+                  autoCapitalize="sentences"
+                  onChangeText={(text) => {
+                    setFormValues({ ...formValues, bio: text });
+                    handleChange("bio")(text);
+                  }}
+                  onBlur={handleBlur("bio")}
+                  value={formValues.bio}
+                />
+              </View>
+
+              <View style={styles.fullScreenWidthInputContainer}>
+                <Text style={styles.inputLabels}>Favorite Cuisine</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Share your favorite cuisine..."
+                  textAlignVertical="top"
+                  autoCapitalize="sentences"
+                  onChangeText={(text) => {
+                    setFormValues({ ...formValues, favoriteCuisine: text });
+                    handleChange("favoriteCuisine")(text);
+                  }}
+                  onBlur={handleBlur("favoriteCuisine")}
+                  value={formValues.favoriteCuisine}
+                />
+              </View>
+
+              <View style={styles.rowContainer}>
+                <View style={styles.halfScreenWidthInput}>
                   <Text style={styles.inputLabels}>First Name</Text>
 
                   <TextInput
-                    style={styles.firstNameInput}
+                    style={[styles.input, { marginRight: 5 }]}
                     onChangeText={(text) => {
                       setFormValues({ ...formValues, firstName: text });
                       handleChange("firstName")(text);
@@ -146,10 +188,10 @@ const UpdateProfileForm = ({
                   />
                 </View>
 
-                <View style={styles.nameInputs}>
+                <View style={styles.halfScreenWidthInput}>
                   <Text style={styles.inputLabels}>Last Name</Text>
                   <TextInput
-                    style={styles.lastNameInput}
+                    style={styles.input}
                     onChangeText={(text) => {
                       setFormValues({ ...formValues, lastName: text });
                       handleChange("lastName")(text);
@@ -165,48 +207,84 @@ const UpdateProfileForm = ({
                 </View>
               </View>
 
-              <View style={styles.logInInputs}>
-                <Text style={styles.inputLabels}>Email</Text>
-                <TextInput
-                  style={styles.textInput}
-                  onChangeText={(text) => {
-                    setFormValues({ ...formValues, email: text });
-                    handleChange("email")(text);
-                  }}
-                  onBlur={handleBlur("email")}
-                  value={formValues.email}
-                  autoCapitalize="none"
-                  autoComplete="email"
-                />
-                <ErrorMessage
-                  name="email"
-                  component={Text}
-                  style={styles.errorText}
-                />
+              <View style={styles.rowContainer}>
+                <View style={styles.halfScreenWidthInput}>
+                  <Text style={styles.inputLabels}>Username</Text>
+                  <TextInput
+                    style={[styles.input, { marginRight: 5 }]}
+                    onChangeText={(text) => {
+                      setFormValues({ ...formValues, username: text });
+                      handleChange("username")(text);
+                    }}
+                    onBlur={handleBlur("username")}
+                    value={formValues.username}
+                    autoCapitalize="none"
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
+                <View style={styles.halfScreenWidthInput}>
+                  <Text style={styles.inputLabels}>Email</Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => {
+                      setFormValues({ ...formValues, email: text });
+                      handleChange("email")(text);
+                    }}
+                    onBlur={handleBlur("email")}
+                    value={formValues.email}
+                    autoCapitalize="none"
+                    autoComplete="email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component={Text}
+                    style={styles.errorText}
+                  />
+                </View>
               </View>
-              <View style={styles.logInInputs}>
-                <Text style={styles.inputLabels}>Username</Text>
-                <TextInput
-                  style={styles.textInput}
-                  onChangeText={(text) => {
-                    setFormValues({ ...formValues, username: text });
-                    handleChange("username")(text);
-                  }}
-                  onBlur={handleBlur("username")}
-                  value={formValues.username}
-                  autoCapitalize="none"
-                />
-                <ErrorMessage
-                  name="username"
-                  component={Text}
-                  style={styles.errorText}
-                />
+
+              <View style={styles.rowContainer}>
+                <View style={styles.halfScreenWidthInput}>
+                  <Text style={styles.inputLabels}>Birthday</Text>
+
+                  <TextInput
+                    style={[styles.input, { marginRight: 5 }]}
+                    placeholder="ex. June 21"
+                    onChangeText={(text) => {
+                      setFormValues({ ...formValues, birthday: text });
+                      handleChange("birthday")(text);
+                    }}
+                    onBlur={handleBlur("birthday")}
+                    value={formValues.birthday}
+                  />
+                </View>
+
+                <View style={styles.halfScreenWidthInput}>
+                  <Text style={styles.inputLabels}>Location</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="ex. Los Angeles, CA"
+                    onChangeText={(text) => {
+                      setFormValues({ ...formValues, location: text });
+                      handleChange("location")(text);
+                    }}
+                    onBlur={handleBlur("location")}
+                    value={formValues.location}
+                  />
+                </View>
               </View>
 
               <View
                 style={[styles.buttonContainer, { marginTop: buttonMarginTop }]}
               >
-                 <SecondaryButton onPress={() => navigation.goBack()} width={370}>
+                <SecondaryButton
+                  onPress={() => navigation.goBack()}
+                  width={370}
+                >
                   Return
                 </SecondaryButton>
                 <SecondaryButton onPress={handleSubmit} width={370}>
@@ -228,49 +306,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
-  nameInputsContainer: {
-    flexDirection: "row",
-  },
-  nameInputs: {
-    width: "50%",
+  fullScreenWidthInputContainer: {
+    width: "100%",
   },
   inputLabels: {
     marginTop: 10,
     fontFamily: "red-hat-normal",
   },
-  firstNameInput: {
+  rowContainer: {
+    flexDirection: "row",
+  },
+  halfScreenWidthInput: {
+    width: "50%",
+  },
+  input: {
     fontFamily: "red-hat-bold",
-    marginRight: 5,
     padding: 10,
     backgroundColor: Colors.inputBackground,
     borderBottomColor: Colors.inputBorder,
     borderBottomWidth: 2,
     borderRadius: 5,
+  },
+
+  buttonContainer: {
+    marginTop: 200,
   },
   errorText: {
     color: "red",
-  },
-  lastNameInput: {
-    fontFamily: "red-hat-bold",
-    padding: 10,
-    backgroundColor: Colors.inputBackground,
-    borderBottomColor: Colors.inputBorder,
-    borderBottomWidth: 2,
-    borderRadius: 5,
-  },
-  logInInputs: {
-    width: "100%",
-  },
-  textInput: {
-    fontFamily: "red-hat-bold",
-    backgroundColor: Colors.inputBackground,
-    borderBottomColor: Colors.inputBorder,
-    borderBottomWidth: 2,
-    borderRadius: 5,
-    padding: 10,
-  },
-  buttonContainer: {
-    marginTop: 200,
   },
 });
 

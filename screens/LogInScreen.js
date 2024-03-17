@@ -17,9 +17,8 @@ import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
-import { useRoute } from "@react-navigation/native";
 
-const LogInScreen = () => {
+const LogInScreen = ({ route }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -28,7 +27,6 @@ const LogInScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const route = useRoute();
 
   const { apiKey } = route.params;
 
@@ -70,7 +68,7 @@ const LogInScreen = () => {
     };
     try {
       const response = await fetch(
-        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/login",
+        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/login",
         {
           method: "POST",
           headers: {

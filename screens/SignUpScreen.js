@@ -18,10 +18,9 @@ import UploadProfileImage from "../ui/UploadProfileImage";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
-import { useRoute } from "@react-navigation/native";
 import Spinner from "../components/Spinner";
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ route }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
@@ -33,7 +32,6 @@ const SignUpScreen = () => {
   const [longitude, setLongitude] = useState(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const route = useRoute();
 
   const { apiKey } = route.params;
 
@@ -124,7 +122,7 @@ const SignUpScreen = () => {
         });
 
         const response = await fetch(
-          "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/users/profileimages",
+          "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -145,11 +143,15 @@ const SignUpScreen = () => {
       username: values.createUsername.toLowerCase(),
       password: values.password,
       profileImageKey: imageKey || null,
+      bio: null,
+      favoriteCuisine: null,
+      birthday: null,
+      location: null,
     };
 
     try {
       const response = await fetch(
-        "https://aa8e-2603-8000-c0f0-a570-9b5-266c-5fdc-cfb9.ngrok-free.app/signup",
+        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

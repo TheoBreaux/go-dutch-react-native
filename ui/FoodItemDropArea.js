@@ -135,7 +135,7 @@ const FoodItemDropArea = () => {
           transparent={true}
         >
           <View style={styles.overlay}>
-            <View style={styles.modalContainer}>
+            <View>
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review items for</Text>
                 {dinersUpdated[currentDinerIndex].profile_image_key === null ? (
@@ -207,7 +207,7 @@ const FoodItemDropArea = () => {
           buttonText2="No"
           onPress2={handleNoConfirmation}
           modalHeight={200}
-          buttonWidth={ 100}
+          buttonWidth={100}
         />
       )}
 
@@ -307,12 +307,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
   },
   modalContent: {
     backgroundColor: "white",
