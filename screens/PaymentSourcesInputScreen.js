@@ -119,7 +119,7 @@ const PaymentSourcesInputScreen = () => {
                   </Text>
                 </View>
 
-                <View>
+                <View style={{ flexDirection: "row" }}>
                   <Picker
                     style={styles.input}
                     selectedValue={values.selectedPrimaryPayment}
@@ -134,7 +134,7 @@ const PaymentSourcesInputScreen = () => {
                         key={index}
                         label={item.label}
                         value={item.source}
-                      />
+                      ></Picker.Item>
                     ))}
                   </Picker>
                 </View>

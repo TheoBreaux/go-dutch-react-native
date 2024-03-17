@@ -136,7 +136,7 @@ const UpdateProfileForm = ({
               <View style={styles.fullScreenWidthInputContainer}>
                 <Text style={styles.inputLabels}>Bio</Text>
                 <TextInput
-                  style={[styles.input, { height: 50 }]}
+                  style={[styles.input, { height: 55 }]}
                   placeholder="Enter your bio here..."
                   multiline={true}
                   numberOfLines={2}

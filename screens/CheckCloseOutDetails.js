@@ -24,6 +24,7 @@ const CheckCloseOutDetails = () => {
   const stampOpacity = useRef(new Animated.Value(1)).current;
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [viewReceipt, setViewReceipt] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const diningEvent = useSelector((state) => state.diningEvent);
   const eventTitle = diningEvent.event.eventTitle;
@@ -181,7 +182,6 @@ const CheckCloseOutDetails = () => {
             style={{
               borderWidth: 5,
               borderColor: Colors.goDutchBlue,
-              padding: 5,
             }}
           >
             {isLoadingImage && <Spinner children={"Loading..."} />}
@@ -197,6 +197,30 @@ const CheckCloseOutDetails = () => {
               <Text style={styles.bold}>Primary Diner: </Text>@{primaryDiner}
             </Text>
           </View>
+
+          {!viewReceipt && (
+            <Image
+              style={styles.iconImage}
+              source={require("../assets/go-dutch-split-button.png")}
+            />
+          )}
+
+          {!viewReceipt && (
+            <PrimaryButton onPress={() => setViewReceipt(!viewReceipt)}>
+              View Receipt
+            </PrimaryButton>
+          )}
+
+          {viewReceipt && (
+            <View
+              style={{
+                borderWidth: 5,
+                borderColor: Colors.goDutchBlue,
+              }}
+            >
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            </View>
+          )}
 
           <View style={styles.additionalDinerContainer}>
             <Text style={styles.additionalDinerText}>Diners</Text>
@@ -242,6 +266,12 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.goDutchRed,
     width: 30,
+  },
+  iconImage: {
+    width: 250,
+    height: 200,
+    resizeMode: "center",
+    marginBottom: 10,
   },
   image: {
     width: 300,

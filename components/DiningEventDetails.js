@@ -12,9 +12,11 @@ import Logo from "./Logo";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
+import PrimaryButton from "./PrimaryButton";
 
 const DiningEventDetails = ({ route }) => {
   const [diners, setDiners] = useState([]);
+  const [viewReceipt, setViewReceipt] = useState(false);
   const navigation = useNavigation();
 
   const { item } = route.params;
@@ -87,15 +89,29 @@ const DiningEventDetails = ({ route }) => {
             </View>
           </View>
 
-          <View
-            style={{
-              borderWidth: 5,
-              borderColor: Colors.goDutchBlue,
-              padding: 5,
-            }}
-          >
-            <Image source={{ uri: imageUri }} style={styles.image} />
-          </View>
+          {!viewReceipt && (
+            <Image
+              style={styles.iconImage}
+              source={require("../assets/go-dutch-split-button.png")}
+            />
+          )}
+
+          {!viewReceipt && (
+            <PrimaryButton onPress={() => setViewReceipt(!viewReceipt)}>
+              View Receipt
+            </PrimaryButton>
+          )}
+
+          {viewReceipt && (
+            <View
+              style={{
+                borderWidth: 5,
+                borderColor: Colors.goDutchBlue,
+              }}
+            >
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            </View>
+          )}
 
           <View>
             <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
@@ -153,6 +169,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.goDutchRed,
     width: 30,
   },
+  iconImage: {
+    width: 250,
+    height: 200,
+    resizeMode: "center",
+    marginBottom: 10,
+  },
   image: {
     width: 300,
     height: 300,
@@ -162,6 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "red-hat-normal",
+    marginBottom: 5,
   },
   bold: {
     fontFamily: "red-hat-bold",
@@ -171,7 +194,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   additionalDinerText: {
     fontSize: 20,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ImageBackground } from "react-native";
 import Logo from "../components/Logo";
 import AWS from "aws-sdk";
 import { useEffect, useState } from "react";
@@ -13,7 +13,16 @@ const ViewUserProfile = ({ route }) => {
 
   const firstName = selectedUser.first_name;
   const lastName = selectedUser.last_name;
+  const username = selectedUser.username;
+  const bio = selectedUser.bio;
+  const birthday = selectedUser.birthday;
+  const favoriteCuisine = selectedUser.favorite_cuisine;
+  const location = selectedUser.location;
   const profileImageKey = selectedUser.profile_image_key;
+  const dateJoined = selectedUser.date_joined;
+  const date = new Date(dateJoined);
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -45,7 +54,6 @@ const ViewUserProfile = ({ route }) => {
   return (
     <>
       <Logo />
-
       <View style={styles.container}>
         <View style={styles.imageIconcontainer}>
           {isLoadingImage && <Spinner indicatorSize={200} />}
@@ -63,19 +71,35 @@ const ViewUserProfile = ({ route }) => {
             </View>
           )}
         </View>
-
+        <Text style={styles.bold}>
+          Member since:{" "}
+          <Text style={styles.userInfo}>{month + " " + year}</Text>
+        </Text>
         <Text style={styles.userFullName}>{firstName + " " + lastName}</Text>
-        <Text style={styles.username}>@{selectedUser.username}</Text>
+        <Text style={styles.username}>@{username}</Text>
+
         <View style={styles.bioContainer}>
-          <Text style={styles.bio}>{selectedUser.bio}</Text>
+          <Text style={styles.bio}>About</Text>
+          <Text style={styles.bioText}>{bio}</Text>
+
+          <Text style={styles.bold}>
+            Birthday: <Text style={styles.userInfo}>{birthday}</Text>
+          </Text>
+
+          <Text style={styles.bold}>
+            Favorite Cuisine:{" "}
+            <Text style={styles.userInfo}>{favoriteCuisine}</Text>
+          </Text>
+
+          <Text style={styles.bold}>
+            Location: <Text style={styles.userInfo}>{location}</Text>
+          </Text>
         </View>
 
-        <Text style={styles.birthday}>{selectedUser.birthday}</Text>
-        <Text style={styles.favoriteCuisine}>
-          {selectedUser.favoriteCuisine}
-        </Text>
-
-        <Text style={styles.location}>{selectedUser.location}</Text>
+        <Image
+          style={styles.backgroundImage}
+          source={require("../assets/go-dutch-pattern.png")}
+        />
       </View>
     </>
   );
@@ -83,9 +107,8 @@ const ViewUserProfile = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: -20,
+    marginTop: 15,
     justifyContent: "center",
-    padding: 16,
     alignItems: "center",
   },
   imageIconcontainer: {
@@ -95,27 +118,47 @@ const styles = StyleSheet.create({
     position: "relative",
     borderRadius: 100,
     overflow: "hidden",
-    marginBottom: 10,
+    marginBottom: 5,
   },
+
   userFullName: {
     fontFamily: "red-hat-bold",
     fontSize: 40,
+    marginBottom: -5,
   },
   username: {
     fontFamily: "red-hat-bold",
     fontSize: 18,
-    margin: 5,
+    marginBottom: 5,
   },
   bioContainer: {
     borderWidth: 2,
-    borderColor: "#ddd",
-    padding: 20,
+    width: "95%",
+    borderColor: "#b3b0b0",
+    padding: 10,
     borderRadius: 10,
   },
   bio: {
+    fontFamily: "red-hat-bold",
+    fontSize: 25,
+  },
+  bioText: {
     fontFamily: "red-hat-normal",
-    fontSize: 18,
-    textAlign: "center",
+    fontSize: 15,
+    marginBottom: 10,
+    textAlign: "justify",
+  },
+  userInfo: {
+    fontFamily: "red-hat-normal",
+    textAlign: "left",
+    fontSize: 15,
+  },
+  bold: { fontFamily: "red-hat-bold", fontSize: 16 },
+  backgroundImage: {
+    height: 500,
+    marginTop: 10,
+    marginLeft: 40,
+    resizeMode: "contain",
   },
 });
 
