@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
 import Colors from "../constants/colors";
 
 const PrimaryButton = ({ children, onPress, padding, width, height }) => {
+
   const buttonContainerStyle = {
     padding: padding !== undefined ? padding : 10,
-    width: width !== undefined ? width : 150,
-    height: height !== undefined ? height : 50,
+    width: width !== undefined ? width : "auto",
+    height: height !== undefined ? height : "auto",
   };
   return (
     <View style={styles.buttonOuterContainer}>

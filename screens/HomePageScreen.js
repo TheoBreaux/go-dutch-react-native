@@ -1,22 +1,15 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  Linking,
-} from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import Logo from "../components/Logo";
-import { featuredRestaurants } from "../data/data";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
-import PrimaryButton from "../components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 import CustomProfileIcon from "../components/CustomProfileIcon";
 import CustomModal from "../components/CustomModal";
+import { featuredRestaurants } from "../data/data";
+import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant";
 
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
@@ -28,6 +21,7 @@ const HomePageScreen = () => {
 
   const firstName = useSelector((state) => state.userInfo.user.firstName);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
+  const user = useSelector((state) => state.userInfo.user);
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
   );
@@ -41,14 +35,21 @@ const HomePageScreen = () => {
   useEffect(() => {
     dispatch(
       setInitialPrimaryDiner({
-        event_id: null,
+        eventId: null,
         id: Date.now(),
-        additional_diner_username: goDutchUsername,
-        primary_diner: true,
-        diner_meal_cost: 0,
+        additionalDinerUsername: goDutchUsername,
+        primaryDiner: true,
+        dinerMealCost: 0,
         items: [],
-        birthday: false,
-        profile_image_key: profileImageKey,
+        celebratingBirthday: false,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        bio: user.bio,
+        location: user.location,
+        favoriteCuisine: user.favoriteCuisine,
+        birthday: user.birthday,
+        dateJoined: user.dateJoined,
+        profileImageKey: profileImageKey,
       })
     );
   }, [goDutchUsername]);
@@ -63,34 +64,8 @@ const HomePageScreen = () => {
     error = null;
   }
 
-  const handleExternalLink = (url) => {
-    Linking.openURL(url);
-  };
-
   const renderItem = ({ item }) => {
-    return (
-      <View style={styles.carouselContainer}>
-        <View style={styles.carouselImageContainer}>
-          <Image source={{ uri: item.imgUrl }} style={styles.carouselImage} />
-        </View>
-
-        <View style={styles.restaurantInfoContainer}>
-          <View style={styles.restaurantInfo}>
-            <Text style={styles.restaurantName}>{item.name}</Text>
-            <Text style={styles.restaurantText}>{item.address}</Text>
-            <Text style={styles.restaurantText}>
-              {item.city}, {item.state} {item.zip}
-            </Text>
-            <Text style={styles.restaurantText}>Rating:{item.rating}⭐</Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={() => handleExternalLink(item.website)}>
-              Reserve
-            </PrimaryButton>
-          </View>
-        </View>
-      </View>
-    );
+    return <CarouselFeaturedRestaurant item={item} />;
   };
 
   const screenWidth = Dimensions.get("window").width; // Get the screen width
@@ -166,43 +141,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-normal",
     textAlign: "center",
     fontSize: 18,
-  },
-  carouselContainer: {
-    flex: 2,
-    marginTop: 10,
-    marginBottom: 200,
-  },
-  carouselImageContainer: {
-    width: "90%",
-    marginHorizontal: "5%",
-    height: "75%",
-  },
-  carouselImage: {
-    height: "100%",
-    width: "100%",
-    resizeMode: "cover",
-  },
-  restaurantInfoContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-  },
-  restaurantInfo: {
-    alignItems: "center",
-    marginTop: -55,
-  },
-  restaurantName: {
-    fontFamily: "red-hat-bold",
-    fontSize: 35,
-    paddingTop: 15,
-  },
-  restaurantText: {
-    fontFamily: "red-hat-normal",
-    fontSize: 18,
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 

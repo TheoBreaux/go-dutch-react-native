@@ -10,14 +10,14 @@ import Colors from "../constants/colors";
 const AssignItemsArea = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
 
-  const updatedDiners = useSelector((state) => state.diningEvent.diners);
+  const dinersUpdated = useSelector((state) => state.diningEvent.diners);
 
   const separatedDinnerItems = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
   );
 
   const diners = useSelector((state) => state.diningEvent.diners);
-  const finalDiner = diners[diners.length - 1].additional_diner_username;
+  const finalDiner = diners[diners.length - 1].additionalDinerUsername;
 
   useEffect(() => {
     if (separatedDinnerItems.length === 0) {
@@ -27,10 +27,10 @@ const AssignItemsArea = () => {
 
   const dispatch = useDispatch();
 
-  //dispatch updating the diners array with updatedDiners
+  //dispatch updating the diners array with dinersUpdated
   useEffect(() => {
-    dispatch(setDiners(updatedDiners));
-  }, [updatedDiners]);
+    dispatch(setDiners(dinersUpdated));
+  }, [dinersUpdated]);
 
   return (
     <>
@@ -50,14 +50,17 @@ const AssignItemsArea = () => {
 
                 <Text style={styles.reviewText}>REVIEW!</Text>
                 <Text style={styles.text}>
-                  Please review the final bill for @{finalDiner}
+                  Please review the final bill for{" "}
+                  <Text style={{ fontFamily: "red-hat-bold" }}>
+                    @{finalDiner}
+                  </Text>
                 </Text>
               </View>
             ) : (
               separatedDinnerItems.map((item) => {
                 return (
                   <View key={item.id}>
-                    <DinnerItem item={item} updatedDiners={updatedDiners} />
+                    <DinnerItem item={item} dinersUpdated={dinersUpdated} />
                   </View>
                 );
               })
@@ -102,7 +105,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor: Colors.goDutchRed,
   },
-  text: { fontFamily: "red-hat-bold", fontSize: 20, marginTop: 10 },
+  text: {
+    fontFamily: "red-hat-normal",
+    fontSize: 20,
+    marginTop: 10,
+    textAlign: "center",
+  },
 });
 
 export default AssignItemsArea;

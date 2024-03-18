@@ -194,6 +194,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                     <PrimaryButton
                       padding={5}
                       width={40}
+                      height={50}
                       onPress={cancelCaptureReceipt}
                     >
                       <Feather name="x-circle" size={24} color="white" />
@@ -202,6 +203,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                     <PrimaryButton
                       padding={5}
                       width={40}
+                      height={50}
                       onPress={() => {
                         setFlash(
                           flash === Camera.Constants.FlashMode.off
@@ -231,13 +233,20 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
             <View style={styles.buttonContainer}>
               {image ? (
                 <View style={styles.buttonsContainer}>
-                  <PrimaryButton padding={3} onPress={() => setImage(null)}>
+                  <PrimaryButton
+                    width={150}
+                    height={60}
+                    padding={3}
+                    onPress={() => setImage(null)}
+                  >
                     <View style={styles.iconButton}>
                       <Entypo name="retweet" size={24} color="white" />
                       <Text style={styles.cameraText}>Recapture</Text>
                     </View>
                   </PrimaryButton>
                   <PrimaryButton
+                    width={150}
+                    height={60}
                     padding={3}
                     onPress={saveAndSubmitReceiptImage}
                   >
@@ -248,7 +257,12 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
                   </PrimaryButton>
                 </View>
               ) : (
-                <PrimaryButton onPress={captureReceipt} padding={3}>
+                <PrimaryButton
+                  width={150}
+                  height={60}
+                  onPress={captureReceipt}
+                  padding={3}
+                >
                   <View style={styles.iconButton}>
                     <Entypo name="camera" size={24} color="white" />
                     <Text style={styles.cameraText}>Capture</Text>

@@ -201,7 +201,7 @@ const CreateNewSplitScreen = () => {
                         />
                       </View>
                       <View>
-                        <SecondaryButton width={370} onPress={handleSubmit}>
+                        <SecondaryButton onPress={handleSubmit}>
                           Continue
                         </SecondaryButton>
                       </View>
@@ -272,12 +272,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.goDutchRed,
     borderRadius: 5,
-    padding: 0,
-    margin: 0,
     marginRight: "2%",
     width: "10%",
     borderColor: "black",
-    borderWidth: 5,
+    borderWidth: 2,
     borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",

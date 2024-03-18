@@ -8,7 +8,7 @@ import ProfileImageMedallion from "./ProfileImageMedallion";
 
 const Diner = ({ additionalDinerUsername, diner, profileImageKey }) => {
   //check to see if users current profile pic path is null
-  const usingDefaultProfilePhoto = diner.profile_image_key === null;
+  const usingDefaultProfilePhoto = diner.profileImageKey === null;
 
   const dispatch = useDispatch();
 

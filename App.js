@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "react-native";
 import Constants from "expo-constants";
 import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
@@ -20,13 +20,13 @@ import store from "./store/store";
 import LogOutScreen from "./screens/LogOutScreen";
 import AddDinersScreen from "./screens/AddDinersScreen";
 import AssignItemsArea from "./ui/AssignItemsArea";
-import DiningEventDetails from "./components/DiningEventDetails";
+import DiningEventDetailsScreen from "./screens/DiningEventDetailsScreen";
 import FeaturedRestaurants from "./screens/FeaturedRestaurantsScreen";
 import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
-import CheckCloseOutDetails from "./screens/CheckCloseOutDetails";
+import CheckCloseOutDetailsScreen from "./screens/CheckCloseOutDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import { useDisableBackButton } from "./utils";
@@ -149,16 +149,16 @@ const App = () => {
           />
           <Stack.Screen name="History" component={DiningEventHistory} />
           <Stack.Screen
-            name="DiningEventDetails"
-            component={DiningEventDetails}
+            name="DiningEventDetailsScreen"
+            component={DiningEventDetailsScreen}
           />
           <Stack.Screen
             name="ConfirmFeeTotalsScreen"
             component={ConfirmFeeTotalsScreen}
           />
           <Stack.Screen
-            name="CheckCloseOutDetails"
-            component={CheckCloseOutDetails}
+            name="CheckCloseOutDetailsScreen"
+            component={CheckCloseOutDetailsScreen}
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen

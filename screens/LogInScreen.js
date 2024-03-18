@@ -144,7 +144,7 @@ const LogInScreen = ({ route }) => {
               </View>
 
               <View>
-                <SecondaryButton onPress={handleSubmit} width={370}>
+                <SecondaryButton onPress={handleSubmit}>
                   Submit
                 </SecondaryButton>
               </View>

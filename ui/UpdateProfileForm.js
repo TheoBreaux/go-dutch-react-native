@@ -282,8 +282,8 @@ const UpdateProfileForm = ({
                 style={[styles.buttonContainer, { marginTop: buttonMarginTop }]}
               >
                 <SecondaryButton
-                  onPress={() => navigation.goBack()}
                   width={370}
+                  onPress={() => navigation.goBack()}
                 >
                   Return
                 </SecondaryButton>

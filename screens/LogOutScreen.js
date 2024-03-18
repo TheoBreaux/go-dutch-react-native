@@ -17,7 +17,9 @@ const LogOutScreen = ({ navigation }) => {
       <Logo />
       <View style={styles.container}>
         <Text style={styles.text}>Are you sure you want to log out?</Text>
-        <PrimaryButton onPress={handleLogOut}>Log Out</PrimaryButton>
+        <PrimaryButton width={100} height={50} onPress={handleLogOut}>
+          Log Out
+        </PrimaryButton>
       </View>
     </>
   );

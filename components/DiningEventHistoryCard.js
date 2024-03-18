@@ -46,7 +46,7 @@ const DiningEventHistoryCard = ({ item }) => {
   }, [receiptImageKey]);
 
   const showEventDetails = () => {
-    navigation.navigate("DiningEventDetails", { item, imageUri });
+    navigation.navigate("DiningEventDetailsScreen", { item, imageUri });
   };
 
   return (
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-normal",
     letterSpacing: 3,
     color: Colors.goDutchRed,
   },

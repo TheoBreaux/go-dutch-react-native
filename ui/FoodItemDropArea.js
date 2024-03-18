@@ -34,8 +34,7 @@ const FoodItemDropArea = () => {
   const [notSure, setNotSure] = useState(false);
 
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
-  const currentDiner =
-    dinersUpdated[currentDinerIndex].additional_diner_username;
+  const currentDiner = dinersUpdated[currentDinerIndex].additionalDinerUsername;
   let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();
@@ -138,7 +137,7 @@ const FoodItemDropArea = () => {
             <View>
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Review items for</Text>
-                {dinersUpdated[currentDinerIndex].profile_image_key === null ? (
+                {dinersUpdated[currentDinerIndex].profileImageKey === null ? (
                   <Image
                     source={require("../assets/default-profile-icon.jpg")}
                     style={styles.profilePic}
@@ -146,7 +145,7 @@ const FoodItemDropArea = () => {
                 ) : (
                   <ProfileImageMedallion
                     profileImageKey={
-                      dinersUpdated[currentDinerIndex].profile_image_key
+                      dinersUpdated[currentDinerIndex].profileImageKey
                     }
                     width={100}
                     height={100}
@@ -219,16 +218,14 @@ const FoodItemDropArea = () => {
             Drag user items to profile pic & review!
           </Text>
 
-          {dinersUpdated[currentDinerIndex].profile_image_key === null ? (
+          {dinersUpdated[currentDinerIndex].profileImageKey === null ? (
             <Image
               source={require("../assets/default-profile-icon.jpg")}
               style={styles.profilePic}
             />
           ) : (
             <ProfileImageMedallion
-              profileImageKey={
-                dinersUpdated[currentDinerIndex].profile_image_key
-              }
+              profileImageKey={dinersUpdated[currentDinerIndex].profileImageKey}
               width={150}
               height={150}
               borderRadius={75}
@@ -247,7 +244,7 @@ const FoodItemDropArea = () => {
             )}
 
             {
-              <PrimaryButton width={140} onPress={handleAssignedItemsReview}>
+              <PrimaryButton width={140} height={50} onPress={handleAssignedItemsReview}>
                 Review
               </PrimaryButton>
             }

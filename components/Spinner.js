@@ -17,6 +17,7 @@ const Spinner = ({ children, indicatorSize, fontSize }) => {
 const styles = StyleSheet.create({
   loadingText: {
     fontFamily: "red-hat-bold",
+    letterSpacing: 1,
     color: Colors.goDutchBlue,
     textAlign: "center",
   },

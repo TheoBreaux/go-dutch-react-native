@@ -154,9 +154,11 @@ app.post("/login", async (req, res) => {
         lastName: users.rows[0].last_name,
         bio: users.rows[0].bio,
         favoriteCuisine: users.rows[0].favorite_cuisine,
+        celebratingBirthday: users.rows[0].celebrating_birthday,
         birthday: users.rows[0].birthday,
         location: users.rows[0].location,
         userId: users.rows[0].user_id,
+        dateJoined: users.rows[0].date_joined,
         profileImageKey: users.rows[0].profile_image_key,
         token,
       });
@@ -247,13 +249,19 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 
   try {
     const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name, profile_image_key FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      `SELECT username, first_name, last_name, profile_image_key, bio, location, birthday, favorite_cuisine, date_joined FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
       [`%${userInput}%`]
     );
     const suggestions = autoCompleteDiner.rows.map((row) => ({
       username: row.username,
       firstName: row.first_name,
       lastName: row.last_name,
+      bio: row.bio,
+      location: row.location,
+      birthday: row.birthday,
+      celebratingBirthday: row.celebrating_birthday,
+      favoriteCuisine: row.favorite_cuisine,
+      dateJoined: row.date_joined,
       profileImageKey: row.profile_image_key,
     }));
     res.json(suggestions);

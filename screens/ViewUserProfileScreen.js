@@ -1,25 +1,29 @@
-import { StyleSheet, Text, View, Image, ImageBackground } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Logo from "../components/Logo";
 import AWS from "aws-sdk";
 import { useEffect, useState } from "react";
 import Constants from "expo-constants";
 import Spinner from "../components/Spinner";
+import PrimaryButton from "../components/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
+import IconButton from "../components/IconButton";
 
 const ViewUserProfile = ({ route }) => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const { selectedUser } = route.params;
+  const navigation = useNavigation();
 
-  const firstName = selectedUser.first_name;
-  const lastName = selectedUser.last_name;
-  const username = selectedUser.username;
+  const firstName = selectedUser.firstName;
+  const lastName = selectedUser.lastName;
+  const username = selectedUser.additionalDinerUsername;
   const bio = selectedUser.bio;
   const birthday = selectedUser.birthday;
-  const favoriteCuisine = selectedUser.favorite_cuisine;
+  const favoriteCuisine = selectedUser.favoriteCuisine;
   const location = selectedUser.location;
-  const profileImageKey = selectedUser.profile_image_key;
-  const dateJoined = selectedUser.date_joined;
+  const profileImageKey = selectedUser.profileImageKey;
+  const dateJoined = selectedUser.dateJoined;
   const date = new Date(dateJoined);
   const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
@@ -75,25 +79,52 @@ const ViewUserProfile = ({ route }) => {
           Member since:{" "}
           <Text style={styles.userInfo}>{month + " " + year}</Text>
         </Text>
-        <Text style={styles.userFullName}>{firstName + " " + lastName}</Text>
+
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.userFullName}>{firstName + " " + lastName}</Text>
+          {/* Star here for addFavorites Functionality */}
+          <IconButton
+            // onPress={changeFavoriteStatusHandler}
+            color="white"
+            icon={"star-outline"}
+            // icon={mealIsFavorite ? "star" : "star-outline"}
+          />
+        </View>
+
         <Text style={styles.username}>@{username}</Text>
 
         <View style={styles.bioContainer}>
           <Text style={styles.bio}>About</Text>
           <Text style={styles.bioText}>{bio}</Text>
 
-          <Text style={styles.bold}>
-            Location: <Text style={styles.userInfo}>{location}</Text>
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "column" }}>
+              <Text style={styles.bold}>
+                Location: <Text style={styles.userInfo}>{location}</Text>
+              </Text>
 
-          <Text style={styles.bold}>
-            Birthday: <Text style={styles.userInfo}>{birthday}</Text>
-          </Text>
+              <Text style={styles.bold}>
+                Birthday: <Text style={styles.userInfo}>{birthday}</Text>
+              </Text>
 
-          <Text style={styles.bold}>
-            Favorite Cuisine:{" "}
-            <Text style={styles.userInfo}>{favoriteCuisine}</Text>
-          </Text>
+              <Text style={styles.bold}>
+                Favorite Cuisine:{" "}
+                <Text style={styles.userInfo}>{favoriteCuisine}</Text>
+              </Text>
+            </View>
+
+            <View>
+              <PrimaryButton width={100} onPress={() => navigation.goBack()}>
+                Return
+              </PrimaryButton>
+            </View>
+          </View>
         </View>
 
         <Image
@@ -112,6 +143,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageIconcontainer: {
+    marginTop: 20,
     elevation: 10,
     height: 200,
     width: 200,
@@ -120,7 +152,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 5,
   },
-
   userFullName: {
     fontFamily: "red-hat-bold",
     fontSize: 40,
@@ -134,8 +165,9 @@ const styles = StyleSheet.create({
   bioContainer: {
     borderWidth: 2,
     width: "95%",
+    height: "20%",
     borderColor: "#b3b0b0",
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
   },
   bio: {
@@ -145,7 +177,7 @@ const styles = StyleSheet.create({
   bioText: {
     fontFamily: "red-hat-normal",
     fontSize: 15,
-    marginBottom: 10,
+    // marginBottom: 5,
     textAlign: "justify",
   },
   userInfo: {

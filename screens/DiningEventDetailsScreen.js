@@ -7,14 +7,14 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton from "../components/PrimaryButton";
 
-const DiningEventDetails = ({ route }) => {
+const DiningEventDetailsScreen = ({ route }) => {
   const [diners, setDiners] = useState([]);
   const [viewReceipt, setViewReceipt] = useState(false);
   const navigation = useNavigation();
@@ -42,7 +42,7 @@ const DiningEventDetails = ({ route }) => {
         navigation.navigate("ViewUserProfileScreen", { selectedUser: item })
       }
     >
-      <Text>@{item.additional_diner_username}</Text>
+      <Text>@{item.additionalDinerUsername}</Text>
       <Text>${item.diner_meal_cost}</Text>
     </TouchableOpacity>
   );
@@ -74,6 +74,7 @@ const DiningEventDetails = ({ route }) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
+                alignItems: "center",
                 width: 360,
                 marginBottom: 10,
               }}
@@ -88,6 +89,8 @@ const DiningEventDetails = ({ route }) => {
               </View>
             </View>
           </View>
+
+          
 
           {!viewReceipt && (
             <Image
@@ -113,6 +116,8 @@ const DiningEventDetails = ({ route }) => {
             </View>
           )}
 
+
+
           <View>
             <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
             <Text style={[styles.text, styles.bold]}>
@@ -123,6 +128,9 @@ const DiningEventDetails = ({ route }) => {
               {item.primary_diner_username}
             </Text>
           </View>
+
+
+
 
           <View style={styles.additionalDinerContainer}>
             <Text style={styles.additionalDinerText}>Diners</Text>
@@ -161,13 +169,19 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-normal",
     color: Colors.goDutchRed,
     fontSize: 30,
   },
   button: {
     backgroundColor: Colors.goDutchRed,
-    width: 30,
+    borderRadius: 5,
+    width: "10%",
+    borderColor: "black",
+    borderWidth: 2,
+    borderStyle: "solid",
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconImage: {
     width: 250,
@@ -204,7 +218,6 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     flexGrow: 1,
-    // justifyContent: 'space-between',
   },
   totalMealCostText: {
     fontFamily: "red-hat-bold",
@@ -225,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DiningEventDetails;
+export default DiningEventDetailsScreen;

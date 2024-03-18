@@ -112,7 +112,7 @@ const ConfirmFeeTotalsScreen = () => {
       //post final additional diner values data to database
       postDataFinalAdditionalDinerValues(sharedExpenses);
       //navigate to close out check
-      navigation.navigate("CheckCloseOutDetails");
+      navigation.navigate("CheckCloseOutDetailsScreen");
     }
   };
 
@@ -206,7 +206,7 @@ const ConfirmFeeTotalsScreen = () => {
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetails");
+    navigation.navigate("CheckCloseOutDetailsScreen");
   };
 
   const calculateWithoutBirthdayDiners = () => {
@@ -222,7 +222,7 @@ const ConfirmFeeTotalsScreen = () => {
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetails");
+    navigation.navigate("CheckCloseOutDetailsScreen");
   };
 
   const sumAdditionalFees = () => {
@@ -303,7 +303,7 @@ const ConfirmFeeTotalsScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <PrimaryButton width={50}>
+            <PrimaryButton width={40} height={55}>
               <Ionicons
                 name="close"
                 size={20}
@@ -323,7 +323,7 @@ const ConfirmFeeTotalsScreen = () => {
               value={taxConfirmed}
               onChangeText={(text) => setTaxConfirmed(text)}
             />
-            <PrimaryButton width={50}>
+            <PrimaryButton width={40} height={55}>
               <Ionicons
                 name="close"
                 size={20}
@@ -349,13 +349,14 @@ const ConfirmFeeTotalsScreen = () => {
 
           <View style={{ marginBottom: 10, flexDirection: "row" }}>
             <PrimaryButton
+              height={50}
               onPress={() => setShowAddFeesModal(!showAddFeesModal)}
             >
               Yes, add them!
             </PrimaryButton>
 
             {/* will navigate to breakdown page to close out check, send all info to DB, then back to Home */}
-            <PrimaryButton onPress={handleNoBirthdaysPresent}>
+            <PrimaryButton height={50} onPress={handleNoBirthdaysPresent}>
               No, continue!
             </PrimaryButton>
           </View>

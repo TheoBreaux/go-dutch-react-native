@@ -86,10 +86,10 @@ const AddDinersScreen = () => {
       inputValue === goDutchUsername;
 
     // Check if diner is in the database
-    const isDinerInDatabase = await checkIfDinerExistsInDatabase(inputValue);
+    const dinerInDatabase = await checkIfDinerExistsInDatabase(inputValue);
 
     //If diner is already added, show alert and don't allow
-    if (isValuePresent || !isDinerInDatabase) {
+    if (isValuePresent || !dinerInDatabase) {
       Alert.alert(
         "🤦🏾‍♂️Not Allowed! ", // Alert title
         "This diner is already included in the split or the username does not exist!", // Alert message
@@ -108,18 +108,26 @@ const AddDinersScreen = () => {
       const foundSuggestion = suggestions.find(
         (suggestion) => suggestion.username === inputValue
       );
+
       const profileImageKey = foundSuggestion.profileImageKey;
 
       dispatch(
         addDiner({
-          event_id: eventId,
+          eventId: eventId,
           id: Date.now(),
-          additional_diner_username: inputValue,
-          primary_diner: false,
-          diner_meal_cost: 0,
+          additionalDinerUsername: inputValue,
+          primaryDiner: false,
+          dinerMealCost: 0,
           items: [],
-          birthday: false,
-          profile_image_key: profileImageKey,
+          celebratingBirthday: false,
+          firstName: foundSuggestion.firstName,
+          lastName: foundSuggestion.lastName,
+          bio: foundSuggestion.bio,
+          location: foundSuggestion.location,
+          favoriteCuisine: foundSuggestion.favoriteCuisine,
+          birthday: foundSuggestion.birthday,
+          dateJoined: foundSuggestion.dateJoined,
+          profileImageKey: profileImageKey,
         })
       );
       setInputValue("");
@@ -167,11 +175,11 @@ const AddDinersScreen = () => {
       event_id: eventId,
       additionalDiners: diners,
       diner_meal_cost: 0,
-      birthday: null,
+      celebratingBirthday: null,
     };
 
     // Extract birthday value
-    const birthdayValue = diners.some((diner) => diner.birthday); // Check if any diner has birthday true
+    const birthdayValue = diners.some((diner) => diner.celebratingBirthday); // Check if any diner has birthday true
 
     try {
       const response = await fetch(
@@ -179,7 +187,7 @@ const AddDinersScreen = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...data, birthday: birthdayValue }),
+          body: JSON.stringify({ ...data, celebratingBirthday: birthdayValue }),
         }
       );
       // const result = await response.json();
@@ -211,11 +219,11 @@ const AddDinersScreen = () => {
                     Is it someone's birthday?
                   </Text>
                   <View style={styles.buttonsContainer}>
-                    <PrimaryButton width={100} onPress={birthdayHandler}>
+                    <PrimaryButton width={100} height={50} onPress={birthdayHandler}>
                       Yes
                     </PrimaryButton>
 
-                    <PrimaryButton width={100} onPress={postData}>
+                    <PrimaryButton width={100} height={50} onPress={postData}>
                       No
                     </PrimaryButton>
                   </View>
@@ -238,9 +246,7 @@ const AddDinersScreen = () => {
                       renderItem={({ item }) => (
                         <BirthdayDiner
                           key={item.id}
-                          additionalDinerUsername={
-                            item.additional_diner_username
-                          }
+                          additionalDinerUsername={item.additionalDinerUsername}
                           diner={item}
                         />
                       )}
@@ -293,7 +299,7 @@ const AddDinersScreen = () => {
           onChangeText={handleInputChange}
         />
 
-        <PrimaryButton width={130} onPress={addDinerClickHandler}>
+        <PrimaryButton width={130} height={50} onPress={addDinerClickHandler}>
           Add Diner
         </PrimaryButton>
       </View>
@@ -306,9 +312,9 @@ const AddDinersScreen = () => {
             renderItem={({ item }) => (
               <Diner
                 key={item.id}
-                additionalDinerUsername={item.additional_diner_username}
+                additionalDinerUsername={item.additionalDinerUsername}
                 diner={item}
-                profileImageKey={item.profile_image_key}
+                profileImageKey={item.profileImageKey}
               />
             )}
           />
@@ -333,7 +339,7 @@ const AddDinersScreen = () => {
                   justifyContent: "center",
                 }}
               >
-                <PrimaryButton width={100} onPress={allDinersAddedHandler}>
+                <PrimaryButton width={150} height={50} onPress={allDinersAddedHandler}>
                   Confirm
                 </PrimaryButton>
               </View>

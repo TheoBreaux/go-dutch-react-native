@@ -3,7 +3,7 @@ import Colors from "../constants/colors";
 
 const SecondaryButton = ({ children, onPress, width }) => {
   const buttonContainerStyle = {
-    width: width !== undefined ? width : 150,
+    width: width !== undefined ? width : "auto",
   };
   return (
     <View style={styles.buttonOuterContainer}>

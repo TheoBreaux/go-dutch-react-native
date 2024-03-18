@@ -14,12 +14,17 @@ const WelcomeScreen = ({ navigation }) => {
         />
         <View style={styles.buttonContainer}>
           <PrimaryButton
-            // width={20}
+            width={150}
+            height={50}
             onPress={() => navigation.navigate("SignUp")}
           >
             Sign Up
           </PrimaryButton>
-          <PrimaryButton onPress={() => navigation.navigate("LogIn")}>
+          <PrimaryButton
+            width={150}
+            height={50}
+            onPress={() => navigation.navigate("LogIn")}
+          >
             Log In
           </PrimaryButton>
         </View>
