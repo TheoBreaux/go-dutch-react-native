@@ -55,7 +55,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners/${eventId}`
+        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDiners(data);
@@ -69,7 +69,7 @@ const DiningEventDetailsScreen = ({ route }) => {
       <Logo />
       <View style={styles.cardContainer}>
         <View style={styles.contentContainer}>
-          <View>
+          {/* <View>
             <View
               style={{
                 flexDirection: "row",
@@ -88,9 +88,7 @@ const DiningEventDetailsScreen = ({ route }) => {
                 />
               </View>
             </View>
-          </View>
-
-          
+          </View> */}
 
           {!viewReceipt && (
             <Image
@@ -116,8 +114,6 @@ const DiningEventDetailsScreen = ({ route }) => {
             </View>
           )}
 
-
-
           <View>
             <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
             <Text style={[styles.text, styles.bold]}>
@@ -128,9 +124,6 @@ const DiningEventDetailsScreen = ({ route }) => {
               {item.primary_diner_username}
             </Text>
           </View>
-
-
-
 
           <View style={styles.additionalDinerContainer}>
             <Text style={styles.additionalDinerText}>Diners</Text>
@@ -152,17 +145,17 @@ const DiningEventDetailsScreen = ({ route }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flex: 1,
-    padding: 16,
-    marginTop: -5,
-    margin: 5,
-    borderRadius: 8,
-    shadowColor: Colors.goDutchBlue,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 2,
-    alignItems: "center",
+    // flex: 1,
+    // padding: 16,
+    // marginTop: -5,
+    // margin: 5,
+    // borderRadius: 8,
+    // shadowColor: Colors.goDutchBlue,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 3,
+    // elevation: 2,
+    // alignItems: "center",
   },
   contentContainer: {
     alignItems: "center",

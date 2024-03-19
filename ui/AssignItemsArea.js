@@ -10,7 +10,7 @@ import Colors from "../constants/colors";
 const AssignItemsArea = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
 
-  const dinersUpdated = useSelector((state) => state.diningEvent.diners);
+  const updatedDiners = useSelector((state) => state.diningEvent.diners);
 
   const separatedDinnerItems = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
@@ -29,8 +29,8 @@ const AssignItemsArea = () => {
 
   //dispatch updating the diners array with dinersUpdated
   useEffect(() => {
-    dispatch(setDiners(dinersUpdated));
-  }, [dinersUpdated]);
+    dispatch(setDiners(updatedDiners));
+  }, [updatedDiners]);
 
   return (
     <>
@@ -60,7 +60,7 @@ const AssignItemsArea = () => {
               separatedDinnerItems.map((item) => {
                 return (
                   <View key={item.id}>
-                    <DinnerItem item={item} dinersUpdated={dinersUpdated} />
+                    <DinnerItem item={item} updatedDiners={updatedDiners} />
                   </View>
                 );
               })
@@ -71,6 +71,7 @@ const AssignItemsArea = () => {
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   scrollViewContainer: {

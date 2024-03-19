@@ -47,7 +47,7 @@ const AddDinersScreen = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/users/${username}`
+        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -62,7 +62,7 @@ const AddDinersScreen = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -172,10 +172,10 @@ const AddDinersScreen = () => {
     navigation.navigate("ConfirmReceiptItemsScreen");
     // create data object to send to db
     const data = {
-      event_id: eventId,
+      eventId: eventId,
       additionalDiners: diners,
-      diner_meal_cost: 0,
-      celebratingBirthday: null,
+      dinerMealCost: 0,
+      celebratingBirthday: false,
     };
 
     // Extract birthday value
@@ -183,7 +183,7 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners`,
+        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -219,7 +219,11 @@ const AddDinersScreen = () => {
                     Is it someone's birthday?
                   </Text>
                   <View style={styles.buttonsContainer}>
-                    <PrimaryButton width={100} height={50} onPress={birthdayHandler}>
+                    <PrimaryButton
+                      width={100}
+                      height={50}
+                      onPress={birthdayHandler}
+                    >
                       Yes
                     </PrimaryButton>
 
@@ -251,20 +255,16 @@ const AddDinersScreen = () => {
                         />
                       )}
                     />
-                    <View
-                      style={[
-                        styles.buttonContainer,
-                        styles.birthdayButtonContainer,
-                      ]}
-                    >
+                    <View style={styles.birthdayButtonContainer}>
                       {/* SEND ALL INFO TO DATABASE */}
                       <View style={{ flexDirection: "row" }}>
                         <PrimaryButton
+                          width={100}
                           onPress={() => setShowSelectBirthday(false)}
                         >
                           Return
                         </PrimaryButton>
-                        <PrimaryButton onPress={postData}>
+                        <PrimaryButton width={100} onPress={postData}>
                           Continue
                         </PrimaryButton>
                       </View>
@@ -285,7 +285,6 @@ const AddDinersScreen = () => {
         </Text>
       </View>
       <PrimaryDiner />
-      {/* <Text style={styles.title}>↓ Add diners ↓</Text> */}
       <View style={styles.addDinersContainer}>
         <Image
           style={styles.iconImage}
@@ -339,7 +338,11 @@ const AddDinersScreen = () => {
                   justifyContent: "center",
                 }}
               >
-                <PrimaryButton width={150} height={50} onPress={allDinersAddedHandler}>
+                <PrimaryButton
+                  width={150}
+                  height={50}
+                  onPress={allDinersAddedHandler}
+                >
                   Confirm
                 </PrimaryButton>
               </View>
@@ -413,9 +416,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  buttonContainer: {
-    marginBottom: 125,
-  },
+
   birthdayButtonContainer: {
     marginBottom: 245,
   },

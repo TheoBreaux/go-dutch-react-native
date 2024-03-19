@@ -53,7 +53,7 @@ app.post("/signup", async (req, res) => {
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key, bio, favorite_cuisine, birthday, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key, bio, favorite_cuisine, birthday, celebrating_birthday, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         firstName,
         lastName,
@@ -64,6 +64,7 @@ app.post("/signup", async (req, res) => {
         bio,
         favoriteCuisine,
         birthday,
+        celebrating_birthday,
         location,
       ]
     );
@@ -81,6 +82,7 @@ app.post("/signup", async (req, res) => {
       bio,
       favoriteCuisine,
       birthday,
+      celebratingBirthday,
       location,
     });
   } catch (error) {
@@ -212,28 +214,28 @@ app.post("/updateprofile", async (req, res) => {
 // SEND NEW DINING EVENTS TO DATABASE
 app.post("/diningevents", async (req, res) => {
   const {
-    dining_date,
-    restaurant_bar,
+    diningDate,
+    restaurantBar,
     title,
-    primary_diner_username,
+    primaryDinerUsername,
     tax,
     tip,
-    total_meal_cost,
-    receipt_image_key,
+    totalMealCost,
+    receiptImageKey,
   } = req.body;
 
   try {
     const newDiningEvent = await pool.query(
       `INSERT INTO dining_events(dining_date, restaurant_bar, title, primary_diner_username, tax, tip, total_meal_cost, receipt_image_key) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING event_id`,
       [
-        dining_date,
-        restaurant_bar,
+        diningDate,
+        restaurantBar,
         title,
-        primary_diner_username,
+        primaryDinerUsername,
         tax,
         tip,
-        total_meal_cost,
-        receipt_image_key,
+        totalMealCost,
+        receiptImageKey,
       ]
     );
     const eventId = newDiningEvent.rows[0].event_id;
@@ -259,7 +261,6 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
       bio: row.bio,
       location: row.location,
       birthday: row.birthday,
-      celebratingBirthday: row.celebrating_birthday,
       favoriteCuisine: row.favorite_cuisine,
       dateJoined: row.date_joined,
       profileImageKey: row.profile_image_key,
@@ -291,17 +292,18 @@ app.get("/users/:username", async (req, res) => {
 
 // ADDITIONAL DINERS TO THE DATABASE PER DINING EVENT
 app.post("/additionaldiners", async (req, res) => {
-  const { event_id, additionalDiners, dinerMealCost, birthday } = req.body;
+  const { eventId, additionalDiners, dinerMealCost, celebratingBirthday } =
+    req.body;
 
   try {
     for (const diner of additionalDiners) {
       await pool.query(
-        `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost, birthday) VALUES($1, $2, $3, $4)`,
+        `INSERT INTO additional_diners(event_id, additional_diner_username, diner_meal_cost, celebrating_birthday) VALUES($1, $2, $3, $4)`,
         [
-          event_id,
-          diner.additional_diner_username,
-          diner.diner_meal_cost,
-          diner.birthday,
+          eventId,
+          diner.additionalDinerUsername,
+          diner.dinerMealCost,
+          diner.celebratingBirthday,
         ]
       );
     }
@@ -401,6 +403,8 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
 app.post("/diningevent/values", async (req, res) => {
   const { tax, tip, totalMealCost, subtotal, eventId } = req.body;
 
+  console.log("DINING EVENT VALUES", req.body);
+
   try {
     const diningEventData = await pool.query(
       `UPDATE dining_events 
@@ -423,26 +427,35 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
+  const {
+    sharedExpenses,
+    dinersUpdated,
+    birthdayDiners,
+    eventId,
+    totalMealCost,
+  } = req.body;
+
   try {
+    // Initialize allDinerMealCosts to accumulate the total meal cost
+    let allDinerMealCosts = 0;
     //sum birthday diner(s) meal costs
     let birthdayDinerMealCost = 0;
+
     //calculate birthday diners meal costs
     for (const diner of birthdayDiners) {
       diner.items.forEach((item) => {
         birthdayDinerMealCost += parseFloat(item.price);
       });
     }
-    for (let i = 0; i < dinersUpdated.length; i++) {
-      const diner = dinersUpdated[i];
+
+    for (const diner of dinersUpdated) {
+      //loop through diners items to get total
       let dinerMealCost = 0;
-
       //calculate shared birthday diner(s) meal costs
-      const sharedBirthdayDinerExpenses =
+      const sharedBirthdayDinerMealCosts =
         birthdayDinerMealCost / (dinersUpdated.length - birthdayDiners.length);
-
       //if the diner has a birthday
-      if (diner.birthday) {
+      if (diner.celebratingBirthday) {
         //set the birthday diners meal cost to 0
         dinerMealCost += 0;
       } else {
@@ -451,16 +464,32 @@ app.post("/additionaldiners/values", async (req, res) => {
           dinerMealCost += parseFloat(item.price);
         });
 
-        dinerMealCost += parseFloat(sharedExpenses.toFixed(2));
-
+        dinerMealCost += sharedExpenses;
         //if there are birthday diners add their shared expense to other diners total meal cost
-        dinerMealCost += parseFloat(sharedBirthdayDinerExpenses.toFixed(2));
+        dinerMealCost += sharedBirthdayDinerMealCosts;
+
+        console.log("IN THE LOOOP - SHARED EXPESNES", sharedExpenses);
+        console.log(
+          "IN THE LOOOP - SHARED BIRTHDAY DINER EXPESNES",
+          sharedBirthdayDinerMealCosts
+        );
+        console.log("IN THE LOOOP - ALL DINER MEAL COSTS", allDinerMealCosts);
       }
+
+      // Add the current diner's meal cost to the total
+      allDinerMealCosts += dinerMealCost;
+      // Round up allDinerMealCosts to 2 decimal places
+      // allDinerMealCosts = Math.ceil(allDinerMealCosts * 100) / 100;
+      allDinerMealCosts.toFixed(2);
+
+      console.log("ALL DINER MEAL COSTS TOTAL IN DATABASE", allDinerMealCosts);
+      console.log("TOTAL MEAL COSTS", totalMealCost);
+
       await pool.query(
         `UPDATE additional_diners
           SET diner_meal_cost = $1
           WHERE event_id = $2 AND additional_diner_username = $3`,
-        [dinerMealCost.toFixed(2), eventId, diner.additional_diner_username]
+        [dinerMealCost.toFixed(2), eventId, diner.additionalDinerUsername]
       );
     }
     res.status(200).send("Diner meal costs updated successfully");
@@ -520,11 +549,3 @@ app.post(
     res.send({ imageKey: result.Key });
   }
 );
-
-//AWS - GET PROFILE IMAGES
-// app.get("/users/profileimages/:key", (req, res) => {
-//   const key = req.params.key;
-//   const readStream = getFileStream(key);
-
-//   readStream.pipe(res);
-// });

@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
 import Constants from "expo-constants";
 import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
 import LogInScreen from "./screens/LogInScreen";

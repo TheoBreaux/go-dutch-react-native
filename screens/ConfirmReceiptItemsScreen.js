@@ -96,7 +96,7 @@ const ConfirmReceiptItemsScreen = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);

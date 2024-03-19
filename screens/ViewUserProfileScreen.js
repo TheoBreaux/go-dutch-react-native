@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   bioContainer: {
     borderWidth: 2,
     width: "95%",
-    height: "20%",
+    height: "auto",
     borderColor: "#b3b0b0",
     padding: 5,
     borderRadius: 10,

@@ -12,19 +12,18 @@ import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { setUser, updateUserInfo } from "../store/store";
-import { useNavigation } from "@react-navigation/native";
 
 const UpdateProfileForm = ({
   user,
   updateProfileImage,
   setIsUpdatingProfile,
+  setShowUpdatePasswordAndPaymentModal,
 }) => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   useEffect(() => {
     setFormValues(initialValues);
@@ -78,7 +77,7 @@ const UpdateProfileForm = ({
     //reset Form
     actions.resetForm();
 
-    const newUser = {
+    const updatedUserInfo = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
@@ -90,15 +89,15 @@ const UpdateProfileForm = ({
       userId: user.userId,
     };
 
-    dispatch(updateUserInfo(newUser));
+    dispatch(updateUserInfo(updatedUserInfo));
 
     try {
       const response = await fetch(
-        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/updateprofile",
+        "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
+          body: JSON.stringify(updatedUserInfo),
         }
       );
 
@@ -283,7 +282,9 @@ const UpdateProfileForm = ({
               >
                 <SecondaryButton
                   width={370}
-                  onPress={() => navigation.goBack()}
+                  onPress={() => {
+                    setShowUpdatePasswordAndPaymentModal(true);
+                  }}
                 >
                   Return
                 </SecondaryButton>

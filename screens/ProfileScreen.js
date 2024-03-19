@@ -22,6 +22,7 @@ import AWS from "aws-sdk";
 import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
 import CustomModal from "../components/CustomModal";
+import UpdatePasswordAndPaymentsScreen from "./UpdatePasswordAndPaymentsScreen";
 
 const ProfileScreen = ({ route }) => {
   //for uploading image to backend
@@ -38,6 +39,10 @@ const ProfileScreen = ({ route }) => {
   const [
     showUpdatePasswordAndPaymentModal,
     setShowUpdatePasswordAndPaymentModal,
+  ] = useState(false);
+  const [
+    showUpdatePasswordAndPaymentUpdateForm,
+    setShowUpdatePasswordAndPaymentUpdateForm,
   ] = useState(false);
 
   const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
@@ -154,7 +159,7 @@ const ProfileScreen = ({ route }) => {
         });
 
         const response = await fetch(
-          "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/users/profileimages",
+          "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -185,7 +190,7 @@ const ProfileScreen = ({ route }) => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/profilephoto",
+        "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -215,8 +220,8 @@ const ProfileScreen = ({ route }) => {
           modalText="Need to update password or payment sources?"
           buttonWidth={100}
           onPress1={() => {
-            navigation.navigate("UpdatePasswordAndPaymentScreen");
             setShowUpdatePasswordAndPaymentModal(false);
+            setShowUpdatePasswordAndPaymentUpdateForm(true);
           }}
           //navigate back to user home page
           onPress2={() => navigation.navigate("Main", { screen: "Home" })}
@@ -224,12 +229,14 @@ const ProfileScreen = ({ route }) => {
           buttonText2="No"
         />
       )}
-      {isUpdatingProfile && (
+
+      {isUpdatingProfile && showUpdatePasswordAndPaymentModal ? (
         <View style={styles.spinnerContainer}>
           <Spinner children={"Updating profile..."} />
         </View>
-      )}
-      {!isUpdatingProfile && <Logo />}
+      ) : null}
+
+      <Logo />
 
       {!isUpdatingProfile && (
         <View style={styles.container}>
@@ -294,8 +301,9 @@ const ProfileScreen = ({ route }) => {
             />
           </View>
 
+          {isLoadingImage && <Spinner indicatorSize={200} />}
+
           <View style={styles.imageIconcontainer}>
-            {isLoadingImage && <Spinner indicatorSize={200} />}
             {!isLoadingImage && profileImageKey ? (
               <Image
                 source={{ uri: imageUri }}
@@ -316,6 +324,16 @@ const ProfileScreen = ({ route }) => {
         <UpdateProfileForm
           user={user}
           updateProfileImage={updateProfileImage}
+          setIsUpdatingProfile={setIsUpdatingProfile}
+          setShowUpdatePasswordAndPaymentModal={
+            setShowUpdatePasswordAndPaymentModal
+          }
+        />
+      )}
+
+      {showUpdatePasswordAndPaymentUpdateForm && (
+        <UpdatePasswordAndPaymentsScreen
+          user={user}
           setIsUpdatingProfile={setIsUpdatingProfile}
         />
       )}

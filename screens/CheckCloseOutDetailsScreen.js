@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",
-    // width: 30,
   },
   iconImage: {
     width: 250,
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
     color: Colors.goDutchRed,
   },
   flatListContainer: {
-    flexGrow: 1,
+    marginBottom: 10,
   },
   totalMealCostText: {
     fontFamily: "red-hat-bold",

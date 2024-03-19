@@ -20,6 +20,7 @@ import {
   updateDinerFinalMealCost,
   updateFinalDiningEventValues,
 } from "../store/store";
+import CustomModal from "../components/CustomModal";
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
@@ -151,7 +152,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/diningevent/values`,
+        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -167,7 +168,7 @@ const ConfirmFeeTotalsScreen = () => {
   const postDataFinalAdditionalDinerValues = async (sharedExpenses) => {
     const data = {
       eventId: eventId,
-      sharedExpenses: sharedExpenses,
+      sharedExpenses: Math.round(sharedExpenses * 100) / 100,
       dinersUpdated: dinersUpdated,
       birthdayDiners: birthdayDiners,
       tax: taxConfirmed,
@@ -180,7 +181,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/additionaldiners/values`,
+        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -239,6 +240,12 @@ const ConfirmFeeTotalsScreen = () => {
     parseFloat(taxConfirmed) +
     parseFloat(tipConfirmed) +
     parseFloat(sumAdditionalFees());
+
+  console.log("BIRTHDAY DINERS - CONFIRM FEE TOTALS SCREEN", birthdayDiners);
+  console.log("TOTAL MEAL COST", totalMealCost);
+  console.log("ADDITIONAL FEES", sumAdditionalFees());
+  console.log("TAX", taxConfirmed);
+  console.log("TIP", tipConfirmed);
 
   return (
     <>
@@ -376,41 +383,20 @@ const ConfirmFeeTotalsScreen = () => {
           )}
 
           {/* ask if diners will take care of birthdat diner's meals */}
+
           {birthdayDinersPresent && (
-            <Modal
+            <CustomModal
               animationType="slide"
               transparent={true}
               visible={showTreatBirthdayDinersModal}
-            >
-              <View style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                  <View style={styles.modalContent}>
-                    <>
-                      <Text style={styles.birthdayEmoji}>🥳</Text>
-
-                      <Text style={styles.modalText}>
-                        Taking care of birthday diner(s)?
-                      </Text>
-                      <View style={styles.buttonsContainer}>
-                        <PrimaryButton
-                          width={100}
-                          onPress={calculateWithBirthdayDiners}
-                        >
-                          Yes
-                        </PrimaryButton>
-
-                        <PrimaryButton
-                          width={100}
-                          onPress={calculateWithoutBirthdayDiners}
-                        >
-                          No
-                        </PrimaryButton>
-                      </View>
-                    </>
-                  </View>
-                </View>
-              </View>
-            </Modal>
+              modalText="Taking care of birthday diner(s)?"
+              buttonText1="Yes"
+              onPress1={calculateWithBirthdayDiners}
+              buttonText2="No"
+              onPress2={calculateWithoutBirthdayDiners}
+              buttonWidth={100}
+              source={require("../assets/party-face-emoji.png")}
+            />
           )}
 
           {serviceConfirmed != "0" && (
@@ -521,37 +507,6 @@ const styles = StyleSheet.create({
   },
   tipSuggestionsContainer: {
     flexDirection: "row",
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-  },
-  modalContainer: {
-    width: "90%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-  },
-  modalContent: {
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontFamily: "red-hat-bold",
-    marginBottom: 20,
-  },
-  modalImage: {
-    width: 300,
-    height: 300,
-  },
-  modalText: {
-    fontFamily: "red-hat-normal",
-    fontSize: 25,
-  },
-  birthdayEmoji: {
-    fontSize: 150,
   },
   inputsContainer: {
     width: "100%",

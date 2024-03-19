@@ -81,7 +81,7 @@ const FoodItemDropArea = () => {
     if (separatedDinnerItems.length === 0) {
       //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
       dinersUpdated.map((diner) => {
-        if (diner.birthday === true) {
+        if (diner.celebratingBirthday) {
           // assign birthday diners to array
           dispatch(setBirthdayDiners(diner));
         }

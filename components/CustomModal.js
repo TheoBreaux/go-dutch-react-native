@@ -29,11 +29,11 @@ const CustomModal = ({
             <Text style={styles.modalText}>{modalText}</Text>
 
             <View style={styles.buttonsContainer}>
-              <PrimaryButton width={buttonWidth} onPress={onPress1}>
+              <PrimaryButton width={100} height={50}  onPress={onPress1}>
                 {buttonText1}
               </PrimaryButton>
 
-              <PrimaryButton width={buttonWidth} onPress={onPress2}>
+              <PrimaryButton width={100} height={50} onPress={onPress2}>
                 {buttonText2}
               </PrimaryButton>
             </View>

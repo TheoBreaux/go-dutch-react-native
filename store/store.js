@@ -21,6 +21,10 @@ const userInfoSlice = createSlice({
         favoriteCuisine,
         birthday,
         location,
+        primaryPaymentSource,
+        primaryPaymentSourceUsername,
+        secondaryPaymentSource,
+        secondaryPaymentSourceUsername,
       } = action.payload;
 
       const updatedUser = {
@@ -33,6 +37,10 @@ const userInfoSlice = createSlice({
         favoriteCuisine,
         birthday,
         location,
+        primaryPaymentSource,
+        primaryPaymentSourceUsername,
+        secondaryPaymentSource,
+        secondaryPaymentSourceUsername,
       };
       state.user = updatedUser;
     },
@@ -86,7 +94,7 @@ const diningEventSlice = createSlice({
       state.event.eventId = action.payload;
     },
     setEventIdForPrimary: (state, action) => {
-      state.diners[0].event_id = action.payload;
+      state.diners[0].eventId = action.payload;
     },
     setReceiptValues: (state, action) => {
       state.receiptValues = action.payload;
@@ -174,11 +182,11 @@ const diningEventSlice = createSlice({
     },
     updateBirthdayStatus: (state, action) => {
       const dinerToUpdate = state.diners.find(
-        (diner) => diner.additional_diner_username === action.payload.username
+        (diner) => diner.additionalDinerUsername === action.payload.username
       );
 
       if (dinerToUpdate) {
-        dinerToUpdate.birthday = action.payload.birthday;
+        dinerToUpdate.celebratingBirthday = action.payload.celebratingBirthday;
       }
     },
   },

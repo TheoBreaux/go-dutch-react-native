@@ -81,7 +81,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         });
 
         const response = await fetch(
-          "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/diningevents/receiptimages",
+          "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/diningevents/receiptimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -99,21 +99,21 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     dispatch(setReceiptImagePath(imageKey));
 
     const diningEventInfo = {
-      event_id: diningEvent.eventId,
-      dining_date: getCurrentDate(),
-      restaurant_bar: restaurantBar,
+      eventId: diningEvent.eventId,
+      diningDate: getCurrentDate(),
+      restaurantBar: restaurantBar,
       title: diningEvent.eventTitle,
-      primary_diner_username: primaryDinerUsername,
+      primaryDinerUsername: primaryDinerUsername,
       tax: null,
       tip: null,
-      total_meal_cost: null,
-      receipt_image_key: imageKey,
+      totalMealCoat: null,
+      receiptImageKey: imageKey,
       subtotal: null,
     };
 
     try {
       const response = await fetch(
-        "https://5a08-2603-8000-c0f0-a570-71c6-1bf7-216d-37ac.ngrok-free.app/diningevents",
+        "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {

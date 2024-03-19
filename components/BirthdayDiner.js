@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Switch } from "react-native";
 import Colors from "../constants/colors";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateBirthdayStatus } from "../store/store";
 
 const BirthdayDiner = ({ additionalDinerUsername }) => {
@@ -13,14 +13,14 @@ const BirthdayDiner = ({ additionalDinerUsername }) => {
     setChecked((previousState) => !previousState);
 
     const username = additionalDinerUsername;
-    const birthday = !isChecked;
+    const celebratingBirthday = !isChecked;
 
-    dispatch(updateBirthdayStatus({ username, birthday }));
+    dispatch(updateBirthdayStatus({ username, celebratingBirthday }));
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{additionalDinerUsername}</Text>
+      <Text style={styles.text}>@{additionalDinerUsername}</Text>
 
       <View style={styles.switch}>
         <Text>{isChecked ? "Yes" : "No"}</Text>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.goDutchRed,
     borderWidth: 1,
     marginTop: 5,
-    width: 300,
+    width: "90%",
   },
   text: {
     color: Colors.goDutchBlue,
