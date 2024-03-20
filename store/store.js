@@ -137,20 +137,16 @@ const diningEventSlice = createSlice({
       const profileImageKey = action.payload;
       state.diners[0].profile_image_key = profileImageKey;
     },
-
-
-
     updateBirthdayDinerFinalMealCost: (state, action) => {
-      console.log("STORE ACTION - updateBirthdayDinerFinalMealCost", action);
-    
       const updatedDinerInfo = action.payload.dinerMealCosts;
-    
+
       const updatedArray = state.diners.map((diner) => {
         const updatedDiner = updatedDinerInfo.find(
           (updatedDiner) =>
-            updatedDiner.additionalDinerUsername === diner.additionalDinerUsername
+            updatedDiner.additionalDinerUsername ===
+            diner.additionalDinerUsername
         );
-    
+
         if (updatedDiner) {
           return {
             ...diner,
@@ -159,19 +155,15 @@ const diningEventSlice = createSlice({
         }
         return diner;
       });
-    
+
       console.log("STORE", updatedArray);
-      
+
       // Ensure to return the updated state object
       return {
         ...state,
         diners: updatedArray,
       };
     },
-
-
-
-
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
       // find the index of the item that has been dragged and dropped
