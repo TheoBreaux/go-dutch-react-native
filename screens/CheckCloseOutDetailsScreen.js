@@ -27,10 +27,24 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const eventLocation =
     diningEvent.event.selectedRestaurant ||
     diningEvent.event.enteredSelectedRestaurant;
-  const primaryDiner = diningEvent.diners[0].additionalDinerUsername;
+  const eventTitle = useSelector((state) => state.diningEvent.event.eventTitle);
   const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
+
+
+
+
+
+
   const receiptImageKey = diningEvent.event.receipt_image_key;
+
+
+
+
+
+
+
+  
   //convert string date to month, day, year format
   const parts = eventDate.split("-");
   const month = parseInt(parts[0], 10);
@@ -40,7 +54,8 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
 
   const navigation = useNavigation();
-  const { finalBirthdayDinerNumbers } = route.params;
+
+  // const { finalBirthdayDinerNumbers } = route.params;
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -89,9 +104,6 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
       </TouchableOpacity>
     </View>
   );
-
-  console.log("DINERS IN CHECKOUT", diners);
-  console.log("FINAL BDAY DINER MEAL NUMBERS IN CHECK CLOSEOUT", finalBirthdayDinerNumbers);
 
   return (
     <>
@@ -150,6 +162,7 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
         )}
 
         <View>
+          <Text style={styles.text}>{eventTitle}</Text>
           <Text style={styles.text}>{formattedEventDate}</Text>
         </View>
 

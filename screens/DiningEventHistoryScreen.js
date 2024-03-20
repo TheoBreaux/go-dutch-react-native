@@ -20,7 +20,7 @@ const DiningEventHistoryScreen = () => {
         `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
-      setDiningEvents(data);
+      setDiningEvents(data.eventData);
     } catch (error) {
       throw error;
     }
@@ -31,16 +31,16 @@ const DiningEventHistoryScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <DiningEventHistoryCard key={item.event_id} item={item} />
+    <DiningEventHistoryCard key={item.eventId} item={item} />
   );
 
   const handleNavigation = () => {
     navigation.navigate("Restaurants");
   };
 
-  //sort by date
+  // sort by date
   const sortedDiningEvents = diningEvents?.sort(
-    (a, b) => new Date(b.dining_date) - new Date(a.dining_date)
+    (a, b) => new Date(b.diningDate) - new Date(a.diningDate)
   );
 
   return (

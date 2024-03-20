@@ -4,7 +4,6 @@ import {
   View,
   Image,
   FlatList,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import Logo from "../components/Logo";
@@ -15,15 +14,16 @@ import Colors from "../constants/colors";
 import PrimaryButton from "../components/PrimaryButton";
 
 const DiningEventDetailsScreen = ({ route }) => {
-  const [diners, setDiners] = useState([]);
+  const [dinerData, setDinerData] = useState([]);
+  const [eventData, setEventData] = useState({});
   const [viewReceipt, setViewReceipt] = useState(false);
   const navigation = useNavigation();
 
   const { item } = route.params;
   const { imageUri } = route.params;
 
-  const dateObj = new Date(item.dining_date);
-  const eventId = item.event_id;
+  const dateObj = new Date(item.diningDate);
+  const eventId = item.eventId;
 
   // Extract the year, month, and day from the Date object
   const year = dateObj.getFullYear();
@@ -37,13 +37,21 @@ const DiningEventDetailsScreen = ({ route }) => {
   const renderItem = ({ item }) => (
     //onpress needs to naviaget to ViewUserProfile
     <TouchableOpacity
-      style={styles.row}
+      style={styles.dinerCard}
       onPress={() =>
         navigation.navigate("ViewUserProfileScreen", { selectedUser: item })
       }
     >
-      <Text>@{item.additionalDinerUsername}</Text>
-      <Text>${item.dinerMealCost}</Text>
+      <Text style={styles.dinerCardInfo}>
+        @{item.additionalDinerUsername}
+        {item.primaryDiner === item.additionalDinerUsername && (
+          <Text style={{ color: Colors.goDutchRed }}> PRIMARY DINER</Text>
+        )}
+      </Text>
+
+      <Text style={styles.dinerCardInfo}>
+        ${item.dinerMealCost} {item.celebratingBirthday ? "🎂" : ""}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -58,52 +66,36 @@ const DiningEventDetailsScreen = ({ route }) => {
         `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
-      setDiners(data);
+      setDinerData(data.dinerData);
+      setEventData(data.eventData);
     } catch (error) {
       throw error;
     }
   };
 
+  console.log("DINING EVENT DETAIL SCREEN ", dinerData);
+  console.log("EVENT DATA", eventData);
+
   return (
     <>
       <Logo />
-      <View style={styles.cardContainer}>
-        <View style={styles.contentContainer}>
-          {/* <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: 360,
-                marginBottom: 10,
-              }}
-            >
-              <Text style={styles.eventTitle}>{item.title}</Text>
-              <View style={styles.button}>
-                <Button
-                  title="X"
-                  color={Colors.goDutchRed}
-                  onPress={handleReturnToHistory}
-                />
-              </View>
-            </View>
-          </View> */}
 
-          {!viewReceipt && (
-            <Image
-              style={styles.iconImage}
-              source={require("../assets/go-dutch-split-button.png")}
-            />
-          )}
+      <View style={styles.contentContainer}>
+        {!viewReceipt && (
+          <Image
+            style={styles.iconImage}
+            source={require("../assets/go-dutch-split-button.png")}
+          />
+        )}
 
-          {!viewReceipt && (
-            <PrimaryButton onPress={() => setViewReceipt(!viewReceipt)}>
-              View Receipt
-            </PrimaryButton>
-          )}
+        {!viewReceipt && (
+          <PrimaryButton onPress={() => setViewReceipt(!viewReceipt)}>
+            View Receipt
+          </PrimaryButton>
+        )}
 
-          {viewReceipt && (
+        {viewReceipt && (
+          <View>
             <View
               style={{
                 borderWidth: 5,
@@ -112,53 +104,48 @@ const DiningEventDetailsScreen = ({ route }) => {
             >
               <Image source={{ uri: imageUri }} style={styles.image} />
             </View>
-          )}
 
-          <View>
-            <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
-            <Text style={[styles.text, styles.bold]}>
-              {item.restaurant_bar}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={styles.bold}>Primary Diner: </Text>@
-              {item.primary_diner_username}
-            </Text>
+            {viewReceipt && (
+              <View style={{ zIndex: 10 }}>
+                <PrimaryButton height={50} onPress={handleReturnToHistory}>
+                  Return to History
+                </PrimaryButton>
+              </View>
+            )}
           </View>
+        )}
 
-          <View style={styles.additionalDinerContainer}>
-            <Text style={styles.additionalDinerText}>Diners</Text>
-          </View>
-
-          <FlatList
-            data={diners}
-            renderItem={renderItem}
-            contentContainerStyle={styles.flatListContainer}
-          />
-          <Text style={styles.totalMealCostText}>
-            Total Meal Cost: ${item.total_meal_cost}
-          </Text>
+        <View >
+          <Text style={styles.text}>{eventData.eventTitle}</Text>
+          <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
         </View>
+
+        <View style={styles.additionalDinerContainer}>
+          <Text
+            style={[styles.text, styles.bold, { color: Colors.goDutchBlue }]}
+          >
+            {eventData.eventLocation}
+          </Text>
+          <Text style={styles.additionalDinerText}>Diners</Text>
+        </View>
+
+        <FlatList
+          data={dinerData}
+          renderItem={renderItem}
+          contentContainerStyle={styles.flatListContainer}
+        />
+        <Text style={styles.totalMealCostText}>
+          Total Meal Cost: ${eventData.totalMealCost}
+        </Text>
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    // flex: 1,
-    // padding: 16,
-    // marginTop: -5,
-    // margin: 5,
-    // borderRadius: 8,
-    // shadowColor: Colors.goDutchBlue,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 3,
-    // elevation: 2,
-    // alignItems: "center",
-  },
   contentContainer: {
     alignItems: "center",
+    flex: 1,
   },
   eventTitle: {
     textAlign: "center",
@@ -191,7 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "red-hat-normal",
-    marginBottom: 5,
   },
   bold: {
     fontFamily: "red-hat-bold",
@@ -201,7 +187,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5,
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    flexDirection: "row",
   },
   additionalDinerText: {
     fontSize: 20,
@@ -209,25 +197,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.goDutchRed,
   },
-  flatListContainer: {
-    flexGrow: 1,
-  },
+  // flatListContainer: {
+  //   marginBottom: 1,
+  // },
   totalMealCostText: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
   },
-  row: {
+  dinerCard: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: 360,
     padding: 8,
     marginBottom: 3,
     backgroundColor: "#fff",
-    shadowColor: Colors.goDutchBlue,
+    shadowColor: Colors.goDutchRed,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
+  },
+
+  dinerCardInfo: {
+    fontFamily: "red-hat-bold",
+    fontSize: 16,
+  },
+  marginText: {
+    alignSelf: "flex-end",
+    paddingRight: 25,
+    paddingBottom: 5,
+  },
+  marginOfError: {
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchRed,
   },
 });
 

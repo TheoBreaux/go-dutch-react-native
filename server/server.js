@@ -352,7 +352,16 @@ app.get("/diningevents/:username", async (req, res) => {
       WHERE additional_diners.additional_diner_username = $1;`,
       [username]
     );
-    res.json(diningEvents.rows);
+
+    const eventData = diningEvents.rows.map((event) => ({
+      diningDate: event.dining_date,
+      eventId: event.event_id,
+      primaryDinerUsername: event.primary_diner_username,
+      receiptImageKey: event.receipt_image_key,
+      eventLocation: event.restaurant_bar,
+      eventTitle: event.title,
+    }));
+    res.json({ eventData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -365,13 +374,40 @@ app.get("/additionaldiners/:eventId", async (req, res) => {
 
   try {
     const diningEvents = await pool.query(
-      `SELECT additional_diners.*, users.*
+      `SELECT additional_diners.*, users.*, dining_events.*
       FROM additional_diners
       JOIN users ON additional_diners.additional_diner_username = users.username
+      JOIN dining_events ON additional_diners.event_id = dining_events.event_id
       WHERE additional_diners.event_id = $1`,
       [eventId]
     );
-    res.json(diningEvents.rows);
+    console.log("DINING EVENTS", diningEvents);
+
+    const dinerData = diningEvents.rows.map((event) => ({
+      additionalDinerUsername: event.additional_diner_username,
+      celebratingBirthday: event.celebrating_birthday,
+      dinerMealCost: event.diner_meal_cost,
+      bio: event.bio,
+      location: event.location,
+      birthday: event.birthday,
+      favoriteCuisine: event.favorite_cuisine,
+      dateJoined: event.date_joined,
+      firstName: event.first_name,
+      lastName: event.last_name,
+      profileImageKey: event.profile_image_key,
+      primaryDiner: event.primary_diner_username,
+    }));
+
+    const eventData = {
+      eventLocation: diningEvents.rows[0].restaurant_bar,
+      eventTitle: diningEvents.rows[0].title,
+      totalMealCost: diningEvents.rows[0].total_meal_cost,
+      tax: diningEvents.rows[0].tax,
+      tip: diningEvents.rows[0].tip,
+      subtotal: diningEvents.rows[0].subtotal,
+    };
+
+    res.json({ dinerData, eventData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

@@ -135,7 +135,8 @@ const diningEventSlice = createSlice({
     },
     updateDinerProfileImageKey: (state, action) => {
       const profileImageKey = action.payload;
-      state.diners[0].profile_image_key = profileImageKey;
+      //LOOG AT THIS IF HTERE ARE ISSUES
+      state.diners[0].profileImageKey = profileImageKey;
     },
     updateBirthdayDinerFinalMealCost: (state, action) => {
       const updatedDinerInfo = action.payload.dinerMealCosts;
