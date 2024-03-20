@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import LottieView from "lottie-react-native";
 import PrimaryButton from "../components/PrimaryButton";
 
-const CheckCloseOutDetailsScreen = () => {
+const CheckCloseOutDetailsScreen = ({ route }) => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const [viewReceipt, setViewReceipt] = useState(false);
@@ -40,6 +40,7 @@ const CheckCloseOutDetailsScreen = () => {
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
 
   const navigation = useNavigation();
+  const { finalBirthdayDinerNumbers } = route.params;
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -76,11 +77,21 @@ const CheckCloseOutDetailsScreen = () => {
           navigation.navigate("ViewUserProfileScreen", { selectedUser: item });
         }}
       >
-        <Text>@{item.additionalDinerUsername}</Text>
-        <Text>${item.diner_meal_cost}</Text>
+        <Text style={styles.dinerCardInfo}>
+          @{item.additionalDinerUsername}
+          {item.primaryDiner && (
+            <Text style={{ color: Colors.goDutchRed }}>PRIMARY DINER</Text>
+          )}
+        </Text>
+        <Text style={styles.dinerCardInfo}>
+          ${item.dinerMealCost} {item.celebratingBirthday ? "🎂" : ""}
+        </Text>
       </TouchableOpacity>
     </View>
   );
+
+  console.log("DINERS IN CHECKOUT", diners);
+  console.log("FINAL BDAY DINER MEAL NUMBERS IN CHECK CLOSEOUT", finalBirthdayDinerNumbers);
 
   return (
     <>
@@ -140,21 +151,27 @@ const CheckCloseOutDetailsScreen = () => {
 
         <View>
           <Text style={styles.text}>{formattedEventDate}</Text>
-          <Text style={[styles.text, styles.bold]}>{eventLocation}</Text>
-          <Text style={styles.text}>
-            <Text style={styles.bold}>Primary Diner: </Text>@{primaryDiner}
-          </Text>
         </View>
 
         <View style={styles.additionalDinerContainer}>
+          <Text
+            style={[styles.text, styles.bold, { color: Colors.goDutchBlue }]}
+          >
+            {eventLocation}
+          </Text>
           <Text style={styles.additionalDinerText}>Diners</Text>
         </View>
+
+        {/* <View style={styles.marginText}>
+          <Text style={styles.marginOfError}>Diner Meal Cost (+/- $0.05)</Text>
+        </View> */}
 
         <FlatList
           data={diners}
           renderItem={renderItem}
           contentContainerStyle={styles.flatListContainer}
         />
+
         <Text style={styles.totalMealCostText}>
           Total Meal Cost: ${totalMealCost}
         </Text>
@@ -166,6 +183,7 @@ const CheckCloseOutDetailsScreen = () => {
 const styles = StyleSheet.create({
   contentContainer: {
     alignItems: "center",
+    flex: 1,
   },
   eventTitle: {
     textAlign: "center",
@@ -207,7 +225,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5,
+    marginTop: 5,
     marginBottom: 5,
+    flexDirection: "row",
   },
   additionalDinerText: {
     fontSize: 20,
@@ -215,12 +235,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.goDutchRed,
   },
-  flatListContainer: {
-    marginBottom: 10,
-  },
+  // flatListContainer: {
+  //   marginBottom: 1,
+  // },
   totalMealCostText: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
+  },
+  marginText: {
+    alignSelf: "flex-end",
+    paddingRight: 25,
+    paddingBottom: 5,
+  },
+  marginOfError: {
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchRed,
   },
   dinerCard: {
     flexDirection: "row",
@@ -234,6 +263,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
+  },
+  dinerCardInfo: {
+    fontFamily: "red-hat-bold",
+    fontSize: 16,
   },
   confettiBurst: {
     position: "absolute",

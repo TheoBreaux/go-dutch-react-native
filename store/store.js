@@ -137,19 +137,41 @@ const diningEventSlice = createSlice({
       const profileImageKey = action.payload;
       state.diners[0].profile_image_key = profileImageKey;
     },
-    updateDinerFinalMealCost: (state, action) => {
-      const sharedExpenses = action.payload;
-      const updatedDiners = state.diners.map((diner) => {
-        const total =
-          diner.items.reduce((acc, item) => acc + item.price, 0) +
-          sharedExpenses;
-        return { ...diner, diner_meal_cost: total.toFixed(2) };
+
+
+
+    updateBirthdayDinerFinalMealCost: (state, action) => {
+      console.log("STORE ACTION - updateBirthdayDinerFinalMealCost", action);
+    
+      const updatedDinerInfo = action.payload.dinerMealCosts;
+    
+      const updatedArray = state.diners.map((diner) => {
+        const updatedDiner = updatedDinerInfo.find(
+          (updatedDiner) =>
+            updatedDiner.additionalDinerUsername === diner.additionalDinerUsername
+        );
+    
+        if (updatedDiner) {
+          return {
+            ...diner,
+            dinerMealCost: updatedDiner.dinerMealCost,
+          };
+        }
+        return diner;
       });
+    
+      console.log("STORE", updatedArray);
+      
+      // Ensure to return the updated state object
       return {
         ...state,
-        diners: updatedDiners,
+        diners: updatedArray,
       };
     },
+
+
+
+
     assignAndRemoveFoodItem: (state, action) => {
       const { item, dinerId } = action.payload;
       // find the index of the item that has been dragged and dropped
@@ -221,7 +243,7 @@ export const {
   updateSubtotal,
   updateBirthdayDinerBill,
   updateFinalDiningEventValues,
-  updateDinerFinalMealCost,
+  updateBirthdayDinerFinalMealCost,
   updateDinerProfileImageKey,
 } = diningEventSlice.actions;
 

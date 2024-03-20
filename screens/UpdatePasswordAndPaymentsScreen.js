@@ -10,11 +10,7 @@ import { useDispatch } from "react-redux";
 import { setUser, updateUserInfo } from "../store/store";
 import CustomProfileIcon from "../components/CustomProfileIcon";
 
-const UpdatePasswordAndPaymentsScreen = ({
-  user,
-  setIsUpdatingProfile,
-  
-}) => {
+const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
@@ -92,7 +88,7 @@ const UpdatePasswordAndPaymentsScreen = ({
 
     try {
       const response = await fetch(
-        "https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/users",
+        "https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/users",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

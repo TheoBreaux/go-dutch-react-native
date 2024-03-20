@@ -28,7 +28,7 @@ const Diner = ({ additionalDinerUsername, diner, profileImageKey }) => {
         />
       )}
 
-      <Text style={styles.text}>{additionalDinerUsername}</Text>
+      <Text style={styles.text}>@{additionalDinerUsername}</Text>
       <PrimaryButton width={40} onPress={() => dispatch(removeDiner(diner))}>
         X
       </PrimaryButton>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.goDutchBlue,
     fontSize: 18,
-    fontFamily: "red-hat-normal",
+    fontFamily: "red-hat-bold",
     padding: 5,
   },
 });

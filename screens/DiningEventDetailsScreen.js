@@ -43,7 +43,7 @@ const DiningEventDetailsScreen = ({ route }) => {
       }
     >
       <Text>@{item.additionalDinerUsername}</Text>
-      <Text>${item.diner_meal_cost}</Text>
+      <Text>${item.dinerMealCost}</Text>
     </TouchableOpacity>
   );
 
@@ -55,7 +55,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/${eventId}`
+        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDiners(data);

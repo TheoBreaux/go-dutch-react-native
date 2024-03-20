@@ -427,19 +427,14 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const {
-    sharedExpenses,
-    dinersUpdated,
-    birthdayDiners,
-    eventId,
-    totalMealCost,
-  } = req.body;
+  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
 
   try {
     // Initialize allDinerMealCosts to accumulate the total meal cost
     let allDinerMealCosts = 0;
     //sum birthday diner(s) meal costs
     let birthdayDinerMealCost = 0;
+    let dinerMealCosts = []; // Array to store diner meal costs
 
     //calculate birthday diners meal costs
     for (const diner of birthdayDiners) {
@@ -467,23 +462,15 @@ app.post("/additionaldiners/values", async (req, res) => {
         dinerMealCost += sharedExpenses;
         //if there are birthday diners add their shared expense to other diners total meal cost
         dinerMealCost += sharedBirthdayDinerMealCosts;
-
-        console.log("IN THE LOOOP - SHARED EXPESNES", sharedExpenses);
-        console.log(
-          "IN THE LOOOP - SHARED BIRTHDAY DINER EXPESNES",
-          sharedBirthdayDinerMealCosts
-        );
-        console.log("IN THE LOOOP - ALL DINER MEAL COSTS", allDinerMealCosts);
       }
 
       // Add the current diner's meal cost to the total
       allDinerMealCosts += dinerMealCost;
-      // Round up allDinerMealCosts to 2 decimal places
-      // allDinerMealCosts = Math.ceil(allDinerMealCosts * 100) / 100;
-      allDinerMealCosts.toFixed(2);
 
-      console.log("ALL DINER MEAL COSTS TOTAL IN DATABASE", allDinerMealCosts);
-      console.log("TOTAL MEAL COSTS", totalMealCost);
+      dinerMealCosts.push({
+        additionalDinerUsername: diner.additionalDinerUsername,
+        dinerMealCost: dinerMealCost.toFixed(2),
+      });
 
       await pool.query(
         `UPDATE additional_diners
@@ -492,7 +479,8 @@ app.post("/additionaldiners/values", async (req, res) => {
         [dinerMealCost.toFixed(2), eventId, diner.additionalDinerUsername]
       );
     }
-    res.status(200).send("Diner meal costs updated successfully");
+
+    res.status(200).json({ dinerMealCosts });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating diner meal costs");

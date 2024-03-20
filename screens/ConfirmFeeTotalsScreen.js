@@ -5,7 +5,6 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/colors";
@@ -17,7 +16,7 @@ import { useEffect, useState } from "react";
 import FeeTextInput from "../components/FeeTextInput";
 import AddPropertyToListModal from "../components/AddPropertyToListModal";
 import {
-  updateDinerFinalMealCost,
+  updateBirthdayDinerFinalMealCost,
   updateFinalDiningEventValues,
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
@@ -37,7 +36,9 @@ const ConfirmFeeTotalsScreen = () => {
     []
   );
   const [feeValue, setFeeValue] = useState("");
-
+  const [finalBirthdayDinerNumbers, setFinalBirthdayDinerNumbers] = useState(
+    []
+  );
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
   const mealSubtotal = useSelector(
@@ -152,7 +153,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/diningevent/values`,
+        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -177,24 +178,36 @@ const ConfirmFeeTotalsScreen = () => {
       totalMealCost: parseFloat(totalMealCost),
     };
 
-    dispatch(updateDinerFinalMealCost(sharedExpenses));
+    console.log("DATA - ADDITIONAL DINERS VALUES", data);
+    
 
     try {
       const response = await fetch(
-        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/values`,
+        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         }
       );
-      // const result = await response.json();
+      const result = await response.json();
+      console.log("RESULT", result)
+      setFinalBirthdayDinerNumbers(result);
+      dispatch(updateBirthdayDinerFinalMealCost(result));
     } catch (error) {
       console.error("Network error:", error);
     }
   };
 
+
+
+
+
+
+
+
   const calculateWithBirthdayDiners = () => {
+    console.log("CALCULATE WITH BDAY");
     //calculate fees taking care of birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -207,10 +220,13 @@ const ConfirmFeeTotalsScreen = () => {
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen");
+    navigation.navigate("CheckCloseOutDetailsScreen", {
+      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
+    });
   };
 
   const calculateWithoutBirthdayDiners = () => {
+    console.log("CALCULATE WITHOUT BDAY");
     //calculate fees not taking care of or no birthday diners
     const sharedExpenses =
       (parseFloat(taxConfirmed) +
@@ -223,7 +239,9 @@ const ConfirmFeeTotalsScreen = () => {
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen");
+    navigation.navigate("CheckCloseOutDetailsScreen", {
+      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
+    });
   };
 
   const sumAdditionalFees = () => {
@@ -241,11 +259,10 @@ const ConfirmFeeTotalsScreen = () => {
     parseFloat(tipConfirmed) +
     parseFloat(sumAdditionalFees());
 
-  console.log("BIRTHDAY DINERS - CONFIRM FEE TOTALS SCREEN", birthdayDiners);
-  console.log("TOTAL MEAL COST", totalMealCost);
-  console.log("ADDITIONAL FEES", sumAdditionalFees());
-  console.log("TAX", taxConfirmed);
-  console.log("TIP", tipConfirmed);
+  console.log(
+    "FINAL BIRTHDAY DINER NUMBERS IN CONFIRM FEE TOTALS",
+    finalBirthdayDinerNumbers
+  );
 
   return (
     <>

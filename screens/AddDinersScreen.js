@@ -13,7 +13,7 @@ import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryDiner from "../components/PrimaryDiner";
 import PrimaryButton from "../components/PrimaryButton";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Diner from "../components/Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
@@ -47,7 +47,7 @@ const AddDinersScreen = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/users/${username}`
+        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -62,7 +62,7 @@ const AddDinersScreen = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -130,6 +130,14 @@ const AddDinersScreen = () => {
           profileImageKey: profileImageKey,
         })
       );
+
+      // Remove added diner from suggestions
+      // const updatedSuggestions = suggestions.filter(
+      //   (suggestion) => suggestion.username !== inputValue
+      // );
+
+      // setSuggestions(updatedSuggestions);
+
       setInputValue("");
       setShowDiners(true);
       setShowAllDinersAddedModal(true);
@@ -183,7 +191,7 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://5a44-2603-8000-c0f0-a570-7994-d506-7046-a088.ngrok-free.app/additionaldiners`,
+        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -195,6 +203,19 @@ const AddDinersScreen = () => {
       console.error("Network error:", error);
     }
   };
+
+  const renderSuggestionsItem = useMemo(() => {
+    return ({ item, index }) => (
+      <ProfileIcon
+        key={index}
+        userFullName={`${item.firstName} ${item.lastName}`}
+        username={item.username}
+        onPress={handleSelectUsername}
+        profileImageKey={item.profileImageKey}
+        item={item}
+      />
+    );
+  }, [handleSelectUsername]);
 
   return (
     <View style={styles.container}>
@@ -355,21 +376,14 @@ const AddDinersScreen = () => {
         <FlatList
           style={styles.showSuggestionsContainer}
           data={suggestions}
-          renderItem={({ item, index }) => (
-            <ProfileIcon
-              key={index}
-              userFullName={item.firstName + " " + item.lastName}
-              username={item.username}
-              onPress={handleSelectUsername}
-              profileImageKey={item.profileImageKey}
-              item={item}
-            />
-          )}
+          renderItem={renderSuggestionsItem}
         />
       )}
     </View>
   );
 };
+
+//
 
 const styles = StyleSheet.create({
   container: {
