@@ -117,7 +117,8 @@ const diningEventSlice = createSlice({
       state.event.receiptImageKey = action.payload;
     },
     updateSubtotal: (state, action) => {
-      state.event.subtotal = action.payload;
+      const subtotal = action.payload;
+      state.event.subtotal = subtotal;
     },
     returnRemovedDinerItem: (state, action) => {
       state.allReceiptItemsCopy.push(action.payload);

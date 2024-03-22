@@ -381,7 +381,6 @@ app.get("/additionaldiners/:eventId", async (req, res) => {
       WHERE additional_diners.event_id = $1`,
       [eventId]
     );
-    console.log("DINING EVENTS", diningEvents);
 
     const dinerData = diningEvents.rows.map((event) => ({
       additionalDinerUsername: event.additional_diner_username,
@@ -464,6 +463,7 @@ app.post("/diningevent/values", async (req, res) => {
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
   const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
+  console.log("SERVER - SHAERED", sharedExpenses);
 
   try {
     // Initialize allDinerMealCosts to accumulate the total meal cost

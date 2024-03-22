@@ -45,7 +45,7 @@ const ConfirmFeeTotalsScreen = () => {
   );
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
-  const sharedDinnerItems = useSelector((state) =>
+  const evenlySplitItemsTotal = useSelector((state) =>
     state.diningEvent.evenlySplitItems
       .reduce((total, item) => total + item.price, 0)
       .toFixed(2)
@@ -115,7 +115,7 @@ const ConfirmFeeTotalsScreen = () => {
       (parseFloat(taxConfirmed) +
         parseFloat(tipConfirmed) +
         parseFloat(sumAdditionalFees())) /
-      dinersUpdated.length;
+      (dinersUpdated.length - 1);
     if (birthdayDinersPresent) {
       setShowTreatBirthdayDinersModal(true);
     } else {
@@ -147,7 +147,7 @@ const ConfirmFeeTotalsScreen = () => {
     setServiceConfirmed(service.toString());
     setGratuityConfirmed(gratuity.toString());
     setEntertainmentConfirmed(entertainment.toString());
-    setSharedDinnerItemsConfirmed(sharedDinnerItems.toString());
+    setSharedDinnerItemsConfirmed(evenlySplitItemsTotal.toString());
   }, []);
 
   const postDataFinalDiningEventValues = async () => {
@@ -178,9 +178,15 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const postDataFinalAdditionalDinerValues = async (sharedExpenses) => {
+    const evenlySplitTotal = parseFloat(
+      evenlySplitItemsTotal / (dinersUpdated.length - 1)
+    );
+    const totalSharedExpenses =
+      evenlySplitTotal + Math.round(sharedExpenses * 100) / 100;
+
     const data = {
       eventId: eventId,
-      sharedExpenses: Math.round(sharedExpenses * 100) / 100,
+      sharedExpenses: totalSharedExpenses,
       dinersUpdated: dinersUpdated,
       birthdayDiners: birthdayDiners,
       tax: taxConfirmed,
@@ -199,6 +205,7 @@ const ConfirmFeeTotalsScreen = () => {
         }
       );
       const result = await response.json();
+      console.log("RESULT", result);
       setFinalBirthdayDinerNumbers(result);
       dispatch(updateBirthdayDinerFinalMealCost(result));
     } catch (error) {

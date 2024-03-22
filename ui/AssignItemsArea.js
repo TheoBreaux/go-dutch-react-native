@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   foodItemsListContainer: {
     padding: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   textContainer: {
     justifyContent: "center",

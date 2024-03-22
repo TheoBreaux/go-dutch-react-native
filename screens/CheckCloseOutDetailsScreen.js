@@ -23,7 +23,9 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const [viewReceipt, setViewReceipt] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const diningEvent = useSelector((state) => state.diningEvent);
-  const diners = diningEvent.diners;
+  const diners = diningEvent.diners.filter(
+    (diner) => diner.additionalDinerUsername !== "shareditems"
+  );
   const eventLocation =
     diningEvent.event.selectedRestaurant ||
     diningEvent.event.enteredSelectedRestaurant;

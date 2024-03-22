@@ -17,8 +17,8 @@ import {
   updateDinerItems,
   setCurrentDinerId,
   setBirthdayDiners,
-  updateSubtotal,
   addDiner,
+  updateSubtotal,
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
 
@@ -40,6 +40,12 @@ const FoodItemDropArea = () => {
   const evenlySplitItems = useSelector(
     (state) => state.diningEvent.evenlySplitItems
   );
+
+  const evenlySplitItemsTotal = evenlySplitItems.reduce(
+    (total, item) => total + item.price,
+    0
+  );
+
   let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();
@@ -152,6 +158,8 @@ const FoodItemDropArea = () => {
     setCurrentDinerIndex((prevIndex) => prevIndex - 1); // Move back to the previous diner
     setDinerReviewedItems([]); // Reset reviewed items
   };
+
+  console.log("EVENLY SPLIT ITEMS IN FIDA", evenlySplitItems);
 
   return (
     <>
@@ -290,7 +298,7 @@ const FoodItemDropArea = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    marginTop: 25,
+    // marginTop: 20,
     marginBottom: 20,
   },
   profilePic: {
