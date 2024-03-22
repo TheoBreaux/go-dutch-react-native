@@ -11,21 +11,19 @@ const AssignItemsArea = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
 
   const updatedDiners = useSelector((state) => state.diningEvent.diners);
-
   const separatedDinnerItems = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
   );
-
   const diners = useSelector((state) => state.diningEvent.diners);
   const finalDiner = diners[diners.length - 1].additionalDinerUsername;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (separatedDinnerItems.length === 0) {
       setAssigmentComplete(true);
     }
   }, [separatedDinnerItems]);
-
-  const dispatch = useDispatch();
 
   //dispatch updating the diners array with dinersUpdated
   useEffect(() => {
@@ -72,7 +70,6 @@ const AssignItemsArea = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flex: 1,
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reviewText: {
-    marginTop: 20,
+    marginTop: 10,
     letterSpacing: 5,
     fontFamily: "stamper",
     color: Colors.goDutchRed,

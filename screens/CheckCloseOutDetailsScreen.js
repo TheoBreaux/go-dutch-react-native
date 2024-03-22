@@ -30,21 +30,8 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const eventTitle = useSelector((state) => state.diningEvent.event.eventTitle);
   const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
+  const receiptImageKey = diningEvent.event.receiptImageKey;
 
-
-
-
-
-
-  const receiptImageKey = diningEvent.event.receipt_image_key;
-
-
-
-
-
-
-
-  
   //convert string date to month, day, year format
   const parts = eventDate.split("-");
   const month = parseInt(parts[0], 10);

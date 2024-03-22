@@ -299,7 +299,9 @@ const AddDinersScreen = () => {
       </Modal>
 
       <View>
-        <Text style={styles.eventTitle}>{diningEvent.eventTitle}</Text>
+        <Text style={styles.eventTitle}>
+          {diningEvent.eventTitle.toUpperCase()}
+        </Text>
         <Text style={styles.eventLocation}>
           {diningEvent.selectedRestaurant ||
             diningEvent.enteredSelectedRestaurant}
@@ -436,9 +438,9 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-normal",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
-    fontSize: 30,
+    fontSize: 25,
     marginTop: -10,
     marginBottom: 5,
   },

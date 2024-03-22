@@ -18,6 +18,7 @@ import {
   setCurrentDinerId,
   setBirthdayDiners,
   updateSubtotal,
+  addDiner,
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
 
@@ -34,7 +35,11 @@ const FoodItemDropArea = () => {
   const [notSure, setNotSure] = useState(false);
 
   const currDinerItems = dinersUpdated[currentDinerIndex]?.items || [];
+  const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const currentDiner = dinersUpdated[currentDinerIndex].additionalDinerUsername;
+  const evenlySplitItems = useSelector(
+    (state) => state.diningEvent.evenlySplitItems
+  );
   let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();
@@ -43,6 +48,29 @@ const FoodItemDropArea = () => {
   useEffect(() => {
     dispatch(setCurrentDinerId(dinersUpdated[0].id));
   }, []);
+
+  useEffect(() => {
+    //check if items are in the evenlySplitDiners array to creat a shared diner
+    if (
+      evenlySplitItems.length >= 1 &&
+      dinersUpdated.every(
+        (diner) => diner.additionalDinerUsername !== "shareditems"
+      )
+    ) {
+      dispatch(
+        addDiner({
+          eventId: eventId,
+          id: Date.now(),
+          additionalDinerUsername: "shareditems",
+          celebratingBirthday: false,
+          primaryDiner: false,
+          dinerMealCost: 0,
+          items: [],
+          profileImageKey: "default-profile-icon.jpg",
+        })
+      );
+    }
+  }, [dispatch, dinersUpdated, evenlySplitItems]);
 
   const handleAssignedItemsReview = () => {
     setDinerReviewedItems(currDinerItems);
@@ -79,8 +107,8 @@ const FoodItemDropArea = () => {
     }, 0);
 
     if (separatedDinnerItems.length === 0) {
-      //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true
-      dinersUpdated.map((diner) => {
+      //find out if it is a birthday for a diner, map over diners arrray and look for birthday property === true, this was.map
+      dinersUpdated.forEach((diner) => {
         if (diner.celebratingBirthday) {
           // assign birthday diners to array
           dispatch(setBirthdayDiners(diner));
@@ -244,7 +272,11 @@ const FoodItemDropArea = () => {
             )}
 
             {
-              <PrimaryButton width={140} height={50} onPress={handleAssignedItemsReview}>
+              <PrimaryButton
+                width={140}
+                height={50}
+                onPress={handleAssignedItemsReview}
+              >
                 Review
               </PrimaryButton>
             }

@@ -23,10 +23,14 @@ import CustomModal from "../components/CustomModal";
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
+  const [showSharedDinnerMealFees, setShowSharedDinnerMealFees] =
+    useState(false);
   const [newFeeName, setNewFeeName] = useState("");
   const [newFeePrice, setNewFeePrice] = useState("");
   const [taxConfirmed, setTaxConfirmed] = useState("");
   const [tipConfirmed, setTipConfirmed] = useState("");
+  const [sharedDinnerItemsConfirmed, setSharedDinnerItemsConfirmed] =
+    useState("");
   const [gratuityConfirmed, setGratuityConfirmed] = useState("");
   const [serviceConfirmed, setServiceConfirmed] = useState("");
   const [entertainmentConfirmed, setEntertainmentConfirmed] = useState("");
@@ -41,6 +45,12 @@ const ConfirmFeeTotalsScreen = () => {
   );
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
+  const sharedDinnerItems = useSelector((state) =>
+    state.diningEvent.evenlySplitItems
+      .reduce((total, item) => total + item.price, 0)
+      .toFixed(2)
+  );
+
   const mealSubtotal = useSelector(
     (state) => state.diningEvent.event.subtotal
   ).toFixed(2);
@@ -137,6 +147,7 @@ const ConfirmFeeTotalsScreen = () => {
     setServiceConfirmed(service.toString());
     setGratuityConfirmed(gratuity.toString());
     setEntertainmentConfirmed(entertainment.toString());
+    setSharedDinnerItemsConfirmed(sharedDinnerItems.toString());
   }, []);
 
   const postDataFinalDiningEventValues = async () => {
@@ -178,9 +189,6 @@ const ConfirmFeeTotalsScreen = () => {
       totalMealCost: parseFloat(totalMealCost),
     };
 
-    console.log("DATA - ADDITIONAL DINERS VALUES", data);
-    
-
     try {
       const response = await fetch(
         `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/values`,
@@ -191,20 +199,12 @@ const ConfirmFeeTotalsScreen = () => {
         }
       );
       const result = await response.json();
-      console.log("RESULT", result)
       setFinalBirthdayDinerNumbers(result);
       dispatch(updateBirthdayDinerFinalMealCost(result));
     } catch (error) {
       console.error("Network error:", error);
     }
   };
-
-
-
-
-
-
-
 
   const calculateWithBirthdayDiners = () => {
     console.log("CALCULATE WITH BDAY");
@@ -258,11 +258,6 @@ const ConfirmFeeTotalsScreen = () => {
     parseFloat(taxConfirmed) +
     parseFloat(tipConfirmed) +
     parseFloat(sumAdditionalFees());
-
-  console.log(
-    "FINAL BIRTHDAY DINER NUMBERS IN CONFIRM FEE TOTALS",
-    finalBirthdayDinerNumbers
-  );
 
   return (
     <>
@@ -358,6 +353,29 @@ const ConfirmFeeTotalsScreen = () => {
           </View>
 
           {/* render additional custom fees */}
+
+          {!showSharedDinnerMealFees && (
+            <View style={styles.feeContainer}>
+              <Text style={styles.text}>Shared Items</Text>
+              <TextInput
+                style={styles.textInput}
+                keyboardType="numeric"
+                placeholder="$0.00"
+                placeholderTextColor="gray"
+                value={sharedDinnerItemsConfirmed}
+                onChangeText={(text) => setSharedDinnerItemsConfirmed(text)}
+              />
+              <PrimaryButton width={40} height={55}>
+                <Ionicons
+                  name="close"
+                  size={20}
+                  color="white"
+                  onPress={() => setSharedDinnerItemsConfirmed("")}
+                />
+              </PrimaryButton>
+            </View>
+          )}
+
           {!showAddFeesModal &&
             additionalCustomFeesAdded.map((fee, index) => (
               <FeeTextInput

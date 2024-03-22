@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: "flex-start",
     width: "100%",
-    elevation: 5,
+    elevation: 1,
     backgroundColor: "white",
     marginBottom: 5,
   },

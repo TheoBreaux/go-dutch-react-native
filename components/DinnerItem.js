@@ -5,15 +5,18 @@ import {
   Animated,
   Image,
   View,
+  Switch,
 } from "react-native";
 import Colors from "../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { assignAndRemoveFoodItem } from "../store/store";
+import { addToEvenlySplitItems, assignAndRemoveFoodItem } from "../store/store";
 import { Easing } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 
-const DinnerItem = ({ item, updatedDiners }) => {
+const DinnerItem = ({ item }) => {
   const [showDinnerItem, setShowDinnerItem] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const pan = useRef(new Animated.ValueXY()).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
@@ -22,6 +25,11 @@ const DinnerItem = ({ item, updatedDiners }) => {
   const dinerId = useSelector((state) => state.diningEvent.currentDinerId);
 
   const dispatch = useDispatch();
+
+  const evenlySplitItemsToggle = () => {
+    dispatch(addToEvenlySplitItems({ item }));
+    setIsChecked((previousState) => !previousState);
+  };
 
   let val = { x: 0, y: 0 };
   pan.addListener((value) => (val = value));
@@ -109,6 +117,9 @@ const DinnerItem = ({ item, updatedDiners }) => {
 
   const itemBackgroundColor = isDragging ? "white" : Colors.goDutchRed;
   const itemTextColor = isDragging ? Colors.goDutchRed : "white";
+  const strikeThroughText = {
+    textDecorationLine: isChecked ? "line-through" : "none",
+  };
 
   return (
     <>
@@ -129,8 +140,49 @@ const DinnerItem = ({ item, updatedDiners }) => {
           ]}
           {...panResponder.panHandlers}
         >
-          <Text style={[styles.foodInfo, { color: itemTextColor }]}>{item.name}</Text>
-          <Text style={[styles.foodInfo, { color: itemTextColor }]}>${item.price.toFixed(2)}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={[styles.splitEvenlyText, { color: itemTextColor }]}>
+              Share
+            </Text>
+
+            <View style={styles.switch}>
+              <Text>
+                {isChecked ? (
+                  <Ionicons name="checkmark-sharp" size={25} color="white" />
+                ) : (
+                  ""
+                )}
+              </Text>
+
+              <Switch
+                trackColor={{ false: "#767577", true: Colors.goDutchBlue }}
+                thumbColor={isChecked ? "#b9afb0" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={evenlySplitItemsToggle}
+                value={isChecked}
+              />
+            </View>
+          </View>
+
+          <Text
+            style={[
+              styles.foodInfo,
+              strikeThroughText,
+              { color: itemTextColor },
+            ]}
+          >
+            {item.name}
+          </Text>
+
+          <Text
+            style={[
+              styles.foodInfo,
+              strikeThroughText,
+              { color: itemTextColor, textAlign: "right" },
+            ]}
+          >
+            ${item.price.toFixed(2)}
+          </Text>
 
           {/* Hand image overlay */}
           {isDragging && (
@@ -152,33 +204,41 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 40,
-    borderWidth: 2,
-    borderColor: Colors.goDutchRed,
     padding: 5,
+    margin: 1,
     borderRadius: 10,
     backgroundColor: Colors.goDutchRed,
-    margin: 1,
+    elevation: 2,
+    width: "100%",
+    height: 45,
   },
   handImageContainer: {
     position: "absolute",
-    top: 40,
-    left: "40%",
+    top: 50,
+    left: -150,
     right: 0,
     bottom: 0,
     justifyContent: "center",
     alignItems: "center",
   },
   handImage: {
-    width: 50, 
-    height: 100, 
-    resizeMode: "cover", 
-    transform: [{ rotate: "45deg" }], 
+    width: 50,
+    height: 100,
+    resizeMode: "cover",
+    transform: [{ rotate: "45deg" }],
   },
+  splitEvenlyText: {
+    fontFamily: "red-hat-bold",
+    marginRight: 5,
+  },
+  switch: { flexDirection: "row", alignItems: "center" },
   foodInfo: {
     fontFamily: "red-hat-bold",
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 
 export default DinnerItem;
+{
+  /* <Ionicons name="checkmark-sharp" size={30} color="white" /> */
+}

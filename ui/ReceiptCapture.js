@@ -123,7 +123,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         }
       );
       const result = await response.json();
-      dispatch(setEventId(result.event_id));
+      dispatch(setEventId(result.eventId));
     } catch (error) {
       console.error(error);
     }

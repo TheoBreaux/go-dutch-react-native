@@ -59,11 +59,12 @@ const DiningEventHistoryCard = ({ item }) => {
       )}
 
       <View style={styles.textContainer}>
-        <Text style={styles.eventTitle}>{item.eventTitle}</Text>
-        <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
         <Text style={[styles.eventLocation, styles.bold]}>
           {item.eventLocation}
         </Text>
+        <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
+        <Text style={styles.eventTitle}>{item.eventTitle}</Text>
+
         {/* <Text style={styles.text}>
           <Text style={styles.bold}>Primary Diner: </Text>@
           {item.primaryDinerUsername}

@@ -80,6 +80,7 @@ const diningEventSlice = createSlice({
     receiptValues: {},
     allReceiptItems: [],
     allReceiptItemsCopy: [],
+    evenlySplitItems: [],
     diners: [],
     birthdayDiners: [],
   },
@@ -113,7 +114,7 @@ const diningEventSlice = createSlice({
       state.currentDinerId = action.payload;
     },
     setReceiptImagePath: (state, action) => {
-      state.event.receipt_image_key = action.payload;
+      state.event.receiptImageKey = action.payload;
     },
     updateSubtotal: (state, action) => {
       state.event.subtotal = action.payload;
@@ -156,8 +157,6 @@ const diningEventSlice = createSlice({
         }
         return diner;
       });
-
-      console.log("STORE", updatedArray);
 
       // Ensure to return the updated state object
       return {
@@ -204,6 +203,24 @@ const diningEventSlice = createSlice({
         dinerToUpdate.celebratingBirthday = action.payload.celebratingBirthday;
       }
     },
+
+    addToEvenlySplitItems: (state, action) => {
+      const { item } = action.payload;
+      //get index of item added to array
+      const itemIndex = state.evenlySplitItems.findIndex((foodItem) => {
+        return foodItem.id === item.id;
+      });
+
+      //if the item is not in the array, put it in
+      if (itemIndex === -1) {
+        state.evenlySplitItems.push(item);
+      } else {
+        // if it is in the array filter it out from the array
+        state.evenlySplitItems = state.evenlySplitItems.filter(
+          (splitItem) => splitItem.id !== item.id
+        );
+      }
+    },
   },
 });
 
@@ -238,6 +255,7 @@ export const {
   updateFinalDiningEventValues,
   updateBirthdayDinerFinalMealCost,
   updateDinerProfileImageKey,
+  addToEvenlySplitItems,
 } = diningEventSlice.actions;
 
 const store = configureStore({

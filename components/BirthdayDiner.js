@@ -5,12 +5,12 @@ import { useDispatch } from "react-redux";
 import { updateBirthdayStatus } from "../store/store";
 
 const BirthdayDiner = ({ additionalDinerUsername }) => {
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const dispatch = useDispatch();
 
   const toggleSwitch = () => {
-    setChecked((previousState) => !previousState);
+    setIsChecked((previousState) => !previousState);
 
     const username = additionalDinerUsername;
     const celebratingBirthday = !isChecked;

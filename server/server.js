@@ -239,7 +239,7 @@ app.post("/diningevents", async (req, res) => {
       ]
     );
     const eventId = newDiningEvent.rows[0].event_id;
-    res.json({ event_id: eventId });
+    res.json({ eventId: eventId });
   } catch (error) {
     console.error(error);
   }
