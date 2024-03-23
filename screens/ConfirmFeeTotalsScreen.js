@@ -23,8 +23,6 @@ import CustomModal from "../components/CustomModal";
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
-  const [showSharedDinnerMealFees, setShowSharedDinnerMealFees] =
-    useState(false);
   const [newFeeName, setNewFeeName] = useState("");
   const [newFeePrice, setNewFeePrice] = useState("");
   const [taxConfirmed, setTaxConfirmed] = useState("");
@@ -111,11 +109,21 @@ const ConfirmFeeTotalsScreen = () => {
 
   const handleNoBirthdaysPresent = () => {
     //calculate fees not taking care of or no birthday diners
-    const sharedExpenses =
-      (parseFloat(taxConfirmed) +
-        parseFloat(tipConfirmed) +
-        parseFloat(sumAdditionalFees())) /
-      (dinersUpdated.length - 1);
+    let sharedExpenses;
+    if (evenlySplitItemsTotal !== "0.00") {
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - 1);
+    } else {
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        dinersUpdated.length;
+    }
+
     if (birthdayDinersPresent) {
       setShowTreatBirthdayDinersModal(true);
     } else {
@@ -164,7 +172,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/diningevent/values`,
+        `https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -177,17 +185,22 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-  const postDataFinalAdditionalDinerValues = async (sharedExpenses) => {
+  const postDataFinalAdditionalDinerValues = async (
+    sharedExpenses,
+    coveringBirthdayDiners,
+    evenlySplitItems
+  ) => {
     const evenlySplitTotal = parseFloat(
       evenlySplitItemsTotal / (dinersUpdated.length - 1)
     );
-    const totalSharedExpenses =
-      evenlySplitTotal + Math.round(sharedExpenses * 100) / 100;
+    const totalSharedExpenses = Math.round(sharedExpenses * 100) / 100;
 
     const data = {
       eventId: eventId,
       sharedExpenses: totalSharedExpenses,
       dinersUpdated: dinersUpdated,
+      coveringBirthdayDiners: coveringBirthdayDiners,
+      evenlySplitItems: evenlySplitItems,
       birthdayDiners: birthdayDiners,
       tax: taxConfirmed,
       tip: tipConfirmed,
@@ -197,7 +210,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/values`,
+        `https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -205,7 +218,6 @@ const ConfirmFeeTotalsScreen = () => {
         }
       );
       const result = await response.json();
-      console.log("RESULT", result);
       setFinalBirthdayDinerNumbers(result);
       dispatch(updateBirthdayDinerFinalMealCost(result));
     } catch (error) {
@@ -214,18 +226,29 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithBirthdayDiners = () => {
-    console.log("CALCULATE WITH BDAY");
     //calculate fees taking care of birthday diners
-    const sharedExpenses =
-      (parseFloat(taxConfirmed) +
+    let sharedExpenses;
+    let evenlySplitItems;
+    if (evenlySplitItemsTotal !== "0.00") {
+      evenlySplitItems = true;
+      sharedExpenses =
+        parseFloat(taxConfirmed) +
         parseFloat(tipConfirmed) +
-        parseFloat(sumAdditionalFees())) /
-      (dinersUpdated.length - birthdayDiners.length);
+        parseFloat(evenlySplitItemsTotal) +
+        parseFloat(sumAdditionalFees());
+    } else {
+      evenlySplitItems = false;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - birthdayDiners.length);
+    }
 
     //post final dining event values data to database
     postDataFinalDiningEventValues();
     //post final additional diner values data to database
-    postDataFinalAdditionalDinerValues(sharedExpenses);
+    postDataFinalAdditionalDinerValues(sharedExpenses, true, evenlySplitItems);
     //navigate to close out check
     navigation.navigate("CheckCloseOutDetailsScreen", {
       finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
@@ -233,22 +256,31 @@ const ConfirmFeeTotalsScreen = () => {
   };
 
   const calculateWithoutBirthdayDiners = () => {
-    console.log("CALCULATE WITHOUT BDAY");
-    //calculate fees not taking care of or no birthday diners
-    const sharedExpenses =
-      (parseFloat(taxConfirmed) +
-        parseFloat(tipConfirmed) +
-        parseFloat(sumAdditionalFees())) /
-      dinersUpdated.length;
+    //calculate fees taking care of birthday diners
+    let sharedExpenses;
+    let evenlySplitItems;
+    if (evenlySplitItemsTotal !== "0.00") {
+      evenlySplitItems = true;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - 1);
+    } else {
+      evenlySplitItems = false;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        dinersUpdated.length;
+    }
 
     //post final dining event values data to database
     postDataFinalDiningEventValues();
     //post final additional diner values data to database
-    postDataFinalAdditionalDinerValues(sharedExpenses);
+    postDataFinalAdditionalDinerValues(sharedExpenses, false, evenlySplitItems);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen", {
-      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
-    });
+    navigation.navigate("CheckCloseOutDetailsScreen");
   };
 
   const sumAdditionalFees = () => {
@@ -361,7 +393,7 @@ const ConfirmFeeTotalsScreen = () => {
 
           {/* render additional custom fees */}
 
-          {!showSharedDinnerMealFees && (
+          {evenlySplitItemsTotal !== "0.00" && (
             <View style={styles.feeContainer}>
               <Text style={styles.text}>Shared Items</Text>
               <TextInput

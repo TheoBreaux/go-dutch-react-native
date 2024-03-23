@@ -116,10 +116,18 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
         {!viewReceipt && (
           <View style={{ flexDirection: "row", zIndex: 100 }}>
             <PrimaryButton
+              width={130}
               height={50}
               onPress={() => setViewReceipt(!viewReceipt)}
             >
               View Receipt
+            </PrimaryButton>
+            <PrimaryButton
+              width={130}
+              height={50}
+              onPress={() => navigation.navigate("Main", { screen: "Home" })}
+            >
+              Home
             </PrimaryButton>
           </View>
         )}
@@ -164,19 +172,32 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
           <Text style={styles.additionalDinerText}>Diners</Text>
         </View>
 
-        {/* <View style={styles.marginText}>
-          <Text style={styles.marginOfError}>Diner Meal Cost (+/- $0.05)</Text>
-        </View> */}
-
         <FlatList
           data={diners}
           renderItem={renderItem}
           contentContainerStyle={styles.flatListContainer}
         />
 
-        <Text style={styles.totalMealCostText}>
-          Total Meal Cost: ${totalMealCost}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={styles.totalMealCostText}>
+              Total Meal Cost: ${totalMealCost}{" "}
+            </Text>
+            <Text style={styles.marginOfErrorText}>(± $0.05)</Text>
+          </View>
+        </View>
       </View>
     </>
   );
@@ -244,15 +265,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 20,
   },
-  marginText: {
-    alignSelf: "flex-end",
-    paddingRight: 25,
-    paddingBottom: 5,
-  },
-  marginOfError: {
-    fontFamily: "red-hat-bold",
-    color: Colors.goDutchRed,
-  },
   dinerCard: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -269,6 +281,11 @@ const styles = StyleSheet.create({
   dinerCardInfo: {
     fontFamily: "red-hat-bold",
     fontSize: 16,
+  },
+  marginOfErrorText: {
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchRed,
+    fontSize: 15,
   },
   confettiBurst: {
     position: "absolute",

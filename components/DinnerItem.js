@@ -142,7 +142,7 @@ const DinnerItem = ({ item }) => {
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={[styles.splitEvenlyText, { color: itemTextColor }]}>
-              Share
+              Shared
             </Text>
 
             <View style={styles.switch}>

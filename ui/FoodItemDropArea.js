@@ -159,8 +159,6 @@ const FoodItemDropArea = () => {
     setDinerReviewedItems([]); // Reset reviewed items
   };
 
-  console.log("EVENLY SPLIT ITEMS IN FIDA", evenlySplitItems);
-
   return (
     <>
       {showReviewModal && (

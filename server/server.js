@@ -462,31 +462,51 @@ app.post("/diningevent/values", async (req, res) => {
 
 // UPDATE FINAL VALUES FOR ADDITIONAL DINERS
 app.post("/additionaldiners/values", async (req, res) => {
-  const { sharedExpenses, dinersUpdated, birthdayDiners, eventId } = req.body;
-  console.log("SERVER - SHAERED", sharedExpenses);
+  const {
+    sharedExpenses,
+    dinersUpdated,
+    birthdayDiners,
+    eventId,
+    coveringBirthdayDiners,
+    evenlySplitItems,
+  } = req.body;
 
   try {
-    // Initialize allDinerMealCosts to accumulate the total meal cost
-    let allDinerMealCosts = 0;
-    //sum birthday diner(s) meal costs
-    let birthdayDinerMealCost = 0;
+    let allDinerMealCosts = 0; // Initialize allDinerMealCosts to accumulate the total meal cost
     let dinerMealCosts = []; // Array to store diner meal costs
 
     //calculate birthday diners meal costs
+    let birthdayDinerMealCost = 0;
     for (const diner of birthdayDiners) {
       diner.items.forEach((item) => {
         birthdayDinerMealCost += parseFloat(item.price);
       });
     }
 
+    // Calculate shared meal cost for birthday diners
+    let numPayingDiners;
+    //not covering birthday diners & sharing items
+    if (!coveringBirthdayDiners && evenlySplitItems) {
+      numPayingDiners = dinersUpdated.length - 1;
+      //taking care of birhtday diners and sharing items
+    } else if (coveringBirthdayDiners && evenlySplitItems) {
+      numPayingDiners = dinersUpdated.length - birthdayDiners.length - 1;
+      //taking care of birthday diners and not sharing items
+    } else if (coveringBirthdayDiners && !evenlySplitItems) {
+      numPayingDiners = dinersUpdated.length - birthdayDiners.length;
+      //not taking care of birthday diners and not sharing items
+    } else {
+      numPayingDiners = dinersUpdated.length;
+    }
+
+    const sharedBirthdayDinerMealCosts =
+      birthdayDinerMealCost / numPayingDiners;
+
     for (const diner of dinersUpdated) {
       //loop through diners items to get total
       let dinerMealCost = 0;
-      //calculate shared birthday diner(s) meal costs
-      const sharedBirthdayDinerMealCosts =
-        birthdayDinerMealCost / (dinersUpdated.length - birthdayDiners.length);
       //if the diner has a birthday
-      if (diner.celebratingBirthday) {
+      if (diner.celebratingBirthday && coveringBirthdayDiners) {
         //set the birthday diners meal cost to 0
         dinerMealCost += 0;
       } else {
@@ -497,7 +517,11 @@ app.post("/additionaldiners/values", async (req, res) => {
 
         dinerMealCost += sharedExpenses;
         //if there are birthday diners add their shared expense to other diners total meal cost
-        dinerMealCost += sharedBirthdayDinerMealCosts;
+        if (birthdayDiners.length && coveringBirthdayDiners) {
+          dinerMealCost += sharedBirthdayDinerMealCosts;
+        } else {
+          dinerMealCost += 0;
+        }
       }
 
       // Add the current diner's meal cost to the total

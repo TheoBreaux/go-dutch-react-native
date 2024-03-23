@@ -68,7 +68,7 @@ const LogInScreen = ({ route }) => {
     };
     try {
       const response = await fetch(
-        "https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/login",
+        "https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/login",
         {
           method: "POST",
           headers: {

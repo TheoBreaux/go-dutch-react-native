@@ -63,7 +63,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://0e50-2603-8000-c0f0-a570-3db6-2045-6541-910.ngrok-free.app/additionaldiners/${eventId}`
+        `https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);
@@ -72,9 +72,6 @@ const DiningEventDetailsScreen = ({ route }) => {
       throw error;
     }
   };
-
-  console.log("DINING EVENT DETAIL SCREEN ", dinerData);
-  console.log("EVENT DATA", eventData);
 
   return (
     <>
@@ -115,7 +112,7 @@ const DiningEventDetailsScreen = ({ route }) => {
           </View>
         )}
 
-        <View >
+        <View>
           <Text style={styles.text}>{eventData.eventTitle}</Text>
           <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
         </View>
@@ -134,9 +131,19 @@ const DiningEventDetailsScreen = ({ route }) => {
           renderItem={renderItem}
           contentContainerStyle={styles.flatListContainer}
         />
-        <Text style={styles.totalMealCostText}>
-          Total Meal Cost: ${eventData.totalMealCost}
-        </Text>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.totalMealCostText}>
+            Total Meal Cost: ${eventData.totalMealCost}
+          </Text>
+          <Text style={styles.marginOfErrorText}>(± $0.05)</Text>
+        </View>
       </View>
     </>
   );
@@ -222,14 +229,10 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 16,
   },
-  marginText: {
-    alignSelf: "flex-end",
-    paddingRight: 25,
-    paddingBottom: 5,
-  },
-  marginOfError: {
+  marginOfErrorText: {
     fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
+    fontSize: 15,
   },
 });
 
