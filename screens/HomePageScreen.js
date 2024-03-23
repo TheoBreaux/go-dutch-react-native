@@ -18,6 +18,7 @@ const HomePageScreen = () => {
 
   const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
     useState(usingDefaultProfilePhoto);
+  const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
 
   const firstName = useSelector((state) => state.userInfo.user.firstName);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
@@ -31,6 +32,12 @@ const HomePageScreen = () => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // Shuffle the featuredRestaurants array when component mounts
+    const shuffled = [...featuredRestaurants].sort(() => Math.random() - 0.5);
+    setShuffledRestaurants(shuffled);
+  }, []);
 
   useEffect(() => {
     dispatch(
@@ -114,14 +121,14 @@ const HomePageScreen = () => {
           )}
         </View>
         <Carousel
-          data={featuredRestaurants}
+          data={shuffledRestaurants}
           renderItem={renderItem}
           sliderWidth={screenWidth}
           itemWidth={screenWidth}
           autoplay={true}
           autoplayInterval={3000}
           loop={true}
-          loopClonesPerSide={featuredRestaurants.length}
+          loopClonesPerSide={shuffledRestaurants.length}
         />
       </View>
     </>

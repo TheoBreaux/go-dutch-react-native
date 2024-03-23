@@ -1,5 +1,3 @@
-import { updateUserProfileImageKey } from "../store/store";
-
 export const paymentOptions = [
   { source: "", label: "Please select payment source" },
   { source: "venmo", label: "Venmo" },
@@ -32,6 +30,8 @@ export const featuredRestaurants = [
     zip: "90046",
     website: "https://www.norah.la",
     rating: "4.2/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://s3-media0.fl.yelpcdn.com/bphoto/3InHlkrjOBhs5v32hrkP4A/o.jpg",
   },
@@ -43,6 +43,8 @@ export const featuredRestaurants = [
     zip: "90036",
     website: "https://www.methimatabar.com",
     rating: "4.5/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://images.squarespace-cdn.com/content/v1/5e38abab18fffc74089e1fce/1682559204645-T63F19AZEWKYD80I3CYP/2C63E5FB-1E92-4635-9F4F-1E9F1200329E_1_201_a.jpg?format=1000w",
   },
@@ -54,6 +56,8 @@ export const featuredRestaurants = [
     zip: "90401",
     website: "http://www.loulousantamonica.com",
     rating: "4.3/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl: "https://resizer.otstatic.com/v2/photos/xlarge/3/48269713.webp",
   },
   {
@@ -64,6 +68,8 @@ export const featuredRestaurants = [
     zip: "90021",
     website: "https://bestiala.com",
     rating: "4.6/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://lh3.googleusercontent.com/p/AF1QipP0W1JTr2VAHVBx_JQJ-opNwKXkYREWoatPwB8a=s680-w680-h510",
   },
@@ -76,6 +82,8 @@ export const featuredRestaurants = [
     zip: "90046",
     website: "https://www.laurelhardware.com",
     rating: "4.5/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://images.squarespace-cdn.com/content/v1/5d4061e927a556000148c1e2/1570129091108-211GW6A1C2A2END7U528/Website+5.jpg?format=1000w",
   },
@@ -88,6 +96,8 @@ export const featuredRestaurants = [
     zip: "90013",
     website: "https://www.girlandthegoat.com",
     rating: "4.7/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://lh3.googleusercontent.com/p/AF1QipOspZf2hnzNO2Ed5sSsVZPuT6oZFTT7S7cepIWC=s680-w680-h510",
   },
@@ -100,6 +110,8 @@ export const featuredRestaurants = [
     zip: "90036",
     website: "https://republiquela.com/",
     rating: "4.8/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://lh3.googleusercontent.com/p/AF1QipPEjdeiG5Zgxuw-JdNOB_CMysTUimA3zrUy1zqE=s680-w680-h510",
   },
@@ -112,6 +124,8 @@ export const featuredRestaurants = [
     zip: "90038",
     website: "https://www.raoshollywood.com/",
     rating: "4.6/5.0",
+    phone: "310-555-5555",
+    bio: "Super delicious cuisine for you! We have everything you like",
     imgUrl:
       "https://lh3.googleusercontent.com/p/AF1QipP3_9B-0X2sw3VHao4YjLGUdDqpg1SCf_5ZlRHG=s680-w680-h510",
   },

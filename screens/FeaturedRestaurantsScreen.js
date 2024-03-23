@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import Logo from "../components/Logo";
 import React, { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
+import FeaturedRestaurantCard from "../components/FeaturedRestaurantCard";
+import { featuredRestaurants } from "../data/data";
+import Colors from "../constants/colors";
 
 const FeaturedRestaurantsScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,15 +21,25 @@ const FeaturedRestaurantsScreen = () => {
   return (
     <>
       <Logo />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        {isLoading ? (
+      {!isLoading && <Text style={styles.title}>Featured Restaurants</Text>}
+
+      <View style={styles.container}>
+        {isLoading && (
           <Spinner
             indicatorSize={200}
-            fontSize={20}
-            children="Loading featured restaurants..."
+            fontSize={16}
+            children="Loading featured restaurants in your area..."
           />
-        ) : (
-          <Text>ADVERTISING SPACE FOR FEATURED RESTAURANT CARDS</Text>
+        )}
+
+        {!isLoading && (
+          <FlatList
+            data={featuredRestaurants}
+            renderItem={({ item }) => (
+              <FeaturedRestaurantCard restaurant={item} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
       </View>
     </>
@@ -34,12 +47,19 @@ const FeaturedRestaurantsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+    fontSize: 30,
+    marginTop: -10,
+    color: Colors.goDutchRed,
+  },
   container: {
     flex: 1,
-    padding: 16,
+    padding: 15,
+    justifyContent: "center",
+    marginTop: -10,
   },
 });
 
 export default FeaturedRestaurantsScreen;
-
-// POSSIBLY CARDS WITH INFO FOR ALL PAYING ADVERTISERS WITH LINKS IN A FLATLIST

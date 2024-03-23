@@ -122,7 +122,6 @@ app.post("/users", async (req, res) => {
 
     // On success, send a 200 OK response
     res.status(200).json({ success: true });
-    console.log("From server:", newUserPaymentInfo);
   } catch (error) {
     console.error(error);
     // On error, send a 500 Internal Server Error response with an error message
@@ -275,14 +274,12 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 // CONFIRM THAT USER EXISTS IN DB SO CAN BE ADDED AS DINER
 app.get("/users/:username", async (req, res) => {
   const { username } = req.params;
-  console.log(username);
 
   try {
     const userExists = await pool.query(
       `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1)`,
       [username]
     );
-    console.log(userExists);
     res.json(userExists.rows[0].exists);
   } catch (error) {
     console.error(error);
@@ -316,8 +313,6 @@ app.post("/additionaldiners", async (req, res) => {
 app.post("/profilephoto", async (req, res) => {
   const { profileImageKey, username } = req.body;
 
-  console.log(profileImageKey, username);
-
   try {
     const newUserData = await pool.query(
       `UPDATE users 
@@ -328,7 +323,6 @@ app.post("/profilephoto", async (req, res) => {
 
     // On success, send a 200 OK response
     res.status(200).json({ success: true });
-    console.log("From server:", newUserData);
   } catch (error) {
     console.error(error);
     // On error, send a 500 Internal Server Error response with an error message
@@ -425,8 +419,6 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
       WHERE additional_diners.event_id = $1`,
       [eventId]
     );
-
-    console.log(profileImageKeys);
     res.json(profileImageKeys.rows);
   } catch (error) {
     console.error(error);
@@ -437,8 +429,6 @@ app.get("/additionaldiners/profilepics/:eventId", async (req, res) => {
 // UPDATE FINAL VALUES FOR DINING EVENT
 app.post("/diningevent/values", async (req, res) => {
   const { tax, tip, totalMealCost, subtotal, eventId } = req.body;
-
-  console.log("DINING EVENT VALUES", req.body);
 
   try {
     const diningEventData = await pool.query(
@@ -452,7 +442,6 @@ app.post("/diningevent/values", async (req, res) => {
     );
     // On success, send a 200 OK response
     res.status(200).json({ success: true });
-    console.log("From server:", diningEventData);
   } catch (error) {
     console.error(error);
     // On error, send a 500 Internal Server Error response with an error message
@@ -549,12 +538,9 @@ app.post("/additionaldiners/values", async (req, res) => {
 
 // AWS - POST PROFILE IMAGES
 app.post("/users/profileimages", upload.single("image"), async (req, res) => {
-  console.log(req.body);
   const file = req.file;
-  console.log(file);
   const result = await uploadFile(file);
   await unlinkFile(file.path);
-  console.log(result);
   res.send({ imageKey: result.Key });
 });
 
@@ -563,18 +549,14 @@ app.post(
   "/users/profileimages/update",
   upload.single("image"),
   async (req, res) => {
-    console.log(req.body);
     const file = req.file;
-    console.log(file);
     const result = await uploadFile(file);
     await unlinkFile(file.path);
-
     try {
       const updatedProfileImage = await pool.query(
         "UPDATE users SET profile_image_key = $1 WHERE username = $2",
         [profileImageKey, username]
       );
-      console.log(updatedProfileImage); // Log the result of the database query
       res.send({ imageKey: result.Key });
     } catch (error) {
       console.error(error); // Log the error
@@ -588,12 +570,9 @@ app.post(
   "/diningevents/receiptimages",
   upload.single("image"),
   async (req, res) => {
-    console.log(req.body);
     const file = req.file;
-    console.log(file);
     const result = await uploadFile(file);
     await unlinkFile(file.path);
-    console.log(result);
     res.send({ imageKey: result.Key });
   }
 );

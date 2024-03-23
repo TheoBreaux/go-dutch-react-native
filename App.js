@@ -28,6 +28,7 @@ import CheckCloseOutDetailsScreen from "./screens/CheckCloseOutDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import { useDisableBackButton } from "./utils";
+import FeaturedRestaurantDetailsScreen from "./screens/FeaturedRestaurantDetailsScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -157,6 +158,10 @@ const App = () => {
           <Stack.Screen
             name="CheckCloseOutDetailsScreen"
             component={CheckCloseOutDetailsScreen}
+          />
+          <Stack.Screen
+            name="FeaturedRestaurantDetailsScreen"
+            component={FeaturedRestaurantDetailsScreen}
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen

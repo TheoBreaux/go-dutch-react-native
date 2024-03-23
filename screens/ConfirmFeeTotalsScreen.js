@@ -114,6 +114,7 @@ const ConfirmFeeTotalsScreen = () => {
       sharedExpenses =
         (parseFloat(taxConfirmed) +
           parseFloat(tipConfirmed) +
+          parseFloat(evenlySplitItemsTotal) +
           parseFloat(sumAdditionalFees())) /
         (dinersUpdated.length - 1);
     } else {
@@ -264,6 +265,7 @@ const ConfirmFeeTotalsScreen = () => {
       sharedExpenses =
         (parseFloat(taxConfirmed) +
           parseFloat(tipConfirmed) +
+          parseFloat(evenlySplitItemsTotal) +
           parseFloat(sumAdditionalFees())) /
         (dinersUpdated.length - 1);
     } else {
