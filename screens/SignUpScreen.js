@@ -122,7 +122,7 @@ const SignUpScreen = ({ route }) => {
         });
 
         const response = await fetch(
-          "https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/users/profileimages",
+          "https://a7cc-2603-8000-c0f0-a570-7463-3fd7-9c59-ccb5.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -151,7 +151,7 @@ const SignUpScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/signup",
+        "https://a7cc-2603-8000-c0f0-a570-7463-3fd7-9c59-ccb5.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

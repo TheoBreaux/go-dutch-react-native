@@ -29,6 +29,8 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import FeaturedRestaurantDetailsScreen from "./screens/FeaturedRestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
+import FavoritesScreen from "./screens/FavoritesScreen";
+
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
@@ -85,6 +87,15 @@ const MainTabNavigator = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="restaurant" size={35} color="white" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" color="white" size={35} />
           ),
         }}
       />

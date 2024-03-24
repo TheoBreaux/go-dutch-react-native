@@ -6,6 +6,8 @@ const userInfoSlice = createSlice({
     user: {},
     currentCity: "",
     restaurantList: [],
+    favoriteRestaurantsList: [],
+    favoriteDinersList: [],
   },
   reducers: {
     setUser: (state, action) => {
@@ -54,6 +56,45 @@ const userInfoSlice = createSlice({
       const profileImageKey = action.payload;
       state.user.profileImageKey = profileImageKey;
     },
+    assignAndRemoveFavoriteDiners: (state, action) => {
+      console.log("STORE", action);
+      const { item } = action.payload;
+      //get index of item added to array
+      const itemIndex = state.favoriteDinersList.findIndex((foodItem) => {
+        return foodItem.id === item.id;
+      });
+
+      //if the item is not in the array, put it in
+      if (itemIndex === -1) {
+        state.favoriteDinersList.push(item);
+      } else {
+        // if it is in the array filter it out from the array
+        state.favoriteDinersList = state.favoriteDinersList.filter(
+          (splitItem) => splitItem.id !== item.id
+        );
+      }
+    },
+
+    assignAndRemoveFavoriteRestaurants: (state, action) => {
+      const item = action.payload;
+      //get index of item added to array
+      const itemIndex = state.favoriteRestaurantsList.findIndex(
+        (restaurant) => {
+          return restaurant.name === item.name;
+        }
+      );
+
+      //if the item is not in the array, put it in
+      if (itemIndex === -1) {
+        state.favoriteRestaurantsList.push(item);
+      } else {
+        // if it is in the array filter it out from the array
+        state.favoriteRestaurantsList = state.favoriteRestaurantsList.filter(
+          (restaurant) => restaurant.name !== item.name
+        );
+      }
+    },
+
     logOut: (state) => {
       state.user = {};
     },
@@ -231,6 +272,8 @@ export const {
   setRestaurantList,
   updateUserProfileImageKey,
   updateUserInfo,
+  assignAndRemoveFavoriteDiners,
+  assignAndRemoveFavoriteRestaurants,
   logOut,
 } = userInfoSlice.actions;
 

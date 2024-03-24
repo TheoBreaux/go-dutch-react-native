@@ -81,7 +81,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         });
 
         const response = await fetch(
-          "https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/diningevents/receiptimages",
+          "https://a7cc-2603-8000-c0f0-a570-7463-3fd7-9c59-ccb5.ngrok-free.app/diningevents/receiptimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -113,7 +113,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://b6d9-2603-8000-c0f0-a570-90cb-fa0b-e3e2-c897.ngrok-free.app/diningevents",
+        "https://a7cc-2603-8000-c0f0-a570-7463-3fd7-9c59-ccb5.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {

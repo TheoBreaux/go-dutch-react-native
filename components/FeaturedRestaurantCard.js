@@ -20,7 +20,7 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
         {imageError ? (
           <Image
             source={require("../assets/restaurant-placeholder.png")}
-            style={[styles.image, {resizeMode: "contain"}]}
+            style={[styles.image, { resizeMode: "contain" }]}
           />
         ) : (
           <Image
@@ -29,6 +29,7 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
             onError={() => setImageError(true)}
           />
         )}
+
       </View>
       <View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -48,6 +49,7 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
         <Text style={styles.text}>
           {restaurant.city + ", " + restaurant.state + " " + restaurant.zip}
         </Text>
+
         <Text style={[styles.text, { fontFamily: "red-hat-bold" }]}>
           {restaurant.phone}
         </Text>
