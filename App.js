@@ -27,14 +27,15 @@ import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetailsScreen from "./screens/CheckCloseOutDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
-import { useDisableBackButton } from "./utils";
 import FeaturedRestaurantDetailsScreen from "./screens/FeaturedRestaurantDetailsScreen";
-
+import { useDisableBackButton } from "./utils";
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
 
 const MainTabNavigator = () => {
+  //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
+  useDisableBackButton();
   return (
     <BottomTab.Navigator
       screenOptions={{
