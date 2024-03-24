@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
 const FeaturedRestaurantCard = ({ restaurant }) => {
   const navigation = useNavigation();
+  const [imageError, setImageError] = useState(false);
 
   const navigateToFeaturedRestuarantDetails = () => {
     navigation.navigate("FeaturedRestaurantDetailsScreen", { restaurant });
@@ -16,9 +17,19 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
       onPress={navigateToFeaturedRestuarantDetails}
     >
       <View>
-        <Image source={{ uri: restaurant.imgUrl }} style={styles.image} />
+        {imageError ? (
+          <Image
+            source={require("../assets/restaurant-placeholder.png")}
+            style={[styles.image, {resizeMode: "contain"}]}
+          />
+        ) : (
+          <Image
+            source={{ uri: restaurant.imgUrl }}
+            style={styles.image}
+            onError={() => setImageError(true)}
+          />
+        )}
       </View>
-
       <View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text

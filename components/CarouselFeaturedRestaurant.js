@@ -1,17 +1,37 @@
 import { Linking, StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
 
 const CarouselFeaturedRestaurant = ({ item }) => {
+  const [imageError, setImageError] = useState(false);
   const handleExternalLink = (url) => {
     Linking.openURL(url);
   };
 
+  const renderImage = () => {
+    if (imageError) {
+      // Render a placeholder image if there's an error loading the image
+      return (
+        <Image
+          source={require("../assets/restaurant-placeholder.png")}
+          style={[styles.carouselImage, { resizeMode: "contain",}]}
+        />
+      );
+    } else {
+      // Render the image from the URL
+      return (
+        <Image
+          source={{ uri: item.imgUrl }}
+          style={styles.carouselImage}
+          onError={() => setImageError(true)}
+        />
+      );
+    }
+  };
+
   return (
     <View style={styles.carouselContainer}>
-      <View style={styles.carouselImageContainer}>
-        <Image source={{ uri: item.imgUrl }} style={styles.carouselImage} />
-      </View>
+      <View style={styles.carouselImageContainer}>{renderImage()}</View>
 
       <View style={styles.restaurantInfoContainer}>
         <View style={styles.restaurantInfo}>
