@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 import FavoritesIconButton from "../components/FavoritesIconButton";
 import { assignAndRemoveFavoriteRestaurants } from "../store/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const FeaturedRestaurantDetailsScreen = ({ route }) => {
   const [imageError, setImageError] = useState(false);
@@ -23,6 +23,18 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const isFavorited = useSelector((state) => {
+    const favoriteRestaurantsList = state.userInfo.favoriteRestaurantsList;
+
+    const restaurantNameToFind = restaurant.name;
+
+    const foundRestaurant = favoriteRestaurantsList.find((restaurant) => {
+      return restaurant.name === restaurantNameToFind;
+    });
+
+    return foundRestaurant ? foundRestaurant.isFavorited : false;
+  });
 
   // Get the screen dimensions
   const screenWidth = Dimensions.get("window").width;
@@ -36,7 +48,6 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
   };
 
   const handleFavorites = (restaurant) => {
-    console.log("FAVORITED");
     dispatch(assignAndRemoveFavoriteRestaurants(restaurant));
   };
 
@@ -80,10 +91,15 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.restaurantName}>{restaurant.name}</Text>
               <FavoritesIconButton
-                name="heart-outline"
-                color={Colors.goDutchBlue}
                 size={35}
+                name={restaurant.isFavorited ? "heart-circle" : "heart-outline"}
+                color={
+                  restaurant.isFavorited
+                    ? Colors.goDutchRed
+                    : Colors.goDutchBlue
+                }
                 onPress={() => handleFavorites(restaurant)}
+                isFavorited={isFavorited}
               />
             </View>
 
@@ -91,13 +107,6 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
             <Text style={styles.restaurantText}>
               {restaurant.city + ", " + restaurant.state + " " + restaurant.zip}
             </Text>
-          </View>
-          <View>
-            <PrimaryButton
-              onPress={() => handleExternalLink(restaurant.website)}
-            >
-              Reserve
-            </PrimaryButton>
           </View>
         </View>
         <Text
@@ -112,6 +121,11 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
         >
           {restaurant.bio}
         </Text>
+        <View>
+          <PrimaryButton onPress={() => handleExternalLink(restaurant.website)}>
+            Reserve
+          </PrimaryButton>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -158,6 +172,7 @@ const styles = StyleSheet.create({
   restaurantName: {
     fontFamily: "red-hat-bold",
     fontSize: 30,
+    flexWrap: "wrap",
   },
   restaurantImageContainer: {
     width: "100%",

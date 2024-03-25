@@ -77,24 +77,27 @@ const userInfoSlice = createSlice({
 
     assignAndRemoveFavoriteRestaurants: (state, action) => {
       const item = action.payload;
-      //get index of item added to array
       const itemIndex = state.favoriteRestaurantsList.findIndex(
         (restaurant) => {
           return restaurant.name === item.name;
         }
       );
 
-      //if the item is not in the array, put it in
+      // If the item is not in the array, put it in
       if (itemIndex === -1) {
-        state.favoriteRestaurantsList.push(item);
+        const newItem = { ...item, isFavorited: true };
+        state.favoriteRestaurantsList.push(newItem);
       } else {
-        // if it is in the array filter it out from the array
-        state.favoriteRestaurantsList = state.favoriteRestaurantsList.filter(
-          (restaurant) => restaurant.name !== item.name
-        );
+        // If it is in the array, toggle its favorite status
+        state.favoriteRestaurantsList[itemIndex].isFavorited =
+          !state.favoriteRestaurantsList[itemIndex].isFavorited;
+
+        // If the restaurant is no longer favorited, remove it from the list
+        if (!state.favoriteRestaurantsList[itemIndex].isFavorited) {
+          state.favoriteRestaurantsList.splice(itemIndex, 1);
+        }
       }
     },
-
     logOut: (state) => {
       state.user = {};
     },

@@ -3,14 +3,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import Colors from "../constants/colors";
 
-const FavoritesIconButton = ({ name, size, color, onPress }) => {
-  const [isPressed, setIspressed] = useState(false);
+const FavoritesIconButton = ({ name, size, color, onPress, isFavorited }) => {
+  const handlePress = () => {
+    onPress();
+  };
+
   return (
     <Pressable
-      onPress={() => {
-        setIspressed(!isPressed);
-        onPress();
-      }}
+      onPress={handlePress}
       style={({ pressed }) => [
         {
           opacity: pressed ? 0.7 : 1,
@@ -18,9 +18,9 @@ const FavoritesIconButton = ({ name, size, color, onPress }) => {
       ]}
     >
       <Ionicons
-        name={isPressed ? "heart-circle" : name}
+        name={isFavorited ? "heart-circle" : "heart-outline"}
         size={size}
-        color={isPressed ? Colors.goDutchRed : color}
+        color={isFavorited ? Colors.goDutchRed : Colors.goDutchBlue}
       />
     </Pressable>
   );
