@@ -6,7 +6,10 @@ import Constants from "expo-constants";
 import Spinner from "../components/Spinner";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
-import IconButton from "../components/IconButton";
+import FavoritesIconButton from "../components/FavoritesIconButton";
+import { useDispatch, useSelector } from "react-redux";
+import Colors from "../constants/colors";
+import { assignAndRemoveFavoriteDiners } from "../store/store";
 
 const ViewUserProfile = ({ route }) => {
   const [imageUri, setImageUri] = useState(null);
@@ -14,6 +17,7 @@ const ViewUserProfile = ({ route }) => {
 
   const { selectedUser } = route.params;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const firstName = selectedUser.firstName;
   const lastName = selectedUser.lastName;
@@ -27,6 +31,22 @@ const ViewUserProfile = ({ route }) => {
   const date = new Date(dateJoined);
   const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
+
+  const isFavorited = useSelector((state) => {
+    const favoriteDinersList = state.userInfo.favoriteDinersList;
+
+    const dinerNameToFind = selectedUser.additionalDinerUsername;
+
+    const foundDiner = favoriteDinersList.find((selectedUser) => {
+      return selectedUser.additionalDinerUsername === dinerNameToFind;
+    });
+
+    return foundDiner ? foundDiner.isFavorited : false;
+  });
+
+  const handleFavorites = (selectedUser) => {
+    dispatch(assignAndRemoveFavoriteDiners(selectedUser));
+  };
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -55,11 +75,13 @@ const ViewUserProfile = ({ route }) => {
     getImageFromS3();
   }, []);
 
+  console.log("SELECTED USER", selectedUser);
+
   return (
     <>
       <Logo />
       <View style={styles.container}>
-        <View style={styles.imageIconcontainer}>
+        <View style={styles.imageIconContainer}>
           {isLoadingImage && <Spinner indicatorSize={200} />}
           {!isLoadingImage && profileImageKey ? (
             <Image
@@ -80,14 +102,23 @@ const ViewUserProfile = ({ route }) => {
           <Text style={styles.userInfo}>{month + " " + year}</Text>
         </Text>
 
-        <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Text style={styles.userFullName}>{firstName + " " + lastName}</Text>
-          {/* Star here for addFavorites Functionality */}
-          <IconButton
-            // onPress={changeFavoriteStatusHandler}
-            color="white"
-            icon={"star-outline"}
-            // icon={mealIsFavorite ? "star" : "star-outline"}
+
+          <FavoritesIconButton
+            size={50}
+            name={selectedUser.isFavorited ? "heart-circle" : "heart-outline"}
+            color={
+              selectedUser.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue
+            }
+            onPress={() => handleFavorites(selectedUser)}
+            isFavorited={isFavorited}
           />
         </View>
 
@@ -142,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  imageIconcontainer: {
+  imageIconContainer: {
     marginTop: 20,
     elevation: 10,
     height: 200,
@@ -155,7 +186,7 @@ const styles = StyleSheet.create({
   userFullName: {
     fontFamily: "red-hat-bold",
     fontSize: 40,
-    marginBottom: -5,
+    // marginBottom: -5,
   },
   username: {
     fontFamily: "red-hat-bold",

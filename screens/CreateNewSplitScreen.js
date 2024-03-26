@@ -65,7 +65,7 @@ const CreateNewSplitScreen = () => {
 
   return (
     <>
-      <Logo />
+      {/* <Logo /> */}
       {isCapturingReceipt ? (
         <ReceiptCapture
           setIsCapturingReceipt={setIsCapturingReceipt}
@@ -75,7 +75,7 @@ const CreateNewSplitScreen = () => {
         <>
           {!isCapturingReceipt && (
             <ScrollView>
-              <View style={styles.imageContainer}>
+              <View>
                 <Image
                   style={styles.friendsImage}
                   source={require("../assets/friends2.jpg")}
@@ -221,14 +221,11 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: "center",
-    padding: 16,
-  },
-  imageContainer: {
-    paddingHorizontal: 15,
+    padding: 10,
   },
   friendsImage: {
     width: "100%",
-    height: 205,
+    height: 325,
     resizeMode: "cover",
   },
   overlay: {

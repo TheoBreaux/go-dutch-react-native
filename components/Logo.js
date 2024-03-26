@@ -16,9 +16,7 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 4 / 1,
     backgroundColor: "transparent",
-    marginTop: 30,
-
-    alignContent: "center"
+    alignContent: "center",
   },
   logo: {
     flex: 1,

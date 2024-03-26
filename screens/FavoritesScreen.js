@@ -8,9 +8,6 @@ import Spinner from "../components/Spinner";
 import { useSelector } from "react-redux";
 
 const FavoritesScreen = () => {
-  const [viewFavoriteDiners, setViewFavoriteDiners] = useState(false);
-  const [viewFavoriteRestaurants, setViewFavoriteRestaurants] = useState(false);
-
   const favoriteRestaurantsExists = useSelector(
     (state) => state.userInfo.favoriteRestaurantsList.length > 0
   );
@@ -19,34 +16,51 @@ const FavoritesScreen = () => {
     (state) => state.userInfo.favoriteDinersList.length > 0
   );
 
-  const favoritesSaved = viewFavoriteDiners || viewFavoriteRestaurants;
+  const favoritesSaved = favoriteDinersExists || favoriteRestaurantsExists;
 
   return (
     <>
       <Logo />
-      <Text style={[styles.title, { marginTop: -10 }]}>
-        Favorite Restaurants
-      </Text>
-      <View style={styles.favoriteRestaurantsContainer}>
-        <FavoriteRestaurantsList />
+      <View style={styles.container}>
+        {favoriteRestaurantsExists && (
+          <View style={styles.favoriteRestaurantsContainer}>
+            <Text style={[styles.title]}>Favorite Restaurants</Text>
+            <FavoriteRestaurantsList />
+          </View>
+        )}
+
+        {favoriteDinersExists && (
+          <View style={styles.favoriteDinersContainer}>
+            <Text style={styles.title}>Favorite Diners</Text>
+            <FavoriteDinersList />
+          </View>
+        )}
+
+        {!favoritesSaved && (
+          <Text style={styles.text}>You have no favorites saved.</Text>
+        )}
       </View>
-      <Text style={[styles.title, { marginTop: -15 }]}>Favorite Diners</Text>
-      <View style={styles.favoriteDinersContainer}>
-        <FavoriteDinersList />
-      </View>
-      {favoritesSaved && (
-        <Text style={styles.text}>You have no favorites saved.</Text>
-      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: "center", justifyContent: "center" },
+
   favoriteRestaurantsContainer: {
     flex: 1,
     padding: 15,
+    marginTop: -20,
+    // justifyContent: "center",
     // borderColor: "black",
     // borderWidth: 1,
+  },
+  noFavoritesText: {
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchRed,
+    textAlign: "center",
+    fontSize: 30,
+    width: "auto",
   },
   favoriteDinersContainer: {
     flex: 1,
@@ -57,14 +71,15 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontFamily: "red-hat-bold",
-    fontSize: 25,
-    marginBottom: -15,
+    fontSize: 30,
     color: Colors.goDutchRed,
   },
   text: {
     fontFamily: "red-hat-bold",
-    fontSize: 30,
+    color: Colors.goDutchRed,
     textAlign: "center",
+    fontSize: 30,
+    width: "auto",
   },
 });
 

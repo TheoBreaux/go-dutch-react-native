@@ -29,6 +29,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import FeaturedRestaurantDetailsScreen from "./screens/FeaturedRestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
+import { StatusBar } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
 
 const Stack = createStackNavigator();
@@ -129,6 +130,10 @@ const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
+        <StatusBar
+          barStyle="light-content" // Set the status bar text color to light
+          backgroundColor={Colors.goDutchBlue} // Set the status bar background color
+        />
         <Stack.Navigator
           initialRouteName="Welcome" //change this back to "Welcome" after developing
           screenOptions={{

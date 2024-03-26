@@ -132,7 +132,6 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", padding: 16 },
   returnButton: {
     justifyContent: "center",
     alignItems: "center",

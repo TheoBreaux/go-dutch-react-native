@@ -1,42 +1,83 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useSelector } from "react-redux";
-import { featuredRestaurants } from "../data/data";
 import Colors from "../constants/colors";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import AWS from "aws-sdk";
+import Constants from "expo-constants";
+import Spinner from "./Spinner";
 
 const FavoriteDinersList = () => {
-  const [favoriteDiners, setFavoriteDiners] = useState([]);
-  const [imageError, setImageError] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-  
   const navigation = useNavigation();
+  const favoriteDiners = useSelector(
+    (state) => state.userInfo.favoriteDinersList
+  );
 
-  const navigateToFeaturedRestuarantDetails = (restaurant) => {
-    navigation.navigate("FeaturedRestaurantDetailsScreen", { restaurant });
+  const navigateToUserProfile = (selectedUser) => {
+    navigation.navigate("ViewUserProfileScreen", { selectedUser });
   };
 
+  useEffect(() => {
+    const s3 = new AWS.S3({
+      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+    });
 
-  //make call to database to get diners
+    const getImageFromS3 = async (profileImageKey) => {
+      setIsLoadingImage(true);
+      const params = {
+        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+        Key: profileImageKey,
+      };
+
+      try {
+        const data = await s3.getObject(params).promise();
+        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+      } catch (error) {
+        console.error("Error retrieving image from S3:", error);
+      } finally {
+        setIsLoadingImage(false);
+      }
+    };
+
+    favoriteDiners.forEach((diner) => {
+      console.log("PROFIE", diner);
+      const profileImageKey = diner.profileImageKey;
+      getImageFromS3(profileImageKey);
+    });
+  }, [favoriteDiners]);
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.cardContainer}
-        onPress={() => navigateToFeaturedRestuarantDetails(item)}
+        onPress={() => navigateToUserProfile(item)}
       >
-        <View>
-          {imageError ? (
+        <View style={styles.imageIconContainer}>
+          {isLoadingImage && <Spinner indicatorSize={200} />}
+          {!isLoadingImage && imageUri ? (
             <Image
-              source={require("../assets/restaurant-placeholder.png")}
-              style={[styles.image, { resizeMode: "contain" }]}
+              source={{ uri: imageUri }}
+              style={{ width: 200, height: 200 }}
             />
           ) : (
-            <Image
-              source={{ uri: item.imgUrl }}
-              style={styles.image}
-              onError={() => setImageError(true)}
-            />
+            <View>
+              <Image
+                source={require("../assets/default-profile-icon.jpg")}
+                style={{ width: 200, height: 200 }}
+              />
+            </View>
           )}
         </View>
         <View>
@@ -49,7 +90,7 @@ const FavoriteDinersList = () => {
                 { fontFamily: "red-hat-bold", width: "50%" },
               ]}
             >
-              {item.name}
+              {item.additionalDinerUsername}
             </Text>
             <Text
               style={[
@@ -57,35 +98,30 @@ const FavoriteDinersList = () => {
                 { fontFamily: "red-hat-bold", width: "50%" },
               ]}
             >
-              {item.rating + " ⭐"}
+              {item.birthday + " ⭐"}
             </Text>
           </View>
 
-          <Text style={styles.text}>{item.address}</Text>
-          <Text style={styles.text}>
-            {item.city + ", " + item.state + " " + item.zip}
-          </Text>
-
           <Text style={[styles.text, { fontFamily: "red-hat-bold" }]}>
-            {item.phone}
+            {item.birthday}
           </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
+  console.log("FAVORITE DINERS", favoriteDiners);
+
   return (
     <View>
       <FlatList
-        data={featuredRestaurants}
+        data={favoriteDiners}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   cardContainer: {

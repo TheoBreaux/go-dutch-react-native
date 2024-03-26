@@ -57,21 +57,24 @@ const userInfoSlice = createSlice({
       state.user.profileImageKey = profileImageKey;
     },
     assignAndRemoveFavoriteDiners: (state, action) => {
-      console.log("STORE", action);
-      const { item } = action.payload;
-      //get index of item added to array
-      const itemIndex = state.favoriteDinersList.findIndex((foodItem) => {
-        return foodItem.id === item.id;
-      });
+      const item = action.payload;
 
-      //if the item is not in the array, put it in
+      const itemIndex = state.favoriteDinersList.findIndex((diner) => {
+        return diner.additionalDinerUsername === item.additionalDinerUsername;
+      });
+      // If the item is not in the array, put it in
       if (itemIndex === -1) {
-        state.favoriteDinersList.push(item);
+        const newDiner = { ...item, isFavorited: true };
+        state.favoriteDinersList.push(newDiner);
       } else {
-        // if it is in the array filter it out from the array
-        state.favoriteDinersList = state.favoriteDinersList.filter(
-          (splitItem) => splitItem.id !== item.id
-        );
+        // If it is in the array, toggle its favorite status
+        state.favoriteDinersList[itemIndex].isFavorited =
+          !state.favoriteDinersList[itemIndex].isFavorited;
+
+        // If the diner is no longer favorited, remove from the list
+        if (!state.favoriteDinersList[itemIndex].isFavorited) {
+          state.favoriteDinersList.splice(itemIndex, 1);
+        }
       }
     },
 

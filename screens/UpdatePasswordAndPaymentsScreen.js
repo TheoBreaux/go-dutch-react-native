@@ -88,7 +88,7 @@ const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
 
     try {
       const response = await fetch(
-        "https://a7cc-2603-8000-c0f0-a570-7463-3fd7-9c59-ccb5.ngrok-free.app/users",
+        "https://03ff-2603-8000-c0f0-a570-e95b-199c-a214-1fed.ngrok-free.app/users",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
