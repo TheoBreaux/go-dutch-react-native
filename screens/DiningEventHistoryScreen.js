@@ -48,7 +48,11 @@ const DiningEventHistoryScreen = () => {
       <Logo />
       <View style={styles.container}>
         {diningEvents.length > 0 && (
-          <Text style={styles.title}>Tap tile to see details...</Text>
+          <View style={styles.textContainer}>
+            <View style={styles.tabContainer}>
+              <Text style={styles.title}>Tap Tile For Details...</Text>
+            </View>
+          </View>
         )}
 
         {!diningEvents.length > 0 && (
@@ -79,13 +83,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    marginTop: -10,
+    marginTop: -15,
+  },
+  textContainer: {
+    borderBottomColor: Colors.goDutchBlue,
+    borderBottomWidth: 5,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    borderTopColor: Colors.goDutchBlue,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderLeftColor: Colors.goDutchBlue,
+    borderLeftWidth: 1,
+    borderRightColor: Colors.goDutchBlue,
+    borderRightWidth: 1,
+    marginBottom: 5,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomColor: Colors.goDutchBlue,
+    width: "100%",
+    marginBottom: 5,
   },
   title: {
     fontFamily: "red-hat-bold",
+    color: Colors.goDutchRed,
     textAlign: "center",
-    fontSize: 20,
-    marginBottom: 5,
+    fontSize: 30,
+    flex: 1,
   },
   noHistoryContainer: {
     width: "100%",

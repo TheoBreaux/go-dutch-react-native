@@ -1,41 +1,112 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import FavoriteRestaurantsList from "../components/FavoriteRestaurantsList";
 import FavoriteDinersList from "../components/FavoriteDinersList";
 import Logo from "../components/Logo";
 import Colors from "../constants/colors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { assignAndRemoveFavoriteDiners } from "../store/store";
 
 const FavoritesScreen = () => {
-  const favoriteRestaurantsExists = useSelector(
-    (state) => state.userInfo.favoriteRestaurantsList.length > 0
+  const dispatch = useDispatch();
+  const favoriteRestaurantsList = useSelector(
+    (state) => state.userInfo.favoriteRestaurantsList
   );
 
-  const favoriteDinersExists = useSelector(
-    (state) => state.userInfo.favoriteDinersList.length > 0
+  const favoriteDinersList = useSelector(
+    (state) => state.userInfo.favoriteDinersList
   );
 
-  const favoritesSaved = favoriteDinersExists || favoriteRestaurantsExists;
+  const favoritesSaved =
+    favoriteDinersList.length === 0 && favoriteRestaurantsList.length === 0;
+
+  //if there are restaurants favorited and the length is longer thatn diners list, make it active screen
+  const activeScreen =
+    favoriteDinersList &&
+    favoriteDinersList.length > favoriteRestaurantsList.length
+      ? "Diners"
+      : "Restaurants";
+
+  const [activeTab, setActiveTab] = useState(activeScreen);
+
+  const isDinerFavorited = (item) =>
+    useSelector((state) => {
+      const favoriteDinersList = state.userInfo.favoriteDinersList;
+
+      const dinerNameToFind = item.additionalDinerUsername;
+
+      const foundDiner = favoriteDinersList.find((selectedUser) => {
+        return selectedUser.additionalDinerUsername === dinerNameToFind;
+      });
+
+      return foundDiner ? foundDiner.isFavorited : false;
+    });
+
+  const handleFavorites = (item) => {
+    dispatch(assignAndRemoveFavoriteDiners(item));
+  };
 
   return (
     <>
       <Logo />
+
       <View style={styles.container}>
-        {favoriteRestaurantsExists && (
-          <View style={styles.favoriteRestaurantsContainer}>
-            <Text style={[styles.title]}>Favorite Restaurants</Text>
-            <FavoriteRestaurantsList />
-          </View>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              activeTab === "Restaurants" && styles.activeTab,
+            ]}
+            onPress={() => setActiveTab("Restaurants")}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.title}>Restaurants</Text>
+              <Ionicons
+                name="restaurant-sharp"
+                size={25}
+                color={Colors.goDutchRed}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "Diners" && styles.activeTab]}
+            onPress={() => setActiveTab("Diners")}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.title}>Diners</Text>
+              <Ionicons
+                name="people-circle"
+                size={25}
+                color={Colors.goDutchRed}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {favoritesSaved && (
+          <Text style={styles.title}>You have no favorites saved.</Text>
         )}
 
-        {favoriteDinersExists && (
-          <View style={styles.favoriteDinersContainer}>
-            <Text style={styles.title}>Favorite Diners</Text>
-            <FavoriteDinersList />
-          </View>
-        )}
-
-        {!favoritesSaved && (
-          <Text style={styles.text}>You have no favorites saved.</Text>
+        {activeTab === "Diners" ? (
+          <FavoriteDinersList
+            isDinerFavorited={isDinerFavorited}
+            handleFavorites={handleFavorites}
+          />
+        ) : (
+          <FavoriteRestaurantsList />
         )}
       </View>
     </>
@@ -43,37 +114,51 @@ const FavoritesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center" },
-
-  favoriteRestaurantsContainer: {
+  container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     padding: 15,
-    marginTop: -20,
   },
-  noFavoritesText: {
-    fontFamily: "red-hat-bold",
-    color: Colors.goDutchRed,
-    textAlign: "center",
-    fontSize: 30,
-    width: "auto",
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between", 
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.goDutchBlue,
+    width: "100%",
+    marginTop: 5,
+    marginBottom: 10,
   },
-  favoriteDinersContainer: {
-    flex: 1,
-    padding: 15,
-    marginBottom:25,
+  tab: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  activeTab: {
+    borderBottomColor: Colors.goDutchBlue,
+    borderBottomWidth: 5,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    borderTopColor: Colors.goDutchBlue,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderLeftColor: Colors.goDutchBlue,
+    borderLeftWidth: 1,
+    borderRightColor: Colors.goDutchBlue,
+    borderRightWidth: 1,
+    marginTop: 35,
+    marginBottom: 5,
   },
   title: {
-    textAlign: "center",
     fontFamily: "red-hat-bold",
-    fontSize: 30,
     color: Colors.goDutchRed,
+    textAlign: "center",
+    fontSize: 25,
   },
-  text: {
-    fontFamily: "red-hat-bold",
-    color: Colors.goDutchRed,
-    textAlign: "center",
-    fontSize: 30,
-    width: "auto",
+  centeredContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

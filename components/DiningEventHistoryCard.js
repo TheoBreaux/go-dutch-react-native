@@ -52,7 +52,7 @@ const DiningEventHistoryCard = ({ item }) => {
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={showEventDetails}>
       {isLoadingImage && (
-        <Spinner children={"Loading..."} indicatorSize={55} fontSize={20} />
+        <Spinner children={"Loading..."} indicatorSize={25} fontSize={20} />
       )}
       {!isLoadingImage && (
         <Image source={{ uri: imageUri }} style={styles.image} />
@@ -65,10 +65,10 @@ const DiningEventHistoryCard = ({ item }) => {
         <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
         <Text style={styles.eventTitle}>{item.eventTitle}</Text>
 
-        {/* <Text style={styles.text}>
+        <Text style={styles.text}>
           <Text style={styles.bold}>Primary Diner: </Text>@
           {item.primaryDinerUsername}
-        </Text> */}
+        </Text>
       </View>
     </TouchableOpacity>
   );

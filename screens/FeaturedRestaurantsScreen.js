@@ -21,7 +21,13 @@ const FeaturedRestaurantsScreen = () => {
   return (
     <>
       <Logo />
-      {!isLoading && <Text style={styles.title}>Featured Restaurants</Text>}
+      <View style={styles.titleContainer}>
+        {!isLoading && (
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>Featured Restaurants</Text>
+          </View>
+        )}
+      </View>
 
       <View style={styles.container}>
         {isLoading && (
@@ -47,6 +53,25 @@ const FeaturedRestaurantsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    borderBottomColor: Colors.goDutchBlue,
+    width: "100%",
+    paddingHorizontal: 15,
+  },
+  textContainer: {
+    borderBottomColor: Colors.goDutchBlue,
+    borderBottomWidth: 5,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    borderTopColor: Colors.goDutchBlue,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderLeftColor: Colors.goDutchBlue,
+    borderLeftWidth: 1,
+    borderRightColor: Colors.goDutchBlue,
+    borderRightWidth: 1,
+    padding: 5,
+  },
   title: {
     textAlign: "center",
     fontFamily: "red-hat-bold",

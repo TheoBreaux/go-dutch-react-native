@@ -1,52 +1,41 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
-import Spinner from "./Spinner";
 import FavoritesIconButton from "./FavoritesIconButton";
-import { useDispatch, useSelector } from "react-redux";
-import { assignAndRemoveFavoriteDiners } from "../store/store";
+import Spinner from "./Spinner";
 
-const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
+const FavoriteDinerCard = ({
+  isLoadingImage,
+  imageURIs,
+  item,
+  isDinerFavorited,
+  handleFavorites,
+}) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const navigateToUserProfile = (selectedUser) => {
     navigation.navigate("ViewUserProfileScreen", { selectedUser });
-  };
-
-  const isFavorited = useSelector((state) => {
-    const favoriteDinersList = state.userInfo.favoriteDinersList;
-
-    const dinerNameToFind = item.additionalDinerUsername;
-
-    const foundDiner = favoriteDinersList.find((selectedUser) => {
-      return selectedUser.additionalDinerUsername === dinerNameToFind;
-    });
-
-    return foundDiner ? foundDiner.isFavorited : false;
-  });
-
-  const handleFavorites = (item) => {
-    dispatch(assignAndRemoveFavoriteDiners(item));
-  };
+  };;
 
   return (
     <TouchableOpacity
       style={styles.cardContainer}
       onPress={() => navigateToUserProfile(item)}
     >
-      {isLoadingImage && <Spinner indicatorSize={200} />}
-      {!isLoadingImage && imageURIs[item.additionalDinerUsername] ? (
-        <Image
-          source={{ uri: imageURIs[item.additionalDinerUsername] }}
-          style={styles.image}
-        />
-      ) : (
-        <Image
-          source={require("../assets/default-profile-icon.jpg")}
-          style={styles.image}
-        />
-      )}
+      <View style={styles.imageIconContainer}>
+        {isLoadingImage ? (
+          <Spinner indicatorSize={80} />
+        ) : (
+          <Image
+            source={
+              imageURIs[item.additionalDinerUsername]
+                ? { uri: imageURIs[item.additionalDinerUsername] }
+                : require("../assets/default-profile-icon.jpg")
+            }
+            style={styles.image}
+          />
+        )}
+      </View>
 
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <View style={{ flexDirection: "column", width: "50%" }}>
@@ -57,13 +46,15 @@ const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
           <Text style={styles.text}>{item.location}</Text>
         </View>
 
-        <View style={{ width: "50%" }}>
+        <View style={{ width: "75%" }}>
           <FavoritesIconButton
             size={50}
-            name={item.isFavorited ? "heart-circle" : "heart-outline"}
-            color={item.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue}
+            name={item.isDinerFavorited ? "heart-circle" : "heart-outline"}
+            color={
+              item.isDinerFavorited ? Colors.goDutchRed : Colors.goDutchBlue
+            }
             onPress={() => handleFavorites(item)}
-            isFavorited={isFavorited}
+            isFavorited={isDinerFavorited}
           />
         </View>
       </View>
@@ -76,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFF",
-    padding: 10,
+    padding: 8,
     marginBottom: 5,
     borderRadius: 10,
     elevation: 2,
@@ -85,12 +76,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
   },
+  imageIconContainer: {
+    height: 80,
+    width: 80,
+    marginRight: 10,
+    borderRadius: 40,
+  },
   image: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginRight: 10,
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   text: {
     fontSize: 14,

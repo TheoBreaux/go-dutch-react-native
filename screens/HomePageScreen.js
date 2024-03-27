@@ -10,6 +10,7 @@ import CustomProfileIcon from "../components/CustomProfileIcon";
 import CustomModal from "../components/CustomModal";
 import { featuredRestaurants } from "../data/data";
 import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant";
+import Colors from "../constants/colors";
 
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     textAlign: "center",
     fontSize: 32,
+    color: Colors.goDutchRed,
     marginRight: 5,
   },
   subtitle: {

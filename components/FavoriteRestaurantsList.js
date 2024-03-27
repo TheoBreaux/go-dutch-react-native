@@ -10,9 +10,11 @@ import { useState } from "react";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import FavoritesIconButton from "./FavoritesIconButton";
 
 const FavoriteRestaurantsList = () => {
   const [imageError, setImageError] = useState(false);
+  const [allowFavoritesRemoval, setAllowFavoritesRemoval] = useState(false);
   const favoriteRestaurantsList = useSelector(
     (state) => state.userInfo.favoriteRestaurantsList
   );
@@ -55,14 +57,29 @@ const FavoriteRestaurantsList = () => {
             >
               {item.name}
             </Text>
-            <Text
-              style={[
-                styles.text,
-                { fontFamily: "red-hat-bold", width: "50%" },
-              ]}
-            >
-              {item.rating + " ⭐"}
-            </Text>
+            {!allowFavoritesRemoval && (
+              <Text
+                style={[
+                  styles.text,
+                  { fontFamily: "red-hat-bold", width: "50%" },
+                ]}
+              >
+                {item.rating + " ⭐"}
+              </Text>
+            )}
+            {allowFavoritesRemoval && (
+              <View style={{ width: "50%" }}>
+                <FavoritesIconButton
+                  size={50}
+                  name="heart-circle"
+                  color={Colors.goDutchRed}
+                  // name={item.isFavorited ? "heart-circle" : "heart-outline"}
+                  // color={item.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue}
+                  // onPress={() => handleFavorites(item)}
+                  // isFavorited={isFavorited}
+                />
+              </View>
+            )}
           </View>
 
           <Text style={styles.text}>{item.address}</Text>

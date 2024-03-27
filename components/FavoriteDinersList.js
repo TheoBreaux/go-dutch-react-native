@@ -5,7 +5,7 @@ import AWS from "aws-sdk";
 import Constants from "expo-constants";
 import FavoriteDinerCard from "./FavoriteDinerCard";
 
-const FavoriteDinersList = () => {
+const FavoriteDinersList = ({ isDinerFavorited, handleFavorites }) => {
   const [imageURIs, setImageURIs] = useState({});
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
@@ -56,6 +56,8 @@ const FavoriteDinersList = () => {
         item={item}
         isLoadingImage={isLoadingImage}
         imageURIs={imageURIs}
+        isDinerFavorited={isDinerFavorited}
+        handleFavorites={handleFavorites}
       />
     );
   };
