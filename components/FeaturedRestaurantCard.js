@@ -29,8 +29,8 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
             onError={() => setImageError(true)}
           />
         )}
-
       </View>
+
       <View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 5,
     borderRadius: 10,
-    width: "auto",
     elevation: 2,
     shadowColor: Colors.goDutchRed,
     shadowOffset: { width: 0, height: 2 },

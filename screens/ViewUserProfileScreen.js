@@ -75,8 +75,6 @@ const ViewUserProfile = ({ route }) => {
     getImageFromS3();
   }, []);
 
-  console.log("SELECTED USER", selectedUser);
-
   return (
     <>
       <Logo />

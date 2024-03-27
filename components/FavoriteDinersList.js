@@ -1,31 +1,17 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
-import Colors from "../constants/colors";
 import { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
 import Constants from "expo-constants";
-import Spinner from "./Spinner";
+import FavoriteDinerCard from "./FavoriteDinerCard";
 
 const FavoriteDinersList = () => {
-  const [imageUri, setImageUri] = useState(null);
+  const [imageURIs, setImageURIs] = useState({});
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-  const navigation = useNavigation();
   const favoriteDiners = useSelector(
     (state) => state.userInfo.favoriteDinersList
   );
-
-  const navigateToUserProfile = (selectedUser) => {
-    navigation.navigate("ViewUserProfileScreen", { selectedUser });
-  };
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -34,7 +20,7 @@ const FavoriteDinersList = () => {
       region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
     });
 
-    const getImageFromS3 = async (profileImageKey) => {
+    const getImageFromS3 = async (profileImageKey, dinerUsername) => {
       setIsLoadingImage(true);
       const params = {
         Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
@@ -43,7 +29,12 @@ const FavoriteDinersList = () => {
 
       try {
         const data = await s3.getObject(params).promise();
-        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+        setImageURIs((prevState) => ({
+          ...prevState,
+          [dinerUsername]: `data:image/jpeg;base64,${data.Body.toString(
+            "base64"
+          )}`,
+        }));
       } catch (error) {
         console.error("Error retrieving image from S3:", error);
       } finally {
@@ -52,103 +43,32 @@ const FavoriteDinersList = () => {
     };
 
     favoriteDiners.forEach((diner) => {
-      console.log("PROFIE", diner);
       const profileImageKey = diner.profileImageKey;
-      getImageFromS3(profileImageKey);
+      const dinerUsername = diner.additionalDinerUsername;
+      getImageFromS3(profileImageKey, dinerUsername);
     });
   }, [favoriteDiners]);
 
-  const renderItem = ({ item }) => {
+  const renderFavoriteDinerCard = (item) => {
     return (
-      <TouchableOpacity
-        style={styles.cardContainer}
-        onPress={() => navigateToUserProfile(item)}
-      >
-        <View style={styles.imageIconContainer}>
-          {isLoadingImage && <Spinner indicatorSize={200} />}
-          {!isLoadingImage && imageUri ? (
-            <Image
-              source={{ uri: imageUri }}
-              style={{ width: 200, height: 200 }}
-            />
-          ) : (
-            <View>
-              <Image
-                source={require("../assets/default-profile-icon.jpg")}
-                style={{ width: 200, height: 200 }}
-              />
-            </View>
-          )}
-        </View>
-        <View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                styles.text,
-                { fontFamily: "red-hat-bold", width: "50%" },
-              ]}
-            >
-              {item.additionalDinerUsername}
-            </Text>
-            <Text
-              style={[
-                styles.text,
-                { fontFamily: "red-hat-bold", width: "50%" },
-              ]}
-            >
-              {item.birthday + " ⭐"}
-            </Text>
-          </View>
-
-          <Text style={[styles.text, { fontFamily: "red-hat-bold" }]}>
-            {item.birthday}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <FavoriteDinerCard
+        key={item.additionalDinerUsername}
+        item={item}
+        isLoadingImage={isLoadingImage}
+        imageURIs={imageURIs}
+      />
     );
   };
-
-  console.log("FAVORITE DINERS", favoriteDiners);
 
   return (
     <View>
       <FlatList
         data={favoriteDiners}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => renderFavoriteDinerCard(item)}
+        keyExtractor={(item) => item.additionalDinerUsername}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    padding: 10,
-    marginBottom: 5,
-    borderRadius: 10,
-    width: "auto",
-    elevation: 2,
-    shadowColor: Colors.goDutchRed,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-  },
-  image: {
-    width: 100,
-    height: 80,
-    resizeMode: "cover",
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  text: {
-    fontSize: 14,
-    fontFamily: "red-hat-normal",
-  },
-});
 
 export default FavoriteDinersList;

@@ -63,7 +63,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://03ff-2603-8000-c0f0-a570-e95b-199c-a214-1fed.ngrok-free.app/additionaldiners/${eventId}`
+        `https://24b9-2603-8000-c0f0-a570-7971-f873-39b3-59e7.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);
@@ -87,10 +87,18 @@ const DiningEventDetailsScreen = ({ route }) => {
 
         {!viewReceipt && (
           <View style={{ flexDirection: "row" }}>
-            <PrimaryButton width={125} height={50} onPress={() => setViewReceipt(!viewReceipt)}>
+            <PrimaryButton
+              width={125}
+              height={50}
+              onPress={() => setViewReceipt(!viewReceipt)}
+            >
               View Receipt
             </PrimaryButton>
-            <PrimaryButton width={125} height={50} onPress={() => navigation.goBack()}>
+            <PrimaryButton
+              width={125}
+              height={50}
+              onPress={() => navigation.goBack()}
+            >
               Go Back
             </PrimaryButton>
           </View>

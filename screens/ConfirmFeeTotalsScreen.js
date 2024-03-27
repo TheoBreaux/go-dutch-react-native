@@ -173,7 +173,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://03ff-2603-8000-c0f0-a570-e95b-199c-a214-1fed.ngrok-free.app/diningevent/values`,
+        `https://24b9-2603-8000-c0f0-a570-7971-f873-39b3-59e7.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -211,7 +211,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://03ff-2603-8000-c0f0-a570-e95b-199c-a214-1fed.ngrok-free.app/additionaldiners/values`,
+        `https://24b9-2603-8000-c0f0-a570-7971-f873-39b3-59e7.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -3,8 +3,6 @@ import FavoriteRestaurantsList from "../components/FavoriteRestaurantsList";
 import FavoriteDinersList from "../components/FavoriteDinersList";
 import Logo from "../components/Logo";
 import Colors from "../constants/colors";
-import { useState } from "react";
-import Spinner from "../components/Spinner";
 import { useSelector } from "react-redux";
 
 const FavoritesScreen = () => {
@@ -51,9 +49,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     marginTop: -20,
-    // justifyContent: "center",
-    // borderColor: "black",
-    // borderWidth: 1,
   },
   noFavoritesText: {
     fontFamily: "red-hat-bold",
@@ -65,8 +60,7 @@ const styles = StyleSheet.create({
   favoriteDinersContainer: {
     flex: 1,
     padding: 15,
-    // borderColor: "black",
-    // borderWidth: 1,
+    marginBottom:25,
   },
   title: {
     textAlign: "center",
