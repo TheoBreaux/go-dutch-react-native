@@ -15,7 +15,7 @@ const FavoriteDinerCard = ({
 
   const navigateToUserProfile = (selectedUser) => {
     navigation.navigate("ViewUserProfileScreen", { selectedUser });
-  };;
+  };
 
   return (
     <TouchableOpacity
@@ -37,16 +37,16 @@ const FavoriteDinerCard = ({
         )}
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <View style={{ flexDirection: "column", width: "50%" }}>
-          <Text style={styles.text}>
+      <View style={styles.dinerInfoContainer}>
+        <View style={styles.dinerInfo}>
+          <Text style={styles.name}>
             {item.firstName + " " + item.lastName}
           </Text>
           <Text style={styles.text}>@{item.additionalDinerUsername}</Text>
           <Text style={styles.text}>{item.location}</Text>
         </View>
 
-        <View style={{ width: "75%" }}>
+        <View style={styles.favoritesIconContainer}>
           <FavoritesIconButton
             size={50}
             name={item.isDinerFavorited ? "heart-circle" : "heart-outline"}
@@ -82,16 +82,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 40,
   },
+  dinerInfoContainer: { flexDirection: "row", alignItems: "center" },
+  dinerInfo: { flexDirection: "column", width: "50%" },
   image: {
     width: 80,
     height: 80,
     borderRadius: 40,
     resizeMode: "contain",
   },
+  name: { fontSize: 16, fontFamily: "red-hat-bold" },
   text: {
     fontSize: 14,
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-normal",
   },
+  favoritesIconContainer: { width: "70%" },
 });
 
 export default FavoriteDinerCard;

@@ -88,19 +88,36 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
         </View>
         <View style={styles.restaurantInfo}>
           <View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={styles.restaurantName}>{restaurant.name}</Text>
-              <FavoritesIconButton
-                size={35}
-                name={restaurant.isFavorited ? "heart-circle" : "heart-outline"}
-                color={
-                  restaurant.isFavorited
-                    ? Colors.goDutchRed
-                    : Colors.goDutchBlue
-                }
-                onPress={() => handleFavorites(restaurant)}
-                isFavorited={isFavorited}
-              />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.restaurantNameAndRating}>
+                  {restaurant.name}
+                </Text>
+                <FavoritesIconButton
+                  size={35}
+                  name={
+                    restaurant.isFavorited ? "heart-circle" : "heart-outline"
+                  }
+                  color={
+                    restaurant.isFavorited
+                      ? Colors.goDutchRed
+                      : Colors.goDutchBlue
+                  }
+                  onPress={() => handleFavorites(restaurant)}
+                  isFavorited={isFavorited}
+                />
+              </View>
+
+              <Text style={styles.restaurantNameAndRating}>
+                {restaurant.rating + " ⭐"}
+              </Text>
             </View>
 
             <Text style={styles.restaurantText}>{restaurant.address}</Text>
@@ -168,7 +185,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "space-between",
   },
-  restaurantName: {
+  restaurantNameAndRating: {
     fontFamily: "red-hat-bold",
     fontSize: 30,
     flexWrap: "wrap",

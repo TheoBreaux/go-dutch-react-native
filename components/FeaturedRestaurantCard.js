@@ -32,17 +32,9 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
       </View>
 
       <View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text
-            style={[styles.text, { fontFamily: "red-hat-bold", width: "50%" }]}
-          >
-            {restaurant.name}
-          </Text>
-          <Text
-            style={[styles.text, { fontFamily: "red-hat-bold", width: "50%" }]}
-          >
-            {restaurant.rating + " ⭐"}
-          </Text>
+        <View style={styles.nameAndRatingContainer}>
+          <Text style={styles.nameAndRating}>{restaurant.name}</Text>
+          <Text style={styles.nameAndRating}>{restaurant.rating + " ⭐"}</Text>
         </View>
 
         <Text style={styles.text}>{restaurant.address}</Text>
@@ -50,9 +42,7 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
           {restaurant.city + ", " + restaurant.state + " " + restaurant.zip}
         </Text>
 
-        <Text style={[styles.text, { fontFamily: "red-hat-bold" }]}>
-          {restaurant.phone}
-        </Text>
+        <Text style={styles.phoneText}>{restaurant.phone}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -79,9 +69,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
   },
+  nameAndRatingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  nameAndRating: {
+    fontSize: 16,
+    fontFamily: "red-hat-bold",
+    width: "50%",
+  },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "red-hat-normal",
+  },
+  phoneText: {
+    fontFamily: "red-hat-bold",
+    fontSize: 14,
   },
 });
 

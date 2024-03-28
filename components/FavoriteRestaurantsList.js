@@ -25,6 +25,11 @@ const FavoriteRestaurantsList = () => {
     navigation.navigate("FeaturedRestaurantDetailsScreen", { restaurant });
   };
 
+  const test = () => {
+    console.log("test");
+  };
+  const isFavorited = true;
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -35,7 +40,7 @@ const FavoriteRestaurantsList = () => {
           {imageError ? (
             <Image
               source={require("../assets/restaurant-placeholder.png")}
-              style={[styles.image, { resizeMode: "contain" }]}
+              style={styles.image}
             />
           ) : (
             <Image
@@ -45,51 +50,32 @@ const FavoriteRestaurantsList = () => {
             />
           )}
         </View>
-        <View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                styles.text,
-                { fontFamily: "red-hat-bold", width: "50%" },
-              ]}
-            >
-              {item.name}
+
+        <View style={styles.restaurantInfo}>
+          <View>
+            <View style={[styles.restaurantInfo, { width: "50%" }]}>
+              <Text style={[styles.text, { width: "100%" }]}>{item.name}</Text>
+            </View>
+
+            <Text style={styles.address}>{item.address}</Text>
+            <Text style={styles.address}>
+              {item.city + ", " + item.state + " " + item.zip}
             </Text>
-            {!allowFavoritesRemoval && (
-              <Text
-                style={[
-                  styles.text,
-                  { fontFamily: "red-hat-bold", width: "50%" },
-                ]}
-              >
-                {item.rating + " ⭐"}
-              </Text>
-            )}
-            {allowFavoritesRemoval && (
-              <View style={{ width: "50%" }}>
-                <FavoritesIconButton
-                  size={50}
-                  name="heart-circle"
-                  color={Colors.goDutchRed}
-                  // name={item.isFavorited ? "heart-circle" : "heart-outline"}
-                  // color={item.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue}
-                  // onPress={() => handleFavorites(item)}
-                  // isFavorited={isFavorited}
-                />
-              </View>
-            )}
+
+            <Text style={styles.text}>{item.phone}</Text>
           </View>
 
-          <Text style={styles.text}>{item.address}</Text>
-          <Text style={styles.text}>
-            {item.city + ", " + item.state + " " + item.zip}
-          </Text>
-
-          <Text style={[styles.text, { fontFamily: "red-hat-bold" }]}>
-            {item.phone}
-          </Text>
+          {!allowFavoritesRemoval && (
+            <View style={{ width: "35%" }}>
+              <FavoritesIconButton
+                size={50}
+                name="heart-circle"
+                color={Colors.goDutchRed}
+                onPress={test}
+                isFavorited={isFavorited}
+              />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -128,9 +114,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
   },
-  text: {
+  restaurantInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  address: {
     fontSize: 14,
     fontFamily: "red-hat-normal",
+  },
+  text: {
+    fontSize: 14,
+    fontFamily: "red-hat-bold",
   },
 });
 

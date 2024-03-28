@@ -39,3 +39,19 @@ CREATE TABLE additional_diners (
     birthday BOOLEAN,
     diner_meal_cost DECIMAL(10, 2)
 );
+
+CREATE TABLE favorite_diners (
+    favorite_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
+    date_favorited DATE DEFAULT CURRENT_DATE,
+    isFavored BOOLEAN DEFAULT TRUE,
+    notes TEXT
+);
+
+CREATE TABLE favorite_restaurants (
+    favorite_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
+    date_favorited DATE DEFAULT CURRENT_DATE,
+    isFavored BOOLEAN DEFAULT TRUE,
+    notes TEXT
+);
