@@ -90,9 +90,9 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     resizeMode: "contain",
   },
-  name: { fontSize: 16, fontFamily: "red-hat-bold" },
+  name: { fontSize: 18, fontFamily: "red-hat-bold" },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "red-hat-normal",
   },
   favoritesIconContainer: { width: "70%" },

@@ -23,6 +23,7 @@ export const months = [
 
 export const featuredRestaurants = [
   {
+    restaurantId: 1,
     name: "Norah",
     address: "8279 Santa Monica Blvd",
     city: "West Hollywood",
@@ -37,6 +38,7 @@ export const featuredRestaurants = [
     isFavorited: false,
   },
   {
+    restaurantId: 2,
     name: "Met Him At A Bar",
     address: "801 S La Brea",
     city: "Los Angeles",
@@ -51,6 +53,7 @@ export const featuredRestaurants = [
     isFavorited: false,
   },
   {
+    restaurantId: 3,
     name: "Loulou",
     address: "395 Santa Monica Pl, Ste 300",
     city: "Santa Monica",
@@ -64,6 +67,7 @@ export const featuredRestaurants = [
     isFavorited: false,
   },
   {
+    restaurantId: 4,
     name: "Bestia",
     address: "2121 E 7th Pl",
     city: "Los Angeles",
@@ -79,6 +83,7 @@ export const featuredRestaurants = [
   },
 
   {
+    restaurantId: 5,
     name: "Laurel Hardware",
     address: "7984 Santa Monica Blvd",
     city: "West Hollywood",
@@ -94,6 +99,7 @@ export const featuredRestaurants = [
   },
 
   {
+    restaurantId: 6,
     name: "Girl & the Goat",
     address: "555-3 Mateo St",
     city: "Los Angeles",
@@ -109,6 +115,7 @@ export const featuredRestaurants = [
   },
 
   {
+    restaurantId: 7,
     name: "République Restaurant",
     address: "624 S La Brea Ave",
     city: "Los Angeles",
@@ -124,6 +131,7 @@ export const featuredRestaurants = [
   },
 
   {
+    restaurantId: 8,
     name: "Rao's",
     address: "1006 Seward St",
     city: "Los Angeles",

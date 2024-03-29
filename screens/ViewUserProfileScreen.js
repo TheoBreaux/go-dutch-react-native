@@ -7,17 +7,15 @@ import Spinner from "../components/Spinner";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import FavoritesIconButton from "../components/FavoritesIconButton";
-import { useDispatch, useSelector } from "react-redux";
-import Colors from "../constants/colors";
-import { assignAndRemoveFavoriteDiners } from "../store/store";
+import { useSelector } from "react-redux";
 
 const ViewUserProfile = ({ route }) => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [favoriteDiners, setFavoriteDiners] = useState([]);
 
   const { selectedUser } = route.params;
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const firstName = selectedUser.firstName;
   const lastName = selectedUser.lastName;
@@ -32,21 +30,7 @@ const ViewUserProfile = ({ route }) => {
   const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
 
-  const isFavorited = useSelector((state) => {
-    const favoriteDinersList = state.userInfo.favoriteDinersList;
-
-    const dinerNameToFind = selectedUser.additionalDinerUsername;
-
-    const foundDiner = favoriteDinersList.find((selectedUser) => {
-      return selectedUser.additionalDinerUsername === dinerNameToFind;
-    });
-
-    return foundDiner ? foundDiner.isFavorited : false;
-  });
-
-  const handleFavorites = (selectedUser) => {
-    dispatch(assignAndRemoveFavoriteDiners(selectedUser));
-  };
+  const handleFavoriteDinerToggle = () => {};
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -110,13 +94,10 @@ const ViewUserProfile = ({ route }) => {
           <Text style={styles.userFullName}>{firstName + " " + lastName}</Text>
 
           <FavoritesIconButton
-            size={50}
-            name={selectedUser.isFavorited ? "heart-circle" : "heart-outline"}
-            color={
-              selectedUser.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue
-            }
-            onPress={() => handleFavorites(selectedUser)}
-            isFavorited={isFavorited}
+            onPress={handleFavoriteDinerToggle}
+            size={35}
+            // itemId={restaurant.restaurantId}
+            favoritesArray={favoriteDiners}
           />
         </View>
 

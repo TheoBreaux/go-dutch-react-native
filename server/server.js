@@ -576,3 +576,99 @@ app.post(
     res.send({ imageKey: result.Key });
   }
 );
+
+// GET FEATURED RESTAURANTS
+app.get("/featuredrestaurants", async (req, res) => {
+  try {
+    const featuredRestaurants = await pool.query(
+      `SELECT *
+      FROM featured_restaurants;`
+    );
+
+    const featuredRestaurantData = featuredRestaurants.rows.map((row) => ({
+      restaurantID: row.restaurant_id,
+      name: row.name,
+      address: row.address,
+      city: row.city,
+      state: row.state,
+      zip: row.zip,
+      website: row.website,
+      rating: row.rating,
+      phone: row.phone,
+      bio: row.bio,
+      cuisine: row.cuisine,
+      imgUrl: row.img_url,
+      isFavorited: row.is_favorited,
+    }));
+
+    res.json(featuredRestaurantData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//INSERT FAVORITE RESTAURANTS
+app.post("/updatefavoriterestaurants", async (req, res) => {
+  console.log(req.body);
+  const {
+    favoriteRestaurantId,
+    userId,
+    name,
+    address,
+    city,
+    state,
+    zip,
+    rating,
+    bio,
+    website,
+    phone,
+    dateFavorited,
+    isFavorited,
+    imgUrl,
+  } = req.body;
+
+  try {
+    const newFavoriteRestaurant = await pool.query(
+      `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, isfavorited, imgurl) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+
+      [
+        favoriteRestaurantId,
+        userId,
+        name,
+        address,
+        city,
+        state,
+        zip,
+        rating,
+        bio,
+        website,
+        phone,
+        dateFavorited,
+        isFavorited,
+        imgUrl,
+      ]
+    );
+    res.status(200).json({ message: "Restaurant saved successfully" }); // Send success status if the update is successful
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ detail: "Internal server error" }); // Send an appropriate error response
+  }
+});
+
+//INSERT NOTES ON RESTAURANT
+app.post("/saverestaurantnotes", async (req, res) => {
+  const { notes, favoriteRestaurantId, userId } = req.body;
+  console.log(req.body);
+
+  try {
+    const newNotes = await pool.query(
+      `INSERT INTO favorite_restaurants(notes, user_id, favorite_restaurant_id) VALUES($1,$2,$3)`,
+      [notes, userId, favoriteRestaurantId]
+    );
+    res.status(200).json({ message: "Notes saved successfully" }); // Send success status if the update is successful
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ detail: "Internal server error" }); // Send an appropriate error response
+  }
+});

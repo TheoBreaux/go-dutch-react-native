@@ -41,17 +41,50 @@ CREATE TABLE additional_diners (
 );
 
 CREATE TABLE favorite_diners (
-    favorite_id SERIAL PRIMARY KEY,
+    favorite_diner_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),
+    username VARCHAR REFERENCES users(username),
     date_favorited DATE DEFAULT CURRENT_DATE,
-    isFavored BOOLEAN DEFAULT TRUE,
-    notes TEXT
+    isFavorited BOOLEAN DEFAULT TRUE,
+    notes VARCHAR(600)
 );
 
 CREATE TABLE favorite_restaurants (
-    favorite_id SERIAL PRIMARY KEY,
+    favorite_restaurant_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),
+    name VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(50),
+    zip VARCHAR(50),
+    rating VARCHAR(50),
+    bio TEXT,
+    website VARCHAR(150),
+    phone VARCHAR(50),
     date_favorited DATE DEFAULT CURRENT_DATE,
-    isFavored BOOLEAN DEFAULT TRUE,
-    notes TEXT
+    isFavorited BOOLEAN,
+    imgUrl VARCHAR(150),
+    notes VARCHAR(600)
 );
+
+CREATE TABLE featured_restaurants (
+    restaurant_id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(50),
+    zip VARCHAR(50),
+    website VARCHAR(150),
+    rating VARCHAR(50),
+    phone VARCHAR(50),
+    bio TEXT,
+    cuisine TEXT,
+    img_url VARCHAR(300),
+    is_favorited BOOLEAN DEFAULT FALSE
+);
+
+  
+   
+  
+     
+  

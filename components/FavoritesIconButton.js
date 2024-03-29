@@ -1,16 +1,12 @@
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import Colors from "../constants/colors";
 
-const FavoritesIconButton = ({ name, size, color, onPress, isFavorited }) => {
-  const handlePress = () => {
-    onPress();
-  };
-
+const FavoritesIconButton = ({ size, onPress, isFavorited }) => {
+  
   return (
     <Pressable
-      onPress={handlePress}
+      onPress={onPress}
       style={({ pressed }) => [
         {
           opacity: pressed ? 0.7 : 1,

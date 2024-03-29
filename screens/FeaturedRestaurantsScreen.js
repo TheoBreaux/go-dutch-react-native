@@ -3,11 +3,11 @@ import Logo from "../components/Logo";
 import React, { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import FeaturedRestaurantCard from "../components/FeaturedRestaurantCard";
-import { featuredRestaurants } from "../data/data";
 import Colors from "../constants/colors";
 
 const FeaturedRestaurantsScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
 
   // Simulate loading delay
   useEffect(() => {
@@ -18,18 +18,35 @@ const FeaturedRestaurantsScreen = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    getFeaturedRestaurants();
+  }, []);
+
+  const getFeaturedRestaurants = async () => {
+    try {
+      const response = await fetch(
+        `https://c16a-2603-8000-c0f0-a570-19a1-7ff5-79b9-aef1.ngrok-free.app/featuredrestaurants`
+      );
+      const data = await response.json();
+      console.log("DATA", data);
+      setFeaturedRestaurants(data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <>
       <Logo />
-      <View style={styles.titleContainer}>
-        {!isLoading && (
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>Featured Restaurants</Text>
-          </View>
-        )}
-      </View>
-
       <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          {!isLoading && (
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>Featured Restaurants</Text>
+            </View>
+          )}
+        </View>
+
         {isLoading && (
           <Spinner
             indicatorSize={200}
@@ -53,6 +70,12 @@ const FeaturedRestaurantsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    justifyContent: "center",
+    marginTop: -10,
+  },
   titleContainer: {
     borderBottomColor: Colors.goDutchBlue,
     width: "100%",
@@ -78,12 +101,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginTop: -10,
     color: Colors.goDutchRed,
-  },
-  container: {
-    flex: 1,
-    padding: 15,
-    justifyContent: "center",
-    marginTop: -10,
   },
 });
 

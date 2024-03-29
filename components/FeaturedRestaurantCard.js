@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
+    marginTop: 5,
   },
   image: {
     width: 100,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   },
   phoneText: {
     fontFamily: "red-hat-bold",
-    fontSize: 14,
+    fontSize: 16,
   },
 });
 

@@ -56,51 +56,6 @@ const userInfoSlice = createSlice({
       const profileImageKey = action.payload;
       state.user.profileImageKey = profileImageKey;
     },
-    assignAndRemoveFavoriteDiners: (state, action) => {
-      const item = action.payload;
-
-      const itemIndex = state.favoriteDinersList.findIndex((diner) => {
-        return diner.additionalDinerUsername === item.additionalDinerUsername;
-      });
-      // If the item is not in the array, put it in
-      if (itemIndex === -1) {
-        const newDiner = { ...item, isFavorited: true };
-        state.favoriteDinersList.push(newDiner);
-      } else {
-        // If it is in the array, toggle its favorite status
-        state.favoriteDinersList[itemIndex].isFavorited =
-          !state.favoriteDinersList[itemIndex].isFavorited;
-
-        // If the diner is no longer favorited, remove from the list
-        if (!state.favoriteDinersList[itemIndex].isFavorited) {
-          state.favoriteDinersList.splice(itemIndex, 1);
-        }
-      }
-    },
-
-    assignAndRemoveFavoriteRestaurants: (state, action) => {
-      const item = action.payload;
-      const itemIndex = state.favoriteRestaurantsList.findIndex(
-        (restaurant) => {
-          return restaurant.name === item.name;
-        }
-      );
-
-      // If the item is not in the array, put it in
-      if (itemIndex === -1) {
-        const newItem = { ...item, isFavorited: true };
-        state.favoriteRestaurantsList.push(newItem);
-      } else {
-        // If it is in the array, toggle its favorite status
-        state.favoriteRestaurantsList[itemIndex].isFavorited =
-          !state.favoriteRestaurantsList[itemIndex].isFavorited;
-
-        // If the restaurant is no longer favorited, remove it from the list
-        if (!state.favoriteRestaurantsList[itemIndex].isFavorited) {
-          state.favoriteRestaurantsList.splice(itemIndex, 1);
-        }
-      }
-    },
     logOut: (state) => {
       state.user = {};
     },
@@ -278,8 +233,6 @@ export const {
   setRestaurantList,
   updateUserProfileImageKey,
   updateUserInfo,
-  assignAndRemoveFavoriteDiners,
-  assignAndRemoveFavoriteRestaurants,
   logOut,
 } = userInfoSlice.actions;
 

@@ -17,7 +17,7 @@ const DiningEventHistoryScreen = () => {
   const getData = async () => {
     try {
       const response = await fetch(
-        `https://24b9-2603-8000-c0f0-a570-7971-f873-39b3-59e7.ngrok-free.app/diningevents/${username}`
+        `https://c16a-2603-8000-c0f0-a570-19a1-7ff5-79b9-aef1.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
       setDiningEvents(data.eventData);
@@ -82,7 +82,7 @@ const DiningEventHistoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    padding: 10,
     marginTop: -15,
   },
   textContainer: {

@@ -103,7 +103,13 @@ const HomePageScreen = () => {
 
       <View style={styles.container}>
         <View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Text style={styles.title}>Welcome, {firstName}!</Text>
             <CustomProfileIcon
               onPress={() => navigation.navigate("ProfileScreen")}
@@ -149,9 +155,10 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   subtitle: {
+    marginTop: -5,
     fontFamily: "red-hat-normal",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 25,
   },
 });
 

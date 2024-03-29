@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   address: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "red-hat-normal",
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "red-hat-bold",
   },
 });

@@ -2,12 +2,12 @@ import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
 import Colors from "../constants/colors";
 
 const PrimaryButton = ({ children, onPress, padding, width, height }) => {
-
   const buttonContainerStyle = {
     padding: padding !== undefined ? padding : 10,
     width: width !== undefined ? width : "auto",
     height: height !== undefined ? height : "auto",
   };
+
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   buttonOuterContainer: {
     borderRadius: 5,
     borderWidth: 2,
-    margin: 10,
+    margin: 5,
     overflow: "hidden",
     borderColor: Colors.goDutchBlue,
   },
