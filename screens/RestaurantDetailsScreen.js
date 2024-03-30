@@ -10,15 +10,15 @@ import {
   SafeAreaView,
   Linking,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 import FavoritesIconButton from "../components/FavoritesIconButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-const FeaturedRestaurantDetailsScreen = ({ route }) => {
+const RestaurantDetailsScreen = ({ route }) => {
   const { restaurant } = route.params;
 
   const userId = useSelector((state) => state.userInfo.user.userId);
@@ -27,7 +27,6 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
   const [error, setError] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [notes, setNotes] = useState("");
-  const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const [saveButtonPressed, setSaveButtonPressed] = useState(false);
   const [saveButtonText, setSaveButtonText] = useState("Save");
   const [saveButtonColor, setSaveButtonColor] = useState(Colors.goDutchBlue);
@@ -38,9 +37,28 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
     setNotes(text);
   };
 
+  useEffect(() => {
+    fetchFavoritesStatus();
+  }, [userId, restaurant.favoriteRestaurantId]);
+
+  const fetchFavoritesStatus = async () => {
+    try {
+      const response = await fetch(
+        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurant.restaurantId}`
+      );
+      const data = await response.json();
+      // Set isFavorited based on the response from the server
+      setIsFavorited(data.isFavorited);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleFavoriteRestaurantToggle = async () => {
     //set selected resturant isFavorited value to true
     setIsFavorited((prevIsFavorited) => !prevIsFavorited);
+
+    restaurant.isFavorited = !isFavorited;
 
     const newFavoriteRestaurant = {
       favoriteRestaurantId: restaurant.restaurantId,
@@ -61,7 +79,7 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://c16a-2603-8000-c0f0-a570-19a1-7ff5-79b9-aef1.ngrok-free.app/updatefavoriterestaurants",
+        "https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/updatefavoriterestaurants",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -91,7 +109,7 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://c16a-2603-8000-c0f0-a570-19a1-7ff5-79b9-aef1.ngrok-free.app/saverestaurantnotes",
+        "https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/saverestaurantnotes",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -116,8 +134,6 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
   const handleExternalLink = (url) => {
     Linking.openURL(url);
   };
-
-  console.log("RESTAURANT", restaurant);
 
   return (
     <>
@@ -195,7 +211,9 @@ const FeaturedRestaurantDetailsScreen = ({ route }) => {
               </View>
             </View>
           </View>
-          <Text style={styles.restaurantBioText}>{restaurant.bio}</Text>
+          <View style={styles.restaurantBioTextContainer}>
+            <Text style={styles.restaurantBioText}>{restaurant.bio}</Text>
+          </View>
 
           <View style={styles.textInputContainer}>
             <TextInput
@@ -236,7 +254,7 @@ const styles = StyleSheet.create({
     top: 30,
     left: 20,
   },
-  restaurantInfoContainer: { padding: 10 },
+  restaurantInfoContainer: { paddingVertical: 10 },
   splitButtonImageContainer: {
     borderColor: "#cdc8c8",
     backgroundColor: "white",
@@ -258,15 +276,15 @@ const styles = StyleSheet.create({
   restaurantInfo: {
     padding: 10,
     marginTop: 15,
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    // alignContent: "center",
+    // justifyContent: "space-between",
   },
   restaurantHeader: {
     flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
+    // width: "100%",
   },
   restaurantNameAndRating: {
     fontFamily: "red-hat-bold",
@@ -288,28 +306,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "justify",
   },
+  restaurantBioTextContainer: { marginTop: -10 },
   restaurantBioText: {
     fontSize: 15,
     textAlign: "justify",
     color: "#555151",
     fontFamily: "red-hat-normal",
-    padding: 10,
-    marginTop: -10,
+    paddingHorizontal: 10,
   },
   favoritesIconContainer: {
     position: "absolute",
     left: 80,
     top: 60,
   },
-  buttonContainer: { marginBottom: -15, marginHorizontal: -5 },
+  buttonContainer: { marginHorizontal: -5 },
   buttonText: { fontSize: 25, textDecorationLine: "underline" },
   textInputContainer: {
     marginBottom: -10,
-    padding: 10,
+    paddingHorizontal: 10,
     marginTop: -10,
   },
   input: {
-    marginTop: -25,
     borderWidth: 1,
     borderColor: "#555151",
     borderRadius: 5,
@@ -317,7 +334,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "red-hat-bold",
   },
-  saveButtonContainer: { flexDirection: "row", alignItems: "center" },
+  saveButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    // marginBottom: 5,
+  },
   saveButton: {
     backgroundColor: Colors.goDutchBlue,
     paddingVertical: 10,
@@ -334,4 +355,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeaturedRestaurantDetailsScreen;
+export default RestaurantDetailsScreen;

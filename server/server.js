@@ -93,6 +93,35 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// AWS - POST PROFILE IMAGES
+app.post("/users/profileimages", upload.single("image"), async (req, res) => {
+  const file = req.file;
+  const result = await uploadFile(file);
+  await unlinkFile(file.path);
+  res.send({ imageKey: result.Key });
+});
+
+//AWS - UPDATE PROFILE IMAGES
+app.post(
+  "/users/profileimages/update",
+  upload.single("image"),
+  async (req, res) => {
+    const file = req.file;
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+    try {
+      const updatedProfileImage = await pool.query(
+        "UPDATE users SET profile_image_key = $1 WHERE username = $2",
+        [profileImageKey, username]
+      );
+      res.send({ imageKey: result.Key });
+    } catch (error) {
+      console.error(error); // Log the error
+      res.status(500).send("Error updating profile image");
+    }
+  }
+);
+
 //SEND PAYMENT SOURCES INFO - UPDATE USER PROFILE
 app.post("/users", async (req, res) => {
   const {
@@ -209,6 +238,18 @@ app.post("/updateprofile", async (req, res) => {
     }
   }
 });
+
+//AWS - POST RECEIPT IMAGES
+app.post(
+  "/diningevents/receiptimages",
+  upload.single("image"),
+  async (req, res) => {
+    const file = req.file;
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+    res.send({ imageKey: result.Key });
+  }
+);
 
 // SEND NEW DINING EVENTS TO DATABASE
 app.post("/diningevents", async (req, res) => {
@@ -536,47 +577,6 @@ app.post("/additionaldiners/values", async (req, res) => {
   }
 });
 
-// AWS - POST PROFILE IMAGES
-app.post("/users/profileimages", upload.single("image"), async (req, res) => {
-  const file = req.file;
-  const result = await uploadFile(file);
-  await unlinkFile(file.path);
-  res.send({ imageKey: result.Key });
-});
-
-//AWS - UPDATE PROFILE IMAGES
-app.post(
-  "/users/profileimages/update",
-  upload.single("image"),
-  async (req, res) => {
-    const file = req.file;
-    const result = await uploadFile(file);
-    await unlinkFile(file.path);
-    try {
-      const updatedProfileImage = await pool.query(
-        "UPDATE users SET profile_image_key = $1 WHERE username = $2",
-        [profileImageKey, username]
-      );
-      res.send({ imageKey: result.Key });
-    } catch (error) {
-      console.error(error); // Log the error
-      res.status(500).send("Error updating profile image");
-    }
-  }
-);
-
-//AWS - POST RECEIPT IMAGES
-app.post(
-  "/diningevents/receiptimages",
-  upload.single("image"),
-  async (req, res) => {
-    const file = req.file;
-    const result = await uploadFile(file);
-    await unlinkFile(file.path);
-    res.send({ imageKey: result.Key });
-  }
-);
-
 // GET FEATURED RESTAURANTS
 app.get("/featuredrestaurants", async (req, res) => {
   try {
@@ -586,7 +586,7 @@ app.get("/featuredrestaurants", async (req, res) => {
     );
 
     const featuredRestaurantData = featuredRestaurants.rows.map((row) => ({
-      restaurantID: row.restaurant_id,
+      restaurantId: row.restaurant_id,
       name: row.name,
       address: row.address,
       city: row.city,
@@ -608,9 +608,83 @@ app.get("/featuredrestaurants", async (req, res) => {
   }
 });
 
-//INSERT FAVORITE RESTAURANTS
+//GET FAVORITE RESTAURANTS
+app.get("/getfavoriterestaurants", async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const favoriteRestaurants = await pool.query(
+      `SELECT * FROM favorite_restaurants
+      WHERE user_id =$1`,
+      [userId]
+    );
+
+    const favoriteRestaurantsData = favoriteRestaurants.rows.map((row) => ({
+      dateFavorited: row.date_favorited,
+      favoriteRestaurantId: row.favorite_restaurant_id,
+      imgUrl: row.img_url,
+      isFavorited: row.is_favorited,
+      userId: row.user_id,
+      name: row.name,
+      address: row.address,
+      city: row.city,
+      state: row.state,
+      zip: row.zip,
+      rating: row.rating,
+      bio: row.bio,
+      website: row.website,
+      phone: row.phone,
+      notes: row.notes,
+    }));
+    res.json(favoriteRestaurantsData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//GET FAVORITE DINERS
+app.get("/getfavoritediners", async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const favoriteDiners = await pool.query(
+      `SELECT * FROM favorite_diners
+      WHERE user_id = $1`,
+      [userId]
+    );
+    res.json(favoriteDiners.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// GET RESTAURANT FAVORITES STATUS
+app.get("/getfavoritestatus", async (req, res) => {
+  const { userId, restaurantId } = req.query;
+
+  try {
+    const favoriteStatusQuery = await pool.query(
+      `SELECT is_favorited
+      FROM favorite_restaurants
+      WHERE user_id = $1 AND favorite_restaurant_id = $2`,
+      [userId, restaurantId]
+    );
+
+    if (favoriteStatusQuery.rows.length > 0) {
+      const isFavorited = favoriteStatusQuery.rows[0].is_favorited;
+      res.status(200).json({ isFavorited });
+    } else {
+      // If there is no matching record, send the default value (false)
+      res.status(200).json({ isFavorited: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//INSERT OR UPDATE FAVORITE RESTAURANTS
 app.post("/updatefavoriterestaurants", async (req, res) => {
-  console.log(req.body);
   const {
     favoriteRestaurantId,
     userId,
@@ -629,26 +703,45 @@ app.post("/updatefavoriterestaurants", async (req, res) => {
   } = req.body;
 
   try {
-    const newFavoriteRestaurant = await pool.query(
-      `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, isfavorited, imgurl) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
-
-      [
-        favoriteRestaurantId,
-        userId,
-        name,
-        address,
-        city,
-        state,
-        zip,
-        rating,
-        bio,
-        website,
-        phone,
-        dateFavorited,
-        isFavorited,
-        imgUrl,
-      ]
+    //check to see if record exists
+    const existingFavoriteRestaurant = await pool.query(
+      `SELECT * FROM favorite_restaurants 
+      WHERE favorite_restaurant_id = $1 AND user_id = $2`,
+      [favoriteRestaurantId, userId]
     );
+
+    if (existingFavoriteRestaurant.rows.length > 0) {
+      // update existing record
+      await pool.query(
+        `UPDATE favorite_restaurants 
+        SET is_favorited = $1 
+        WHERE favorite_restaurant_id = $2 AND user_id = $3`,
+        [isFavorited, favoriteRestaurantId, userId]
+      );
+    } else {
+      //insert new favorite record
+      const newFavoriteRestaurant = await pool.query(
+        `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, is_favorited, img_url) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+
+        [
+          favoriteRestaurantId,
+          userId,
+          name,
+          address,
+          city,
+          state,
+          zip,
+          rating,
+          bio,
+          website,
+          phone,
+          dateFavorited,
+          isFavorited,
+          imgUrl,
+        ]
+      );
+    }
+
     res.status(200).json({ message: "Restaurant saved successfully" }); // Send success status if the update is successful
   } catch (error) {
     console.error(error);
@@ -659,7 +752,6 @@ app.post("/updatefavoriterestaurants", async (req, res) => {
 //INSERT NOTES ON RESTAURANT
 app.post("/saverestaurantnotes", async (req, res) => {
   const { notes, favoriteRestaurantId, userId } = req.body;
-  console.log(req.body);
 
   try {
     const newNotes = await pool.query(

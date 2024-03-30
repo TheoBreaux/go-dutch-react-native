@@ -8,7 +8,6 @@ import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 import CustomProfileIcon from "../components/CustomProfileIcon";
 import CustomModal from "../components/CustomModal";
-import { featuredRestaurants } from "../data/data";
 import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant";
 import Colors from "../constants/colors";
 
@@ -20,6 +19,7 @@ const HomePageScreen = () => {
   const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
     useState(usingDefaultProfilePhoto);
   const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
+  const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
 
   const firstName = useSelector((state) => state.userInfo.user.firstName);
   const goDutchUsername = useSelector((state) => state.userInfo.user.username);
@@ -35,10 +35,14 @@ const HomePageScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    getFeaturedRestaurants();
+  }, []);
+
+  useEffect(() => {
     // Shuffle the featuredRestaurants array when component mounts
     const shuffled = [...featuredRestaurants].sort(() => Math.random() - 0.5);
     setShuffledRestaurants(shuffled);
-  }, []);
+  }, [featuredRestaurants]);
 
   useEffect(() => {
     dispatch(
@@ -61,6 +65,18 @@ const HomePageScreen = () => {
       })
     );
   }, [goDutchUsername]);
+
+  const getFeaturedRestaurants = async () => {
+    try {
+      const response = await fetch(
+        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/featuredrestaurants`
+      );
+      const data = await response.json();
+      setFeaturedRestaurants(data);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   let currentCity, error;
 
@@ -103,13 +119,7 @@ const HomePageScreen = () => {
 
       <View style={styles.container}>
         <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.profileIconContainer}>
             <Text style={styles.title}>Welcome, {firstName}!</Text>
             <CustomProfileIcon
               onPress={() => navigation.navigate("ProfileScreen")}
@@ -146,6 +156,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+  },
+  profileIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontFamily: "red-hat-bold",

@@ -25,10 +25,9 @@ const FeaturedRestaurantsScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://c16a-2603-8000-c0f0-a570-19a1-7ff5-79b9-aef1.ngrok-free.app/featuredrestaurants`
+        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
-      console.log("DATA", data);
       setFeaturedRestaurants(data);
     } catch (error) {
       throw error;
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
   titleContainer: {
     borderBottomColor: Colors.goDutchBlue,
     width: "100%",
-    paddingHorizontal: 15,
   },
   textContainer: {
     borderBottomColor: Colors.goDutchBlue,

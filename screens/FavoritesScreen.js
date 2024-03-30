@@ -1,51 +1,64 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import FavoriteRestaurantsList from "../components/FavoriteRestaurantsList";
 import FavoriteDinersList from "../components/FavoriteDinersList";
 import Logo from "../components/Logo";
 import Colors from "../constants/colors";
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { assignAndRemoveFavoriteDiners } from "../store/store";
 
 const FavoritesScreen = () => {
-  const dispatch = useDispatch();
-  const favoriteRestaurantsList = useSelector(
-    (state) => state.userInfo.favoriteRestaurantsList
-  );
+  const [favoriteDiners, setFavoriteDiners] = useState([]);
+  const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
 
-  const favoriteDinersList = useSelector(
-    (state) => state.userInfo.favoriteDinersList
-  );
+  const userId = useSelector((state) => state.userInfo.user.userId);
 
   const favoritesSaved =
-    favoriteDinersList.length === 0 && favoriteRestaurantsList.length === 0;
+  (!favoriteDiners || favoriteDiners.length === 0) &&
+  (!favoriteRestaurants || favoriteRestaurants.length === 0);
 
   //if there are restaurants favorited and the length is longer thatn diners list, make it active screen
   const activeScreen =
-    favoriteDinersList &&
-    favoriteDinersList.length > favoriteRestaurantsList.length
+    favoriteDiners && favoriteDiners.length > favoriteRestaurants.length
       ? "Diners"
       : "Restaurants";
 
   const [activeTab, setActiveTab] = useState(activeScreen);
 
-  const isDinerFavorited = (item) =>
-    useSelector((state) => {
-      const favoriteDinersList = state.userInfo.favoriteDinersList;
+  useEffect(() => {
+    fetchFavorites();
+  }, [favoriteRestaurants]);
 
-      const dinerNameToFind = item.additionalDinerUsername;
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch(
+        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoriterestaurants?userId=${userId}`
+      );
+      const data = await response.json();
+      setFavoriteRestaurants(data);
+    } catch (error) {
+      console.error(error);
+    }
 
-      const foundDiner = favoriteDinersList.find((selectedUser) => {
-        return selectedUser.additionalDinerUsername === dinerNameToFind;
-      });
-
-      return foundDiner ? foundDiner.isFavorited : false;
-    });
-
-  const handleFavorites = (item) => {
-    dispatch(assignAndRemoveFavoriteDiners(item));
+    try {
+      const response = await fetch(
+        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoritediners?userId=${userId}`
+      );
+      const data = await response.json();
+      setFavoriteDiners(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const filteredFavoritedRestaurants = favoriteRestaurants.filter(
+    (restaurant) => restaurant.isFavorited
+  );
+
+  const filteredFavoritedDiners = favoriteDiners.filter(
+    (diner) => diner.isFavorited
+  );
+
 
   return (
     <>
@@ -53,7 +66,7 @@ const FavoritesScreen = () => {
 
       <View style={styles.container}>
         <View style={styles.tabContainer}>
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.tab,
               activeTab === "Restaurants" && styles.activeTab,
@@ -74,8 +87,8 @@ const FavoritesScreen = () => {
                 color={Colors.goDutchRed}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             style={[styles.tab, activeTab === "Diners" && styles.activeTab]}
             onPress={() => setActiveTab("Diners")}
           >
@@ -93,7 +106,7 @@ const FavoritesScreen = () => {
                 color={Colors.goDutchRed}
               />
             </View>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {favoritesSaved && (
@@ -102,11 +115,12 @@ const FavoritesScreen = () => {
 
         {activeTab === "Diners" ? (
           <FavoriteDinersList
-            isDinerFavorited={isDinerFavorited}
-            handleFavorites={handleFavorites}
+            filteredFavoritedDinerss={filteredFavoritedDinerss}
           />
         ) : (
-          <FavoriteRestaurantsList />
+          <FavoriteRestaurantsList
+            filteredFavoritedRestaurants={filteredFavoritedRestaurants}
+          />
         )}
       </View>
     </>
@@ -116,18 +130,16 @@ const FavoritesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 15,
+    padding: 10,
+    marginTop: -50,
   },
   tabContainer: {
     flexDirection: "row",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: Colors.goDutchBlue,
     width: "100%",
-    marginTop: 5,
     marginBottom: 10,
   },
   tab: {

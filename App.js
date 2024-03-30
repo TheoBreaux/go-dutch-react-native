@@ -27,7 +27,7 @@ import ConfirmReceiptItemsScreen from "./screens/ConfirmReceiptItemsScreen";
 import CheckCloseOutDetailsScreen from "./screens/CheckCloseOutDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
-import FeaturedRestaurantDetailsScreen from "./screens/FeaturedRestaurantDetailsScreen";
+import RestaurantDetailsScreen from "./screens/RestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
 import { StatusBar } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
@@ -177,8 +177,8 @@ const App = () => {
             component={CheckCloseOutDetailsScreen}
           />
           <Stack.Screen
-            name="FeaturedRestaurantDetailsScreen"
-            component={FeaturedRestaurantDetailsScreen}
+            name="RestaurantDetailsScreen"
+            component={RestaurantDetailsScreen}
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen

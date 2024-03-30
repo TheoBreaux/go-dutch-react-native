@@ -59,12 +59,12 @@ CREATE TABLE favorite_restaurants (
     zip VARCHAR(50),
     rating VARCHAR(50),
     bio TEXT,
-    website VARCHAR(150),
+    website TEXT,
     phone VARCHAR(50),
     date_favorited DATE DEFAULT CURRENT_DATE,
-    isFavorited BOOLEAN,
-    imgUrl VARCHAR(150),
-    notes VARCHAR(600)
+    is_favorited BOOLEAN,
+    img_url VARCHAR(150),
+    notes TEXT
 );
 
 CREATE TABLE featured_restaurants (

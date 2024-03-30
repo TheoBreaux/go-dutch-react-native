@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,7 +8,7 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
   const [imageError, setImageError] = useState(false);
 
   const navigateToFeaturedRestuarantDetails = () => {
-    navigation.navigate("FeaturedRestaurantDetailsScreen", { restaurant });
+    navigation.navigate("RestaurantDetailsScreen", { restaurant });
   };
 
   return (

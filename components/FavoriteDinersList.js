@@ -1,6 +1,6 @@
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AWS from "aws-sdk";
 import Constants from "expo-constants";
 import FavoriteDinerCard from "./FavoriteDinerCard";
