@@ -181,6 +181,7 @@ const App = () => {
             component={RestaurantDetailsScreen}
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen name="FavoritesScreen" component={FavoritesScreen} />
           <Stack.Screen
             name="ViewUserProfileScreen"
             component={ViewUserProfileScreen}
@@ -188,7 +189,7 @@ const App = () => {
           <Stack.Screen
             name="Main"
             component={MainTabNavigator}
-            options={{ headerShown: false }}
+            // options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -2,7 +2,12 @@ import { View, FlatList } from "react-native";
 
 import FavoriteRestaurantCard from "./FavoriteRestaurantCard";
 
-const FavoriteRestaurantsList = ({ filteredFavoritedRestaurants }) => {
+const FavoriteRestaurantsList = ({ favoriteRestaurants }) => {
+
+  const filteredFavoritedRestaurants = favoriteRestaurants
+    ? favoriteRestaurants.filter((restaurant) => restaurant.isFavorited)
+    : [];
+
   const renderItem = ({ item }) => {
     return <FavoriteRestaurantCard item={item} />;
   };

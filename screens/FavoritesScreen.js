@@ -14,8 +14,8 @@ const FavoritesScreen = () => {
   const userId = useSelector((state) => state.userInfo.user.userId);
 
   const favoritesSaved =
-  (!favoriteDiners || favoriteDiners.length === 0) &&
-  (!favoriteRestaurants || favoriteRestaurants.length === 0);
+    (!favoriteDiners || favoriteDiners.length === 0) &&
+    (!favoriteRestaurants || favoriteRestaurants.length === 0);
 
   //if there are restaurants favorited and the length is longer thatn diners list, make it active screen
   const activeScreen =
@@ -23,42 +23,37 @@ const FavoritesScreen = () => {
       ? "Diners"
       : "Restaurants";
 
-  const [activeTab, setActiveTab] = useState(activeScreen);
+  const [activeTab, setActiveTab] = useState("Restaurants");
+
+  // useEffect(() => {
+  //   if (activeTab === "Restaurants") {
+  //     fetchFavorites("restaurants");
+  //   } else if (activeTab === "Diners") {
+  //     fetchFavorites("diners");
+  //   }
+  // }, [activeTab]);
 
   useEffect(() => {
-    fetchFavorites();
-  }, [favoriteRestaurants]);
+    fetchFavorites("restaurants");
+    fetchFavorites("diners");
+  }, [activeTab]);
 
-  const fetchFavorites = async () => {
+  const fetchFavorites = async (type) => {
     try {
       const response = await fetch(
-        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoriterestaurants?userId=${userId}`
+        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
       );
       const data = await response.json();
-      setFavoriteRestaurants(data);
-    } catch (error) {
-      console.error(error);
-    }
 
-    try {
-      const response = await fetch(
-        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoritediners?userId=${userId}`
-      );
-      const data = await response.json();
-      setFavoriteDiners(data);
+      if (type === "restaurants") {
+        setFavoriteRestaurants(data);
+      } else if (type === "diners") {
+        setFavoriteDiners(data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  const filteredFavoritedRestaurants = favoriteRestaurants.filter(
-    (restaurant) => restaurant.isFavorited
-  );
-
-  const filteredFavoritedDiners = favoriteDiners.filter(
-    (diner) => diner.isFavorited
-  );
-
 
   return (
     <>
@@ -114,13 +109,9 @@ const FavoritesScreen = () => {
         )}
 
         {activeTab === "Diners" ? (
-          <FavoriteDinersList
-            filteredFavoritedDinerss={filteredFavoritedDinerss}
-          />
+          <FavoriteDinersList favoriteDiners={favoriteDiners} />
         ) : (
-          <FavoriteRestaurantsList
-            filteredFavoritedRestaurants={filteredFavoritedRestaurants}
-          />
+          <FavoriteRestaurantsList favoriteRestaurants={favoriteRestaurants} />
         )}
       </View>
     </>

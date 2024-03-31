@@ -608,50 +608,53 @@ app.get("/featuredrestaurants", async (req, res) => {
   }
 });
 
-//GET FAVORITE RESTAURANTS
-app.get("/getfavoriterestaurants", async (req, res) => {
-  const { userId } = req.query;
-  try {
-    const favoriteRestaurants = await pool.query(
-      `SELECT * FROM favorite_restaurants
-      WHERE user_id =$1`,
-      [userId]
-    );
+//GET FAVORITE DINERS OR RESTAURANTS
+app.get("/getfavorite", async (req, res) => {
+  const { userId, type } = req.query;
+  let query;
 
-    const favoriteRestaurantsData = favoriteRestaurants.rows.map((row) => ({
-      dateFavorited: row.date_favorited,
-      favoriteRestaurantId: row.favorite_restaurant_id,
-      imgUrl: row.img_url,
-      isFavorited: row.is_favorited,
-      userId: row.user_id,
-      name: row.name,
-      address: row.address,
-      city: row.city,
-      state: row.state,
-      zip: row.zip,
-      rating: row.rating,
-      bio: row.bio,
-      website: row.website,
-      phone: row.phone,
-      notes: row.notes,
-    }));
-    res.json(favoriteRestaurantsData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-//GET FAVORITE DINERS
-app.get("/getfavoritediners", async (req, res) => {
-  const { userId } = req.query;
   try {
-    const favoriteDiners = await pool.query(
-      `SELECT * FROM favorite_diners
-      WHERE user_id = $1`,
-      [userId]
-    );
-    res.json(favoriteDiners.rows);
+    if (type === "restaurants") {
+      query = `SELECT * FROM favorite_restaurants WHERE user_id = $1`;
+    } else if (type === "diners") {
+      query = `SELECT * FROM favorite_diners WHERE user_id = $1`;
+    } else {
+      return res.status(400).json({ error: "Invalid type parameter" });
+    }
+
+    const favorites = await pool.query(query, [userId]);
+
+    if (type === "restaurants") {
+      const favoriteRestaurantData = favorites.rows.map((row) => ({
+        dateFavorited: row.date_favorited,
+        favoriteRestaurantId: row.favorite_restaurant_id,
+        imgUrl: row.img_url,
+        isFavorited: row.is_favorited,
+        userId: row.user_id,
+        name: row.name,
+        address: row.address,
+        city: row.city,
+        state: row.state,
+        zip: row.zip,
+        rating: row.rating,
+        bio: row.bio,
+        website: row.website,
+        phone: row.phone,
+        notes: row.notes,
+      }));
+      res.json(favoriteRestaurantData);
+    } else if (type === "diners") {
+      const favoriteDinerData = favorites.rows.map((row) => ({
+        favoriteDinerId: row.favorite_diner_id,
+        userId: row.user_id,
+        username: row.username,
+        dateFavorited: row.date_favorited,
+        isFavorited: row.is_favorited,
+        state: row.state,
+        notes: row.notes,
+      }));
+      res.json(favoriteDinerData);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -755,8 +758,10 @@ app.post("/saverestaurantnotes", async (req, res) => {
 
   try {
     const newNotes = await pool.query(
-      `INSERT INTO favorite_restaurants(notes, user_id, favorite_restaurant_id) VALUES($1,$2,$3)`,
-      [notes, userId, favoriteRestaurantId]
+      `UPDATE favorite_restaurants
+      SET notes = $1
+      WHERE favorite_restaurant_id = $2 AND user_id = $3`,
+      [notes, favoriteRestaurantId, userId]
     );
     res.status(200).json({ message: "Notes saved successfully" }); // Send success status if the update is successful
   } catch (error) {

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const FavoriteRestaurantCard = ({ item }) => {
   const [imageError, setImageError] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(item.isFavorited);
+  const [favorited, setFavorited] = useState(item.isFavorited);
   const [error, setError] = useState(null);
 
   const userId = useSelector((state) => state.userInfo.user.userId);
@@ -15,14 +15,17 @@ const FavoriteRestaurantCard = ({ item }) => {
   const navigation = useNavigation();
 
   const navigateToFeaturedRestuarantDetails = (restaurant) => {
-    navigation.navigate("RestaurantDetailsScreen", { restaurant });
+    navigation.navigate("RestaurantDetailsScreen", {
+      restaurant,
+      source: "FavoriteRestaurantCard",
+    });
   };
 
   const handleFavoriteRestaurantToggle = async () => {
     //set selected resturant isFavorited value to true
-    setIsFavorited((prevIsFavorited) => !prevIsFavorited);
+    setFavorited((prevIsFavorited) => !prevIsFavorited);
 
-    item.isFavorited = !isFavorited;
+    item.isFavorited = !favorited;
 
     const newFavoriteRestaurant = {
       favoriteRestaurantId: item.favoriteRestaurantId,
@@ -37,13 +40,13 @@ const FavoriteRestaurantCard = ({ item }) => {
       website: item.website,
       phone: item.phone,
       dateFavorited: new Date().toISOString(),
-      isFavorited: !isFavorited,
+      isFavorited: !favorited,
       imgUrl: item.imgUrl,
     };
 
     try {
       const response = await fetch(
-        "https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/updatefavoriterestaurants",
+        "https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/updatefavoriterestaurants",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -97,7 +100,7 @@ const FavoriteRestaurantCard = ({ item }) => {
           <FavoritesIconButton
             size={50}
             onPress={handleFavoriteRestaurantToggle}
-            isFavorited={item.isFavorited}
+            isFavorited={favorited}
           />
         </View>
       </View>

@@ -25,7 +25,7 @@ const FeaturedRestaurantsScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/featuredrestaurants`
+        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);

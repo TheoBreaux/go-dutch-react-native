@@ -5,13 +5,21 @@ import AWS from "aws-sdk";
 import Constants from "expo-constants";
 import FavoriteDinerCard from "./FavoriteDinerCard";
 
-const FavoriteDinersList = ({ isDinerFavorited, handleFavorites }) => {
+const FavoriteDinersList = ({
+  isDinerFavorited,
+  handleFavorites,
+  favoriteDiners,
+}) => {
+  // const filteredFavoritedDiners = favoriteDiners
+  //   ? favoriteDiners.filter((diner) => diner.isFavorited)
+  //   : [];
+
   const [imageURIs, setImageURIs] = useState({});
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-  const favoriteDiners = useSelector(
-    (state) => state.userInfo.favoriteDinersList
-  );
+  // const favoriteDiners = useSelector(
+  //   (state) => state.userInfo.favoriteDinersList
+  // );
 
   useEffect(() => {
     const s3 = new AWS.S3({

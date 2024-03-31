@@ -69,7 +69,7 @@ const HomePageScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/featuredrestaurants`
+        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    paddingHorizontal: 20, // Add padding to ensure text doesn't go off-screen
   },
   profileIconContainer: {
     flexDirection: "row",
@@ -173,7 +174,9 @@ const styles = StyleSheet.create({
     marginTop: -5,
     fontFamily: "red-hat-normal",
     textAlign: "center",
-    fontSize: 25,
+    fontSize: 20,
+    flexWrap: "wrap",
+    maxWidth: "100%", // Ensure text wraps within the screen width
   },
 });
 

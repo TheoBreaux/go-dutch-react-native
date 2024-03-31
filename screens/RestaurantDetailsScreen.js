@@ -19,10 +19,9 @@ import FavoritesIconButton from "../components/FavoritesIconButton";
 import { useSelector } from "react-redux";
 
 const RestaurantDetailsScreen = ({ route }) => {
-  const { restaurant } = route.params;
+  const { source, restaurant } = route.params;
 
   const userId = useSelector((state) => state.userInfo.user.userId);
-
   const [imageError, setImageError] = useState(false);
   const [error, setError] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -30,6 +29,7 @@ const RestaurantDetailsScreen = ({ route }) => {
   const [saveButtonPressed, setSaveButtonPressed] = useState(false);
   const [saveButtonText, setSaveButtonText] = useState("Save");
   const [saveButtonColor, setSaveButtonColor] = useState(Colors.goDutchBlue);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   const navigation = useNavigation();
 
@@ -39,12 +39,12 @@ const RestaurantDetailsScreen = ({ route }) => {
 
   useEffect(() => {
     fetchFavoritesStatus();
-  }, [userId, restaurant.favoriteRestaurantId]);
+  }, []);
 
   const fetchFavoritesStatus = async () => {
     try {
       const response = await fetch(
-        `https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurant.restaurantId}`
+        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurant.favoriteRestaurantId}`
       );
       const data = await response.json();
       // Set isFavorited based on the response from the server
@@ -79,7 +79,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/updatefavoriterestaurants",
+        "https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/updatefavoriterestaurants",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -94,7 +94,9 @@ const RestaurantDetailsScreen = ({ route }) => {
     } catch (error) {
       console.error(error);
     }
+    navigation.goBack();
   };
+
 
   const handleSaveNotes = async () => {
     setSaveButtonPressed(true);
@@ -103,13 +105,13 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     const newNotes = {
       notes: notes,
-      favoriteRestaurantId: restaurant.restaurantId,
+      favoriteRestaurantId: restaurant.favoriteRestaurantId,
       userId: userId,
     };
 
     try {
       const response = await fetch(
-        "https://8ca5-2603-8000-c0f0-a570-b992-8298-958c-98c9.ngrok-free.app/saverestaurantnotes",
+        "https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/saverestaurantnotes",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -123,6 +125,7 @@ const RestaurantDetailsScreen = ({ route }) => {
     } catch (error) {
       console.error(error);
     }
+    navigation.goBack();
   };
 
   // Get the screen dimensions
@@ -180,11 +183,13 @@ const RestaurantDetailsScreen = ({ route }) => {
                     {restaurant.name}
                   </Text>
 
-                  <FavoritesIconButton
-                    onPress={handleFavoriteRestaurantToggle}
-                    size={35}
-                    isFavorited={isFavorited}
-                  />
+                  {source !== "FavoriteRestaurantCard" && ( // Conditional rendering
+                    <FavoritesIconButton
+                      onPress={handleFavoriteRestaurantToggle}
+                      size={35}
+                      isFavorited={isFavorited}
+                    />
+                  )}
                 </View>
 
                 <Text style={styles.restaurantNameAndRating}>
@@ -322,7 +327,6 @@ const styles = StyleSheet.create({
   buttonContainer: { marginHorizontal: -5 },
   buttonText: { fontSize: 25, textDecorationLine: "underline" },
   textInputContainer: {
-    marginBottom: -10,
     paddingHorizontal: 10,
     marginTop: -10,
   },

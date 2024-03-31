@@ -8,7 +8,10 @@ const FeaturedRestaurantCard = ({ restaurant }) => {
   const [imageError, setImageError] = useState(false);
 
   const navigateToFeaturedRestuarantDetails = () => {
-    navigation.navigate("RestaurantDetailsScreen", { restaurant });
+    navigation.navigate("RestaurantDetailsScreen", {
+      restaurant,
+      source: "FeaturedRestaurantCard",
+    });
   };
 
   return (
