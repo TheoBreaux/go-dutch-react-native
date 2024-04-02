@@ -3,18 +3,51 @@ import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import FavoritesIconButton from "./FavoritesIconButton";
 import Spinner from "./Spinner";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const FavoriteDinerCard = ({
-  isLoadingImage,
-  imageURIs,
-  item,
-  isDinerFavorited,
-  handleFavorites,
-}) => {
+const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
+  const [isFavorited, setIsFavorited] = useState(false);
   const navigation = useNavigation();
 
+  const userId = useSelector((state) => state.userInfo.user.userId);
+
   const navigateToUserProfile = (selectedUser) => {
-    navigation.navigate("ViewUserProfileScreen", { selectedUser });
+    navigation.navigate("ViewUserProfileScreen", {
+      source: "FavoriteDinerCard",
+      item: selectedUser,
+    });
+  };
+
+  const handleFavoriteToggle = async () => {
+    setIsFavorited((prevIsFavorited) => !prevIsFavorited);
+
+    const newFavoriteDiner = {
+      userId: userId,
+      favoriteDinerUsername: item.username,
+      dateFavorited: new Date().toISOString(),
+      isFavorited: isFavorited,
+      type: "diner",
+    };
+
+    try {
+      const response = await fetch(
+        "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/updatefavorite",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newFavoriteDiner),
+        }
+      );
+
+      const data = await response.json();
+      if (data.detail) {
+        setError(data.detail);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    navigation.goBack();
   };
 
   return (
@@ -28,8 +61,8 @@ const FavoriteDinerCard = ({
         ) : (
           <Image
             source={
-              imageURIs[item.additionalDinerUsername]
-                ? { uri: imageURIs[item.additionalDinerUsername] }
+              imageURIs[item.username]
+                ? { uri: imageURIs[item.username] }
                 : require("../assets/default-profile-icon.jpg")
             }
             style={styles.image}
@@ -42,19 +75,17 @@ const FavoriteDinerCard = ({
           <Text style={styles.name}>
             {item.firstName + " " + item.lastName}
           </Text>
-          <Text style={styles.text}>@{item.additionalDinerUsername}</Text>
+          <Text style={styles.text}>@{item.username}</Text>
           <Text style={styles.text}>{item.location}</Text>
         </View>
 
         <View style={styles.favoritesIconContainer}>
           <FavoritesIconButton
             size={50}
-            name={item.isDinerFavorited ? "heart-circle" : "heart-outline"}
-            color={
-              item.isDinerFavorited ? Colors.goDutchRed : Colors.goDutchBlue
-            }
-            onPress={() => handleFavorites(item)}
-            isFavorited={isDinerFavorited}
+            name={item.isFavorited ? "heart-circle" : "heart-outline"}
+            color={item.isFavorited ? Colors.goDutchRed : Colors.goDutchBlue}
+            onPress={handleFavoriteToggle}
+            isFavorited={item.isFavorited}
           />
         </View>
       </View>

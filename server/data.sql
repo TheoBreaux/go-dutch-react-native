@@ -45,7 +45,7 @@ CREATE TABLE favorite_diners (
     user_id INT REFERENCES users(user_id),
     username VARCHAR REFERENCES users(username),
     date_favorited DATE DEFAULT CURRENT_DATE,
-    isFavorited BOOLEAN DEFAULT TRUE,
+    is_favorited BOOLEAN DEFAULT TRUE,
     notes VARCHAR(600)
 );
 

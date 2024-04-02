@@ -29,12 +29,49 @@ const RestaurantDetailsScreen = ({ route }) => {
   const [saveButtonPressed, setSaveButtonPressed] = useState(false);
   const [saveButtonText, setSaveButtonText] = useState("Save");
   const [saveButtonColor, setSaveButtonColor] = useState(Colors.goDutchBlue);
-  const [loading, setLoading] = useState(true); // Added loading state
 
   const navigation = useNavigation();
+  let restaurantId;
+
+  if (source === "FavoriteRestaurantCard") {
+    restaurantId = restaurant.favoriteRestaurantId;
+  } else {
+    restaurantId = restaurant.restaurantId;
+  }
 
   const handleChangeNotes = (text) => {
     setNotes(text);
+  };
+
+  const handleSaveNotes = async () => {
+    setSaveButtonPressed(true);
+    setSaveButtonText("Saved");
+    setSaveButtonColor(Colors.goDutchRed);
+
+    const newNotes = {
+      notes: notes,
+      favoriteRestaurantId: restaurant.favoriteRestaurantId,
+      userId: userId,
+      type: "restaurantNotes",
+    };
+
+    try {
+      const response = await fetch(
+        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/savenotes`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newNotes),
+        }
+      );
+
+      const data = await response.json();
+      if (data.detail) {
+        setError(data.detail);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -44,17 +81,18 @@ const RestaurantDetailsScreen = ({ route }) => {
   const fetchFavoritesStatus = async () => {
     try {
       const response = await fetch(
-        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurant.favoriteRestaurantId}`
+        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurantId}`
       );
       const data = await response.json();
       // Set isFavorited based on the response from the server
       setIsFavorited(data.isFavorited);
+      setNotes(data.notes);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleFavoriteRestaurantToggle = async () => {
+  const handleFavoriteToggle = async () => {
     //set selected resturant isFavorited value to true
     setIsFavorited((prevIsFavorited) => !prevIsFavorited);
 
@@ -75,11 +113,12 @@ const RestaurantDetailsScreen = ({ route }) => {
       dateFavorited: new Date().toISOString(),
       isFavorited: !isFavorited,
       imgUrl: restaurant.imgUrl,
+      type: "restaurant",
     };
 
     try {
       const response = await fetch(
-        "https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/updatefavoriterestaurants",
+        "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -87,37 +126,6 @@ const RestaurantDetailsScreen = ({ route }) => {
         }
       );
 
-      const data = await response.json();
-      if (data.detail) {
-        setError(data.detail);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    navigation.goBack();
-  };
-
-
-  const handleSaveNotes = async () => {
-    setSaveButtonPressed(true);
-    setSaveButtonText("Saved");
-    setSaveButtonColor(Colors.goDutchRed);
-
-    const newNotes = {
-      notes: notes,
-      favoriteRestaurantId: restaurant.favoriteRestaurantId,
-      userId: userId,
-    };
-
-    try {
-      const response = await fetch(
-        "https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/saverestaurantnotes",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newNotes),
-        }
-      );
       const data = await response.json();
       if (data.detail) {
         setError(data.detail);
@@ -185,7 +193,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
                   {source !== "FavoriteRestaurantCard" && ( // Conditional rendering
                     <FavoritesIconButton
-                      onPress={handleFavoriteRestaurantToggle}
+                      onPress={handleFavoriteToggle}
                       size={35}
                       isFavorited={isFavorited}
                     />
@@ -311,7 +319,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "justify",
   },
-  restaurantBioTextContainer: { marginTop: -10 },
+  restaurantBioTextContainer: { marginTop: -10, marginBottom: 5 },
   restaurantBioText: {
     fontSize: 15,
     textAlign: "justify",
@@ -328,7 +336,6 @@ const styles = StyleSheet.create({
   buttonText: { fontSize: 25, textDecorationLine: "underline" },
   textInputContainer: {
     paddingHorizontal: 10,
-    marginTop: -10,
   },
   input: {
     borderWidth: 1,

@@ -1,9 +1,7 @@
 import { View, FlatList } from "react-native";
-
 import FavoriteRestaurantCard from "./FavoriteRestaurantCard";
 
-const FavoriteRestaurantsList = ({ favoriteRestaurants }) => {
-
+const FavoriteRestaurantsList = ({ favoriteRestaurants, refreshControl }) => {
   const filteredFavoritedRestaurants = favoriteRestaurants
     ? favoriteRestaurants.filter((restaurant) => restaurant.isFavorited)
     : [];
@@ -18,7 +16,8 @@ const FavoriteRestaurantsList = ({ favoriteRestaurants }) => {
         data={filteredFavoritedRestaurants}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        initialNumToRender={5}
+        initialNumToRender={10}
+        refreshControl={refreshControl}
       />
     </View>
   );

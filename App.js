@@ -38,7 +38,7 @@ const apiKey = Constants.expoConfig.extra.PG_API_KEY;
 
 const MainTabNavigator = () => {
   //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
-  useDisableBackButton();
+  // useDisableBackButton();
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -186,11 +186,7 @@ const App = () => {
             name="ViewUserProfileScreen"
             component={ViewUserProfileScreen}
           />
-          <Stack.Screen
-            name="Main"
-            component={MainTabNavigator}
-            // options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Main" component={MainTabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

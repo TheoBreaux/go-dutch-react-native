@@ -62,8 +62,9 @@ const DiningEventHistoryCard = ({ item }) => {
         <Text style={[styles.eventLocation, styles.bold]}>
           {item.eventLocation}
         </Text>
-        <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
         <Text style={styles.eventTitle}>{item.eventTitle}</Text>
+        <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
+       
 
         <Text style={styles.text}>
           <Text style={styles.bold}>Primary Diner: </Text>@
@@ -77,7 +78,7 @@ const DiningEventHistoryCard = ({ item }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#FFF",
     padding: 10,
@@ -97,29 +98,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   textContainer: {
-    flex: 1,
+    // flex: 1,
     marginLeft: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
   },
   text: {
     fontSize: 16,
     fontFamily: "red-hat-normal",
   },
-  eventTitle: {
-    fontSize: 20,
-    fontFamily: "red-hat-normal",
-    letterSpacing: 3,
-    color: Colors.goDutchRed,
+  eventLocation: {
+    fontFamily: "red-hat-bold",
+    fontSize: 16,
   },
   eventDate: {
     fontSize: 16,
     fontFamily: "red-hat-normal",
   },
-  eventLocation: {
+  eventTitle: {
+    fontSize: 16,
     fontFamily: "red-hat-bold",
-    fontSize: 20,
+    color: Colors.goDutchRed,
   },
+
   bold: {
     fontFamily: "red-hat-bold",
   },

@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  RefreshControl,
+} from "react-native";
 import FavoriteRestaurantsList from "../components/FavoriteRestaurantsList";
 import FavoriteDinersList from "../components/FavoriteDinersList";
 import Logo from "../components/Logo";
@@ -10,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 const FavoritesScreen = () => {
   const [favoriteDiners, setFavoriteDiners] = useState([]);
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const userId = useSelector((state) => state.userInfo.user.userId);
 
@@ -25,13 +32,14 @@ const FavoritesScreen = () => {
 
   const [activeTab, setActiveTab] = useState("Restaurants");
 
-  // useEffect(() => {
-  //   if (activeTab === "Restaurants") {
-  //     fetchFavorites("restaurants");
-  //   } else if (activeTab === "Diners") {
-  //     fetchFavorites("diners");
-  //   }
-  // }, [activeTab]);
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchFavorites("restaurants");
+    fetchFavorites("diners");
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulating a delay of 2 seconds for demonstration purpo
+  };
 
   useEffect(() => {
     fetchFavorites("restaurants");
@@ -41,7 +49,7 @@ const FavoritesScreen = () => {
   const fetchFavorites = async (type) => {
     try {
       const response = await fetch(
-        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
+        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
       );
       const data = await response.json();
 
@@ -68,13 +76,7 @@ const FavoritesScreen = () => {
             ]}
             onPress={() => setActiveTab("Restaurants")}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            <View style={styles.tabContent}>
               <Text style={styles.title}>Restaurants</Text>
               <Ionicons
                 name="restaurant-sharp"
@@ -87,13 +89,7 @@ const FavoritesScreen = () => {
             style={[styles.tab, activeTab === "Diners" && styles.activeTab]}
             onPress={() => setActiveTab("Diners")}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            <View style={styles.tabContent}>
               <Text style={styles.title}>Diners</Text>
               <Ionicons
                 name="people-circle"
@@ -104,14 +100,26 @@ const FavoritesScreen = () => {
           </Pressable>
         </View>
 
+        <Text style={styles.refreshText}>Swipe down to refresh screen</Text>
+
         {favoritesSaved && (
           <Text style={styles.title}>You have no favorites saved.</Text>
         )}
 
         {activeTab === "Diners" ? (
-          <FavoriteDinersList favoriteDiners={favoriteDiners} />
+          <FavoriteDinersList
+            favoriteDiners={favoriteDiners}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
         ) : (
-          <FavoriteRestaurantsList favoriteRestaurants={favoriteRestaurants} />
+          <FavoriteRestaurantsList
+            favoriteRestaurants={favoriteRestaurants}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
         )}
       </View>
     </>
@@ -131,7 +139,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.goDutchBlue,
     width: "100%",
-    marginBottom: 10,
+  },
+  tabContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   tab: {
     paddingVertical: 10,
@@ -151,6 +163,13 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     marginTop: 35,
     marginBottom: 5,
+  },
+  refreshText: {
+    textAlign: "center",
+    marginVertical: 10,
+    color: Colors.goDutchRed,
+    fontFamily: "red-hat-bold",
+    fontSize: 18,
   },
   title: {
     fontFamily: "red-hat-bold",

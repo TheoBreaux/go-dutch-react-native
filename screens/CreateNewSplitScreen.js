@@ -7,7 +7,6 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import Logo from "../components/Logo";
 import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
@@ -65,7 +64,6 @@ const CreateNewSplitScreen = () => {
 
   return (
     <>
-      {/* <Logo /> */}
       {isCapturingReceipt ? (
         <ReceiptCapture
           setIsCapturingReceipt={setIsCapturingReceipt}

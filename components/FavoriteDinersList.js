@@ -1,25 +1,16 @@
 import { View, FlatList } from "react-native";
-import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import AWS from "aws-sdk";
 import Constants from "expo-constants";
 import FavoriteDinerCard from "./FavoriteDinerCard";
 
-const FavoriteDinersList = ({
-  isDinerFavorited,
-  handleFavorites,
-  favoriteDiners,
-}) => {
-  // const filteredFavoritedDiners = favoriteDiners
-  //   ? favoriteDiners.filter((diner) => diner.isFavorited)
-  //   : [];
+const FavoriteDinersList = ({ favoriteDiners, refreshControl }) => {
+  const filteredFavoritedDiners = favoriteDiners
+    ? favoriteDiners.filter((diner) => diner.isFavorited)
+    : [];
 
   const [imageURIs, setImageURIs] = useState({});
   const [isLoadingImage, setIsLoadingImage] = useState(false);
-
-  // const favoriteDiners = useSelector(
-  //   (state) => state.userInfo.favoriteDinersList
-  // );
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -52,20 +43,17 @@ const FavoriteDinersList = ({
 
     favoriteDiners.forEach((diner) => {
       const profileImageKey = diner.profileImageKey;
-      const dinerUsername = diner.additionalDinerUsername;
+      const dinerUsername = diner.username;
       getImageFromS3(profileImageKey, dinerUsername);
     });
-  }, [favoriteDiners]);
+  }, []);
 
-  const renderFavoriteDinerCard = (item) => {
+  const renderFavoriteDinerCard = ({ item }) => {
     return (
       <FavoriteDinerCard
-        key={item.additionalDinerUsername}
         item={item}
         isLoadingImage={isLoadingImage}
         imageURIs={imageURIs}
-        isDinerFavorited={isDinerFavorited}
-        handleFavorites={handleFavorites}
       />
     );
   };
@@ -73,9 +61,11 @@ const FavoriteDinersList = ({
   return (
     <View>
       <FlatList
-        data={favoriteDiners}
-        renderItem={({ item }) => renderFavoriteDinerCard(item)}
-        keyExtractor={(item) => item.additionalDinerUsername}
+        data={filteredFavoritedDiners}
+        renderItem={renderFavoriteDinerCard}
+        keyExtractor={(item, index) => index.toString()}
+        initialNumToRender={10}
+        refreshControl={refreshControl}
       />
     </View>
   );

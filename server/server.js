@@ -617,7 +617,10 @@ app.get("/getfavorite", async (req, res) => {
     if (type === "restaurants") {
       query = `SELECT * FROM favorite_restaurants WHERE user_id = $1`;
     } else if (type === "diners") {
-      query = `SELECT * FROM favorite_diners WHERE user_id = $1`;
+      query = `SELECT users.*, favorite_diners.* 
+      FROM favorite_diners
+      JOIN users ON users.username = favorite_diners.username
+      WHERE favorite_diners.user_id = $1`;
     } else {
       return res.status(400).json({ error: "Invalid type parameter" });
     }
@@ -650,8 +653,15 @@ app.get("/getfavorite", async (req, res) => {
         username: row.username,
         dateFavorited: row.date_favorited,
         isFavorited: row.is_favorited,
-        state: row.state,
         notes: row.notes,
+        profileImageKey: row.profile_image_key,
+        firstName: row.first_name,
+        lastName: row.last_name,
+        location: row.location,
+        bio: row.bio,
+        birthday: row.birthday,
+        favoriteCuisine: row.favorite_cuisine,
+        dateJoined: row.date_joined,
       }));
       res.json(favoriteDinerData);
     }
@@ -661,21 +671,35 @@ app.get("/getfavorite", async (req, res) => {
   }
 });
 
-// GET RESTAURANT FAVORITES STATUS
+// GET RESTAURANT AND DINER FAVORITES STATUS
 app.get("/getfavoritestatus", async (req, res) => {
-  const { userId, restaurantId } = req.query;
+  const { userId, restaurantId, favoriteDinerUsername } = req.query;
+
+  let favoriteStatus;
 
   try {
-    const favoriteStatusQuery = await pool.query(
-      `SELECT is_favorited
-      FROM favorite_restaurants
-      WHERE user_id = $1 AND favorite_restaurant_id = $2`,
-      [userId, restaurantId]
-    );
+    if (restaurantId) {
+      favoriteStatus = await pool.query(
+        `SELECT is_favorited, notes
+        FROM favorite_restaurants
+        WHERE user_id = $1 AND favorite_restaurant_id = $2`,
+        [userId, restaurantId]
+      );
+    } else if (favoriteDinerUsername) {
+      favoriteStatus = await pool.query(
+        `SELECT is_favorited, notes
+        FROM favorite_diners
+        WHERE user_id = $1 AND username = $2`,
+        [userId, favoriteDinerUsername]
+      );
+    }
 
-    if (favoriteStatusQuery.rows.length > 0) {
-      const isFavorited = favoriteStatusQuery.rows[0].is_favorited;
-      res.status(200).json({ isFavorited });
+    if (favoriteStatus.rows.length > 0) {
+      if (restaurantId || favoriteDinerUsername) {
+        const isFavorited = favoriteStatus.rows[0].is_favorited;
+        const notes = favoriteStatus.rows[0].notes;
+        res.status(200).json({ isFavorited, notes });
+      }
     } else {
       // If there is no matching record, send the default value (false)
       res.status(200).json({ isFavorited: false });
@@ -686,8 +710,8 @@ app.get("/getfavoritestatus", async (req, res) => {
   }
 });
 
-//INSERT OR UPDATE FAVORITE RESTAURANTS
-app.post("/updatefavoriterestaurants", async (req, res) => {
+//INSERT OR UPDATE FAVORITE RESTAURANTS OR FAVORITE DINERS
+app.post("/updatefavorite", async (req, res) => {
   const {
     favoriteRestaurantId,
     userId,
@@ -703,67 +727,120 @@ app.post("/updatefavoriterestaurants", async (req, res) => {
     dateFavorited,
     isFavorited,
     imgUrl,
+    favoriteDinerUsername,
+    type,
   } = req.body;
+
+  let existingFavorite;
 
   try {
     //check to see if record exists
-    const existingFavoriteRestaurant = await pool.query(
-      `SELECT * FROM favorite_restaurants 
-      WHERE favorite_restaurant_id = $1 AND user_id = $2`,
-      [favoriteRestaurantId, userId]
-    );
-
-    if (existingFavoriteRestaurant.rows.length > 0) {
-      // update existing record
-      await pool.query(
-        `UPDATE favorite_restaurants 
-        SET is_favorited = $1 
-        WHERE favorite_restaurant_id = $2 AND user_id = $3`,
-        [isFavorited, favoriteRestaurantId, userId]
+    if (type === "restaurant") {
+      existingFavorite = await pool.query(
+        `SELECT * FROM favorite_restaurants 
+        WHERE favorite_restaurant_id = $1 AND user_id = $2`,
+        [favoriteRestaurantId, userId]
       );
-    } else {
-      //insert new favorite record
-      const newFavoriteRestaurant = await pool.query(
-        `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, is_favorited, img_url) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
-
-        [
-          favoriteRestaurantId,
-          userId,
-          name,
-          address,
-          city,
-          state,
-          zip,
-          rating,
-          bio,
-          website,
-          phone,
-          dateFavorited,
-          isFavorited,
-          imgUrl,
-        ]
+    } else if (type === "diner") {
+      existingFavorite = await pool.query(
+        `SELECT * FROM favorite_diners
+        WHERE user_id = $1 AND username = $2`,
+        [userId, favoriteDinerUsername]
       );
     }
 
-    res.status(200).json({ message: "Restaurant saved successfully" }); // Send success status if the update is successful
+    if (existingFavorite.rows.length > 0) {
+      if (type === "restaurant") {
+        // update existing record
+        await pool.query(
+          `UPDATE favorite_restaurants 
+          SET is_favorited = $1 
+          WHERE favorite_restaurant_id = $2 AND user_id = $3`,
+          [isFavorited, favoriteRestaurantId, userId]
+        );
+      } else if (type === "diner") {
+        // update existing diner favorite record
+        await pool.query(
+          `UPDATE favorite_diners
+          SET is_favorited = $1
+          WHERE user_id = $2 AND username = $3`,
+          [isFavorited, userId, favoriteDinerUsername]
+        );
+      }
+    } else {
+      if (type === "restaurant") {
+        await pool.query(
+          `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, is_favorited, img_url) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+          [
+            favoriteRestaurantId,
+            userId,
+            name,
+            address,
+            city,
+            state,
+            zip,
+            rating,
+            bio,
+            website,
+            phone,
+            dateFavorited,
+            isFavorited,
+            imgUrl,
+          ]
+        );
+      } else if (type === "diner") {
+        await pool.query(
+          `INSERT INTO favorite_diners(user_id, username, date_favorited, is_favorited) VALUES($1,$2,$3,$4)`,
+          [userId, favoriteDinerUsername, dateFavorited, isFavorited]
+        );
+      }
+    }
+    res.status(200).json({ message: "Saved successfully" }); // Send success status if the update is successful
+    res.send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ detail: "Internal server error" }); // Send an appropriate error response
   }
 });
 
-//INSERT NOTES ON RESTAURANT
-app.post("/saverestaurantnotes", async (req, res) => {
-  const { notes, favoriteRestaurantId, userId } = req.body;
+//INSERT OR UPDATE NOTES ON RESTAURANT
+app.post("/savenotes", async (req, res) => {
+  const {
+    notes,
+    favoriteRestaurantId,
+    username,
+    dateFavorited,
+    isFavorited,
+    userId,
+    type,
+  } = req.body;
 
+  let query;
+  let newNotes;
   try {
-    const newNotes = await pool.query(
-      `UPDATE favorite_restaurants
+    if (type === "restaurantNotes") {
+      query = `UPDATE favorite_restaurants
+               SET notes = $1
+               WHERE favorite_restaurant_id = $2 AND user_id = $3`;
+    } else if (type === "userNotes") {
+      query = `UPDATE favorite_diners
       SET notes = $1
-      WHERE favorite_restaurant_id = $2 AND user_id = $3`,
-      [notes, favoriteRestaurantId, userId]
-    );
-    res.status(200).json({ message: "Notes saved successfully" }); // Send success status if the update is successful
+      WHERE username = $2 AND user_id = $3`;
+    } else {
+      return res.status(400).json({ error: "Invalid type parameter" });
+    }
+
+    if (type === "restaurantNotes") {
+      newNotes = await pool.query(query, [notes, favoriteRestaurantId, userId]);
+    } else if (type === "userNotes") {
+      newNotes = await pool.query(query, [
+        notes,
+        username,
+        userId,
+        dateFavorited,
+        isFavorited,
+      ]);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ detail: "Internal server error" }); // Send an appropriate error response

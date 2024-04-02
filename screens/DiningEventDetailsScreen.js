@@ -39,7 +39,10 @@ const DiningEventDetailsScreen = ({ route }) => {
     <TouchableOpacity
       style={styles.dinerCard}
       onPress={() =>
-        navigation.navigate("ViewUserProfileScreen", { selectedUser: item })
+        navigation.navigate("ViewUserProfileScreen", {
+          source: "DiningEventDetailsScreen",
+          selectedUser: item,
+        })
       }
     >
       <Text style={styles.dinerCardInfo}>
@@ -63,7 +66,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://2971-2603-8000-c0f0-a570-6ce7-ecef-b5ff-9a39.ngrok-free.app/additionaldiners/${eventId}`
+        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);
@@ -88,14 +91,14 @@ const DiningEventDetailsScreen = ({ route }) => {
         {!viewReceipt && (
           <View style={{ flexDirection: "row" }}>
             <PrimaryButton
-              width={125}
+              width={140}
               height={50}
               onPress={() => setViewReceipt(!viewReceipt)}
             >
               View Receipt
             </PrimaryButton>
             <PrimaryButton
-              width={125}
+              width={140}
               height={50}
               onPress={() => navigation.goBack()}
             >
