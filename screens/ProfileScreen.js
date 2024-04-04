@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
@@ -24,12 +25,13 @@ import UpdateProfileForm from "../ui/UpdateProfileForm";
 import CustomModal from "../components/CustomModal";
 import UpdatePasswordAndPaymentsScreen from "./UpdatePasswordAndPaymentsScreen";
 
-const ProfileScreen = ({ route }) => {
+const ProfileScreen = () => {
   //for uploading image to backend
   const FormData = global.FormData;
 
   const user = useSelector((state) => state.userInfo.user);
-  const username = useSelector((state) => state.userInfo.user.username);
+  const username = user.username;
+
   const [profileImageKey, setProfileImageKey] = useState(user.profileImageKey);
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [isNewProfileImageKey, setIsnewProfileImageKey] = useState(false);
@@ -44,6 +46,7 @@ const ProfileScreen = ({ route }) => {
     showUpdatePasswordAndPaymentUpdateForm,
     setShowUpdatePasswordAndPaymentUpdateForm,
   ] = useState(false);
+  const [showUpdateProfileForm, setShowUpdateProfileForm] = useState(true);
 
   const DEFAULT_IMAGE_KEY = "default-profile-icon.jpg";
 
@@ -159,7 +162,7 @@ const ProfileScreen = ({ route }) => {
         });
 
         const response = await fetch(
-          "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/users/profileimages",
+          "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -190,7 +193,7 @@ const ProfileScreen = ({ route }) => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/profilephoto",
+        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -212,33 +215,26 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      {showUpdatePasswordAndPaymentModal && (
-        <CustomModal
-          visible={showUpdatePasswordAndPaymentModal}
-          animationType="slide"
-          transparent={true}
-          modalText="Need to update password or payment sources?"
-          buttonWidth={100}
-          onPress1={() => {
-            setShowUpdatePasswordAndPaymentModal(false);
-            setShowUpdatePasswordAndPaymentUpdateForm(true);
-          }}
-          //navigate back to user home page
-          onPress2={() => navigation.navigate("Main", { screen: "Home" })}
-          buttonText1="Yes"
-          buttonText2="No"
-        />
-      )}
-
-      {isUpdatingProfile && showUpdatePasswordAndPaymentModal ? (
-        <View style={styles.spinnerContainer}>
-          <Spinner children={"Updating profile..."} />
-        </View>
-      ) : null}
-
       <Logo />
-
-      {!isUpdatingProfile && (
+      <ScrollView>
+        {showUpdatePasswordAndPaymentModal && (
+          <CustomModal
+            visible={showUpdatePasswordAndPaymentModal}
+            animationType="slide"
+            transparent={true}
+            modalText="Need to update password or payment sources?"
+            buttonWidth={100}
+            onPress1={() => {
+              setShowUpdatePasswordAndPaymentModal(false);
+              setShowUpdatePasswordAndPaymentUpdateForm(true);
+              setShowUpdateProfileForm(false);
+            }}
+            //navigate back to user home page
+            onPress2={() => navigation.navigate("Main", { screen: "Home" })}
+            buttonText1="Yes"
+            buttonText2="No"
+          />
+        )}
         <View style={styles.container}>
           {imageUploadModal && (
             <Modal
@@ -291,60 +287,60 @@ const ProfileScreen = ({ route }) => {
               </View>
             </Modal>
           )}
+        </View>
 
-          <View style={styles.cameraIconContainer}>
-            <MaterialCommunityIcons
-              name="camera"
-              size={30}
-              color={Colors.goDutchRed}
-              onPress={onButtonPress}
+        {showUpdateProfileForm && (
+          <View>
+            <View style={styles.cameraIconContainer}>
+              <MaterialCommunityIcons
+                name="camera"
+                size={30}
+                color={Colors.goDutchRed}
+                onPress={onButtonPress}
+              />
+            </View>
+
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={styles.imageIconcontainer}>
+                {isLoadingImage && <Spinner indicatorSize={290} />}
+                {!isLoadingImage && profileImageKey ? (
+                  <Image
+                    source={{ uri: imageUri }}
+                    style={{ width: 200, height: 200 }}
+                  />
+                ) : (
+                  <View>
+                    <Image
+                      source={require("../assets/default-profile-icon.jpg")}
+                      style={{ width: 200, height: 200 }}
+                    />
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <UpdateProfileForm
+              updateProfileImage={updateProfileImage}
+              setIsUpdatingProfile={setIsUpdatingProfile}
+              setShowUpdatePasswordAndPaymentModal={
+                setShowUpdatePasswordAndPaymentModal
+              }
             />
           </View>
+        )}
 
-          {isLoadingImage && <Spinner indicatorSize={200} />}
-
-          <View style={styles.imageIconcontainer}>
-            {!isLoadingImage && profileImageKey ? (
-              <Image
-                source={{ uri: imageUri }}
-                style={{ width: 200, height: 200 }}
-              />
-            ) : (
-              <View>
-                <Image
-                  source={require("../assets/default-profile-icon.jpg")}
-                  style={{ width: 200, height: 200 }}
-                />
-              </View>
-            )}
-          </View>
-        </View>
-      )}
-      {!isUpdatingProfile && (
-        <UpdateProfileForm
-          user={user}
-          updateProfileImage={updateProfileImage}
-          setIsUpdatingProfile={setIsUpdatingProfile}
-          setShowUpdatePasswordAndPaymentModal={
-            setShowUpdatePasswordAndPaymentModal
-          }
-        />
-      )}
-
-      {showUpdatePasswordAndPaymentUpdateForm && (
-        <UpdatePasswordAndPaymentsScreen
-          user={user}
-          setIsUpdatingProfile={setIsUpdatingProfile}
-        />
-      )}
+        {showUpdatePasswordAndPaymentUpdateForm && (
+          <UpdatePasswordAndPaymentsScreen
+            setIsUpdatingProfile={setIsUpdatingProfile}
+          />
+        )}
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: -15,
-    marginBottom: 5,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -358,13 +354,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     position: "absolute",
     borderWidth: 2,
-    top: 150,
+    top: 140,
     borderColor: Colors.goDutchBlue,
     left: 260,
   },
   imageIconcontainer: {
     zIndex: 0,
-    elevation: 10,
+    elevation: 5,
     height: 200,
     width: 200,
     position: "relative",
@@ -418,10 +414,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    top: -50,
+    // position: "absolute",
+    top: -15,
     width: "100%",
     height: "100%",
+    zIndex: 1000,
   },
 });
 

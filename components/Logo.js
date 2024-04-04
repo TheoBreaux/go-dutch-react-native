@@ -20,10 +20,11 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    width: undefined,
-    height: undefined,
+    width: "auto",
+    height: "auto",
     resizeMode: "center",
     marginHorizontal: 20,
+    marginBottom: -20,
   },
 });
 

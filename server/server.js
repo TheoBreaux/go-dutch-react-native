@@ -36,54 +36,35 @@ pool.query("SELECT NOW()", (err, result) => {
 
 //SIGN UP TO GO DUTCH - INITIAL USER INFO
 app.post("/signup", async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    username,
-    password,
-    profileImageKey,
-    bio,
-    favoriteCuisine,
-    birthday,
-    location,
-  } = req.body;
+  const { firstName, lastName, email, username, password, profileImageKey } =
+    req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   try {
     const newUser = await pool.query(
-      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key, bio, favorite_cuisine, birthday, celebrating_birthday, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-      [
-        firstName,
-        lastName,
-        email,
-        username,
-        hashedPassword,
-        profileImageKey,
-        bio,
-        favoriteCuisine,
-        birthday,
-        celebrating_birthday,
-        location,
-      ]
+      `INSERT INTO users(first_name, last_name, email, username, hashed_password, profile_image_key) VALUES($1, $2, $3, $4, $5, $6)
+      RETURNING user_id`,
+      [firstName, lastName, email, username, hashedPassword, profileImageKey]
     );
 
-    const token = jwt.sign({ email, username, firstName, lastName }, "secret", {
-      expiresIn: "1hr",
-    });
+    const userId = newUser.rows[0].user_id;
+
+    const token = jwt.sign(
+      { email, username, firstName, lastName, userId },
+      "secret",
+      {
+        expiresIn: "1hr",
+      }
+    );
     res.json({
+      userId,
       email,
       username,
       firstName,
       lastName,
       token,
       profileImageKey,
-      bio,
-      favoriteCuisine,
-      birthday,
-      celebratingBirthday,
-      location,
     });
   } catch (error) {
     console.error(error);
@@ -92,35 +73,6 @@ app.post("/signup", async (req, res) => {
     }
   }
 });
-
-// AWS - POST PROFILE IMAGES
-app.post("/users/profileimages", upload.single("image"), async (req, res) => {
-  const file = req.file;
-  const result = await uploadFile(file);
-  await unlinkFile(file.path);
-  res.send({ imageKey: result.Key });
-});
-
-//AWS - UPDATE PROFILE IMAGES
-app.post(
-  "/users/profileimages/update",
-  upload.single("image"),
-  async (req, res) => {
-    const file = req.file;
-    const result = await uploadFile(file);
-    await unlinkFile(file.path);
-    try {
-      const updatedProfileImage = await pool.query(
-        "UPDATE users SET profile_image_key = $1 WHERE username = $2",
-        [profileImageKey, username]
-      );
-      res.send({ imageKey: result.Key });
-    } catch (error) {
-      console.error(error); // Log the error
-      res.status(500).send("Error updating profile image");
-    }
-  }
-);
 
 //SEND PAYMENT SOURCES INFO - UPDATE USER PROFILE
 app.post("/users", async (req, res) => {
@@ -158,38 +110,73 @@ app.post("/users", async (req, res) => {
   }
 });
 
+// AWS - POST PROFILE IMAGES
+app.post("/users/profileimages", upload.single("image"), async (req, res) => {
+  const file = req.file;
+  const result = await uploadFile(file);
+  await unlinkFile(file.path);
+  res.send({ imageKey: result.Key });
+});
+
+//AWS - UPDATE PROFILE IMAGES
+app.post(
+  "/users/profileimages/update",
+  upload.single("image"),
+  async (req, res) => {
+    const file = req.file;
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+    try {
+      const updatedProfileImage = await pool.query(
+        "UPDATE users SET profile_image_key = $1 WHERE username = $2",
+        [profileImageKey, username]
+      );
+      res.send({ imageKey: result.Key });
+    } catch (error) {
+      console.error(error); // Log the error
+      res.status(500).send("Error updating profile image");
+    }
+  }
+);
+
 //LOG IN TO GO DUTCH
 app.post("/login", async (req, res) => {
-  const { username, password, firstName, lastName } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const users = await pool.query("SELECT * FROM users WHERE username = $1", [
+    const user = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
 
-    if (!users.rows.length) return res.json({ detail: "User does not exist!" });
+    if (!user.rows.length) return res.json({ detail: "User does not exist!" });
 
     const success = await bcrypt.compare(
       password,
-      users.rows[0].hashed_password
+      user.rows[0].hashed_password
     );
-    const token = jwt.sign({ username, firstName, lastName }, "secret", {
+    const token = jwt.sign({ username }, "secret", {
       expiresIn: "1hr",
     });
     if (success) {
       res.json({
-        email: users.rows[0].email,
-        username: users.rows[0].username,
-        firstName: users.rows[0].first_name,
-        lastName: users.rows[0].last_name,
-        bio: users.rows[0].bio,
-        favoriteCuisine: users.rows[0].favorite_cuisine,
-        celebratingBirthday: users.rows[0].celebrating_birthday,
-        birthday: users.rows[0].birthday,
-        location: users.rows[0].location,
-        userId: users.rows[0].user_id,
-        dateJoined: users.rows[0].date_joined,
-        profileImageKey: users.rows[0].profile_image_key,
+        email: user.rows[0].email,
+        username: user.rows[0].username,
+        firstName: user.rows[0].first_name,
+        lastName: user.rows[0].last_name,
+        bio: user.rows[0].bio,
+        favoriteCuisine: user.rows[0].favorite_cuisine,
+        birthday: user.rows[0].birthday,
+        location: user.rows[0].location,
+        userId: user.rows[0].user_id,
+        dateJoined: user.rows[0].date_joined,
+        profileImageKey: user.rows[0].profile_image_key,
+        primaryPaymentSource: user.rows[0].primary_payment_source,
+        primaryPaymentSourceUsername:
+          user.rows[0].primary_payment_source_username,
+        secondaryPaymentSource: user.rows[0].secondary_payment_source,
+        secondaryPaymentSourceUsername:
+          user.rows[0].secondary_payment_source_username,
+        password: user.rows[0].profile_image_key,
         token,
       });
     } else {
@@ -201,7 +188,12 @@ app.post("/login", async (req, res) => {
 });
 
 //UPDATE USER PROFILE VALUES
+const saltRounds = 10; // Define the number of salt rounds
+// Move the salt generation outside the route handler
+const salt = bcrypt.genSaltSync(saltRounds);
 app.post("/updateprofile", async (req, res) => {
+  console.log("I GOT CALLED", req.body);
+
   const {
     firstName,
     lastName,
@@ -212,14 +204,29 @@ app.post("/updateprofile", async (req, res) => {
     birthday,
     location,
     userId,
+    primaryPaymentSource,
+    primaryPaymentSourceUsername,
+    secondaryPaymentSource,
+    secondaryPaymentSourceUsername,
+    // password,
+    type,
   } = req.body;
 
-  try {
-    const newUser = await pool.query(
-      `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4, bio = $5, favorite_cuisine = $6, birthday = $7, location = $8
-       WHERE user_id = $9`,
+  let query;
+  let updatedInfo;
 
-      [
+  try {
+    if (type === "userInfoProfileUpdate") {
+      query = `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4, bio = $5, favorite_cuisine = $6, birthday = $7, location = $8
+      WHERE user_id = $9`;
+    } else if (type === "paymentAndPasswordProfileUpdate") {
+      query = `UPDATE users SET primary_payment_source = $1, primary_payment_source_username = $2, secondary_payment_source = $3, secondary_payment_source_username = $4 WHERE user_id = $5`;
+    } else {
+      return res.status(400).json({ error: "Invalid type parameter" });
+    }
+
+    if (type === "userInfoProfileUpdate") {
+      updatedInfo = await pool.query(query, [
         firstName,
         lastName,
         email,
@@ -229,8 +236,17 @@ app.post("/updateprofile", async (req, res) => {
         birthday,
         location,
         userId,
-      ]
-    );
+      ]);
+    } else if (type === "paymentAndPasswordProfileUpdate") {
+      // const hashedPassword = bcrypt.hashSync(password, salt); // Generate hash using the pre-defined salt
+      updatedInfo = await pool.query(query, [
+        primaryPaymentSource,
+        primaryPaymentSourceUsername,
+        secondaryPaymentSource,
+        secondaryPaymentSourceUsername,
+        userId,
+      ]);
+    }
   } catch (error) {
     console.error(error);
     if (error) {
@@ -238,6 +254,19 @@ app.post("/updateprofile", async (req, res) => {
     }
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //AWS - POST RECEIPT IMAGES
 app.post(
@@ -805,15 +834,7 @@ app.post("/updatefavorite", async (req, res) => {
 
 //INSERT OR UPDATE NOTES ON RESTAURANT
 app.post("/savenotes", async (req, res) => {
-  const {
-    notes,
-    favoriteRestaurantId,
-    username,
-    dateFavorited,
-    isFavorited,
-    userId,
-    type,
-  } = req.body;
+  const { notes, favoriteRestaurantId, username, userId, type } = req.body;
 
   let query;
   let newNotes;
@@ -833,13 +854,7 @@ app.post("/savenotes", async (req, res) => {
     if (type === "restaurantNotes") {
       newNotes = await pool.query(query, [notes, favoriteRestaurantId, userId]);
     } else if (type === "userNotes") {
-      newNotes = await pool.query(query, [
-        notes,
-        username,
-        userId,
-        dateFavorited,
-        isFavorited,
-      ]);
+      newNotes = await pool.query(query, [notes, username, userId]);
     }
   } catch (error) {
     console.error(error);

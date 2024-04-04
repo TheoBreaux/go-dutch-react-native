@@ -14,6 +14,7 @@ const userInfoSlice = createSlice({
       state.user = action.payload;
     },
     updateUserInfo: (state, action) => {
+      console.log("STORE", action);
       const {
         firstName,
         lastName,
@@ -27,24 +28,36 @@ const userInfoSlice = createSlice({
         primaryPaymentSourceUsername,
         secondaryPaymentSource,
         secondaryPaymentSourceUsername,
+        password,
       } = action.payload;
 
+      // Use existing values if payload values are undefined
       const updatedUser = {
         ...state.user,
-        firstName,
-        lastName,
-        email,
-        username: username.toLowerCase(),
-        bio,
-        favoriteCuisine,
-        birthday,
-        location,
-        primaryPaymentSource,
-        primaryPaymentSourceUsername,
-        secondaryPaymentSource,
-        secondaryPaymentSourceUsername,
+        firstName: firstName ?? state.user.firstName,
+        lastName: lastName ?? state.user.lastName,
+        email: email ?? state.user.email,
+        username: username ? username.toLowerCase() : state.user.username,
+        bio: bio ?? state.user.bio,
+        favoriteCuisine: favoriteCuisine ?? state.user.favoriteCuisine,
+        birthday: birthday ?? state.user.birthday,
+        location: location ?? state.user.location,
+        primaryPaymentSource:
+          primaryPaymentSource ?? state.user.primaryPaymentSource,
+        primaryPaymentSourceUsername:
+          primaryPaymentSourceUsername ??
+          state.user.primaryPaymentSourceUsername,
+        secondaryPaymentSource:
+          secondaryPaymentSource ?? state.user.secondaryPaymentSource,
+        secondaryPaymentSourceUsername:
+          secondaryPaymentSourceUsername ??
+          state.user.secondaryPaymentSourceUsername,
+        password: password ?? state.user.password,
       };
-      state.user = updatedUser;
+      return {
+        ...state,
+        user: updatedUser,
+      };
     },
     setCurrentCity: (state, action) => {
       state.currentCity = action.payload;

@@ -158,8 +158,8 @@ const UploadProfileImage = ({ handleImageChange }) => {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 5,
   },
   cameraIconContainer: {
     backgroundColor: "lightgrey",
@@ -171,18 +171,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     position: "absolute",
     borderWidth: 2,
+    top: 140,
     borderColor: Colors.goDutchBlue,
-    bottom: 40,
-    left: 270,
+    left: 260,
   },
   imageIconcontainer: {
-    elevation: 10,
+    zIndex: 0,
+    elevation: 5,
     height: 200,
     width: 200,
     position: "relative",
     borderRadius: 100,
     overflow: "hidden",
-    shadowColor: Colors.goDutchRed,
+    shadowColor: "#000",
   },
   text: {
     fontFamily: "red-hat-bold",
@@ -190,7 +191,6 @@ const styles = StyleSheet.create({
     color: "black",
     marginTop: 5,
   },
-
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.8)",

@@ -29,7 +29,7 @@ const CustomModal = ({
             <Text style={styles.modalText}>{modalText}</Text>
 
             <View style={styles.buttonsContainer}>
-              <PrimaryButton width={100} height={50}  onPress={onPress1}>
+              <PrimaryButton width={100} height={50} onPress={onPress1}>
                 {buttonText1}
               </PrimaryButton>
 
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-normal",
     fontSize: 20,
     textAlign: "center",
+    width: "auto",
   },
   buttonsContainer: {
     flexDirection: "row",

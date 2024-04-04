@@ -122,7 +122,7 @@ const SignUpScreen = ({ route }) => {
         });
 
         const response = await fetch(
-          "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/users/profileimages",
+          "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -143,15 +143,11 @@ const SignUpScreen = ({ route }) => {
       username: values.createUsername.toLowerCase(),
       password: values.password,
       profileImageKey: imageKey || null,
-      bio: null,
-      favoriteCuisine: null,
-      birthday: null,
-      location: null,
     };
 
     try {
       const response = await fetch(
-        "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/signup",
+        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -160,6 +156,7 @@ const SignUpScreen = ({ route }) => {
       );
 
       const data = await response.json();
+      console.log("SIGN UP DATA", data);
 
       if (data.detail) {
         setError(data.detail);

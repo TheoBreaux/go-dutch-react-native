@@ -31,14 +31,14 @@ import RestaurantDetailsScreen from "./screens/RestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
 import { StatusBar } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
-
+import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPaymentsScreen";
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
 
 const MainTabNavigator = () => {
   //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
-  // useDisableBackButton();
+  useDisableBackButton();
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -181,6 +181,11 @@ const App = () => {
             component={RestaurantDetailsScreen}
           />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen
+            name="UpdatePasswordAndPayments"
+            component={UpdatePasswordAndPaymentsScreen}
+          />
+
           <Stack.Screen name="FavoritesScreen" component={FavoritesScreen} />
           <Stack.Screen
             name="ViewUserProfileScreen"

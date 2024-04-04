@@ -12,23 +12,19 @@ import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant
 import Colors from "../constants/colors";
 
 const HomePageScreen = () => {
-  //check to see if users current profile pic path is null
-  const usingDefaultProfilePhoto =
-    useSelector((state) => state.userInfo.user.profileImageKey) === null;
-
-  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
-    useState(usingDefaultProfilePhoto);
+  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] = useState(usingDefaultProfilePhoto);
   const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
   const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
+  //check to see if users current profile pic path is null
+  const usingDefaultProfilePhoto = useSelector((state) => state.userInfo.user.profileImageKey) === null;
 
-  const firstName = useSelector((state) => state.userInfo.user.firstName);
-  const goDutchUsername = useSelector((state) => state.userInfo.user.username);
   const user = useSelector((state) => state.userInfo.user);
+  const firstName = user.firstName;
+  const goDutchUsername = user.username;
+  const profileImageKey = user.profileImageKey;
+
   const currentCityResponse = useSelector(
     (state) => state.userInfo.currentCity
-  );
-  const profileImageKey = useSelector(
-    (state) => state.userInfo.user.profileImageKey
   );
 
   const dispatch = useDispatch();
@@ -69,7 +65,7 @@ const HomePageScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/featuredrestaurants`
+        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);

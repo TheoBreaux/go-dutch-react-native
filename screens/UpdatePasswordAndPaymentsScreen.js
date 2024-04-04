@@ -1,4 +1,10 @@
-import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import { Picker } from "@react-native-picker/picker";
@@ -6,11 +12,12 @@ import { paymentOptions } from "../data/data";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser, updateUserInfo } from "../store/store";
 import CustomProfileIcon from "../components/CustomProfileIcon";
+import { Ionicons } from "@expo/vector-icons";
 
-const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
+const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
@@ -21,6 +28,14 @@ const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
     setAvailableSecondaryPaymentOptions,
   ] = useState(paymentOptions);
 
+  const [saveButtonText, setSaveButtonText] = useState("Save");
+  const [saveButtonPressed, setSaveButtonPressed] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+  const [confirmedPassword, setConfirmedPassword] = useState(false);
+
+  const user = useSelector((state) => state.userInfo.user);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -29,34 +44,45 @@ const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
   }, []);
 
   const initialValues = {
-    primaryPaymentSource: user.selectedPrimaryPayment,
-    primaryPaymentSourceUsername: user.primaryPaymentUsername,
-    secondaryPaymentSource: user.selectedSecondaryPayment,
-    secondaryPaymentSourceUsername: user.secondaryPaymentUsername,
-    email: user.email,
+    primaryPaymentSource: user.primaryPaymentSource,
+    primaryPaymentSourceUsername: user.primaryPaymentSourceUsername,
+    secondaryPaymentSource: user.secondaryPaymentSource,
+    secondaryPaymentSourceUsername: user.secondaryPaymentSourceUsername,
   };
 
   const validateForm = (values) => {
     const errors = {};
-    if (!values.selectedPrimaryPayment) {
-      errors.selectedPrimaryPayment =
-        "Please select your primary payment source";
+    if (!values.primaryPaymentSource) {
+      errors.primaryPaymentSource = "Please select your primary payment source";
     }
 
-    if (!values.primaryPaymentUsername) {
-      errors.primaryPaymentUsername =
+    if (!values.primaryPaymentSourceUsername) {
+      errors.primaryPaymentSourceUsername =
         "Please enter your primary payment username";
     }
 
-    if (!values.selectedSecondaryPayment) {
-      errors.selectedSecondaryPayment =
+    if (!values.secondaryPaymentSource) {
+      errors.secondaryPaymentSource =
         "Please select your secondary payment source";
     }
 
-    if (!values.secondaryPaymentUsername) {
-      errors.secondaryPaymentUsername =
+    if (!values.secondaryPaymentSourceUsername) {
+      errors.secondaryPaymentSourceUsername =
         "Please enter your secondary payment username";
     }
+
+    // if (!values.password) {
+    //   errors.password = "Please enter a password";
+    // } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/.test(values.password)) {
+    //   errors.password =
+    //     "Must be at least 5 characters: 1 uppercase, 1 lowercase, and 1 digit";
+    // }
+
+    // if (!values.confirmedPassword) {
+    //   errors.confirmedPassword = "Please confirm your password";
+    // } else if (values.confirmedPassword !== values.password) {
+    //   errors.confirmedPassword = "Passwords do not match";
+    // }
 
     const isValid = Object.keys(errors).length === 0;
     setIsFormValid(isValid);
@@ -73,22 +99,28 @@ const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
   };
 
   const handleFormSubmit = async (values, actions) => {
-    setIsUpdatingProfile(true);
+    setSaveButtonText("Saved");
+    setSaveButtonPressed(true);
+    // setIsUpdatingProfile(true);
     actions.resetForm();
 
+    const newPassword = values.password ? values.password : user.password;
+
     const updatedUserInfo = {
-      primaryPaymentSource: values.selectedPrimaryPayment,
-      primaryPaymentSourceUsername: values.primaryPaymentUsername,
-      secondaryPaymentSource: values.selectedSecondaryPayment,
-      secondaryPaymentSourceUsername: values.secondaryPaymentUsername,
-      email: user.email,
+      primaryPaymentSource: values.primaryPaymentSource,
+      primaryPaymentSourceUsername: values.primaryPaymentSourceUsername,
+      secondaryPaymentSource: values.secondaryPaymentSource,
+      secondaryPaymentSourceUsername: values.secondaryPaymentSourceUsername,
+      password: newPassword,
+      userId: user.userId,
+      type: "paymentAndPasswordProfileUpdate",
     };
 
     dispatch(updateUserInfo(updatedUserInfo));
 
     try {
       const response = await fetch(
-        "https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/users",
+        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -106,161 +138,227 @@ const UpdatePasswordAndPaymentsScreen = ({ user, setIsUpdatingProfile }) => {
     } catch (error) {
       console.error(error);
     }
+    navigation.navigate("ProfileScreen");
   };
+
+  console.log("USER IN PAYMENT UPDATE", user);
 
   return (
     <>
-      <View style={{ alignItems: "center", marginBottom: 20, marginTop: -10 }}>
+      <View style={styles.customIconContainer}>
         <CustomProfileIcon width={200} height={200} borderRadius={100} />
       </View>
 
-      <ScrollView>
-        <View style={styles.inputContainer}>
-          <Formik
-            initialValues={initialValues}
-            validate={validateForm}
-            onSubmit={handleFormSubmit}
-          >
-            {({ handleChange, handleSubmit, handleBlur, values }) => (
-              <>
-                <View style={styles.inputPaymentContainer}>
-                  <View>
-                    <Picker
-                      style={styles.input}
-                      selectedValue={values.selectedPrimaryPayment}
-                      onValueChange={(value) => {
-                        setFormValues({
-                          ...formValues,
-                          selectedPrimaryPayment: value,
-                        });
-                        handleChange("selectedPrimaryPayment")(value);
-                        handlePrimaryPaymentChange(value);
-                      }}
-                      onBlur={handleBlur("selectedPrimaryPayment")}
-                    >
-                      {availablePrimaryPaymentOptions.map((item, index) => (
-                        <Picker.Item
-                          key={index}
-                          label={item.label}
-                          value={item.source}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
+      <View style={styles.inputContainer}>
+        <Formik
+          initialValues={initialValues}
+          validate={validateForm}
+          onSubmit={handleFormSubmit}
+        >
+          {({ handleChange, handleSubmit, handleBlur, values }) => (
+            <>
+              <View>
+                <View>
+                  <Text style={styles.label}>
+                    Select Primary Payment Source
+                  </Text>
+                </View>
+                <View>
+                  <Picker
+                    style={styles.pickerInput}
+                    selectedValue={values.primaryPaymentSource}
+                    onValueChange={(value) => {
+                      setFormValues({
+                        ...formValues,
+                        primaryPaymentSource: value,
+                      });
+                      handleChange("primaryPaymentSource")(value);
+                      handlePrimaryPaymentChange(value);
+                    }}
+                    onBlur={handleBlur("primaryPaymentSource")}
+                  >
+                    {availablePrimaryPaymentOptions.map((item, index) => (
+                      <Picker.Item
+                        key={index}
+                        label={item.label}
+                        value={item.source}
+                      />
+                    ))}
+                  </Picker>
+                </View>
+                <ErrorMessage
+                  name="primaryPaymentSource"
+                  component={Text}
+                  style={styles.errorText}
+                />
+
+                <View>
+                  <Text style={styles.label}>
+                    Enter Primary Payment Source Username
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
+                    value={formValues.primaryPaymentSourceUsername}
+                    onChangeText={(text) => {
+                      setFormValues({
+                        ...formValues,
+                        primaryPaymentSourceUsername: text,
+                      });
+                      handleChange("primaryPaymentSourceUsername")(text);
+                    }}
+                    onBlur={handleBlur("primaryPaymentSourceUsername")}
+                  />
                   <ErrorMessage
-                    name="selectedPrimaryPayment"
+                    name="primaryPaymentSourceUsername"
                     component={Text}
                     style={styles.errorText}
                   />
+                </View>
 
-                  <View style={styles.inputPaymentContainer}>
-                    <Text style={styles.label}>
-                      Enter Primary Payment Source Username
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
-                      value={formValues.primaryPaymentUsername}
-                      onChangeText={(text) => {
-                        setFormValues({
-                          ...formValues,
-                          primaryPaymentUsername: text,
-                        });
-                        handleChange("primaryPaymentUsername")(text);
-                      }}
-                      onBlur={handleBlur("primaryPaymentUsername")}
-                    />
-                    <ErrorMessage
-                      name="primaryPaymentUsername"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
+                <View>
+                  <Text style={styles.label}>
+                    Select Secondary Payment Source
+                  </Text>
+                </View>
 
-                  <View>
-                    <Text style={styles.label}>
-                      Select Secondary Payment Source
-                    </Text>
-                  </View>
+                <View>
+                  <Picker
+                    style={styles.pickerInput}
+                    selectedValue={values.secondaryPaymentSource}
+                    onValueChange={handleChange("secondaryPaymentSource")}
+                    onBlur={handleBlur("secondaryPaymentSource")}
+                  >
+                    {availableSecondaryPaymentOptions.map((item, index) => (
+                      <Picker.Item
+                        key={index}
+                        label={item.label}
+                        value={item.source}
+                      />
+                    ))}
+                  </Picker>
+                </View>
+                <ErrorMessage
+                  name="secondaryPaymentSource"
+                  component={Text}
+                  style={styles.errorText}
+                />
 
-                  <View>
-                    <Picker
-                      style={styles.input}
-                      selectedValue={values.selectedSecondaryPayment}
-                      onValueChange={handleChange("selectedSecondaryPayment")}
-                      onBlur={handleBlur("selectedSecondaryPayment")}
-                    >
-                      {availableSecondaryPaymentOptions.map((item, index) => (
-                        <Picker.Item
-                          key={index}
-                          label={item.label}
-                          value={item.source}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
+                <View>
+                  <Text style={styles.label}>
+                    Enter Secondary Payment Source Username
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
+                    value={formValues.secondaryPaymentSourceUsername}
+                    onChangeText={(text) => {
+                      setFormValues({
+                        ...formValues,
+                        secondaryPaymentSourceUsername: text,
+                      });
+                      handleChange("secondaryPaymentSourceUsername")(text);
+                    }}
+                    onBlur={handleBlur("secondaryPaymentSourceUsername")}
+                  />
                   <ErrorMessage
-                    name="selectedSecondaryPayment"
+                    name="secondaryPaymentSourceUsername"
                     component={Text}
                     style={styles.errorText}
                   />
+                </View>
 
-                  <View style={styles.inputPaymentContainer}>
-                    <Text style={styles.label}>
-                      Enter Secondary Payment Source Username
+                <View style={styles.logInInputs}>
+                  <Text style={styles.label}>Password</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                    secureTextEntry={!showPassword}
+                    placeholder="Enter updated password..."
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.passwordToggle}
+                  >
+                    <Text style={styles.passwordToggleText}>
+                      {showPassword ? "Hide" : "Show"}
                     </Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="(i.e. @go-dutch, godutch@godutch.com, $godutch)"
-                      value={formValues.secondaryPaymentUsername}
-                      onChangeText={(text) => {
-                        setFormValues({
-                          ...formValues,
-                          secondaryPaymentUsername: text,
-                        });
-                        handleChange("secondaryPaymentUsername")(text);
-                      }}
-                      onBlur={handleBlur("secondaryPaymentUsername")}
-                    />
-                    <ErrorMessage
-                      name="secondaryPaymentUsername"
-                      component={Text}
-                      style={styles.errorText}
-                    />
-                  </View>
+                  </TouchableOpacity>
+                  <ErrorMessage
+                    name="password"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
 
-                <View style={styles.buttonContainer}>
-                  <SecondaryButton onPress={handleSubmit} width={370}>
-                    Save
-                  </SecondaryButton>
+                <View style={styles.logInInputs}>
+                  <Text style={styles.label}>Confirm Password</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    onChangeText={handleChange("confirmedPassword")}
+                    onBlur={handleBlur("confirmedPassword")}
+                    value={values.confirmedPassword}
+                    secureTextEntry={!showConfirmedPassword}
+                    placeholder="Confirm updated password..."
+                  />
+                  <TouchableOpacity
+                    onPress={() =>
+                      setShowConfirmedPassword(!showConfirmedPassword)
+                    }
+                    style={styles.passwordToggle}
+                  >
+                    <Text style={styles.passwordToggleText}>
+                      {confirmedPassword ? "Hide" : "Show"}
+                    </Text>
+                  </TouchableOpacity>
+                  <ErrorMessage
+                    name="confirmedPassword"
+                    component={Text}
+                    style={styles.errorText}
+                  />
                 </View>
-              </>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
+              </View>
+
+              <SecondaryButton onPress={() => navigation.goBack()} width={370}>
+                Return
+              </SecondaryButton>
+              <SecondaryButton onPress={handleSubmit} width={370}>
+                <View style={styles.buttonContent}>
+                  <Text style={styles.buttonText}>{saveButtonText}</Text>
+                  {saveButtonPressed && (
+                    <Ionicons
+                      name="checkmark-sharp"
+                      size={30}
+                      color="whitesmoke"
+                    />
+                  )}
+                </View>
+              </SecondaryButton>
+            </>
+          )}
+        </Formik>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  customIconContainer: { alignItems: "center", marginVertical: 10 },
   inputContainer: {
-    marginTop: -25,
     flex: 1,
-    alignItems: "center",
     padding: 16,
+    marginTop: -20,
   },
-  inputPaymentContainer: {
-    width: "100%",
-    marginTop: 10,
-  },
-  nameInputsContainer: {
-    flexDirection: "row",
-  },
-  inputLabels: {
-    marginTop: 10,
+  label: {
     fontFamily: "red-hat-normal",
+    marginTop: 5,
+  },
+  pickerInput: {
+    height: 50,
+    backgroundColor: Colors.inputBackground,
+    marginVertical: 5,
   },
   input: {
     backgroundColor: Colors.inputBackground,
@@ -268,28 +366,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 5,
-    width: "100%",
+    height: "auto",
   },
-  nameInputs: {
-    width: "50%",
-  },
-  firstNameInput: {
-    marginRight: 5,
-    padding: 10,
-    backgroundColor: Colors.inputBackground,
-    borderBottomColor: Colors.inputBorder,
-    borderBottomWidth: 2,
-    borderRadius: 5,
-  },
-  lastNameInput: {
-    padding: 10,
-    backgroundColor: Colors.inputBackground,
-    borderBottomColor: Colors.inputBorder,
-    borderBottomWidth: 2,
-    borderRadius: 5,
-  },
-  logInInputs: {
-    width: "100%",
+  errorText: {
+    color: "red",
   },
   textInput: {
     fontFamily: "red-hat-normal",
@@ -299,33 +379,76 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
+  logInInputs: {
+    width: "100%",
+  },
+  passwordToggleText: {
+    color: Colors.goDutchRed,
+  },
   passwordToggle: {
     position: "absolute",
     top: 40,
     right: 10,
   },
-  passwordToggleText: {
-    color: Colors.goDutchRed,
-  },
-  errorText: {
-    color: "red",
-    marginTop: -5,
-  },
-  label: {
-    fontFamily: "red-hat-normal",
-  },
-  buttonContainer: {
-    marginTop: 150,
-  },
-  spinnerContainer: {
-    flex: 1,
-    justifyContent: "center",
+  buttonContent: {
+    flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    top: -50,
-    width: "100%",
-    height: "100%",
+    justifyContent: "center",
   },
+  buttonText: {
+    color: "whitesmoke",
+    fontSize: 18,
+    fontFamily: "red-hat-bold",
+    marginRight: 10,
+  }, // Adjust this v
+  // nameInputsContainer: {
+  //   flexDirection: "row",
+  // },
+  // inputLabels: {
+  //   // marginTop: 10,
+  //   fontFamily: "red-hat-normal",
+  // },
+
+  // nameInputs: {
+  //   width: "50%",
+  // },
+  // firstNameInput: {
+  //   marginRight: 5,
+  //   padding: 10,
+  //   backgroundColor: Colors.inputBackground,
+  //   borderBottomColor: Colors.inputBorder,
+  //   borderBottomWidth: 2,
+  //   borderRadius: 5,
+  // },
+  // lastNameInput: {
+  //   padding: 10,
+  //   backgroundColor: Colors.inputBackground,
+  //   borderBottomColor: Colors.inputBorder,
+  //   borderBottomWidth: 2,
+  //   borderRadius: 5,
+  // },
+  // logInInputs: {
+  //   width: "100%",
+  // },
+
+  // passwordToggle: {
+  //   position: "absolute",
+  //   top: 40,
+  //   right: 10,
+  // },
+  // passwordToggleText: {
+  //   color: Colors.goDutchRed,
+  // },
+
+  // spinnerContainer: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   position: "absolute",
+  //   top: -50,
+  //   width: "100%",
+  //   height: "100%",
+  // },
 });
 
 export default UpdatePasswordAndPaymentsScreen;

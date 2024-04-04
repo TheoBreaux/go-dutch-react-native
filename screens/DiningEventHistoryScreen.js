@@ -17,7 +17,7 @@ const DiningEventHistoryScreen = () => {
   const getData = async () => {
     try {
       const response = await fetch(
-        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/diningevents/${username}`
+        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
       setDiningEvents(data.eventData);

@@ -2,6 +2,7 @@ import * as Location from "expo-location";
 import { useCallback, useEffect, useState } from "react";
 import { setRestaurantList } from "../store/store";
 import { useDispatch } from "react-redux";
+import Constants from "expo-constants";
 
 const LocateRestaurants = ({ onLocationUpdate }) => {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
@@ -9,6 +10,7 @@ const LocateRestaurants = ({ onLocationUpdate }) => {
   const [longitude, setLongitude] = useState(0);
 
   const dispatch = useDispatch();
+  const apiKey = Constants.expoConfig.extra.PG_API_KEY;
 
   //get current location coordinates
   const getLocationAsync = useCallback(async () => {
@@ -43,7 +45,7 @@ const LocateRestaurants = ({ onLocationUpdate }) => {
       const location = `location=${latitude},${longitude}`;
       const radius = "&radius=2000";
       const type = "&keyword=restaurant";
-      const key = "&key=AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig";
+      const key = `&key=${apiKey}`;
       const restaurantSearchUrl = url + location + radius + type + key;
 
       try {

@@ -17,7 +17,7 @@ const FavoritesScreen = () => {
   const [favoriteDiners, setFavoriteDiners] = useState([]);
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  
   const userId = useSelector((state) => state.userInfo.user.userId);
 
   const favoritesSaved =
@@ -49,7 +49,7 @@ const FavoritesScreen = () => {
   const fetchFavorites = async (type) => {
     try {
       const response = await fetch(
-        `https://4707-2603-8000-c0f0-a570-5c6c-7628-a63a-291.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
+        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
       );
       const data = await response.json();
 
@@ -78,6 +78,7 @@ const FavoritesScreen = () => {
           >
             <View style={styles.tabContent}>
               <Text style={styles.title}>Restaurants</Text>
+
               <Ionicons
                 name="restaurant-sharp"
                 size={25}
@@ -91,6 +92,7 @@ const FavoritesScreen = () => {
           >
             <View style={styles.tabContent}>
               <Text style={styles.title}>Diners</Text>
+
               <Ionicons
                 name="people-circle"
                 size={25}
@@ -100,7 +102,9 @@ const FavoritesScreen = () => {
           </Pressable>
         </View>
 
-        <Text style={styles.refreshText}>Swipe down to refresh screen</Text>
+        {!favoritesSaved && (
+          <Text style={styles.refreshText}>Swipe down to refresh screen</Text>
+        )}
 
         {favoritesSaved && (
           <Text style={styles.title}>You have no favorites saved.</Text>
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    marginTop: -50,
+    marginTop: -40,
   },
   tabContainer: {
     flexDirection: "row",
