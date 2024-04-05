@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "../constants/colors";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -24,6 +23,7 @@ import Spinner from "../components/Spinner";
 import UpdateProfileForm from "../ui/UpdateProfileForm";
 import CustomModal from "../components/CustomModal";
 import UpdatePasswordAndPaymentsScreen from "./UpdatePasswordAndPaymentsScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   //for uploading image to backend
@@ -162,7 +162,7 @@ const ProfileScreen = () => {
         });
 
         const response = await fetch(
-          "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users/profileimages",
+          "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -193,7 +193,7 @@ const ProfileScreen = () => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/profilephoto",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -330,9 +330,7 @@ const ProfileScreen = () => {
         )}
 
         {showUpdatePasswordAndPaymentUpdateForm && (
-          <UpdatePasswordAndPaymentsScreen
-            setIsUpdatingProfile={setIsUpdatingProfile}
-          />
+          <UpdatePasswordAndPaymentsScreen />
         )}
       </ScrollView>
     </>
@@ -409,16 +407,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 15,
     textAlign: "center",
-  },
-  spinnerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // position: "absolute",
-    top: -15,
-    width: "100%",
-    height: "100%",
-    zIndex: 1000,
   },
 });
 

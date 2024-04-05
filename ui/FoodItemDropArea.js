@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PrimaryButton from "../components/PrimaryButton";
 import ProfileImageMedallion from "../components/ProfileImageMedallion";
-import { useNavigation } from "@react-navigation/native";
 import {
   returnRemovedDinerItem,
   updateDinerItems,
@@ -21,6 +20,7 @@ import {
   updateSubtotal,
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
+import { useNavigation } from "@react-navigation/native";
 
 const FoodItemDropArea = () => {
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);

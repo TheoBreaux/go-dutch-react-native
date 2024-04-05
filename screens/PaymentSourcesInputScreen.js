@@ -18,10 +18,11 @@ const PaymentSourcesInputScreen = () => {
     setAvailableSecondaryPaymentOptions,
   ] = useState(paymentOptions);
   const [error, setError] = useState("");
-  const navigation = useNavigation();
 
   const userName = useSelector((state) => state.userInfo.user.firstName);
   const email = useSelector((state) => state.userInfo.user.email);
+
+  const navigation = useNavigation();
 
   const initialValues = {
     selectedPrimaryPayment: "",
@@ -77,7 +78,7 @@ const PaymentSourcesInputScreen = () => {
     };
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -208,7 +209,7 @@ const PaymentSourcesInputScreen = () => {
                 </View>
 
                 <View>
-                  <SecondaryButton width={370} onPress={handleSubmit}>
+                  <SecondaryButton onPress={handleSubmit}>
                     Submit
                   </SecondaryButton>
                 </View>

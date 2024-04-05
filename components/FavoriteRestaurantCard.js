@@ -1,9 +1,10 @@
 import { Image, StyleSheet, Text, Pressable, View } from "react-native";
 import React, { useState } from "react";
 import FavoritesIconButton from "./FavoritesIconButton";
-import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { useAnimatedKeyboard } from "react-native-reanimated";
 
 const FavoriteRestaurantCard = ({ item }) => {
   const [imageError, setImageError] = useState(false);
@@ -11,7 +12,6 @@ const FavoriteRestaurantCard = ({ item }) => {
   const [error, setError] = useState(null);
 
   const userId = useSelector((state) => state.userInfo.user.userId);
-
   const navigation = useNavigation();
 
   const navigateToFeaturedRestuarantDetails = (restaurant) => {
@@ -47,7 +47,7 @@ const FavoriteRestaurantCard = ({ item }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updatefavorite",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

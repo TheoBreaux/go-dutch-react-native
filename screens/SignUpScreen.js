@@ -11,7 +11,6 @@ import { useState } from "react";
 import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
 import UploadProfileImage from "../ui/UploadProfileImage";
@@ -19,8 +18,10 @@ import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
 import Spinner from "../components/Spinner";
+import { useNavigation } from "@react-navigation/native";
 
-const SignUpScreen = ({ route }) => {
+
+const SignUpScreen = ({ route}) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
@@ -30,10 +31,10 @@ const SignUpScreen = ({ route }) => {
   const [loading, setLoading] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const { apiKey } = route.params;
+  const navigation = useNavigation();
 
   //for uploading image to backend
   const FormData = global.FormData;
@@ -122,7 +123,7 @@ const SignUpScreen = ({ route }) => {
         });
 
         const response = await fetch(
-          "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users/profileimages",
+          "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -147,7 +148,7 @@ const SignUpScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/signup",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

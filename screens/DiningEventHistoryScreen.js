@@ -10,14 +10,15 @@ import { useNavigation } from "@react-navigation/native";
 
 const DiningEventHistoryScreen = () => {
   const [diningEvents, setDiningEvents] = useState([]);
-  const navigation = useNavigation();
   const username = useSelector((state) => state.userInfo.user.username);
+
+  const navigation = useNavigation();
 
   //fetch all dining events from the database
   const getData = async () => {
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/diningevents/${username}`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/diningevents/${username}`
       );
       const data = await response.json();
       setDiningEvents(data.eventData);

@@ -11,13 +11,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import Colors from "./constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import CustomIcon from "./components/CustomIcon";
 import { Provider } from "react-redux";
 import store from "./store/store";
-import LogOutScreen from "./screens/LogOutScreen";
 import AddDinersScreen from "./screens/AddDinersScreen";
-import AssignItemsArea from "./ui/AssignItemsArea";
 import DiningEventDetailsScreen from "./screens/DiningEventDetailsScreen";
 import FeaturedRestaurants from "./screens/FeaturedRestaurantsScreen";
 import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
@@ -32,6 +29,7 @@ import { useDisableBackButton } from "./utils";
 import { StatusBar } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPaymentsScreen";
+import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
@@ -100,15 +98,6 @@ const MainTabNavigator = () => {
           ),
         }}
       />
-      <BottomTab.Screen
-        name="Log Out"
-        component={LogOutScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Entypo name="log-out" size={35} color="white" />
-          ),
-        }}
-      />
     </BottomTab.Navigator>
   );
 };
@@ -158,7 +147,10 @@ const App = () => {
             component={PaymentSourcesInputScreen}
           />
           <Stack.Screen name="AddDinersScreen" component={AddDinersScreen} />
-          <Stack.Screen name="AssignItemsArea" component={AssignItemsArea} />
+          <Stack.Screen
+            name="AssignItemsToDinersScreen"
+            component={AssignItemsToDinersScreen}
+          />
           <Stack.Screen
             name="ConfirmReceiptItemsScreen"
             component={ConfirmReceiptItemsScreen}

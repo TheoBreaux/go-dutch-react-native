@@ -1,13 +1,13 @@
 import { StyleSheet, View, ScrollView, Text, Image } from "react-native";
 import Logo from "../components/Logo";
-import FoodItemDropArea from "./FoodItemDropArea";
+import FoodItemDropArea from "../ui/FoodItemDropArea";
 import DinnerItem from "../components/DinnerItem";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setDiners } from "../store/store";
 import Colors from "../constants/colors";
 
-const AssignItemsArea = () => {
+const AssignItemsToDinersScreen = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
 
   const updatedDiners = useSelector((state) => state.diningEvent.diners);
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssignItemsArea;
+export default AssignItemsToDinersScreen;

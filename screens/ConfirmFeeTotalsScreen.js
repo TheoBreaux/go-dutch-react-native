@@ -11,7 +11,6 @@ import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import FeeTextInput from "../components/FeeTextInput";
 import AddPropertyToListModal from "../components/AddPropertyToListModal";
@@ -20,6 +19,7 @@ import {
   updateFinalDiningEventValues,
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
+import { useNavigation } from "@react-navigation/native";
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
@@ -43,6 +43,7 @@ const ConfirmFeeTotalsScreen = () => {
   );
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
+
   const evenlySplitItemsTotal = useSelector((state) =>
     state.diningEvent.evenlySplitItems
       .reduce((total, item) => total + item.price, 0)
@@ -65,9 +66,10 @@ const ConfirmFeeTotalsScreen = () => {
   const restaurantName = receiptValues.merchantName.data;
   const restaurantAddress = receiptValues.merchantAddress.data;
 
-  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
+  
   const findAdditionalCharge = (array, searchString) => {
     const matchingObject = array.find((obj) =>
       obj.text.toLowerCase().includes(searchString.toLowerCase())
@@ -173,7 +175,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/diningevent/values`,
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -211,7 +213,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/additionaldiners/values`,
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -506,9 +508,8 @@ const ConfirmFeeTotalsScreen = () => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    // flex: 1,
+    flex: 1,
     padding: 16,
-    marginTop: -5,
     margin: 8,
     borderRadius: 8,
     shadowColor: "#000",

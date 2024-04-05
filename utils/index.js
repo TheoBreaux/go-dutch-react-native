@@ -37,7 +37,7 @@ export const getCityFromCoordinates = async (latitude, longitude, apiKey) => {
     //find a better way to handle this
     return {
       city: null,
-      error: "Currently unable to retrieve city information",
+      error: "Currently unable to retrieve location information",
     };
   }
 };

@@ -14,11 +14,12 @@ import Logo from "../components/Logo";
 import PrimaryDiner from "../components/PrimaryDiner";
 import PrimaryButton from "../components/PrimaryButton";
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import Diner from "../components/Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
 import ProfileIcon from "../components/ProfileIcon";
 import BirthdayDiner from "../components/BirthdayDiner";
+import { useNavigation } from "@react-navigation/native";
+
 
 const AddDinersScreen = () => {
   const [inputValue, setInputValue] = useState("");
@@ -47,7 +48,7 @@ const AddDinersScreen = () => {
     let isDinerInDatabase;
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/users/${username}`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users/${username}`
       );
       const data = await response.json();
       isDinerInDatabase = data;
@@ -62,7 +63,7 @@ const AddDinersScreen = () => {
     const autoCompleteDiner = async () => {
       try {
         const response = await fetch(
-          `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
+          `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/additionaldiners/suggestions?input=${inputValue}`
         );
         const data = await response.json();
         setSuggestions(
@@ -191,14 +192,13 @@ const AddDinersScreen = () => {
 
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/additionaldiners`,
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/additionaldiners`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...data, celebratingBirthday: birthdayValue }),
         }
       );
-      // const result = await response.json();
     } catch (error) {
       console.error("Network error:", error);
     }
@@ -385,8 +385,6 @@ const AddDinersScreen = () => {
   );
 };
 
-//
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -441,7 +439,6 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
     fontSize: 25,
-    marginTop: -10,
     marginBottom: 5,
   },
   eventLocation: {
@@ -449,6 +446,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 25,
     marginTop: -10,
+    color: Colors.goDutchBlue,
   },
   addDinersContainer: {
     flexDirection: "row",

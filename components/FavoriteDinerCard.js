@@ -1,16 +1,16 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import Colors from "../constants/colors";
-import { useNavigation } from "@react-navigation/native";
 import FavoritesIconButton from "./FavoritesIconButton";
 import Spinner from "./Spinner";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
   const [isFavorited, setIsFavorited] = useState(false);
-  const navigation = useNavigation();
 
   const userId = useSelector((state) => state.userInfo.user.userId);
+  const navigation = useNavigation();
 
   const navigateToUserProfile = (selectedUser) => {
     navigation.navigate("ViewUserProfileScreen", {
@@ -32,7 +32,7 @@ const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updatefavorite",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

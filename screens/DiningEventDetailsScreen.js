@@ -7,20 +7,20 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Logo from "../components/Logo";
-
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import PrimaryButton from "../components/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
 
 const DiningEventDetailsScreen = ({ route }) => {
   const [dinerData, setDinerData] = useState([]);
   const [eventData, setEventData] = useState({});
   const [viewReceipt, setViewReceipt] = useState(false);
-  const navigation = useNavigation();
 
   const { item } = route.params;
   const { imageUri } = route.params;
+
+  const navigation = useNavigation();
 
   const dateObj = new Date(item.diningDate);
   const eventId = item.eventId;
@@ -66,7 +66,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/additionaldiners/${eventId}`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);

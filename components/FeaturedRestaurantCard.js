@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
-const FeaturedRestaurantCard = ({ restaurant }) => {
-  const navigation = useNavigation();
+const FeaturedRestaurantCard = ({ restaurant}) => {
   const [imageError, setImageError] = useState(false);
+
+  const navigation = useNavigation();
 
   const navigateToFeaturedRestuarantDetails = () => {
     navigation.navigate("RestaurantDetailsScreen", {

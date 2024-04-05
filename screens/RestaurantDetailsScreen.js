@@ -12,13 +12,13 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
-import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 import FavoritesIconButton from "../components/FavoritesIconButton";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
-const RestaurantDetailsScreen = ({ route }) => {
+const RestaurantDetailsScreen = ({ route}) => {
   const { source, restaurant } = route.params;
 
   const userId = useSelector((state) => state.userInfo.user.userId);
@@ -31,6 +31,7 @@ const RestaurantDetailsScreen = ({ route }) => {
   const [saveButtonColor, setSaveButtonColor] = useState(Colors.goDutchBlue);
 
   const navigation = useNavigation();
+
   let restaurantId;
 
   if (source === "FavoriteRestaurantCard") {
@@ -57,7 +58,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/savenotes`,
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/savenotes`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -81,7 +82,7 @@ const RestaurantDetailsScreen = ({ route }) => {
   const fetchFavoritesStatus = async () => {
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurantId}`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurantId}`
       );
       const data = await response.json();
       // Set isFavorited based on the response from the server
@@ -118,7 +119,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updatefavorite",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

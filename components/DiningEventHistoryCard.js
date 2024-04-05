@@ -1,17 +1,18 @@
 import Constants from "expo-constants";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
-import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
 import React, { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
+import { useNavigation } from "@react-navigation/native";
 
-const DiningEventHistoryCard = ({ item }) => {
+const DiningEventHistoryCard = ({ item}) => {
   const [imageUri, setImageUri] = useState(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const navigation = useNavigation();
   const dateObj = new Date(item.diningDate);
   const receiptImageKey = item.receiptImageKey;
+
+  const navigation = useNavigation();
 
   // Extract the year, month, and day from the Date object
   const year = dateObj.getFullYear();

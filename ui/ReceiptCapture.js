@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from "react";
 import PrimaryButton from "../components/PrimaryButton";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setEventId,
@@ -16,6 +15,8 @@ import {
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import { getCurrentDate } from "../utils";
+import { useNavigation } from "@react-navigation/native";
+import Colors from "../constants/colors";
 
 const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -25,8 +26,8 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const [loading, setLoading] = useState(false);
 
   const cameraRef = useRef(null);
-  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const diningEvent = useSelector((state) => state.diningEvent.event);
 
@@ -38,6 +39,25 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
   const primaryDinerUsername = useSelector(
     (state) => state.userInfo.user.username
   );
+
+  // Function to handle selecting an image from the gallery TEMPORARY FOR TESTING
+  const pickImageFromGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -81,7 +101,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         });
 
         const response = await fetch(
-          "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/diningevents/receiptimages",
+          "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/diningevents/receiptimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -113,7 +133,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/diningevents",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {
@@ -283,11 +303,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   captureText: {
-    // marginTop: -5,
+    marginTop: 15,
     marginBottom: 5,
     textAlign: "center",
     fontSize: 25,
     fontFamily: "red-hat-bold",
+    color: Colors.goDutchBlue,
   },
   contentContainer: {
     flex: 1,

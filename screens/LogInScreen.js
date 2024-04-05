@@ -11,12 +11,12 @@ import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { useState } from "react";
 import { ErrorMessage, Formik } from "formik";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setCurrentCity, setUser } from "../store/store";
 import { getCityFromCoordinates } from "../utils";
 import { useCallback } from "react";
 import LocateRestaurants from "../ui/LocateRestaurants";
+import { useNavigation } from "@react-navigation/native";
 
 const LogInScreen = ({ route }) => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -24,11 +24,10 @@ const LogInScreen = ({ route }) => {
   const [error, setError] = useState("");
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-
-  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const { apiKey } = route.params;
+  const navigation = useNavigation();
 
   const initialValues = {
     username: "",
@@ -68,7 +67,7 @@ const LogInScreen = ({ route }) => {
     };
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/login",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/login",
         {
           method: "POST",
           headers: {

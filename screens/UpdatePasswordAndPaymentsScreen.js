@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
@@ -11,13 +12,13 @@ import { Picker } from "@react-native-picker/picker";
 import { paymentOptions } from "../data/data";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, updateUserInfo } from "../store/store";
 import CustomProfileIcon from "../components/CustomProfileIcon";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
+const UpdatePasswordAndPaymentsScreen = () => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
@@ -37,8 +38,8 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
 
   const user = useSelector((state) => state.userInfo.user);
 
-  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     setFormValues(initialValues);
@@ -102,7 +103,6 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
   const handleFormSubmit = async (values, actions) => {
     setSaveButtonText("Saved");
     setSaveButtonPressed(true);
-    // setIsUpdatingProfile(true);
     actions.resetForm();
 
     const newPassword = values.password ? values.password : user.password;
@@ -121,7 +121,7 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updateprofile",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -141,6 +141,9 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
     }
     navigation.goBack();
   };
+
+  const screenWidth = Dimensions.get("window").width;
+  const buttonWidth = screenWidth - 40;
 
   return (
     <>
@@ -335,10 +338,10 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
                 )}
               </View>
 
-              <SecondaryButton onPress={() => navigation.goBack()} width={370}>
+              <SecondaryButton onPress={() => navigation.goBack()} width={buttonWidth}>
                 Return
               </SecondaryButton>
-              <SecondaryButton onPress={handleSubmit} width={370}>
+              <SecondaryButton onPress={handleSubmit} width={buttonWidth}>
                 <View style={styles.buttonContent}>
                   <Text style={styles.buttonText}>{saveButtonText}</Text>
                   {saveButtonPressed && (
@@ -429,55 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "red-hat-bold",
     marginRight: 10,
-  }, // Adjust this v
-  // nameInputsContainer: {
-  //   flexDirection: "row",
-  // },
-  // inputLabels: {
-  //   // marginTop: 10,
-  //   fontFamily: "red-hat-normal",
-  // },
-
-  // nameInputs: {
-  //   width: "50%",
-  // },
-  // firstNameInput: {
-  //   marginRight: 5,
-  //   padding: 10,
-  //   backgroundColor: Colors.inputBackground,
-  //   borderBottomColor: Colors.inputBorder,
-  //   borderBottomWidth: 2,
-  //   borderRadius: 5,
-  // },
-  // lastNameInput: {
-  //   padding: 10,
-  //   backgroundColor: Colors.inputBackground,
-  //   borderBottomColor: Colors.inputBorder,
-  //   borderBottomWidth: 2,
-  //   borderRadius: 5,
-  // },
-  // logInInputs: {
-  //   width: "100%",
-  // },
-
-  // passwordToggle: {
-  //   position: "absolute",
-  //   top: 40,
-  //   right: 10,
-  // },
-  // passwordToggleText: {
-  //   color: Colors.goDutchRed,
-  // },
-
-  // spinnerContainer: {
-  //   flex: 1,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   position: "absolute",
-  //   top: -50,
-  //   width: "100%",
-  //   height: "100%",
-  // },
+  },
 });
 
 export default UpdatePasswordAndPaymentsScreen;

@@ -17,18 +17,12 @@ const FavoritesScreen = () => {
   const [favoriteDiners, setFavoriteDiners] = useState([]);
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const userId = useSelector((state) => state.userInfo.user.userId);
 
   const favoritesSaved =
     (!favoriteDiners || favoriteDiners.length === 0) &&
     (!favoriteRestaurants || favoriteRestaurants.length === 0);
-
-  //if there are restaurants favorited and the length is longer thatn diners list, make it active screen
-  const activeScreen =
-    favoriteDiners && favoriteDiners.length > favoriteRestaurants.length
-      ? "Diners"
-      : "Restaurants";
 
   const [activeTab, setActiveTab] = useState("Restaurants");
 
@@ -49,7 +43,7 @@ const FavoritesScreen = () => {
   const fetchFavorites = async (type) => {
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
       );
       const data = await response.json();
 

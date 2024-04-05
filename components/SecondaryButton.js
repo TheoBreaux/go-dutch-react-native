@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   buttonOuterContainer: {
     borderRadius: 5,
     borderWidth: 2,
-    marginTop: 10,
+    marginTop: 8,
     overflow: "hidden",
     borderColor: Colors.goDutchBlue,
   },

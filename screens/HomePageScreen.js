@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import Logo from "../components/Logo";
-import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
 import { useDispatch, useSelector } from "react-redux";
 import { useMemo, useState } from "react";
@@ -10,13 +9,17 @@ import CustomProfileIcon from "../components/CustomProfileIcon";
 import CustomModal from "../components/CustomModal";
 import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant";
 import Colors from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const HomePageScreen = () => {
-  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] = useState(usingDefaultProfilePhoto);
+  //check to see if users current profile pic path is null
+  const usingDefaultProfilePhoto =
+    useSelector((state) => state.userInfo.user.profileImageKey) === null;
+
+  const [showUpdateProfilePhotoModal, setShowUpdateProfilePhotoModal] =
+    useState(usingDefaultProfilePhoto);
   const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
   const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
-  //check to see if users current profile pic path is null
-  const usingDefaultProfilePhoto = useSelector((state) => state.userInfo.user.profileImageKey) === null;
 
   const user = useSelector((state) => state.userInfo.user);
   const firstName = user.firstName;
@@ -65,7 +68,7 @@ const HomePageScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/featuredrestaurants`
+        `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);
@@ -151,8 +154,6 @@ const HomePageScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    paddingHorizontal: 20, // Add padding to ensure text doesn't go off-screen
   },
   profileIconContainer: {
     flexDirection: "row",
@@ -161,18 +162,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "red-hat-bold",
-    textAlign: "center",
     fontSize: 32,
     color: Colors.goDutchRed,
     marginRight: 5,
   },
   subtitle: {
-    marginTop: -5,
+    marginTop: -4,
     fontFamily: "red-hat-normal",
     textAlign: "center",
     fontSize: 20,
     flexWrap: "wrap",
-    maxWidth: "100%", // Ensure text wraps within the screen width
+    maxWidth: "100%", 
   },
 });
 

@@ -4,7 +4,9 @@ import Colors from "../constants/colors";
 import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, updateUserInfo } from "../store/store";
+import { logOut, setUser, updateUserInfo } from "../store/store";
+import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const UpdateProfileForm = ({
   updateProfileImage,
@@ -17,6 +19,7 @@ const UpdateProfileForm = ({
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     setFormValues(initialValues);
@@ -63,6 +66,11 @@ const UpdateProfileForm = ({
     return emailRegex.test(email);
   };
 
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigation.navigate("Welcome");
+  };
+
   const handleFormSubmit = async (values, actions) => {
     setIsUpdatingProfile(true);
     //update profile Image
@@ -87,7 +95,7 @@ const UpdateProfileForm = ({
 
     try {
       const response = await fetch(
-        "https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/updateprofile",
+        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -110,9 +118,11 @@ const UpdateProfileForm = ({
 
   const updateProfileComponentHeight = 600;
   const formInputsHeight = 200;
+  const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height; // Get the screen height
+  const buttonWidth = screenWidth - 32;
   const buttonMarginTop = Math.max(
-    screenHeight - 50 - formInputsHeight - updateProfileComponentHeight,
+    screenHeight - 100 - formInputsHeight - updateProfileComponentHeight,
     0
   ); // Ensure button is at least 50 pixels from the bottom
 
@@ -274,15 +284,27 @@ const UpdateProfileForm = ({
               style={[styles.buttonContainer, { marginTop: buttonMarginTop }]}
             >
               <SecondaryButton
-                width={370}
+                width={buttonWidth}
                 onPress={() => {
                   setShowUpdatePasswordAndPaymentModal(true);
                 }}
               >
                 Return
               </SecondaryButton>
-              <SecondaryButton onPress={handleSubmit} width={370}>
+              <SecondaryButton width={buttonWidth} onPress={handleSubmit}>
                 Save
+              </SecondaryButton>
+
+              <SecondaryButton width={buttonWidth} onPress={handleLogOut}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.logOutText}>Log Out</Text>
+                  <Entypo name="log-out" size={30} color="white" />
+                </View>
               </SecondaryButton>
             </View>
           </>
@@ -322,6 +344,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 200,
+  },
+  logOutText: {
+    color: "whitesmoke",
+    fontSize: 18,
+    fontFamily: "red-hat-bold",
+    marginRight: 5,
   },
   errorText: {
     color: "red",

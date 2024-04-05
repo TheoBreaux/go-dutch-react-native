@@ -11,11 +11,11 @@ import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
 import Logo from "../components/Logo";
 import { months } from "../data/data";
-import { useNavigation } from "@react-navigation/native";
 import AWS from "aws-sdk";
 import React, { useEffect, useState } from "react";
 import LottieView from "lottie-react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
 
 const CheckCloseOutDetailsScreen = ({ route }) => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
@@ -33,6 +33,7 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const totalMealCost = diningEvent.event.totalMealCost;
   const eventDate = diningEvent.event.eventDate;
   const receiptImageKey = diningEvent.event.receiptImageKey;
+  const navigation = useNavigation();
 
   //convert string date to month, day, year format
   const parts = eventDate.split("-");
@@ -41,8 +42,6 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const year = parseInt(parts[2], 10);
 
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
-
-  const navigation = useNavigation();
 
   // const { finalBirthdayDinerNumbers } = route.params;
 

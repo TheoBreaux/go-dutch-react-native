@@ -6,9 +6,9 @@ import Logo from "../components/Logo";
 import PrimaryButton from "../components/PrimaryButton";
 import ConfirmableDinnerItem from "../components/ConfirmableDinnerItem";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { nanoid } from "@reduxjs/toolkit";
 import AddPropertyToListModal from "../components/AddPropertyToListModal";
+import { useNavigation } from "@react-navigation/native";
 
 //loop through receiptAmounts array to configure data for use
 const configureReceiptData = (receiptAmounts) => {
@@ -64,7 +64,6 @@ const ConfirmReceiptItemsScreen = () => {
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
   const receiptAmounts = receiptValues.amounts;
-  const diners = useSelector((state) => state.diningEvent.diners);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -96,7 +95,7 @@ const ConfirmReceiptItemsScreen = () => {
     const fetchProfilePicPaths = async () => {
       try {
         const response = await fetch(
-          `https://abd2-2603-8000-c0f0-a570-e840-db4a-515a-91a5.ngrok-free.app/additionaldiners/profilepics/${eventId}`
+          `https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/additionaldiners/profilepics/${eventId}`
         );
         const data = await response.json();
         setProfilePicPaths(data);
@@ -178,7 +177,7 @@ const ConfirmReceiptItemsScreen = () => {
           <PrimaryButton
             width={90}
             onPress={() => {
-              navigation.navigate("AssignItemsArea");
+              navigation.navigate("AssignItemsToDinersScreen");
               dispatch(setAllReceiptItems(separatedDinnerItems));
             }}
           >
@@ -255,7 +254,7 @@ const styles = StyleSheet.create({
   miniModalContent: {
     backgroundColor: "white",
     marginHorizontal: 10,
-    marginBottom: 10,
+    marginVertical: 10,
     borderRadius: 10,
     height: 150,
     elevation: 5,
