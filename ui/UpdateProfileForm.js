@@ -79,6 +79,7 @@ const UpdateProfileForm = ({
       favoriteCuisine: values.favoriteCuisine,
       birthday: values.birthday,
       location: values.location,
+      userId: user.userId,
       type: "userInfoProfileUpdate",
     };
 

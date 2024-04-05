@@ -156,7 +156,6 @@ const SignUpScreen = ({ route }) => {
       );
 
       const data = await response.json();
-      console.log("SIGN UP DATA", data);
 
       if (data.detail) {
         setError(data.detail);

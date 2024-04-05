@@ -14,7 +14,6 @@ const userInfoSlice = createSlice({
       state.user = action.payload;
     },
     updateUserInfo: (state, action) => {
-      console.log("STORE", action);
       const {
         firstName,
         lastName,

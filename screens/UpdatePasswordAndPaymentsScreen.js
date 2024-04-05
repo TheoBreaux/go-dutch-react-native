@@ -30,6 +30,7 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
 
   const [saveButtonText, setSaveButtonText] = useState("Save");
   const [saveButtonPressed, setSaveButtonPressed] = useState(false);
+  const [showUpdatePassword, setShowUpdatePassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState(false);
@@ -71,18 +72,18 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
         "Please enter your secondary payment username";
     }
 
-    // if (!values.password) {
-    //   errors.password = "Please enter a password";
-    // } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/.test(values.password)) {
-    //   errors.password =
-    //     "Must be at least 5 characters: 1 uppercase, 1 lowercase, and 1 digit";
-    // }
+    if (!values.password) {
+      errors.password = "Please enter a password";
+    } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/.test(values.password)) {
+      errors.password =
+        "Must be at least 5 characters: 1 uppercase, 1 lowercase, and 1 digit";
+    }
 
-    // if (!values.confirmedPassword) {
-    //   errors.confirmedPassword = "Please confirm your password";
-    // } else if (values.confirmedPassword !== values.password) {
-    //   errors.confirmedPassword = "Passwords do not match";
-    // }
+    if (!values.confirmedPassword) {
+      errors.confirmedPassword = "Please confirm your password";
+    } else if (values.confirmedPassword !== values.password) {
+      errors.confirmedPassword = "Passwords do not match";
+    }
 
     const isValid = Object.keys(errors).length === 0;
     setIsFormValid(isValid);
@@ -138,10 +139,8 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
     } catch (error) {
       console.error(error);
     }
-    navigation.navigate("ProfileScreen");
+    navigation.goBack();
   };
-
-  console.log("USER IN PAYMENT UPDATE", user);
 
   return (
     <>
@@ -268,57 +267,72 @@ const UpdatePasswordAndPaymentsScreen = ({ setIsUpdatingProfile }) => {
                   />
                 </View>
 
-                <View style={styles.logInInputs}>
-                  <Text style={styles.label}>Password</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    secureTextEntry={!showPassword}
-                    placeholder="Enter updated password..."
-                  />
+                {!showUpdatePassword && (
                   <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.passwordToggle}
+                    onPress={() => setShowUpdatePassword(!showUpdatePassword)}
+                    style={styles.passwordButton}
+                    activeOpacity={0.7}
                   >
-                    <Text style={styles.passwordToggleText}>
-                      {showPassword ? "Hide" : "Show"}
+                    <Text style={styles.updatePasswordText}>
+                      Update Password
                     </Text>
                   </TouchableOpacity>
-                  <ErrorMessage
-                    name="password"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
+                )}
+                {showUpdatePassword && (
+                  <View>
+                    <View style={styles.logInInputs}>
+                      <Text style={styles.label}>Password</Text>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={handleChange("password")}
+                        onBlur={handleBlur("password")}
+                        value={values.password}
+                        secureTextEntry={!showPassword}
+                        placeholder="Enter updated password..."
+                      />
+                      <TouchableOpacity
+                        onPress={() => setShowPassword(!showPassword)}
+                        style={styles.passwordToggle}
+                      >
+                        <Text style={styles.passwordToggleText}>
+                          {showPassword ? "Hide" : "Show"}
+                        </Text>
+                      </TouchableOpacity>
+                      <ErrorMessage
+                        name="password"
+                        component={Text}
+                        style={styles.errorText}
+                      />
+                    </View>
 
-                <View style={styles.logInInputs}>
-                  <Text style={styles.label}>Confirm Password</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange("confirmedPassword")}
-                    onBlur={handleBlur("confirmedPassword")}
-                    value={values.confirmedPassword}
-                    secureTextEntry={!showConfirmedPassword}
-                    placeholder="Confirm updated password..."
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      setShowConfirmedPassword(!showConfirmedPassword)
-                    }
-                    style={styles.passwordToggle}
-                  >
-                    <Text style={styles.passwordToggleText}>
-                      {confirmedPassword ? "Hide" : "Show"}
-                    </Text>
-                  </TouchableOpacity>
-                  <ErrorMessage
-                    name="confirmedPassword"
-                    component={Text}
-                    style={styles.errorText}
-                  />
-                </View>
+                    <View style={styles.logInInputs}>
+                      <Text style={styles.label}>Confirm Password</Text>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={handleChange("confirmedPassword")}
+                        onBlur={handleBlur("confirmedPassword")}
+                        value={values.confirmedPassword}
+                        secureTextEntry={!showConfirmedPassword}
+                        placeholder="Confirm updated password..."
+                      />
+                      <TouchableOpacity
+                        onPress={() =>
+                          setShowConfirmedPassword(!showConfirmedPassword)
+                        }
+                        style={styles.passwordToggle}
+                      >
+                        <Text style={styles.passwordToggleText}>
+                          {confirmedPassword ? "Hide" : "Show"}
+                        </Text>
+                      </TouchableOpacity>
+                      <ErrorMessage
+                        name="confirmedPassword"
+                        component={Text}
+                        style={styles.errorText}
+                      />
+                    </View>
+                  </View>
+                )}
               </View>
 
               <SecondaryButton onPress={() => navigation.goBack()} width={370}>
@@ -378,6 +392,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderRadius: 5,
     padding: 10,
+  },
+  passwordButton: {
+    marginTop: 10,
+    backgroundColor: Colors.goDutchBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    height: "auto",
+    alignItems: "center",
+    elevation: 3,
+  },
+  updatePasswordText: {
+    color: "whitesmoke",
+    fontSize: 20,
+    fontFamily: "red-hat-bold",
   },
   logInInputs: {
     width: "100%",

@@ -176,7 +176,7 @@ app.post("/login", async (req, res) => {
         secondaryPaymentSource: user.rows[0].secondary_payment_source,
         secondaryPaymentSourceUsername:
           user.rows[0].secondary_payment_source_username,
-        password: user.rows[0].profile_image_key,
+        password: user.rows[0].hashed_password,
         token,
       });
     } else {
@@ -192,7 +192,6 @@ const saltRounds = 10; // Define the number of salt rounds
 // Move the salt generation outside the route handler
 const salt = bcrypt.genSaltSync(saltRounds);
 app.post("/updateprofile", async (req, res) => {
-  console.log("I GOT CALLED", req.body);
 
   const {
     firstName,
@@ -208,19 +207,33 @@ app.post("/updateprofile", async (req, res) => {
     primaryPaymentSourceUsername,
     secondaryPaymentSource,
     secondaryPaymentSourceUsername,
-    // password,
+    password,
     type,
   } = req.body;
 
   let query;
   let updatedInfo;
+  let success;
 
   try {
     if (type === "userInfoProfileUpdate") {
       query = `UPDATE users SET first_name = $1, last_name = $2, email = $3, username = $4, bio = $5, favorite_cuisine = $6, birthday = $7, location = $8
       WHERE user_id = $9`;
     } else if (type === "paymentAndPasswordProfileUpdate") {
-      query = `UPDATE users SET primary_payment_source = $1, primary_payment_source_username = $2, secondary_payment_source = $3, secondary_payment_source_username = $4 WHERE user_id = $5`;
+      const user = await pool.query(
+        `SELECT hashed_password FROM users
+      WHERE user_id = $1`,
+        [userId]
+      );
+
+      //this means the incoming password is the same as what is in the database, meaning there was no password update
+      success = await bcrypt.compare(password, user.rows[0].hashed_password);
+
+      if (success) {
+        query = `UPDATE users SET primary_payment_source = $1, primary_payment_source_username = $2, secondary_payment_source = $3, secondary_payment_source_username = $4 WHERE user_id = $5`;
+      } else {
+        query = `UPDATE users SET primary_payment_source = $1, primary_payment_source_username = $2, secondary_payment_source = $3, secondary_payment_source_username = $4, hashed_password = $5 WHERE user_id = $6`;
+      }
     } else {
       return res.status(400).json({ error: "Invalid type parameter" });
     }
@@ -238,14 +251,25 @@ app.post("/updateprofile", async (req, res) => {
         userId,
       ]);
     } else if (type === "paymentAndPasswordProfileUpdate") {
-      // const hashedPassword = bcrypt.hashSync(password, salt); // Generate hash using the pre-defined salt
-      updatedInfo = await pool.query(query, [
-        primaryPaymentSource,
-        primaryPaymentSourceUsername,
-        secondaryPaymentSource,
-        secondaryPaymentSourceUsername,
-        userId,
-      ]);
+      if (success) {
+        updatedInfo = await pool.query(query, [
+          primaryPaymentSource,
+          primaryPaymentSourceUsername,
+          secondaryPaymentSource,
+          secondaryPaymentSourceUsername,
+          userId,
+        ]);
+      } else {
+        const hashedPassword = bcrypt.hashSync(password, salt); // Generate hash using the pre-defined salt
+        updatedInfo = await pool.query(query, [
+          primaryPaymentSource,
+          primaryPaymentSourceUsername,
+          secondaryPaymentSource,
+          secondaryPaymentSourceUsername,
+          hashedPassword,
+          userId,
+        ]);
+      }
     }
   } catch (error) {
     console.error(error);
@@ -254,19 +278,6 @@ app.post("/updateprofile", async (req, res) => {
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //AWS - POST RECEIPT IMAGES
 app.post(
