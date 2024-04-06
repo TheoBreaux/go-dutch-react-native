@@ -192,7 +192,6 @@ const saltRounds = 10; // Define the number of salt rounds
 // Move the salt generation outside the route handler
 const salt = bcrypt.genSaltSync(saltRounds);
 app.post("/updateprofile", async (req, res) => {
-
   const {
     firstName,
     lastName,
@@ -542,7 +541,6 @@ app.post("/additionaldiners/values", async (req, res) => {
   } = req.body;
 
   try {
-    let allDinerMealCosts = 0; // Initialize allDinerMealCosts to accumulate the total meal cost
     let dinerMealCosts = []; // Array to store diner meal costs
 
     //calculate birthday diners meal costs
@@ -561,6 +559,7 @@ app.post("/additionaldiners/values", async (req, res) => {
       //taking care of birhtday diners and sharing items
     } else if (coveringBirthdayDiners && evenlySplitItems) {
       numPayingDiners = dinersUpdated.length - birthdayDiners.length - 1;
+      console.log("TAKING CARE OF BDAYS AND SHARING ITEMS:", numPayingDiners);
       //taking care of birthday diners and not sharing items
     } else if (coveringBirthdayDiners && !evenlySplitItems) {
       numPayingDiners = dinersUpdated.length - birthdayDiners.length;
@@ -585,7 +584,7 @@ app.post("/additionaldiners/values", async (req, res) => {
           dinerMealCost += parseFloat(item.price);
         });
 
-        dinerMealCost += sharedExpenses;
+        dinerMealCost += sharedExpenses / numPayingDiners;
         //if there are birthday diners add their shared expense to other diners total meal cost
         if (birthdayDiners.length && coveringBirthdayDiners) {
           dinerMealCost += sharedBirthdayDinerMealCosts;
@@ -593,9 +592,6 @@ app.post("/additionaldiners/values", async (req, res) => {
           dinerMealCost += 0;
         }
       }
-
-      // Add the current diner's meal cost to the total
-      allDinerMealCosts += dinerMealCost;
 
       dinerMealCosts.push({
         additionalDinerUsername: diner.additionalDinerUsername,

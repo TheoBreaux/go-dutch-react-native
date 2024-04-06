@@ -69,7 +69,6 @@ const ConfirmFeeTotalsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  
   const findAdditionalCharge = (array, searchString) => {
     const matchingObject = array.find((obj) =>
       obj.text.toLowerCase().includes(searchString.toLowerCase())
@@ -182,7 +181,8 @@ const ConfirmFeeTotalsScreen = () => {
           body: JSON.stringify(data),
         }
       );
-      // const result = await response.json();
+      const result = await response.json();
+      console.log("RESULT FROM BACKEND FEE TOTALS", result);
     } catch (error) {
       console.error("Network error:", error);
     }
