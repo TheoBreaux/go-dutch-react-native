@@ -16,7 +16,8 @@ CREATE TABLE users (
     secondary_payment_source VARCHAR(255),
     secondary_payment_source_username VARCHAR(255),
     profile_image_key VARCHAR(300),
-    date_joined DATE DEFAULT CURRENT_DATE
+    date_joined DATE DEFAULT CURRENT_DATE,
+    push_notification_token TEXT
 );
 
 CREATE TABLE dining_events (

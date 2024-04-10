@@ -47,7 +47,7 @@ const FavoriteRestaurantCard = ({ item }) => {
 
     try {
       const response = await fetch(
-        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/updatefavorite",
+        "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

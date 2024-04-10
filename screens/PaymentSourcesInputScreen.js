@@ -7,7 +7,7 @@ import Colors from "../constants/colors";
 import { ErrorMessage, Formik } from "formik";
 import SecondaryButton from "../components/SecondaryButton";
 import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const PaymentSourcesInputScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -23,6 +23,9 @@ const PaymentSourcesInputScreen = () => {
   const email = useSelector((state) => state.userInfo.user.email);
 
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const { pushToken } = route.params;
 
   const initialValues = {
     selectedPrimaryPayment: "",
@@ -75,10 +78,11 @@ const PaymentSourcesInputScreen = () => {
       secondaryPaymentSource: values.selectedSecondaryPayment,
       secondaryPaymentSourceUsername: values.secondaryPaymentUsername,
       email: email,
+      pushNotificationToken: pushToken,
     };
     try {
       const response = await fetch(
-        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users",
+        "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/users",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

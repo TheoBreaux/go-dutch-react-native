@@ -26,13 +26,17 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import RestaurantDetailsScreen from "./screens/RestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
-import { StatusBar } from "react-native";
+import { Alert, Platform, StatusBar } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPaymentsScreen";
 import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
+import { useEffect, useState } from "react";
+import * as Notifications from "expo-notifications";
+
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
+let token;
 
 const MainTabNavigator = () => {
   //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
@@ -103,6 +107,43 @@ const MainTabNavigator = () => {
 };
 
 const App = () => {
+  const [token, setToken] = useState(null);
+
+  //get push notifications for payment notifications later on at app entry
+  useEffect(() => {
+    const configurePushNotifications = async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      let finalStatus = status;
+
+      if (finalStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        Alert.alert(
+          "Permission required",
+          "Push notifications need the appropriate permissions."
+        );
+        return;
+      }
+
+      const pushToken = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      });
+      setToken(pushToken.data);
+
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "default",
+          importance: Notifications.AndroidImportance.DEFAULT,
+        });
+      }
+    };
+
+    configurePushNotifications();
+  }, []);
+
   //disable back button for android devices
   useDisableBackButton(); // Use the custom hook at the root level of your app
 
@@ -134,7 +175,7 @@ const App = () => {
           <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
-            initialParams={{ apiKey: apiKey }}
+            initialParams={{ apiKey: apiKey, pushToken: token }}
           />
           <Stack.Screen
             name="LogIn"

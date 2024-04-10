@@ -20,8 +20,7 @@ import LocateRestaurants from "../ui/LocateRestaurants";
 import Spinner from "../components/Spinner";
 import { useNavigation } from "@react-navigation/native";
 
-
-const SignUpScreen = ({ route}) => {
+const SignUpScreen = ({ route }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
@@ -33,7 +32,7 @@ const SignUpScreen = ({ route}) => {
   const [longitude, setLongitude] = useState(0);
   const dispatch = useDispatch();
 
-  const { apiKey } = route.params;
+  const { apiKey, pushToken } = route.params;
   const navigation = useNavigation();
 
   //for uploading image to backend
@@ -123,7 +122,7 @@ const SignUpScreen = ({ route}) => {
         });
 
         const response = await fetch(
-          "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users/profileimages",
+          "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -148,7 +147,7 @@ const SignUpScreen = ({ route}) => {
 
     try {
       const response = await fetch(
-        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/signup",
+        "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -163,7 +162,7 @@ const SignUpScreen = ({ route}) => {
       } else {
         dispatch(setUser(data));
         handleLocationSearch();
-        navigation.navigate("PaymentSourcesInputScreen");
+        navigation.navigate("PaymentSourcesInputScreen", { pushToken });
       }
     } catch (error) {
       console.error(error);

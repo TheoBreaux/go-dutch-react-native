@@ -162,7 +162,7 @@ const ProfileScreen = () => {
         });
 
         const response = await fetch(
-          "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/users/profileimages",
+          "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/users/profileimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -193,7 +193,7 @@ const ProfileScreen = () => {
     try {
       //updating profile Imagekey for AWS
       const response = await fetch(
-        "https://e20f-2607-fb90-bd35-50ac-5d34-b0d0-fc5a-1c6d.ngrok-free.app/profilephoto",
+        "https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/profilephoto",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

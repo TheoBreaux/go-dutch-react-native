@@ -5,14 +5,19 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "extra": {
       "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
       "AWS_BUCKET_NAME": "go-dutch-bucket",
       "AWS_BUCKET_REGION": "us-west-1",
       "AWS_ACCESS_KEY": "AKIA4MTWNGWUF6AE3KTH",
       "AWS_SECRET_KEY": "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",
-      "TAGGUN_API": "b7dfb6e071e711eea8f313266e4aecd5"
+      "TAGGUN_API": "b7dfb6e071e711eea8f313266e4aecd5",
+      "eas": {
+        "projectId": "20b84919-2870-42f9-af5c-a8a04c41ff13"
+      }
     },
     "ios": {
       "supportsTablet": true
@@ -43,7 +48,7 @@
           "color": "#a40e24"
         }
       ]
-    ]
+    ],
+    "owner": "theobreaux"
   }
-  
 }

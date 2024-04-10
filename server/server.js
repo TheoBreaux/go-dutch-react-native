@@ -82,6 +82,7 @@ app.post("/users", async (req, res) => {
     secondaryPaymentSource,
     secondaryPaymentSourceUsername,
     email,
+    pushNotificationToken,
   } = req.body;
 
   try {
@@ -90,13 +91,15 @@ app.post("/users", async (req, res) => {
       SET primary_payment_source = $1, 
       primary_payment_source_username = $2, 
       secondary_payment_source = $3, 
-      secondary_payment_source_username = $4
-      WHERE email = $5`,
+      secondary_payment_source_username = $4,
+      push_notification_token = $5
+      WHERE email = $6`,
       [
         primaryPaymentSource,
         primaryPaymentSourceUsername,
         secondaryPaymentSource,
         secondaryPaymentSourceUsername,
+        pushNotificationToken,
         email,
       ]
     );
@@ -177,6 +180,7 @@ app.post("/login", async (req, res) => {
         secondaryPaymentSourceUsername:
           user.rows[0].secondary_payment_source_username,
         password: user.rows[0].hashed_password,
+        pushNotificationToken: user.rows[0].push_notification_token,
         token,
       });
     } else {
@@ -330,7 +334,7 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 
   try {
     const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name, profile_image_key, bio, location, birthday, favorite_cuisine, date_joined FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 15;`,
+      `SELECT username, first_name, last_name, profile_image_key, bio, location, birthday, favorite_cuisine, date_joined, push_notification_token FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 10;`,
       [`%${userInput}%`]
     );
     const suggestions = autoCompleteDiner.rows.map((row) => ({
@@ -343,6 +347,7 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
       favoriteCuisine: row.favorite_cuisine,
       dateJoined: row.date_joined,
       profileImageKey: row.profile_image_key,
+      pushNotificationToken: row.push_notification_token,
     }));
     res.json(suggestions);
   } catch (error) {
