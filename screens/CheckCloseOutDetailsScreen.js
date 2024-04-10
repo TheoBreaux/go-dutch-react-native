@@ -158,8 +158,8 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
         )}
 
         <View>
-          <Text style={styles.text}>{eventTitle}</Text>
-          <Text style={styles.text}>{formattedEventDate}</Text>
+          <Text style={styles.eventTitle}>{eventTitle}</Text>
+          <Text style={styles.eventDate}>{formattedEventDate}</Text>
         </View>
 
         <View style={styles.additionalDinerContainer}>
@@ -209,9 +209,15 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-normal",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
     fontSize: 30,
+  },
+  eventDate: {
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchBlue,
+    fontSize: 25,
   },
   button: {
     backgroundColor: Colors.goDutchRed,

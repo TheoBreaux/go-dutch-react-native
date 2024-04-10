@@ -10,7 +10,11 @@ import {
 import Colors from "../constants/colors";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToEvenlySplitItems, assignAndRemoveFoodItem } from "../store/store";
+import {
+  addToEvenlySplitItems,
+  assignAndRemoveFoodItem,
+  removeSharedItemsDiner,
+} from "../store/store";
 import { Easing } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -23,12 +27,15 @@ const DinnerItem = ({ item }) => {
   const rotation = useRef(new Animated.Value(0)).current;
 
   const dinerId = useSelector((state) => state.diningEvent.currentDinerId);
-
   const dispatch = useDispatch();
 
   const evenlySplitItemsToggle = () => {
-    dispatch(addToEvenlySplitItems({ item }));
     setIsChecked((previousState) => !previousState);
+    if (!isChecked) {
+      dispatch(addToEvenlySplitItems({ item }));
+    } else {
+      dispatch(removeSharedItemsDiner({ dinerUsername: "shareditems" }));
+    }
   };
 
   let val = { x: 0, y: 0 };
@@ -64,13 +71,13 @@ const DinnerItem = ({ item }) => {
           // 360-degree spin animation
           Animated.timing(rotation, {
             toValue: 2, // Number of spins
-            duration: 400, // Duration for one spin
+            duration: 300, // Duration for one spin
             easing: Easing.linear,
             useNativeDriver: false,
           }),
           // Shrink the item
           Animated.timing(scaleValue, {
-            toValue: 0.7,
+            toValue: 0.5,
             duration: 200,
             useNativeDriver: false,
           }),
@@ -100,11 +107,11 @@ const DinnerItem = ({ item }) => {
       }
     },
     isDropArea(gesture) {
-      return gesture.moveY < 400;
+      return gesture.moveY < 300;
     },
   });
 
-  const isDropArea = (gesture) => gesture.moveY < 400;
+  const isDropArea = (gesture) => gesture.moveY < 300;
 
   const panStyle = {
     transform: pan.getTranslateTransform(),
@@ -115,11 +122,15 @@ const DinnerItem = ({ item }) => {
     outputRange: ["0deg", "360deg"],
   });
 
-  const itemBackgroundColor = isDragging ? "white" : Colors.goDutchRed;
-  const itemTextColor = isDragging ? Colors.goDutchRed : "white";
-  const strikeThroughText = {
-    textDecorationLine: isChecked ? "line-through" : "none",
-  };
+  const itemBackgroundColor = isDragging
+    ? Colors.goDutchBlue // If dragging, use blue
+    : isChecked
+    ? Colors.goDutchBlue // If checked, use blue
+    : Colors.goDutchRed; // Otherwise, use red
+
+  const itemBorder = isDragging ? Colors.goDutchBlue : "none";
+  const itemBorderWidth = isDragging ? 2 : 0;
+  const dinnerItemText = isChecked ? "DRAG TO @shareditems" : item.name;
 
   return (
     <>
@@ -136,14 +147,14 @@ const DinnerItem = ({ item }) => {
                 { rotate: interpolatedRotation },
               ],
               backgroundColor: itemBackgroundColor,
+              borderColor: itemBorder,
+              borderWidth: itemBorderWidth,
             },
           ]}
           {...panResponder.panHandlers}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={[styles.splitEvenlyText, { color: itemTextColor }]}>
-              Shared
-            </Text>
+            <Text style={[styles.splitEvenlyText]}>Sharing</Text>
 
             <View style={styles.switch}>
               <Text>
@@ -164,21 +175,15 @@ const DinnerItem = ({ item }) => {
             </View>
           </View>
 
-          <Text
-            style={[
-              styles.foodInfo,
-              strikeThroughText,
-              { color: itemTextColor },
-            ]}
-          >
-            {item.name}
-          </Text>
+          <Text style={[styles.foodInfo]}>{dinnerItemText}</Text>
 
           <Text
             style={[
               styles.foodInfo,
-              strikeThroughText,
-              { color: itemTextColor, textAlign: "right" },
+
+              {
+                textAlign: "right",
+              },
             ]}
           >
             ${item.price.toFixed(2)}
@@ -230,11 +235,13 @@ const styles = StyleSheet.create({
   splitEvenlyText: {
     fontFamily: "red-hat-bold",
     marginRight: 5,
+    color: "white",
   },
   switch: { flexDirection: "row", alignItems: "center" },
   foodInfo: {
     fontFamily: "red-hat-bold",
     fontSize: 18,
+    color: "white",
   },
 });
 

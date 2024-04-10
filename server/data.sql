@@ -52,6 +52,7 @@ CREATE TABLE favorite_diners (
 CREATE TABLE favorite_restaurants (
     favorite_restaurant_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),
+    restaurant_id INT REFERENCES featured_restaurants(restaurant_id),
     name VARCHAR(255),
     address VARCHAR(255),
     city VARCHAR(100),
@@ -63,7 +64,7 @@ CREATE TABLE favorite_restaurants (
     phone VARCHAR(50),
     date_favorited DATE DEFAULT CURRENT_DATE,
     is_favorited BOOLEAN,
-    img_url VARCHAR(150),
+    img_url TEXT,
     notes TEXT
 );
 
@@ -79,7 +80,7 @@ CREATE TABLE featured_restaurants (
     phone VARCHAR(50),
     bio TEXT,
     cuisine TEXT,
-    img_url VARCHAR(300),
+    img_url TEXT,
     is_favorited BOOLEAN DEFAULT FALSE
 );
 

@@ -129,8 +129,10 @@ const DiningEventDetailsScreen = ({ route }) => {
         )}
 
         <View>
-          <Text style={styles.text}>{eventData.eventTitle}</Text>
-          <Text style={styles.text}>{month + " " + day + ", " + year}</Text>
+          <Text style={styles.eventTitle}>{eventData.eventTitle}</Text>
+          <Text style={styles.eventDate}>
+            {month + " " + day + ", " + year}
+          </Text>
         </View>
 
         <View style={styles.additionalDinerContainer}>
@@ -172,9 +174,15 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     textAlign: "center",
-    fontFamily: "red-hat-normal",
+    fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
     fontSize: 30,
+  },
+  eventDate: {
+    textAlign: "center",
+    fontFamily: "red-hat-bold",
+    color: Colors.goDutchBlue,
+    fontSize: 25,
   },
   button: {
     backgroundColor: Colors.goDutchRed,

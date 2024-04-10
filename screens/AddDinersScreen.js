@@ -20,7 +20,6 @@ import ProfileIcon from "../components/ProfileIcon";
 import BirthdayDiner from "../components/BirthdayDiner";
 import { useNavigation } from "@react-navigation/native";
 
-
 const AddDinersScreen = () => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -39,6 +38,7 @@ const AddDinersScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const showMiniModal = diners.length > 1;
+
 
   useEffect(() => {
     dispatch(setEventIdForPrimary(eventId));
@@ -280,12 +280,12 @@ const AddDinersScreen = () => {
                       {/* SEND ALL INFO TO DATABASE */}
                       <View style={{ flexDirection: "row" }}>
                         <PrimaryButton
-                          width={100}
+                          width={125}
                           onPress={() => setShowSelectBirthday(false)}
                         >
                           Return
                         </PrimaryButton>
-                        <PrimaryButton width={100} onPress={postData}>
+                        <PrimaryButton width={125} onPress={postData}>
                           Continue
                         </PrimaryButton>
                       </View>

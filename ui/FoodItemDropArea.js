@@ -41,11 +41,6 @@ const FoodItemDropArea = () => {
     (state) => state.diningEvent.evenlySplitItems
   );
 
-  const evenlySplitItemsTotal = evenlySplitItems.reduce(
-    (total, item) => total + item.price,
-    0
-  );
-
   let totalDinerMealCost = 0;
 
   const dispatch = useDispatch();

@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const DiningEventHistoryScreen = () => {
   const [diningEvents, setDiningEvents] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const username = useSelector((state) => state.userInfo.user.username);
 
   const navigation = useNavigation();

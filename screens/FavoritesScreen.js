@@ -17,14 +17,13 @@ const FavoritesScreen = () => {
   const [favoriteDiners, setFavoriteDiners] = useState([]);
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState("Restaurants");
 
   const userId = useSelector((state) => state.userInfo.user.userId);
 
   const favoritesSaved =
     (!favoriteDiners || favoriteDiners.length === 0) &&
     (!favoriteRestaurants || favoriteRestaurants.length === 0);
-
-  const [activeTab, setActiveTab] = useState("Restaurants");
 
   const onRefresh = () => {
     setRefreshing(true);

@@ -236,6 +236,32 @@ const diningEventSlice = createSlice({
         );
       }
     },
+    removeSharedItemsDiner: (state, action) => {
+      const { dinerUsername } = action.payload; 
+      let updatedDiners;
+
+      if (
+        state.diners.find(
+          (diner) => diner.additionalDinerUsername === dinerUsername
+        )
+      ) {
+        // If additional diner exists, filter it out
+        updatedDiners = state.diners.filter(
+          (diner) => diner.additionalDinerUsername !== dinerUsername
+        );
+      } else {
+        // If additional diner doesn't exist, add it
+        updatedDiners = [
+          ...state.diners,
+          { additionalDinerUsername: dinerUsername },
+        ];
+      }
+
+      return {
+        ...state,
+        diners: updatedDiners,
+      };
+    },
   },
 });
 
@@ -271,6 +297,7 @@ export const {
   updateBirthdayDinerFinalMealCost,
   updateDinerProfileImageKey,
   addToEvenlySplitItems,
+  removeSharedItemsDiner,
 } = diningEventSlice.actions;
 
 const store = configureStore({

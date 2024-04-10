@@ -11,6 +11,7 @@ const AssignItemsToDinersScreen = () => {
   const [assignmentComplete, setAssigmentComplete] = useState(false);
 
   const updatedDiners = useSelector((state) => state.diningEvent.diners);
+
   const separatedDinnerItems = useSelector(
     (state) => state.diningEvent.allReceiptItemsCopy
   );
@@ -58,7 +59,7 @@ const AssignItemsToDinersScreen = () => {
               separatedDinnerItems.map((item) => {
                 return (
                   <View key={item.id}>
-                    <DinnerItem item={item} updatedDiners={updatedDiners} />
+                    <DinnerItem item={item} />
                   </View>
                 );
               })

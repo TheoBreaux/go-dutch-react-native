@@ -20,6 +20,17 @@ import {
 } from "../store/store";
 import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+      shouldShowAlert: true,
+    };
+  },
+});
 
 const ConfirmFeeTotalsScreen = () => {
   const [showAddFeesModal, setShowAddFeesModal] = useState(false);
@@ -60,11 +71,19 @@ const ConfirmFeeTotalsScreen = () => {
 
   const birthdayDinersPresent = birthdayDiners.length > 0;
 
+  const diningEvent = useSelector((state) => state.diningEvent);
   const eventId = useSelector((state) => state.diningEvent.event.eventId);
 
   const lineItemAmounts = receiptValues.amounts;
-  const restaurantName = receiptValues.merchantName.data;
+
+  const restaurantName =
+    diningEvent.event.selectedRestaurant ||
+    diningEvent.event.enteredSelectedRestaurant;
+
   const restaurantAddress = receiptValues.merchantAddress.data;
+
+  const totalMealPortion = 35;
+  const primaryDiner = useSelector((state) => state.userInfo.user.username);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -80,6 +99,28 @@ const ConfirmFeeTotalsScreen = () => {
       return 0;
     }
   };
+
+  //set initial values from receipt
+  useEffect(() => {
+    const tax = findAdditionalCharge(lineItemAmounts, "tax");
+
+    const tip = parseFloat(mealSubtotal * 0.2)
+      .toFixed(2)
+      .toString();
+    const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
+    const service = findAdditionalCharge(lineItemAmounts, "service");
+    const entertainment = findAdditionalCharge(
+      lineItemAmounts,
+      "entertainment"
+    );
+
+    setTaxConfirmed(tax.toString());
+    setTipConfirmed(tip.toString());
+    setServiceConfirmed(service.toString());
+    setGratuityConfirmed(gratuity.toString());
+    setEntertainmentConfirmed(entertainment.toString());
+    setSharedDinnerItemsConfirmed(evenlySplitItemsTotal.toString());
+  }, []);
 
   const addAdditionalCustomFees = () => {
     if (newFeeName === "" || newFeePrice === "") {
@@ -108,10 +149,41 @@ const ConfirmFeeTotalsScreen = () => {
     setAdditionalCustomFeesAdded(updatedFees);
   };
 
+  // Function to handle the press on suggested tip percentages
+  const handleTipSuggestion = (percentage) => {
+    const suggestedTip = (parseFloat(mealSubtotal) * percentage)
+      .toFixed(2)
+      .toString();
+    setTipConfirmed(suggestedTip);
+  };
+
+
+
+
+  
+  const notificationHandler = () => {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: `${restaurantName} is ready to be paid!`,
+        body: `Your total portion of the bill is $${totalMealPortion}. Please pay ${primaryDiner}.`,
+        data: {username: primaryDiner},
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  };
+
+
+
+
   const handleNoBirthdaysPresent = () => {
     //calculate fees not taking care of or no birthday diners
     let sharedExpenses;
+    let evenlySplitItems;
+
     if (evenlySplitItemsTotal !== "0.00") {
+      evenlySplitItems = true;
       sharedExpenses =
         (parseFloat(taxConfirmed) +
           parseFloat(tipConfirmed) +
@@ -132,33 +204,98 @@ const ConfirmFeeTotalsScreen = () => {
       //post final dining event values data to database
       postDataFinalDiningEventValues();
       //post final additional diner values data to database
-      postDataFinalAdditionalDinerValues(sharedExpenses);
+      postDataFinalAdditionalDinerValues(
+        sharedExpenses,
+        false,
+        evenlySplitItems
+      );
       //navigate to close out check
       navigation.navigate("CheckCloseOutDetailsScreen");
+      //send notifications to diners
+      notificationHandler();
     }
   };
 
-  //set initial values from receipt
-  useEffect(() => {
-    const tax = findAdditionalCharge(lineItemAmounts, "tax");
+  const calculateWithBirthdayDiners = () => {
+    //calculate fees taking care of birthday diners
+    let sharedExpenses;
+    let evenlySplitItems;
 
-    const tip = parseFloat(mealSubtotal * 0.2)
-      .toFixed(2)
-      .toString();
-    const gratuity = findAdditionalCharge(lineItemAmounts, "gratuity");
-    const service = findAdditionalCharge(lineItemAmounts, "service");
-    const entertainment = findAdditionalCharge(
-      lineItemAmounts,
-      "entertainment"
-    );
+    if (evenlySplitItemsTotal !== "0.00") {
+      evenlySplitItems = true;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(evenlySplitItemsTotal) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - birthdayDiners.length - 1);
+    } else {
+      evenlySplitItems = false;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - birthdayDiners.length);
+    }
 
-    setTaxConfirmed(tax.toString());
-    setTipConfirmed(tip.toString());
-    setServiceConfirmed(service.toString());
-    setGratuityConfirmed(gratuity.toString());
-    setEntertainmentConfirmed(entertainment.toString());
-    setSharedDinnerItemsConfirmed(evenlySplitItemsTotal.toString());
-  }, []);
+    //post final dining event values data to database
+    postDataFinalDiningEventValues();
+    //post final additional diner values data to database
+    postDataFinalAdditionalDinerValues(sharedExpenses, true, evenlySplitItems);
+    //navigate to close out check
+    navigation.navigate("CheckCloseOutDetailsScreen", {
+      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
+    });
+    //send notifications to diners
+    notificationHandler();
+  };
+
+  const calculateWithoutBirthdayDiners = () => {
+    //calculate fees not taking care of birthday diners
+    let sharedExpenses;
+    let evenlySplitItems;
+
+    if (evenlySplitItemsTotal !== "0.00") {
+      evenlySplitItems = true;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(evenlySplitItemsTotal) +
+          parseFloat(sumAdditionalFees())) /
+        (dinersUpdated.length - 1);
+    } else {
+      evenlySplitItems = false;
+      sharedExpenses =
+        (parseFloat(taxConfirmed) +
+          parseFloat(tipConfirmed) +
+          parseFloat(sumAdditionalFees())) /
+        dinersUpdated.length;
+    }
+
+    //post final dining event values data to database
+    postDataFinalDiningEventValues();
+    //post final additional diner values data to database
+    postDataFinalAdditionalDinerValues(sharedExpenses, false, evenlySplitItems);
+    //navigate to close out check
+    navigation.navigate("CheckCloseOutDetailsScreen");
+    //send notifications to diners
+    notificationHandler();
+  };
+
+  const sumAdditionalFees = () => {
+    let totalAdditionalFees = 0;
+
+    additionalCustomFeesAdded.forEach((fee) => {
+      totalAdditionalFees += fee.feePrice;
+    });
+    return totalAdditionalFees.toFixed(2);
+  };
+
+  const totalMealCost =
+    parseFloat(mealSubtotal) +
+    parseFloat(taxConfirmed) +
+    parseFloat(tipConfirmed) +
+    parseFloat(sumAdditionalFees());
 
   const postDataFinalDiningEventValues = async () => {
     const data = {
@@ -182,7 +319,6 @@ const ConfirmFeeTotalsScreen = () => {
         }
       );
       const result = await response.json();
-      console.log("RESULT FROM BACKEND FEE TOTALS", result);
     } catch (error) {
       console.error("Network error:", error);
     }
@@ -228,79 +364,7 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-  const calculateWithBirthdayDiners = () => {
-    //calculate fees taking care of birthday diners
-    let sharedExpenses;
-    let evenlySplitItems;
-    if (evenlySplitItemsTotal !== "0.00") {
-      evenlySplitItems = true;
-      sharedExpenses =
-        parseFloat(taxConfirmed) +
-        parseFloat(tipConfirmed) +
-        parseFloat(evenlySplitItemsTotal) +
-        parseFloat(sumAdditionalFees());
-    } else {
-      evenlySplitItems = false;
-      sharedExpenses =
-        (parseFloat(taxConfirmed) +
-          parseFloat(tipConfirmed) +
-          parseFloat(sumAdditionalFees())) /
-        (dinersUpdated.length - birthdayDiners.length);
-    }
-
-    //post final dining event values data to database
-    postDataFinalDiningEventValues();
-    //post final additional diner values data to database
-    postDataFinalAdditionalDinerValues(sharedExpenses, true, evenlySplitItems);
-    //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen", {
-      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
-    });
-  };
-
-  const calculateWithoutBirthdayDiners = () => {
-    //calculate fees taking care of birthday diners
-    let sharedExpenses;
-    let evenlySplitItems;
-    if (evenlySplitItemsTotal !== "0.00") {
-      evenlySplitItems = true;
-      sharedExpenses =
-        (parseFloat(taxConfirmed) +
-          parseFloat(tipConfirmed) +
-          parseFloat(evenlySplitItemsTotal) +
-          parseFloat(sumAdditionalFees())) /
-        (dinersUpdated.length - 1);
-    } else {
-      evenlySplitItems = false;
-      sharedExpenses =
-        (parseFloat(taxConfirmed) +
-          parseFloat(tipConfirmed) +
-          parseFloat(sumAdditionalFees())) /
-        dinersUpdated.length;
-    }
-
-    //post final dining event values data to database
-    postDataFinalDiningEventValues();
-    //post final additional diner values data to database
-    postDataFinalAdditionalDinerValues(sharedExpenses, false, evenlySplitItems);
-    //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen");
-  };
-
-  const sumAdditionalFees = () => {
-    let totalAdditionalFees = 0;
-
-    additionalCustomFeesAdded.forEach((fee) => {
-      totalAdditionalFees += fee.feePrice;
-    });
-    return totalAdditionalFees.toFixed(2);
-  };
-
-  const totalMealCost =
-    parseFloat(mealSubtotal) +
-    parseFloat(taxConfirmed) +
-    parseFloat(tipConfirmed) +
-    parseFloat(sumAdditionalFees());
+  console.log("DINING EVENT EVENT DIners", diningEvent.diners);
 
   return (
     <>
@@ -308,7 +372,7 @@ const ConfirmFeeTotalsScreen = () => {
       <ScrollView contentContainerStyle={styles.cardContainer}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>
-          <Text style={styles.restaurantAddress}>{restaurantAddress}</Text>
+          {/* <Text style={styles.restaurantAddress}>{restaurantAddress}</Text> */}
 
           <View style={styles.feeContainer}>
             <Text style={styles.text}>Tip</Text>
@@ -322,13 +386,7 @@ const ConfirmFeeTotalsScreen = () => {
             />
 
             <View style={styles.tipSuggestionsContainer}>
-              <TouchableOpacity
-                onPress={() =>
-                  setTipConfirmed(
-                    (0.18 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                  )
-                }
-              >
+              <TouchableOpacity onPress={() => handleTipSuggestion(0.18)}>
                 <View style={styles.buttonTextContainer}>
                   <Text style={styles.emoji}>🙂</Text>
                   <Text style={styles.suggestedTipText}>Good</Text>
@@ -336,13 +394,7 @@ const ConfirmFeeTotalsScreen = () => {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() =>
-                  setTipConfirmed(
-                    (0.2 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                  )
-                }
-              >
+              <TouchableOpacity onPress={() => handleTipSuggestion(0.2)}>
                 <View style={styles.buttonTextContainer}>
                   <Text style={styles.emoji}>😃</Text>
                   <Text style={styles.suggestedTipText}>Great</Text>
@@ -350,13 +402,7 @@ const ConfirmFeeTotalsScreen = () => {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() =>
-                  setTipConfirmed(
-                    (0.25 * parseFloat(mealSubtotal)).toFixed(2).toString()
-                  )
-                }
-              >
+              <TouchableOpacity onPress={() => handleTipSuggestion(0.25)}>
                 <View style={styles.buttonTextContainer}>
                   <Text style={styles.emoji}>😄</Text>
                   <Text style={styles.suggestedTipText}>Wow!</Text>
@@ -519,7 +565,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   restaurantName: {
-    fontSize: 40,
+    fontSize: 30,
+    textAlign: "center",
     color: Colors.goDutchRed,
   },
   restaurantAddress: {

@@ -553,13 +553,13 @@ app.post("/additionaldiners/values", async (req, res) => {
 
     // Calculate shared meal cost for birthday diners
     let numPayingDiners;
+
     //not covering birthday diners & sharing items
     if (!coveringBirthdayDiners && evenlySplitItems) {
       numPayingDiners = dinersUpdated.length - 1;
       //taking care of birhtday diners and sharing items
     } else if (coveringBirthdayDiners && evenlySplitItems) {
       numPayingDiners = dinersUpdated.length - birthdayDiners.length - 1;
-      console.log("TAKING CARE OF BDAYS AND SHARING ITEMS:", numPayingDiners);
       //taking care of birthday diners and not sharing items
     } else if (coveringBirthdayDiners && !evenlySplitItems) {
       numPayingDiners = dinersUpdated.length - birthdayDiners.length;
@@ -584,7 +584,8 @@ app.post("/additionaldiners/values", async (req, res) => {
           dinerMealCost += parseFloat(item.price);
         });
 
-        dinerMealCost += sharedExpenses / numPayingDiners;
+        dinerMealCost += sharedExpenses;
+
         //if there are birthday diners add their shared expense to other diners total meal cost
         if (birthdayDiners.length && coveringBirthdayDiners) {
           dinerMealCost += sharedBirthdayDinerMealCosts;
@@ -806,10 +807,10 @@ app.post("/updatefavorite", async (req, res) => {
     } else {
       if (type === "restaurant") {
         await pool.query(
-          `INSERT INTO favorite_restaurants(favorite_restaurant_id, user_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, is_favorited, img_url) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+          `INSERT INTO favorite_restaurants(user_id, restaurant_id, name, address, city,state,zip,rating,bio,website,phone, date_favorited, is_favorited, img_url) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
           [
-            favoriteRestaurantId,
             userId,
+            favoriteRestaurantId,
             name,
             address,
             city,
