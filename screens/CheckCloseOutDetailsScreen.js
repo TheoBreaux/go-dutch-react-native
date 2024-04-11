@@ -17,7 +17,7 @@ import LottieView from "lottie-react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 
-const CheckCloseOutDetailsScreen = ({ route }) => {
+const CheckCloseOutDetailsScreen = () => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const [viewReceipt, setViewReceipt] = useState(false);
@@ -42,8 +42,6 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
   const year = parseInt(parts[2], 10);
 
   const formattedEventDate = `${months[month - 1]} ${day}, ${year}`;
-
-  // const { finalBirthdayDinerNumbers } = route.params;
 
   useEffect(() => {
     const s3 = new AWS.S3({
@@ -83,7 +81,7 @@ const CheckCloseOutDetailsScreen = ({ route }) => {
         <Text style={styles.dinerCardInfo}>
           @{item.additionalDinerUsername}
           {item.primaryDiner && (
-            <Text style={{ color: Colors.goDutchRed }}>PRIMARY DINER</Text>
+            <Text style={{ color: Colors.goDutchRed }}> : PRIMARY DINER</Text>
           )}
         </Text>
         <Text style={styles.dinerCardInfo}>

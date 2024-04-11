@@ -49,9 +49,7 @@ const ConfirmFeeTotalsScreen = () => {
     []
   );
   const [feeValue, setFeeValue] = useState("");
-  const [finalBirthdayDinerNumbers, setFinalBirthdayDinerNumbers] = useState(
-    []
-  );
+  const [finalDinerNumbers, setFinalDinerNumbers] = useState([]);
   const dinersUpdated = useSelector((state) => state.diningEvent.diners);
   const receiptValues = useSelector((state) => state.diningEvent.receiptValues);
 
@@ -77,12 +75,11 @@ const ConfirmFeeTotalsScreen = () => {
   const lineItemAmounts = receiptValues.amounts;
 
   const restaurantName =
-    diningEvent.event.selectedRestaurant ||
-    diningEvent.event.enteredSelectedRestaurant;
+    diningEvent.event.selectedRestaurant.trim() ||
+    diningEvent.event.enteredSelectedRestaurant.trim();
 
   const restaurantAddress = receiptValues.merchantAddress.data;
 
-  let totalMealPortion = 0;
   const primaryDiner = useSelector((state) => state.userInfo.user.username);
 
   const dispatch = useDispatch();
@@ -171,18 +168,30 @@ const ConfirmFeeTotalsScreen = () => {
   // };
 
   //send push notifications to diners about their bill
-  const sendPushNotificationHandler = () => {
-    fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // to: dinersUpdated.map((diner) => diner.pushToken),
-        to: "ExponentPushToken[usWDQiKKMF7FYKmNhXPEeT]",
-        title: `${restaurantName} is ready to be paid!`,
-        body: `Your total portion of the bill is $${totalMealPortion}. Please pay ${primaryDiner}.`,
-      }),
+  const sendPushNotificationHandler = (result) => {
+    const individualDinerMealCosts = result.dinerMealCosts;
+
+    dinersUpdated.forEach((diner) => {
+      const matchingDinerObject = individualDinerMealCosts.find(
+        (costObj) =>
+          costObj.additionalDinerUsername === diner.additionalDinerUsername
+      );
+
+      if (matchingDinerObject) {
+        const dinerMealCost = matchingDinerObject.dinerMealCost;
+
+        fetch("https://exp.host/--/api/v2/push/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: diner.pushNotificationToken,
+            title: `Hey, ${diner.firstName}! Your ${restaurantName} bill is ready to be paid!`,
+            body: `Your total portion of the bill is $${dinerMealCost}. Please pay primary diner, @${primaryDiner}.`,
+          }),
+        });
+      }
     });
   };
 
@@ -220,9 +229,6 @@ const ConfirmFeeTotalsScreen = () => {
       );
       //navigate to close out check
       navigation.navigate("CheckCloseOutDetailsScreen");
-      //send notifications to diners
-      // notificationHandler();
-      sendPushNotificationHandler();
     }
   };
 
@@ -253,12 +259,7 @@ const ConfirmFeeTotalsScreen = () => {
     //post final additional diner values data to database
     postDataFinalAdditionalDinerValues(sharedExpenses, true, evenlySplitItems);
     //navigate to close out check
-    navigation.navigate("CheckCloseOutDetailsScreen", {
-      finalBirthdayDinerNumbers: finalBirthdayDinerNumbers,
-    });
-    //send notifications to diners
-    // notificationHandler();
-    sendPushNotificationHandler();
+    navigation.navigate("CheckCloseOutDetailsScreen");
   };
 
   const calculateWithoutBirthdayDiners = () => {
@@ -289,9 +290,6 @@ const ConfirmFeeTotalsScreen = () => {
     postDataFinalAdditionalDinerValues(sharedExpenses, false, evenlySplitItems);
     //navigate to close out check
     navigation.navigate("CheckCloseOutDetailsScreen");
-    //send notifications to diners
-    // notificationHandler();
-    sendPushNotificationHandler();
   };
 
   const sumAdditionalFees = () => {
@@ -323,7 +321,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/diningevent/values`,
+        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -341,9 +339,6 @@ const ConfirmFeeTotalsScreen = () => {
     coveringBirthdayDiners,
     evenlySplitItems
   ) => {
-    const evenlySplitTotal = parseFloat(
-      evenlySplitItemsTotal / (dinersUpdated.length - 1)
-    );
     const totalSharedExpenses = Math.round(sharedExpenses * 100) / 100;
 
     const data = {
@@ -361,7 +356,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/additionaldiners/values`,
+        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -369,15 +364,15 @@ const ConfirmFeeTotalsScreen = () => {
         }
       );
       const result = await response.json();
-      setFinalBirthdayDinerNumbers(result);
+      setFinalDinerNumbers(result);
       dispatch(updateBirthdayDinerFinalMealCost(result));
+
+      //send result values for use in push notifications
+      sendPushNotificationHandler(result);
     } catch (error) {
       console.error("Network error:", error);
     }
   };
-
-  console.log("DINERS UUPDATED: ", dinersUpdated);
-  // console.log("DINERS PUSH TOKENS: ", dinersUpdated.map(diner => diner.pushToken));
 
   return (
     <>

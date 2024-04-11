@@ -69,7 +69,7 @@ const HomePageScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://83a7-2603-8000-c0f0-a570-98f5-ecae-b39a-6e07.ngrok-free.app/featuredrestaurants`
+        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);
@@ -95,6 +95,12 @@ const HomePageScreen = () => {
   }, []);
 
   const screenWidth = Dimensions.get("window").width; // Get the screen width
+
+  console.log(
+    "PUSH NOTIFICATION TOKEN - HOME PAGE: ",
+    user.username,
+    user.pushNotificationToken
+  );
 
   return (
     <>
