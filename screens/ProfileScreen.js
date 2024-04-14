@@ -330,7 +330,10 @@ const ProfileScreen = () => {
         )}
 
         {showUpdatePasswordAndPaymentUpdateForm && (
-          <UpdatePasswordAndPaymentsScreen />
+          <UpdatePasswordAndPaymentsScreen
+            imageUri={imageUri}
+            profileImageKey={profileImageKey}
+          />
         )}
       </ScrollView>
     </>
@@ -344,7 +347,7 @@ const styles = StyleSheet.create({
   },
   cameraIconContainer: {
     backgroundColor: "lightgrey",
-    zIndex: 1,
+    zIndex: 100,
     justifyContent: "center",
     alignItems: "center",
     height: 50,
@@ -358,7 +361,6 @@ const styles = StyleSheet.create({
   },
   imageIconcontainer: {
     zIndex: 0,
-    elevation: 5,
     height: 200,
     width: 200,
     position: "relative",

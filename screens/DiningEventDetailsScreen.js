@@ -7,21 +7,26 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Logo from "../components/Logo";
+import Constants from "expo-constants";
+import AWS from "aws-sdk";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
+import Spinner from "../components/Spinner";
 
 const DiningEventDetailsScreen = ({ route }) => {
   const [dinerData, setDinerData] = useState([]);
   const [eventData, setEventData] = useState({});
   const [viewReceipt, setViewReceipt] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
 
   const { item } = route.params;
-  const { imageUri } = route.params;
 
   const navigation = useNavigation();
 
+  const receiptImageKey = item.receiptImageKey;
   const dateObj = new Date(item.diningDate);
   const eventId = item.eventId;
 
@@ -29,6 +34,33 @@ const DiningEventDetailsScreen = ({ route }) => {
   const year = dateObj.getFullYear();
   const month = dateObj.toLocaleString("default", { month: "long" });
   const day = dateObj.getDate();
+
+  useEffect(() => {
+    const s3 = new AWS.S3({
+      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+    });
+
+    const getImageFromS3 = async () => {
+      setIsLoadingImage(true);
+      const params = {
+        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
+        Key: receiptImageKey,
+      };
+
+      try {
+        const data = await s3.getObject(params).promise();
+        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
+      } catch (error) {
+        console.error("Error retrieving image from S3:", error);
+      } finally {
+        setIsLoadingImage(false);
+      }
+    };
+
+    getImageFromS3();
+  }, [receiptImageKey]);
 
   useEffect(() => {
     getAdditionalDiners();
@@ -40,7 +72,7 @@ const DiningEventDetailsScreen = ({ route }) => {
       style={styles.dinerCard}
       onPress={() =>
         navigation.navigate("ViewUserProfileScreen", {
-          source: "DiningEventDetailsScreen",
+          source: ["DiningEventDetailsScreen", "CheckCloseOutDetailsScreen"],
           selectedUser: item,
         })
       }
@@ -66,7 +98,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/additionaldiners/${eventId}`
+        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);
@@ -80,94 +112,107 @@ const DiningEventDetailsScreen = ({ route }) => {
     <>
       <Logo />
 
-      <View style={styles.contentContainer}>
-        {!viewReceipt && (
-          <Image
-            style={styles.iconImage}
-            source={require("../assets/go-dutch-split-button.png")}
-          />
-        )}
+      {isLoadingImage && (
+        <View style={styles.spinnerContainer}>
+          <Spinner children="Requesting data...🧾" />
+        </View>
+      )}
 
-        {!viewReceipt && (
-          <View style={{ flexDirection: "row" }}>
-            <PrimaryButton
-              width={140}
-              height={50}
-              onPress={() => setViewReceipt(!viewReceipt)}
-            >
-              View Receipt
-            </PrimaryButton>
-            <PrimaryButton
-              width={140}
-              height={50}
-              onPress={() => navigation.goBack()}
-            >
-              Go Back
-            </PrimaryButton>
-          </View>
-        )}
+      {!isLoadingImage && (
+        <View style={styles.contentContainer}>
+          {!viewReceipt && (
+            <Image
+              style={styles.iconImage}
+              source={require("../assets/go-dutch-split-button.png")}
+            />
+          )}
 
-        {viewReceipt && (
-          <View>
-            <View
-              style={{
-                borderWidth: 5,
-                borderColor: Colors.goDutchBlue,
-              }}
-            >
-              <Image source={{ uri: imageUri }} style={styles.image} />
+          {!viewReceipt && (
+            <View style={{ flexDirection: "row" }}>
+              <PrimaryButton
+                width={140}
+                height={50}
+                onPress={() => setViewReceipt(!viewReceipt)}
+              >
+                View Receipt
+              </PrimaryButton>
+              <PrimaryButton
+                width={140}
+                height={50}
+                onPress={() => navigation.goBack()}
+              >
+                Go Back
+              </PrimaryButton>
             </View>
+          )}
 
-            {viewReceipt && (
-              <View style={{ zIndex: 10 }}>
-                <PrimaryButton height={50} onPress={handleReturnToHistory}>
-                  Return to History
-                </PrimaryButton>
+          {viewReceipt && (
+            <View>
+              <View
+                style={{
+                  borderWidth: 5,
+                  borderColor: Colors.goDutchBlue,
+                }}
+              >
+                <Image source={{ uri: imageUri }} style={styles.image} />
               </View>
-            )}
+
+              {viewReceipt && (
+                <View style={{ zIndex: 10 }}>
+                  <PrimaryButton height={50} onPress={handleReturnToHistory}>
+                    Return to History
+                  </PrimaryButton>
+                </View>
+              )}
+            </View>
+          )}
+
+          <View>
+            <Text style={styles.eventTitle}>{eventData.eventTitle}</Text>
+            <Text style={styles.eventDate}>
+              {month + " " + day + ", " + year}
+            </Text>
           </View>
-        )}
 
-        <View>
-          <Text style={styles.eventTitle}>{eventData.eventTitle}</Text>
-          <Text style={styles.eventDate}>
-            {month + " " + day + ", " + year}
-          </Text>
-        </View>
+          <View style={styles.additionalDinerContainer}>
+            <Text
+              style={[styles.text, styles.bold, { color: Colors.goDutchBlue }]}
+            >
+              {eventData.eventLocation}
+            </Text>
+            <Text style={styles.additionalDinerText}>Diners</Text>
+          </View>
 
-        <View style={styles.additionalDinerContainer}>
-          <Text
-            style={[styles.text, styles.bold, { color: Colors.goDutchBlue }]}
+          <FlatList data={dinerData} renderItem={renderItem} />
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            {eventData.eventLocation}
-          </Text>
-          <Text style={styles.additionalDinerText}>Diners</Text>
+            <Text style={styles.totalMealCostText}>
+              Total Meal Cost: ${eventData.totalMealCost}
+            </Text>
+            <Text style={styles.marginOfErrorText}>(± $0.05)</Text>
+          </View>
         </View>
-
-        <FlatList
-          data={dinerData}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatListContainer}
-        />
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={styles.totalMealCostText}>
-            Total Meal Cost: ${eventData.totalMealCost}
-          </Text>
-          <Text style={styles.marginOfErrorText}>(± $0.05)</Text>
-        </View>
-      </View>
+      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: -50,
+    width: "100%",
+    height: "100%",
+  },
   contentContainer: {
     alignItems: "center",
     flex: 1,
@@ -228,12 +273,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.goDutchRed,
   },
-  // flatListContainer: {
-  //   marginBottom: 1,
-  // },
   totalMealCostText: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
+    marginBottom: 20,
   },
   dinerCard: {
     flexDirection: "row",
@@ -257,6 +300,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
     fontSize: 15,
+    marginBottom: 20,
   },
 });
 

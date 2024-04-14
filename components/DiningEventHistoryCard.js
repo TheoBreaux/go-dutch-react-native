@@ -1,17 +1,10 @@
-import Constants from "expo-constants";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
-import AWS from "aws-sdk";
-import React, { useEffect, useState } from "react";
-import Spinner from "../components/Spinner";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const DiningEventHistoryCard = ({ item}) => {
-  const [imageUri, setImageUri] = useState(null);
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
+const DiningEventHistoryCard = ({ item }) => {
   const dateObj = new Date(item.diningDate);
-  const receiptImageKey = item.receiptImageKey;
-
   const navigation = useNavigation();
 
   // Extract the year, month, and day from the Date object
@@ -19,58 +12,30 @@ const DiningEventHistoryCard = ({ item}) => {
   const month = dateObj.toLocaleString("default", { month: "long" });
   const day = dateObj.getDate();
 
-  useEffect(() => {
-    const s3 = new AWS.S3({
-      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
-      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
-      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
-    });
-
-    const getImageFromS3 = async () => {
-      setIsLoadingImage(true);
-      const params = {
-        Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
-        Key: receiptImageKey,
-      };
-
-      try {
-        const data = await s3.getObject(params).promise();
-        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
-      } catch (error) {
-        console.error("Error retrieving image from S3:", error);
-      } finally {
-        setIsLoadingImage(false);
-      }
-    };
-
-    getImageFromS3();
-  }, [receiptImageKey]);
-
   const showEventDetails = () => {
-    navigation.navigate("DiningEventDetailsScreen", { item, imageUri });
+    navigation.navigate("DiningEventDetailsScreen", { item });
   };
 
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={showEventDetails}>
-      {isLoadingImage && (
-        <Spinner children={"Loading..."} indicatorSize={25} fontSize={20} />
-      )}
-      {!isLoadingImage && (
-        <Image source={{ uri: imageUri }} style={styles.image} />
-      )}
+      <View style={{ flexDirection: "row" }}>
+        <Image
+          source={require("../assets/go-dutch-pattern.png")}
+          style={styles.image}
+        />
 
-      <View style={styles.textContainer}>
-        <Text style={[styles.eventLocation, styles.bold]}>
-          {item.eventLocation}
-        </Text>
-        <Text style={styles.eventTitle}>{item.eventTitle}</Text>
-        <Text style={styles.eventDate}>{month + " " + day + ", " + year}</Text>
-       
+        <View style={styles.textContainer}>
+          <Text style={[styles.eventDate, styles.bold]}>
+            {month + " " + day + ", " + year}
+          </Text>
+          <Text style={styles.eventLocation}>{item.eventLocation}</Text>
+          <Text style={styles.eventTitle}>{item.eventTitle}</Text>
 
-        <Text style={styles.text}>
-          <Text style={styles.bold}>Primary Diner: </Text>@
-          {item.primaryDinerUsername}
-        </Text>
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Primary Diner: </Text>@
+            {item.primaryDinerUsername}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -78,9 +43,6 @@ const DiningEventHistoryCard = ({ item}) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
     backgroundColor: "#FFF",
     padding: 10,
     marginBottom: 5,
@@ -94,30 +56,30 @@ const styles = StyleSheet.create({
 
   image: {
     width: 100,
-    height: 80,
-    resizeMode: "cover",
-    borderRadius: 10,
+    height: "auto",
+    resizeMode: "contain",
   },
   textContainer: {
-    // flex: 1,
-    marginLeft: 8,
-    justifyContent: "flex-start",
+    width: "auto",
+    marginLeft: 10,
   },
   text: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "red-hat-normal",
   },
   eventLocation: {
-    fontFamily: "red-hat-bold",
-    fontSize: 16,
+    fontFamily: "red-hat-normal",
+    fontSize: 20,
+    color: Colors.goDutchBlue,
+    letterSpacing: 0.5,
   },
   eventDate: {
-    fontSize: 16,
-    fontFamily: "red-hat-normal",
+    fontSize: 18,
+    letterSpacing: 1,
   },
   eventTitle: {
-    fontSize: 16,
-    fontFamily: "red-hat-bold",
+    fontSize: 18,
+    fontFamily: "red-hat-normal",
     color: Colors.goDutchRed,
   },
 

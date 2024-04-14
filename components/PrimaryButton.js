@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../constants/colors";
 
 const PrimaryButton = ({ children, onPress, padding, width, height }) => {

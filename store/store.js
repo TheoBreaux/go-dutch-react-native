@@ -237,7 +237,7 @@ const diningEventSlice = createSlice({
       }
     },
     removeSharedItemsDiner: (state, action) => {
-      const { dinerUsername } = action.payload; 
+      const { dinerUsername } = action.payload;
       let updatedDiners;
 
       if (

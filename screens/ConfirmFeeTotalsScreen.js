@@ -22,6 +22,7 @@ import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 
+//push notification handler
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
@@ -97,6 +98,31 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
+  //handle receipt and tapping of notification
+  useEffect(() => {
+    // const subscription = Notifications.addNotificationReceivedListener(
+    //   (notification) => {
+    //     console.log("NOTIFICATION RECEIVED");
+    //     console.log(notification);
+    //   }
+    // );
+
+    const subscription2 = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        //this is the activity i want to happen, i want the modal to show
+        // console.log("NOTIFICATION RESPONSE RECEIVED");
+        // console.log(response);
+        // console.log("HELLO");
+        navigation.navigate("PayPrimaryDinerScreen");
+      }
+    );
+
+    return () => {
+      // subscription.remove();
+      subscription2.remove();
+    };
+  }, []);
+
   //set initial values from receipt
   useEffect(() => {
     const tax = findAdditionalCharge(lineItemAmounts, "tax");
@@ -154,31 +180,23 @@ const ConfirmFeeTotalsScreen = () => {
     setTipConfirmed(suggestedTip);
   };
 
-  // const notificationHandler = () => {
-  //   Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: `${restaurantName} is ready to be paid!`,
-  //       body: `Your total portion of the bill is $${totalMealPortion}. Please pay ${primaryDiner}.`,
-  //       data: { username: primaryDiner },
-  //     },
-  //     trigger: {
-  //       seconds: 5,
-  //     },
-  //   });
-  // };
-
   //send push notifications to diners about their bill
   const sendPushNotificationHandler = (result) => {
     const individualDinerMealCosts = result.dinerMealCosts;
 
     dinersUpdated.forEach((diner) => {
-      const matchingDinerObject = individualDinerMealCosts.find(
-        (costObj) =>
-          costObj.additionalDinerUsername === diner.additionalDinerUsername
-      );
+      const isPrimaryDiner = diner.additionalDinerUsername === primaryDiner;
 
-      if (matchingDinerObject) {
-        const dinerMealCost = matchingDinerObject.dinerMealCost;
+      if (isPrimaryDiner) {
+        let bodyMessage = `You are the primary diner. Please collect payments from the following diners.\n\n`;
+
+        individualDinerMealCosts.forEach((costObj) => {
+          if (costObj.additionalDinerUsername === primaryDiner) {
+            bodyMessage += `@${costObj.additionalDinerUsername}: PAID IN FULL\n`;
+          } else {
+            bodyMessage += `@${costObj.additionalDinerUsername}: $${costObj.dinerMealCost}\n`;
+          }
+        });
 
         fetch("https://exp.host/--/api/v2/push/send", {
           method: "POST",
@@ -187,10 +205,40 @@ const ConfirmFeeTotalsScreen = () => {
           },
           body: JSON.stringify({
             to: diner.pushNotificationToken,
-            title: `Hey, ${diner.firstName}! Your ${restaurantName} bill is ready to be paid!`,
-            body: `Your total portion of the bill is $${dinerMealCost}. Please pay primary diner, @${primaryDiner}.`,
+            title: `Hey, ${diner.firstName}! You have paid $${totalMealCost} for the bill at ${restaurantName}!`,
+            body: bodyMessage,
           }),
         });
+      } else {
+        const matchingDinerObject = individualDinerMealCosts.find(
+          (costObj) =>
+            costObj.additionalDinerUsername === diner.additionalDinerUsername
+        );
+
+        if (matchingDinerObject) {
+          const dinerMealCost = matchingDinerObject.dinerMealCost;
+
+          fetch("https://exp.host/--/api/v2/push/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              to: diner.pushNotificationToken,
+              title: `Hey, ${diner.firstName}! Your ${restaurantName} bill is ready to be paid!`,
+              body: `Your portion of the bill is $${dinerMealCost}. Please pay primary diner @${primaryDiner}.`,
+              data: {
+                primaryDinerUsername: primaryDiner,
+                primaryPaymentSource: diner.primaryPaymentSource,
+                primaryPaymentSourceUsername:
+                  diner.primaryPaymentSourceUsername,
+                secondaryPaymentSource: diner.secondaryPaymentSource,
+                secondaryPaymentSourceUsername:
+                  diner.secondaryPaymentSourceUsername,
+              },
+            }),
+          });
+        }
       }
     });
   };
@@ -321,7 +369,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/diningevent/values`,
+        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -356,7 +404,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/additionaldiners/values`,
+        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -374,9 +422,14 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
+  console.log("DINERS UPDATED:", dinersUpdated);
+  console.log("DINING EVENT:", diningEvent);
+  console.log("TOTAL MEAL COST: ", totalMealCost);
+
   return (
     <>
       <Logo />
+
       <ScrollView contentContainerStyle={styles.cardContainer}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>

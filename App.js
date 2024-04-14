@@ -32,6 +32,7 @@ import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPayments
 import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
 import { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
+import PayPrimaryDinerScreen from "./screens/PayPrimaryDinerScreen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -197,6 +198,7 @@ const App = () => {
             component={ConfirmReceiptItemsScreen}
           />
           <Stack.Screen name="History" component={DiningEventHistory} />
+
           <Stack.Screen
             name="DiningEventDetailsScreen"
             component={DiningEventDetailsScreen}
@@ -223,6 +225,10 @@ const App = () => {
           <Stack.Screen
             name="ViewUserProfileScreen"
             component={ViewUserProfileScreen}
+          />
+          <Stack.Screen
+            name="PayPrimaryDinerScreen"
+            component={PayPrimaryDinerScreen}
           />
           <Stack.Screen name="Main" component={MainTabNavigator} />
         </Stack.Navigator>

@@ -16,16 +16,32 @@ import React, { useEffect, useState } from "react";
 import LottieView from "lottie-react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
+// import FloatingNotificationCard from "../components/FloatingNotificationCard";
 
 const CheckCloseOutDetailsScreen = () => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const [viewReceipt, setViewReceipt] = useState(false);
   const [imageUri, setImageUri] = useState(null);
+  const [showFloatingNotificationCard, setShowFloatingNotificationCard] =
+    useState(true);
+
   const diningEvent = useSelector((state) => state.diningEvent);
+
   const diners = diningEvent.diners.filter(
     (diner) => diner.additionalDinerUsername !== "shareditems"
   );
+
+  const dinerNotificationInfo = diningEvent.diners.map((diner) => ({
+    firstName: diner.firstName,
+    dinerMealCost: diner.dinerMealCost,
+  }));
+
+  const primaryDiner = useSelector((state) => state.userInfo.user.username);
+  const restaurantName =
+    diningEvent.event.selectedRestaurant ||
+    diningEvent.event.enteredSelectedRestaurant;
+
   const eventLocation =
     diningEvent.event.selectedRestaurant ||
     diningEvent.event.enteredSelectedRestaurant;
@@ -94,6 +110,18 @@ const CheckCloseOutDetailsScreen = () => {
   return (
     <>
       <Logo />
+
+      {/* {showFloatingNotificationCard && (
+        <FloatingNotificationCard
+          onPress={() => {
+            console.log("HLELLO");
+          }}
+          firstName={dinerNotificationInfo[0].firstName}
+          dinerMealCost={dinerNotificationInfo[0].dinerMealCost}
+          primaryDiner={primaryDiner}
+          restaurantName={restaurantName}
+        />
+      )} */}
 
       <LottieView
         source={require("../assets/confetti-animation.json")}
@@ -169,11 +197,7 @@ const CheckCloseOutDetailsScreen = () => {
           <Text style={styles.additionalDinerText}>Diners</Text>
         </View>
 
-        <FlatList
-          data={diners}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatListContainer}
-        />
+        <FlatList data={diners} renderItem={renderItem} />
 
         <View
           style={{
@@ -261,12 +285,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.goDutchRed,
   },
-  // flatListContainer: {
-  //   marginBottom: 1,
-  // },
   totalMealCostText: {
     fontFamily: "red-hat-bold",
     fontSize: 20,
+    marginBottom: 20,
   },
   dinerCard: {
     flexDirection: "row",
@@ -289,6 +311,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     color: Colors.goDutchRed,
     fontSize: 15,
+    marginBottom: 20,
   },
   confettiBurst: {
     position: "absolute",

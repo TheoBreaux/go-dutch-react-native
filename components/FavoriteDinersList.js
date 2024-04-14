@@ -41,12 +41,21 @@ const FavoriteDinersList = ({ favoriteDiners, refreshControl }) => {
       }
     };
 
+
+
+    
+    // Check if the image is already cached before making an API call
     favoriteDiners.forEach((diner) => {
-      const profileImageKey = diner.profileImageKey;
       const dinerUsername = diner.username;
-      getImageFromS3(profileImageKey, dinerUsername);
+      if (!imageURIs[dinerUsername]) {
+        const profileImageKey = diner.profileImageKey;
+        getImageFromS3(profileImageKey, dinerUsername);
+      }
     });
-  }, []);
+  }, [favoriteDiners, imageURIs]);
+
+
+
 
   const renderFavoriteDinerCard = ({ item }) => {
     return (

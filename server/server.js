@@ -334,7 +334,7 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
 
   try {
     const autoCompleteDiner = await pool.query(
-      `SELECT username, first_name, last_name, profile_image_key, bio, location, birthday, favorite_cuisine, date_joined, push_notification_token FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 10;`,
+      `SELECT * FROM users WHERE username ILIKE $1 OR first_name ILIKE $1 LIMIT 10;`,
       [`%${userInput}%`]
     );
     const suggestions = autoCompleteDiner.rows.map((row) => ({
@@ -348,6 +348,10 @@ app.get("/additionaldiners/suggestions", async (req, res) => {
       dateJoined: row.date_joined,
       profileImageKey: row.profile_image_key,
       pushNotificationToken: row.push_notification_token,
+      primaryPaymentSource: row.primary_payment_source,
+      primaryPaymentSourceUsername: row.primary_payment_source_username,
+      secondaryPaymentSource: row.secondary_payment_source,
+      secondaryPaymentSourceUsername: row.secondary_payment_source_username,
     }));
     res.json(suggestions);
   } catch (error) {

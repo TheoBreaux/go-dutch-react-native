@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   loadingText: {
-    fontFamily: "red-hat-bold",
+    fontFamily: "red-hat-normal",
     letterSpacing: 1,
     color: Colors.goDutchBlue,
     textAlign: "center",

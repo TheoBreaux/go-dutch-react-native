@@ -30,6 +30,7 @@ const ViewUserProfile = ({ route }) => {
   const [saveButtonPressed, setSaveButtonPressed] = useState(false);
   const [saveButtonText, setSaveButtonText] = useState("Save");
   const [saveButtonColor, setSaveButtonColor] = useState(Colors.goDutchBlue);
+  const [containerElevation, setContainerElevation] = useState(0);
   const [error, setError] = useState(null);
 
   const navigation = useNavigation();
@@ -45,15 +46,15 @@ const ViewUserProfile = ({ route }) => {
     dateJoined,
     profileImageKey;
 
-  if (source === "DiningEventDetailsScreen") {
+  if (source === "DiningEventDetailsScreen" || "CheckCloseOutDetailsScreen") {
     favoriteDinerUsername = selectedUser.additionalDinerUsername;
     firstName = selectedUser.firstName;
     lastName = selectedUser.lastName;
     username = selectedUser.additionalDinerUsername;
-    location = selectedUser.location;
-    bio = selectedUser.bio;
-    birthday = selectedUser.birthday;
-    favoriteCuisine = selectedUser.favoriteCuisine;
+    location = selectedUser.location || "No information.";
+    bio = selectedUser.bio || "No information.";
+    birthday = selectedUser.birthday || "No information";
+    favoriteCuisine = selectedUser.favoriteCuisine || "No information.";
     dateJoined = selectedUser.dateJoined;
     profileImageKey = selectedUser.profileImageKey;
   } else if (source === "FavoriteDinerCard") {
@@ -61,10 +62,10 @@ const ViewUserProfile = ({ route }) => {
     firstName = item.firstName;
     lastName = item.lastName;
     username = item.username;
-    location = item.location;
-    bio = item.bio;
-    birthday = item.birthday;
-    favoriteCuisine = item.favoriteCuisine;
+    location = item.location || "No information.";
+    bio = item.bio || "No information.";
+    birthday = item.birthday || "No information.";
+    favoriteCuisine = item.favoriteCuisine || "No information.";
     dateJoined = item.dateJoined;
     profileImageKey = item.profileImageKey;
   }
@@ -97,7 +98,7 @@ const ViewUserProfile = ({ route }) => {
 
     try {
       const response = await fetch(
-        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/savenotes`,
+        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/savenotes`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -120,7 +121,7 @@ const ViewUserProfile = ({ route }) => {
   const fetchFavoritesStatus = async () => {
     try {
       const response = await fetch(
-        `https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/getfavoritestatus?userId=${userId}&favoriteDinerUsername=${favoriteDinerUsername}`
+        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/getfavoritestatus?userId=${userId}&favoriteDinerUsername=${favoriteDinerUsername}`
       );
       const data = await response.json();
       // Set isFavorited based on the response from the server
@@ -144,7 +145,7 @@ const ViewUserProfile = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/updatefavorite",
+        "https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -163,39 +164,52 @@ const ViewUserProfile = ({ route }) => {
   };
 
   useEffect(() => {
-    const s3 = new AWS.S3({
-      accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
-      secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
-      region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
-    });
-
-    const getImageFromS3 = async () => {
+    if (profileImageKey) {
       setIsLoadingImage(true);
+      fetchAndCacheImage(profileImageKey).then((cachedImage) => {
+        setImageUri(cachedImage);
+        setIsLoadingImage(false);
+        setContainerElevation(10);
+      });
+    }
+  }, [profileImageKey]);
+
+  const fetchAndCacheImage = async (profileImageKey) => {
+    try {
+      const s3 = new AWS.S3({
+        accessKeyId: Constants.expoConfig.extra.AWS_ACCESS_KEY,
+        secretAccessKey: Constants.expoConfig.extra.AWS_SECRET_KEY,
+        region: Constants.expoConfig.extra.AWS_BUCKET_REGION,
+      });
+
       const params = {
         Bucket: Constants.expoConfig.extra.AWS_BUCKET_NAME,
         Key: profileImageKey,
       };
 
-      try {
-        const data = await s3.getObject(params).promise();
-        setImageUri(`data:image/jpeg;base64,${data.Body.toString("base64")}`);
-      } catch (error) {
-        console.error("Error retrieving image from S3:", error);
-      } finally {
-        setIsLoadingImage(false);
-      }
-    };
-
-    getImageFromS3();
-  }, []);
+      const data = await s3.getObject(params).promise();
+      const base64Image = `data:image/jpeg;base64,${data.Body.toString(
+        "base64"
+      )}`;
+      return base64Image;
+    } catch (error) {
+      console.error("Error retrieving image from S3:", error);
+      return null;
+    }
+  };
 
   return (
     <>
       <Logo />
       <KeyboardAvoidingView>
         <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.imageIconContainer}>
-            {isLoadingImage && <Spinner indicatorSize={150} />}
+          <View
+            style={[
+              styles.imageIconContainer,
+              { elevation: containerElevation },
+            ]}
+          >
+            {isLoadingImage && <Spinner indicatorSize={200} />}
             {!isLoadingImage && profileImageKey ? (
               <Image
                 source={{ uri: imageUri }}
@@ -308,7 +322,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageIconContainer: {
-    elevation: 10,
+    // elevation: 10,
     height: 200,
     width: 200,
     position: "relative",

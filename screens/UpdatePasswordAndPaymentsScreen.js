@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
@@ -14,11 +15,11 @@ import SecondaryButton from "../components/SecondaryButton";
 import { ErrorMessage, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, updateUserInfo } from "../store/store";
-import CustomProfileIcon from "../components/CustomProfileIcon";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import Spinner from "../components/Spinner";
 
-const UpdatePasswordAndPaymentsScreen = () => {
+const UpdatePasswordAndPaymentsScreen = ({ imageUri, profileImageKey }) => {
   const [formValues, setFormValues] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState("");
@@ -35,6 +36,7 @@ const UpdatePasswordAndPaymentsScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const user = useSelector((state) => state.userInfo.user);
 
@@ -73,17 +75,21 @@ const UpdatePasswordAndPaymentsScreen = () => {
         "Please enter your secondary payment username";
     }
 
-    if (!values.password) {
-      errors.password = "Please enter a password";
-    } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/.test(values.password)) {
-      errors.password =
-        "Must be at least 5 characters: 1 uppercase, 1 lowercase, and 1 digit";
-    }
+    if (showUpdatePassword) {
+      if (!values.password) {
+        errors.password = "Please enter a password";
+      } else if (
+        !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/.test(values.password)
+      ) {
+        errors.password =
+          "Must be at least 5 characters: 1 uppercase, 1 lowercase, and 1 digit";
+      }
 
-    if (!values.confirmedPassword) {
-      errors.confirmedPassword = "Please confirm your password";
-    } else if (values.confirmedPassword !== values.password) {
-      errors.confirmedPassword = "Passwords do not match";
+      if (!values.confirmedPassword) {
+        errors.confirmedPassword = "Please confirm your password";
+      } else if (values.confirmedPassword !== values.password) {
+        errors.confirmedPassword = "Passwords do not match";
+      }
     }
 
     const isValid = Object.keys(errors).length === 0;
@@ -121,7 +127,7 @@ const UpdatePasswordAndPaymentsScreen = () => {
 
     try {
       const response = await fetch(
-        "https://c33a-2603-8000-c0f0-a570-cc6d-9967-8312-c904.ngrok-free.app/updateprofile",
+        "https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -147,8 +153,23 @@ const UpdatePasswordAndPaymentsScreen = () => {
 
   return (
     <>
-      <View style={styles.customIconContainer}>
-        <CustomProfileIcon width={200} height={200} borderRadius={100} />
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View style={styles.imageIconcontainer}>
+          {isLoadingImage && <Spinner indicatorSize={290} />}
+          {!isLoadingImage && profileImageKey ? (
+            <Image
+              source={{ uri: imageUri }}
+              style={{ width: 200, height: 200 }}
+            />
+          ) : (
+            <View>
+              <Image
+                source={require("../assets/default-profile-icon.jpg")}
+                style={{ width: 200, height: 200 }}
+              />
+            </View>
+          )}
+        </View>
       </View>
 
       <View style={styles.inputContainer}>
@@ -281,6 +302,7 @@ const UpdatePasswordAndPaymentsScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 )}
+
                 {showUpdatePassword && (
                   <View>
                     <View style={styles.logInInputs}>
@@ -365,7 +387,15 @@ const UpdatePasswordAndPaymentsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  customIconContainer: { alignItems: "center", marginVertical: 10 },
+  imageIconcontainer: {
+    zIndex: 0,
+    height: 200,
+    width: 200,
+    position: "relative",
+    borderRadius: 100,
+    overflow: "hidden",
+    shadowColor: "#000",
+  },
   inputContainer: {
     flex: 1,
     padding: 16,
