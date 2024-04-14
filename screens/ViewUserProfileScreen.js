@@ -46,15 +46,18 @@ const ViewUserProfile = ({ route }) => {
     dateJoined,
     profileImageKey;
 
-  if (source === "DiningEventDetailsScreen" || "CheckCloseOutDetailsScreen") {
+  if (
+    source.includes("DiningEventDetailsScreen") ||
+    source.includes("CheckCloseOutDetailsScreen")
+  ) {
     favoriteDinerUsername = selectedUser.additionalDinerUsername;
     firstName = selectedUser.firstName;
     lastName = selectedUser.lastName;
     username = selectedUser.additionalDinerUsername;
-    location = selectedUser.location || "No information.";
-    bio = selectedUser.bio || "No information.";
-    birthday = selectedUser.birthday || "No information";
-    favoriteCuisine = selectedUser.favoriteCuisine || "No information.";
+    location = selectedUser.location;
+    bio = selectedUser.bio;
+    birthday = selectedUser.birthday;
+    favoriteCuisine = selectedUser.favoriteCuisine;
     dateJoined = selectedUser.dateJoined;
     profileImageKey = selectedUser.profileImageKey;
   } else if (source === "FavoriteDinerCard") {
@@ -62,10 +65,10 @@ const ViewUserProfile = ({ route }) => {
     firstName = item.firstName;
     lastName = item.lastName;
     username = item.username;
-    location = item.location || "No information.";
-    bio = item.bio || "No information.";
-    birthday = item.birthday || "No information.";
-    favoriteCuisine = item.favoriteCuisine || "No information.";
+    location = item.location;
+    bio = item.bio;
+    birthday = item.birthday;
+    favoriteCuisine = item.favoriteCuisine;
     dateJoined = item.dateJoined;
     profileImageKey = item.profileImageKey;
   }
@@ -198,6 +201,8 @@ const ViewUserProfile = ({ route }) => {
     }
   };
 
+  console.log("SOURCE: ", source);
+
   return (
     <>
       <Logo />
@@ -240,7 +245,8 @@ const ViewUserProfile = ({ route }) => {
               {firstName + " " + lastName}
             </Text>
 
-            {source === "DiningEventDetailsScreen" && (
+            {(source.includes("DiningEventDetailsScreen") ||
+              source.includes("CheckCloseOutDetailsScreen")) && (
               <FavoritesIconButton
                 onPress={handleFavoriteToggle}
                 size={35}
