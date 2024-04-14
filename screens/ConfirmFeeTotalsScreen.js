@@ -193,6 +193,8 @@ const ConfirmFeeTotalsScreen = () => {
         individualDinerMealCosts.forEach((costObj) => {
           if (costObj.additionalDinerUsername === primaryDiner) {
             bodyMessage += `@${costObj.additionalDinerUsername}: PAID IN FULL\n`;
+          } else if (costObj.additionalDinerUsername === "shareditems") {
+            bodyMessage += `@${costObj.additionalDinerUsername}: $0.00\n`;
           } else {
             bodyMessage += `@${costObj.additionalDinerUsername}: $${costObj.dinerMealCost}\n`;
           }

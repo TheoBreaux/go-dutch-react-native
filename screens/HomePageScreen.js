@@ -100,8 +100,6 @@ const HomePageScreen = () => {
 
   const screenWidth = Dimensions.get("window").width; // Get the screen width
 
-  console.log(user.pushNotificationToken);
-
   return (
     <>
       <Logo />
