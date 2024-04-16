@@ -41,9 +41,6 @@ const FavoriteDinersList = ({ favoriteDiners, refreshControl }) => {
       }
     };
 
-
-
-    
     // Check if the image is already cached before making an API call
     favoriteDiners.forEach((diner) => {
       const dinerUsername = diner.username;
@@ -53,9 +50,6 @@ const FavoriteDinersList = ({ favoriteDiners, refreshControl }) => {
       }
     });
   }, [favoriteDiners, imageURIs]);
-
-
-
 
   const renderFavoriteDinerCard = ({ item }) => {
     return (

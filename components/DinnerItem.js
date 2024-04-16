@@ -246,6 +246,3 @@ const styles = StyleSheet.create({
 });
 
 export default DinnerItem;
-{
-  /* <Ionicons name="checkmark-sharp" size={30} color="white" /> */
-}

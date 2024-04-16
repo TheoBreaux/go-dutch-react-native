@@ -4,7 +4,6 @@ import FavoritesIconButton from "./FavoritesIconButton";
 import Colors from "../constants/colors";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { useAnimatedKeyboard } from "react-native-reanimated";
 
 const FavoriteRestaurantCard = ({ item }) => {
   const [imageError, setImageError] = useState(false);
@@ -47,7 +46,7 @@ const FavoriteRestaurantCard = ({ item }) => {
 
     try {
       const response = await fetch(
-        "https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/updatefavorite",
+        "https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

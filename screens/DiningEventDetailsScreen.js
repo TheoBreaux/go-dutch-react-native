@@ -98,7 +98,7 @@ const DiningEventDetailsScreen = ({ route }) => {
   const getAdditionalDiners = async () => {
     try {
       const response = await fetch(
-        `https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/additionaldiners/${eventId}`
+        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/additionaldiners/${eventId}`
       );
       const data = await response.json();
       setDinerData(data.dinerData);

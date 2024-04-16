@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
   },
-
   image: {
     width: 100,
     height: "auto",

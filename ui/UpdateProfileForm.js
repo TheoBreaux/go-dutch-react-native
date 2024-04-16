@@ -95,7 +95,7 @@ const UpdateProfileForm = ({
 
     try {
       const response = await fetch(
-        "https://e4ed-2603-8000-c0f0-a570-8006-1cea-bf13-870d.ngrok-free.app/updateprofile",
+        "https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/updateprofile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

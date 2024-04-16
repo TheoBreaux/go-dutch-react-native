@@ -4,7 +4,6 @@ import SendToAwsS3Image from "./SendToAwsS3Image";
 
 const ProfileImageMedallion = ({
   profileImageKey,
-  iconSize,
   width,
   height,
   borderRadius,
