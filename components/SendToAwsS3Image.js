@@ -33,7 +33,7 @@ const SendToAwsS3Image = ({
     };
 
     getImageFromS3();
-  }, [imageKey]);
+  }, []);
 
   return (
     <View>

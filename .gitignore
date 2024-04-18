@@ -36,4 +36,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # Ignoring app.json
-app.json
+# app.json

@@ -26,7 +26,7 @@ import * as Notifications from "expo-notifications";
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
-      shouldPlaySound: false,
+      shouldPlaySound: true,
       shouldSetBadge: false,
       shouldShowAlert: true,
     };
@@ -98,6 +98,10 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
+
+
+
+  
   //handle receipt and tapping of notification
   useEffect(() => {
     // const subscription = Notifications.addNotificationReceivedListener(
@@ -122,6 +126,16 @@ const ConfirmFeeTotalsScreen = () => {
       subscription2.remove();
     };
   }, []);
+
+
+
+
+
+
+
+
+
+
 
   //set initial values from receipt
   useEffect(() => {
@@ -207,6 +221,7 @@ const ConfirmFeeTotalsScreen = () => {
           },
           body: JSON.stringify({
             to: diner.pushNotificationToken,
+            sound: "default",
             title: `Hey, ${diner.firstName}! You have paid $${totalMealCost} for the bill at ${restaurantName}!`,
             body: bodyMessage,
           }),

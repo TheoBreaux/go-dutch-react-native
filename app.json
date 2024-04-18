@@ -1,40 +1,8 @@
 {
   "expo": {
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
-    "name": "godutch",
-    "slug": "godutch",
-    "version": "1.0.0",
-
-    "userInterfaceStyle": "light",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "extra": {
-      "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
-      "AWS_BUCKET_NAME": "go-dutch-bucket",
-      "AWS_BUCKET_REGION": "us-west-1",
-      "AWS_ACCESS_KEY": "AKIA4MTWNGWUF6AE3KTH",
-      "AWS_SECRET_KEY": "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",
-      "TAGGUN_API": "b7dfb6e071e711eea8f313266e4aecd5",
-      "eas": {
-        "projectId": "20b84919-2870-42f9-af5c-a8a04c41ff13"
-      }
-    },
-    "ios": {
-      "supportsTablet": true,
-      "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#000000"
-      }
-    },
     "android": {
+      "package": "com.theobreaux.godutch",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
@@ -47,9 +15,42 @@
         "android.permission.DETECT_SCREEN_CAPTURE"
       ]
     },
-    "web": {
-      "favicon": "./assets/icon.png"
+    "name": "Go Dutch!",
+    "slug": "godutch",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "backgroundColor": "#000000",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "buildNumber": "1.0.0",
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      }
+    },
+    "extra": {
+      "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
+      "AWS_BUCKET_NAME": "go-dutch-bucket",
+      "AWS_BUCKET_REGION": "us-west-1",
+      "AWS_ACCESS_KEY": "AKIA4MTWNGWUF6AE3KTH",
+      "AWS_SECRET_KEY": "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",
+      "TAGGUN_API": "b7dfb6e071e711eea8f313266e4aecd5",
+      "eas": {
+        "projectId": "20b84919-2870-42f9-af5c-a8a04c41ff13"
+      }
+    },
+   
     "plugins": [
       [
         "expo-camera",
@@ -60,7 +61,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/go-dutch-spilt-button.png",
+          "icon": "./assets/go-dutch-split-button.png",
           "color": "#a40e24"
         }
       ]

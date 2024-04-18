@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import Logo from "../components/Logo";
 import Carousel from "react-native-snap-carousel";
 import { useDispatch, useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { setInitialPrimaryDiner } from "../store/store";
 import { useEffect } from "react";
 import CustomProfileIcon from "../components/CustomProfileIcon";
@@ -92,11 +92,7 @@ const HomePageScreen = () => {
     error = null;
   }
 
-  const renderItem = useMemo(() => {
-    return ({ item }) => {
-      return <CarouselFeaturedRestaurant item={item} />;
-    };
-  }, []);
+  const renderItem = ({ item }) => <CarouselFeaturedRestaurant item={item} />;
 
   const screenWidth = Dimensions.get("window").width; // Get the screen width
 
