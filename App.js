@@ -33,6 +33,7 @@ import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
 import { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
 import PayPrimaryDinerScreen from "./screens/PayPrimaryDinerScreen";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -109,6 +110,11 @@ const MainTabNavigator = () => {
 
 const App = () => {
   const [token, setToken] = useState(null);
+
+  SplashScreen.preventAutoHideAsync();
+  setTimeout(async () => {
+    await SplashScreen.hideAsync();
+  }, 2000);
 
   //get push notifications for payment notifications later on at app entry
   useEffect(() => {
