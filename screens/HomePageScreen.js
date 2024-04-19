@@ -11,6 +11,7 @@ import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
+
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
   const usingDefaultProfilePhoto =
@@ -73,7 +74,7 @@ const HomePageScreen = () => {
   const getFeaturedRestaurants = async () => {
     try {
       const response = await fetch(
-        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/featuredrestaurants`
+        `https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/featuredrestaurants`
       );
       const data = await response.json();
       setFeaturedRestaurants(data);

@@ -58,7 +58,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/savenotes`,
+        `https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/savenotes`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -82,7 +82,7 @@ const RestaurantDetailsScreen = ({ route }) => {
   const fetchFavoritesStatus = async () => {
     try {
       const response = await fetch(
-        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurantId}`
+        `https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/getfavoritestatus?userId=${userId}&restaurantId=${restaurantId}`
       );
       const data = await response.json();
       // Set isFavorited based on the response from the server
@@ -119,7 +119,7 @@ const RestaurantDetailsScreen = ({ route }) => {
 
     try {
       const response = await fetch(
-        "https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/updatefavorite",
+        "https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

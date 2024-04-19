@@ -7,7 +7,15 @@
       "android": {
         "buildType": "apk"
       },
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "PGUSER":"@PGUSER",
+        "PGPASSWORD": "@PGPASSWORD",
+        "AWS_BUCKET_NAME": "@AWS_BUCKET_NAME",
+        "AWS_BUCKET_REGION": "@AWS_BUCKET_REGION",
+        "AWS_ACCESS_KEY": "@AWS_ACCESS_KEY",
+        "AWS_SECRET_KEY": "@AWS_SECRET_KEY"
+      }
     },
     "development": {
       "developmentClient": true,

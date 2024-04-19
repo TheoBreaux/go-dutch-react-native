@@ -98,10 +98,6 @@ const ConfirmFeeTotalsScreen = () => {
     }
   };
 
-
-
-
-  
   //handle receipt and tapping of notification
   useEffect(() => {
     // const subscription = Notifications.addNotificationReceivedListener(
@@ -126,16 +122,6 @@ const ConfirmFeeTotalsScreen = () => {
       subscription2.remove();
     };
   }, []);
-
-
-
-
-
-
-
-
-
-
 
   //set initial values from receipt
   useEffect(() => {
@@ -386,7 +372,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/diningevent/values`,
+        `https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/diningevent/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -421,7 +407,7 @@ const ConfirmFeeTotalsScreen = () => {
 
     try {
       const response = await fetch(
-        `https://d580-2603-8000-c0f0-a570-a14e-4f47-d368-7088.ngrok-free.app/additionaldiners/values`,
+        `https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/additionaldiners/values`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

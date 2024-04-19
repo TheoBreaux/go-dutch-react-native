@@ -35,6 +35,11 @@ import * as Notifications from "expo-notifications";
 import PayPrimaryDinerScreen from "./screens/PayPrimaryDinerScreen";
 import * as SplashScreen from "expo-splash-screen";
 
+SplashScreen.preventAutoHideAsync();
+setTimeout(async () => {
+  await SplashScreen.hideAsync();
+}, 2000);
+
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const apiKey = Constants.expoConfig.extra.PG_API_KEY;
@@ -42,7 +47,7 @@ let token;
 
 const MainTabNavigator = () => {
   //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
-  useDisableBackButton();
+  // useDisableBackButton();
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -110,11 +115,6 @@ const MainTabNavigator = () => {
 
 const App = () => {
   const [token, setToken] = useState(null);
-
-  SplashScreen.preventAutoHideAsync();
-  setTimeout(async () => {
-    await SplashScreen.hideAsync();
-  }, 2000);
 
   //get push notifications for payment notifications later on at app entry
   useEffect(() => {
