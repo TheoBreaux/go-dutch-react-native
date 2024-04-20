@@ -3,7 +3,7 @@ import PaymentSourcesInputScreen from "./screens/PaymentSourcesInputScreen";
 import LogInScreen from "./screens/LogInScreen";
 import HomePageScreen from "./screens/HomePageScreen";
 import CreateNewSplitScreen from "./screens/CreateNewSplitScreen";
-import DiningEventHistory from "./screens/DiningEventHistoryScreen";
+import DiningEventHistoryScreen from "./screens/DiningEventHistoryScreen";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -16,7 +16,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import AddDinersScreen from "./screens/AddDinersScreen";
 import DiningEventDetailsScreen from "./screens/DiningEventDetailsScreen";
-import FeaturedRestaurants from "./screens/FeaturedRestaurantsScreen";
+import FeaturedRestaurantsScreen from "./screens/FeaturedRestaurantsScreen";
 import ConfirmFeeTotalsScreen from "./screens/ConfirmFeeTotalsScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -26,7 +26,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ViewUserProfileScreen from "./screens/ViewUserProfileScreen";
 import RestaurantDetailsScreen from "./screens/RestaurantDetailsScreen";
 import { useDisableBackButton } from "./utils";
-import { Alert, Platform, StatusBar } from "react-native";
+import { Alert, Platform, StatusBar, Text, View } from "react-native";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPaymentsScreen";
 import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
@@ -93,7 +93,7 @@ const MainTabNavigator = () => {
       />
       <BottomTab.Screen
         name="Restaurants"
-        component={FeaturedRestaurants}
+        component={FeaturedRestaurantsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="restaurant" size={35} color="white" />
@@ -166,79 +166,81 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar
-          barStyle="light-content" // Set the status bar text color to light
-          backgroundColor={Colors.goDutchBlue} // Set the status bar background color
-        />
-        <Stack.Navigator
-          initialRouteName="Welcome" //change this back to "Welcome" after developing
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <View style={{ flex: 1 }}>
+        <NavigationContainer>
+          <StatusBar
+            barStyle="light-content" // Set the status bar text color to light
+            backgroundColor={Colors.goDutchBlue} // Set the status bar background color
+          />
+          <Stack.Navigator
+            initialRouteName="Welcome" //change this back to "Welcome" after developing
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
 
-          <Stack.Screen
-            name="SignUp"
-            component={SignUpScreen}
-            initialParams={{ apiKey: apiKey, pushToken: token }}
-          />
-          <Stack.Screen
-            name="LogIn"
-            component={LogInScreen}
-            initialParams={{ apiKey: apiKey }}
-          />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUpScreen}
+              initialParams={{ apiKey: apiKey, pushToken: token }}
+            />
+            <Stack.Screen
+              name="LogIn"
+              component={LogInScreen}
+              initialParams={{ apiKey: apiKey }}
+            />
 
-          <Stack.Screen
-            name="PaymentSourcesInputScreen"
-            component={PaymentSourcesInputScreen}
-          />
-          <Stack.Screen name="AddDinersScreen" component={AddDinersScreen} />
-          <Stack.Screen
-            name="AssignItemsToDinersScreen"
-            component={AssignItemsToDinersScreen}
-          />
-          <Stack.Screen
-            name="ConfirmReceiptItemsScreen"
-            component={ConfirmReceiptItemsScreen}
-          />
-          <Stack.Screen name="History" component={DiningEventHistory} />
+            <Stack.Screen
+              name="PaymentSourcesInputScreen"
+              component={PaymentSourcesInputScreen}
+            />
+            <Stack.Screen name="AddDinersScreen" component={AddDinersScreen} />
+            <Stack.Screen
+              name="AssignItemsToDinersScreen"
+              component={AssignItemsToDinersScreen}
+            />
+            <Stack.Screen
+              name="ConfirmReceiptItemsScreen"
+              component={ConfirmReceiptItemsScreen}
+            />
+            <Stack.Screen name="History" component={DiningEventHistoryScreen} />
 
-          <Stack.Screen
-            name="DiningEventDetailsScreen"
-            component={DiningEventDetailsScreen}
-          />
-          <Stack.Screen
-            name="ConfirmFeeTotalsScreen"
-            component={ConfirmFeeTotalsScreen}
-          />
-          <Stack.Screen
-            name="CheckCloseOutDetailsScreen"
-            component={CheckCloseOutDetailsScreen}
-          />
-          <Stack.Screen
-            name="RestaurantDetailsScreen"
-            component={RestaurantDetailsScreen}
-          />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen
-            name="UpdatePasswordAndPayments"
-            component={UpdatePasswordAndPaymentsScreen}
-          />
+            <Stack.Screen
+              name="DiningEventDetailsScreen"
+              component={DiningEventDetailsScreen}
+            />
+            <Stack.Screen
+              name="ConfirmFeeTotalsScreen"
+              component={ConfirmFeeTotalsScreen}
+            />
+            <Stack.Screen
+              name="CheckCloseOutDetailsScreen"
+              component={CheckCloseOutDetailsScreen}
+            />
+            <Stack.Screen
+              name="RestaurantDetailsScreen"
+              component={RestaurantDetailsScreen}
+            />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen
+              name="UpdatePasswordAndPayments"
+              component={UpdatePasswordAndPaymentsScreen}
+            />
 
-          <Stack.Screen name="FavoritesScreen" component={FavoritesScreen} />
-          <Stack.Screen
-            name="ViewUserProfileScreen"
-            component={ViewUserProfileScreen}
-          />
-          <Stack.Screen
-            name="PayPrimaryDinerScreen"
-            component={PayPrimaryDinerScreen}
-          />
-          <Stack.Screen name="Main" component={MainTabNavigator} />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen name="FavoritesScreen" component={FavoritesScreen} />
+            <Stack.Screen
+              name="ViewUserProfileScreen"
+              component={ViewUserProfileScreen}
+            />
+            <Stack.Screen
+              name="PayPrimaryDinerScreen"
+              component={PayPrimaryDinerScreen}
+            />
+            <Stack.Screen name="Main" component={MainTabNavigator} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
     </Provider>
   );
 };
