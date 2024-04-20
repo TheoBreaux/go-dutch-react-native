@@ -51,6 +51,10 @@ const FoodItemDropArea = () => {
   }, []);
 
   useEffect(() => {
+    // Force re-render when profileImageKey changes
+  }, [dinersUpdated[currentDinerIndex].profileImageKey]);
+
+  useEffect(() => {
     //check if items are in the evenlySplitDiners array to creat a shared diner
     if (
       evenlySplitItems.length >= 1 &&
@@ -154,6 +158,15 @@ const FoodItemDropArea = () => {
     setDinerReviewedItems([]); // Reset reviewed items
   };
 
+  // console.log("DINERS UPDATED:", dinersUpdated);
+  // console.log("CURRENT DINER:", currentDiner);
+  // console.log("CURRENT DINER INDEX:", currentDinerIndex);
+  // console.log(
+  //   "CURRENT DINER PROFILE IMAGE KEY:",
+  //   dinersUpdated[currentDinerIndex].profileImageKey
+  // );
+  // console.log("DINER REVIEWED ITEMS:", dinerReviewedItems);
+
   return (
     <>
       {showReviewModal && (
@@ -249,11 +262,13 @@ const FoodItemDropArea = () => {
 
           {dinersUpdated[currentDinerIndex].profileImageKey === null ? (
             <Image
+              key={dinersUpdated[currentDinerIndex].id}
               source={require("../assets/default-profile-icon.jpg")}
               style={styles.profilePic}
             />
           ) : (
             <ProfileImageMedallion
+              key={dinersUpdated[currentDinerIndex].id}
               profileImageKey={dinersUpdated[currentDinerIndex].profileImageKey}
               width={150}
               height={150}

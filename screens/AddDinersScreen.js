@@ -13,7 +13,7 @@ import Colors from "../constants/colors";
 import Logo from "../components/Logo";
 import PrimaryDiner from "../components/PrimaryDiner";
 import PrimaryButton from "../components/PrimaryButton";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Diner from "../components/Diner";
 import { addDiner, setEventIdForPrimary } from "../store/store";
 import ProfileIcon from "../components/ProfileIcon";
@@ -208,18 +208,16 @@ const AddDinersScreen = () => {
     }
   };
 
-  const renderSuggestionsItem = useMemo(() => {
-    return ({ item, index }) => (
-      <ProfileIcon
-        key={index}
-        userFullName={`${item.firstName} ${item.lastName}`}
-        username={item.username}
-        onPress={handleSelectUsername}
-        profileImageKey={item.profileImageKey}
-        item={item}
-      />
-    );
-  }, [handleSelectUsername]);
+  const renderSuggestionsItem = ({ item, index }) => (
+    <ProfileIcon
+      key={index}
+      userFullName={`${item.firstName} ${item.lastName}`}
+      username={item.username}
+      onPress={handleSelectUsername}
+      profileImageKey={item.profileImageKey}
+      item={item}
+    />
+  );
 
   return (
     <View style={styles.container}>

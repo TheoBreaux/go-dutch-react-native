@@ -11,7 +11,6 @@ import CarouselFeaturedRestaurant from "../components/CarouselFeaturedRestaurant
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
-
 const HomePageScreen = () => {
   //check to see if users current profile pic path is null
   const usingDefaultProfilePhoto =

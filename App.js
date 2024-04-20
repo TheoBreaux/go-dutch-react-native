@@ -47,7 +47,7 @@ let token;
 
 const MainTabNavigator = () => {
   //KEEP THIS HERE FOR NOW - SEEMS TO BE PREVENTING BACK BUTTON HARDWARE USE
-  // useDisableBackButton();
+  useDisableBackButton();
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -84,7 +84,7 @@ const MainTabNavigator = () => {
       />
       <BottomTab.Screen
         name="History"
-        component={DiningEventHistory}
+        component={DiningEventHistoryScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="history" size={35} color="white" />
