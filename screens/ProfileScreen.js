@@ -111,7 +111,7 @@ const ProfileScreen = () => {
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           aspect: [1, 1],
-          quality: 1,
+          quality: 0.5,
         });
         setImageUploadModal(false);
       } else {
@@ -120,7 +120,7 @@ const ProfileScreen = () => {
           cameraType: ImagePicker.CameraType.front,
           allowsEditing: true,
           aspect: [1, 1],
-          quality: 1,
+          quality: 0.5,
         });
         setImageUploadModal(false);
       }

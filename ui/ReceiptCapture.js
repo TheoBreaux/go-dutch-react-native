@@ -40,25 +40,6 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
     (state) => state.userInfo.user.username
   );
 
-  // Function to handle selecting an image from the gallery TEMPORARY FOR TESTING
-  const pickImageFromGallery = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-
   useEffect(() => {
     (async () => {
       try {
@@ -101,7 +82,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
         });
 
         const response = await fetch(
-          "https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/diningevents/receiptimages",
+          "https://dd05-2603-8000-c0f0-a570-3ccf-8971-d193-a972.ngrok-free.app/diningevents/receiptimages",
           {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
@@ -133,7 +114,7 @@ const ReceiptCapture = ({ setIsCapturingReceipt, isCapturingReceipt }) => {
 
     try {
       const response = await fetch(
-        "https://4b35-2603-8000-c0f0-a570-d59a-2761-e0d-b64.ngrok-free.app/diningevents",
+        "https://dd05-2603-8000-c0f0-a570-3ccf-8971-d193-a972.ngrok-free.app/diningevents",
         {
           method: "POST",
           headers: {

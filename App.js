@@ -32,7 +32,6 @@ import UpdatePasswordAndPaymentsScreen from "./screens/UpdatePasswordAndPayments
 import AssignItemsToDinersScreen from "./screens/AssignItemsToDinersScreen";
 import { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
-import PayPrimaryDinerScreen from "./screens/PayPrimaryDinerScreen";
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
@@ -232,10 +231,6 @@ const App = () => {
             <Stack.Screen
               name="ViewUserProfileScreen"
               component={ViewUserProfileScreen}
-            />
-            <Stack.Screen
-              name="PayPrimaryDinerScreen"
-              component={PayPrimaryDinerScreen}
             />
             <Stack.Screen name="Main" component={MainTabNavigator} />
           </Stack.Navigator>

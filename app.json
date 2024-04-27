@@ -31,7 +31,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.theobreaux.godutch"
     },
     "extra": {
       "PG_API_KEY": "AIzaSyCXB87rKoiCqEI_As-a_eytKZZRDADW_ig",
@@ -44,7 +45,6 @@
         "projectId": "20b84919-2870-42f9-af5c-a8a04c41ff13"
       }
     },
-   
     "plugins": [
       [
         "expo-camera",

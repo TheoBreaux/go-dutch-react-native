@@ -14,7 +14,7 @@ const CarouselFeaturedRestaurant = ({ item }) => {
       return (
         <Image
           source={require("../assets/restaurant-placeholder.png")}
-          style={[styles.carouselImage, { resizeMode: "contain",}]}
+          style={[styles.carouselImage, { resizeMode: "contain" }]}
         />
       );
     } else {
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     fontFamily: "red-hat-bold",
     fontSize: 35,
     paddingTop: 15,
+    textAlign: "center",
   },
   restaurantText: {
     fontFamily: "red-hat-normal",
