@@ -32,7 +32,7 @@ const FavoriteDinerCard = ({ isLoadingImage, imageURIs, item }) => {
 
     try {
       const response = await fetch(
-        "https://dd05-2603-8000-c0f0-a570-3ccf-8971-d193-a972.ngrok-free.app/updatefavorite",
+        "https://5574-76-32-124-165.ngrok-free.app/updatefavorite",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

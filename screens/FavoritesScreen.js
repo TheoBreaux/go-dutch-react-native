@@ -42,7 +42,7 @@ const FavoritesScreen = () => {
   const fetchFavorites = async (type) => {
     try {
       const response = await fetch(
-        `https://dd05-2603-8000-c0f0-a570-3ccf-8971-d193-a972.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
+        `https://5574-76-32-124-165.ngrok-free.app/getfavorite?type=${type}&userId=${userId}`
       );
       const data = await response.json();
 
